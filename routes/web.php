@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [BaseController::class, 'index'])->name('base');
+Route::get('/login', [BaseController::class, 'login'])->name('login');
+Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogin');
+Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');
+Route::post('/post-registrasi', [BaseController::class, 'postRegistrasi'])->name('postRegistrasi');
+Route::middleware('auth')->group(function(){
+    Route::get('/profile', [BaseController::class, 'profile'])->name('profile');
+    Route::post('/update-profile', [BaseController::class, 'updateProfile'])->name('updateProfile');
 });
