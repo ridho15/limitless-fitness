@@ -11,7 +11,8 @@
                         <p data-aos="fade-right">Duis aute irure dolor in reprehenderit in volurate velit cillum
                             nulla pariatur nostrud exercitation.</p>
                         <div class="btn_wrapper" data-aos="fade-up">
-                            <a class="text-decoration-none getstarted_btn" href="{{ Auth::check() ? '#kelas' : route('login') }}">Get Started</a>
+                            <a class="text-decoration-none getstarted_btn"
+                                href="{{ Auth::check() ? '#kelas' : route('login') }}">Get Started</a>
                         </div>
                         <a class="top-btn" href="#footer_section">
                             <i class="fa-solid fa-arrow-down-long"></i>
@@ -71,7 +72,8 @@
                                     alt="" class="img-fluid"></figure>
                         </div>
                         <div class="btn_wrapper">
-                            <a href="{{ Auth::check() ? '#kelas' : route('login') }}" class="text-decoration-none get_started_btn">Get Started</a>
+                            <a href="{{ Auth::check() ? '#kelas' : route('login') }}"
+                                class="text-decoration-none get_started_btn">Get Started</a>
                         </div>
                     </div>
                 </div>
