@@ -9,6 +9,7 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -70,6 +71,8 @@ class UserResource extends Resource
                             ->multiple()
                             ->relationship('permissions', 'name')
                             ->preload(),
+                        Toggle::make('status')
+                            ->label('Status User'),
                     ])
             ]);
     }

@@ -3,9 +3,8 @@
 return [
 
     'buttons' => [
-
         'logout' => [
-            'label' => 'Sign out',
+            'label' => 'Keluar',
         ],
 
     ],

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerKelas;
+use App\Models\Kelas;
 use App\Models\User;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
@@ -9,6 +11,7 @@ use Filament\Facades\Filament;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -18,17 +21,60 @@ class BaseController extends Controller
     use WithRateLimiting;
     public function index()
     {
-        return view('base.index');
+        $data['active'] = 'home';
+        return view('base-2.index', $data);
+    }
+
+    public function class(){
+        $data['active'] = 'class';
+        return view('base-2.class', $data);
+    }
+
+    public function detailClass(){
+        $data['active'] = 'class';
+        return view('base-2.detail-class', $data);
+    }
+
+    public function packages(){
+        $data['active'] = 'packages';
+        return view('base-2.packages', $data);
+    }
+
+    public function detailPackages(){
+        $data['active'] = 'packages';
+        return view('base-2.detail-packages', $data);
+    }
+
+    public function timetable(){
+        $data['active'] = 'timetable';
+        return view('base-2.timetable', $data);
+    }
+
+    public function contactus(){
+        $data['active'] = 'contact us';
+        return view('base-2.contact-us', $data);
+    }
+
+    public function location(){
+        $data['active'] = 'location';
+        return view('base-2.location', $data);
     }
 
     public function login()
     {
-        return view('base.login');
+        $data['active'] = 'login';
+        return view('base-2.login', $data);
     }
 
     public function registrasi()
     {
-        return view('base.registrasi');
+        $data['active'] = 'registrasi';
+        return view('base-2.registrasi', $data);
+    }
+
+    public function detailLocation(){
+        $data['active'] = 'location';
+        return view('base-2.detail-location', $data);
     }
 
     public function postLogin(Request $request){
@@ -146,5 +192,32 @@ class BaseController extends Controller
         $user->update($data);
 
         return redirect()->back()->with('success', 'Profile berhasil di update');
+    }
+
+    public function orderKelas(Request $request){
+        if(!Auth::user()->hasRole('Customer')){
+            return redirect()->back()->with('fail', 'Mohon maaf kamu bukan sebagai customer');
+        }
+        $id_user = Auth::id();
+        $id_kelas = Crypt::decryptString($request->kelas);
+        $kelas = Kelas::find($id_kelas);
+        if(!$kelas){
+            return redirect()->back()->with('fail', 'Data kelas tidak ditemukan !');
+        }
+        CustomerKelas::create([
+            'id_user' => $id_user,
+            'id_kelas' => $id_kelas,
+            'status' => 2,
+            'jumlah_pertemuan' => $kelas->jumlah_pertemuan
+        ]);
+
+        return redirect()->route('profile')->with('success', 'Berhasil melakukan order kelas');
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('base');
     }
 }

@@ -19,7 +19,7 @@ return [
         ],
 
         'logout' => [
-            'label' => 'Log keluar',
+            'label' => 'keluar',
         ],
 
         'sidebar' => [

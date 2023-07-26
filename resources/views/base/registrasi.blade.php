@@ -11,7 +11,7 @@
                             <p data-aos="fade-right" class="aos-init aos-animate">Silahkan isi data untuk melakukan order
                                 kelas</p>
                         </div>
-                        <div class="col-md-6 shadow-lg p-3 rounded" style="border: 1px solid rgb(255, 255, 255)">
+                        <div class="col-md-6 shadow-lg p-4 rounded" style="border: 1px solid rgb(255, 255, 255)">
                             <form class="" method="POST" action="{{ route('postRegistrasi') }}"
                                 enctype="multipart/form-data">
                                 @csrf
@@ -20,7 +20,7 @@
                                         {{ session()->has('success') ? session('success') : session('fail') }}
                                     </div>
                                 @endif
-                                <div class="form-group">
+                                <div class="form-group mt-3">
                                     <label for="nama" class="text-white">Nama</label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         placeholder="Masukkan nama">

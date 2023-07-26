@@ -8,8 +8,13 @@
                     <div class="banner-section-content row" style="padding-top: 20px !important">
                         <div class="col-md-6">
                             <h1 data-aos="fade-up" class="aos-init aos-animate">Profile Page</h1>
-                            <p data-aos="fade-right" class="aos-init aos-animate">Silahkan kelola data diri anda
-                            </p>
+                            <p data-aos="fade-right" class="aos-init aos-animate">Silahkan kelola data diri anda</p>
+                            <div class="text-left">
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn-login">Keluar</button>
+                                </form>
+                            </div>
                         </div>
                         <div class="col-md-6 shadow-lg rounded p-3" style="border: 1px solid rgb(255, 255, 255)">
                             <form class="" method="POST" action="{{ route('updateProfile') }}"
