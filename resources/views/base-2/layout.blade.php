@@ -62,7 +62,7 @@
 
     @yield('content')
     {{-- Start Footer --}}
-    <footer class="bg-color-custom py-3 mt-auto" id="footer">
+    <footer class="bg-color-custom pb-3 pt-5 mt-auto" id="footer">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">

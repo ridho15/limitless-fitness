@@ -19,7 +19,7 @@
                     <a class="nav-link px-3" href="#">Private Classes</a>
                 </li>
             </ul>
-            
+
             <div class="row d-sm-none my-3 align-items-center justify-content-center">
                 <div class="dropdown col-10">
                     <button class="btn btn-custom-filter btn-block dropdown-toggle shadow-sm border w-100" type="button"
@@ -40,7 +40,7 @@
             </div>
 
             <div class="row d-none d-sm-flex justify-content-end my-5">
-                <div class="dropdown mx-2 col-md-4 col-lg-3 col-sm-6 ">
+                <div class="dropdown mx-2 col-md-2 col-lg-2 col-sm-6 ">
                     <button class="btn btn-custom-filter dropdown-toggle shadow-sm border" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         All Class Types
@@ -51,7 +51,7 @@
                         <li><a class="dropdown-item" href="#">Onsite</a></li>
                     </ul>
                 </div>
-                <div class="dropdown mx-2 col-md-4 col-lg-3 col-sm-5">
+                <div class="dropdown mx-2 col-md-2 col-lg-2 col-sm-5">
                     <button class="btn btn-custom-filter dropdown-toggle shadow-sm border" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         All Class Types
