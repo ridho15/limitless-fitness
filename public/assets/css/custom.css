@@ -138,7 +138,13 @@ body{
 .custom-btn-outline{
     border: 1px solid grey;
     color: #212529;
+    border-radius: 20px;
     background-color: transparent;
+}
+
+.padding-vertical-12{
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .custom-btn-outline-white{

@@ -25,6 +25,7 @@ Route::get('/packages', [BaseController::class, 'packages'])->name('packages');
 Route::get('/detail-packages/{id}', [BaseController::class, 'detailPackages'])->name('detail-packages');
 Route::get('/timetable', [BaseController::class, 'timetable'])->name('timetable');
 Route::get('/location', [BaseController::class, 'location'])->name('location');
+Route::get('/detail-location/{id}', [BaseController::class, 'detailLocation'])->name('detail-location');
 Route::get('/contactus', [BaseController::class, 'contactus'])->name('contactus');
 Route::get('/login', [BaseController::class, 'login'])->name('login');
 Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogin');

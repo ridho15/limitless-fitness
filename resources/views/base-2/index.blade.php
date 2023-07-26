@@ -34,7 +34,7 @@
                         style="background-image: url('https://cdnwpedutorenews.gramedia.net/wp-content/uploads/2022/05/30155159/yoga-4-scaled.jpg');">
                         <div class="position-absolute h-100 w-100 bg-dark" style="--bs-bg-opacity: .5; z-index: 1; "></div>
                         <div class="position-absolute position-absolute d-flex flex-column justify-content-start align-items-start h-100 w-100"
-                            style="z-index: 10; margin-top: 270px">
+                            style="z-index: 1; margin-top: 270px">
                             <div class="container">
                                 <h1 class="text-white my-3">Looking for a space to sweat out your day long</h1>
                                 <p class="text-white">Our zen studio is the place for you to rewind, relax, and let your

@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <div>
-                                <button class="btn custom-btn">View More</button>
+                                <a href="{{ route('detail-location', ['id' => 1]) }}" class="btn custom-btn">View More</a>
                             </div>
                         </div>
                     </div>

@@ -62,12 +62,19 @@ class BaseController extends Controller
 
     public function login()
     {
-        return view('base.login');
+        $data['active'] = 'login';
+        return view('base-2.login', $data);
     }
 
     public function registrasi()
     {
-        return view('base.registrasi');
+        $data['active'] = 'registrasi';
+        return view('base-2.registrasi', $data);
+    }
+
+    public function detailLocation(){
+        $data['active'] = 'location';
+        return view('base-2.detail-location', $data);
     }
 
     public function postLogin(Request $request){

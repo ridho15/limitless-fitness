@@ -55,7 +55,7 @@
                             us</a>
                     </li>
                 </ul>
-                <button class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline">Login / Registrasi</button>
+                <a href="{{ route('login') }}" class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline">Login / Registrasi</a>
             </div>
         </div>
     </nav>
