@@ -29,4 +29,9 @@ class EditUser extends EditRecord
     {
         return "Berhasil mengupdate data user";
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return $data;
+    }
 }

@@ -50,7 +50,9 @@
                                 <span class="per_month">/{{ $item->jumlah_pertemuan }} Kali Pertemuan</span>
                             </div>
                             <div class="btn_wrapper">
-                                <a class="enroll_now_btn text-decoration-none" href="pricing.html">Enroll Now</a>
+                                <a class="enroll_now_btn text-decoration-none"
+                                    href="{{ route('order-kelas', ['kelas' => \Crypt::encryptString($item->id)]) }}">Enroll
+                                    Now</a>
                             </div>
                         </div>
                     </div>

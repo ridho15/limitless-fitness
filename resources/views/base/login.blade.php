@@ -11,7 +11,7 @@
                             <p data-aos="fade-right" class="aos-init aos-animate">Silahkan login untuk melakukan order kelas
                             </p>
                         </div>
-                        <div class="col-md-6 shadow-lg rounded p-3" style="border: 1px solid rgb(255, 255, 255)">
+                        <div class="col-md-6 shadow-lg rounded p-4" style="border: 1px solid rgb(255, 255, 255)">
                             <form method="POST" action="{{ route('postLogin') }}">
                                 @csrf
                                 @if (session()->has('fail') || session()->has('success'))
@@ -19,7 +19,7 @@
                                         {{ session()->has('success') ? session('success') : session('fail') }}
                                     </div>
                                 @endif
-                                <div class="form-group">
+                                <div class="form-group mt-3">
                                     <label for="exampleInputEmail1" class="text-white">Email address</label>
                                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
                                         aria-describedby="emailHelp" placeholder="Enter email">
@@ -36,7 +36,7 @@
                                     <label class="form-check-label text-white" for="exampleCheck1">Remember</label>
                                 </div>
                                 <button type="submit"
-                                    class="btn shadow-lg btn-outline-light btn-block font-weight-bold mt-5">Submit</button>
+                                    class="btn shadow-lg btn-outline-light btn-block font-weight-bold mt-3">Submit</button>
                                 <div class="my-5 text-center text-white">
                                     <small>Don't have an account?
                                         <a href="{{ route('registrasi') }}" class="font-weight-bold no-hover">Sign up

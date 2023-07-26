@@ -33,6 +33,7 @@
     <link href="{{ asset('/assets/css/custom-style.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/assets/css/special-classes.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/assets/css/aos.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link href="{{ asset('/assets/css/custom.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/assets/css/magnific-popup.js/1.1.0/magnific-popup.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -61,19 +62,19 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav">
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="index.html">Home</a>
+                                    <a class="nav-link" href="{{ route('base') }}">Home</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#footer_section">Contact Us</a>
                                 </li>
                                 @if (Auth::check() == false)
-                                <li class="nav-item">
-                                    <a class="nav-link contact_us" href="{{ route('login') }}">Login</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link contact_us" href="{{ route('login') }}">Login</a>
+                                    </li>
                                 @else
-                                <li class="nav-item">
-                                    <a class="nav-link contact_us" href="{{ route('profile') }}">Profile</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link contact_us" href="{{ route('profile') }}">Profile</a>
+                                    </li>
                                 @endif
                             </ul>
                         </div>
@@ -102,7 +103,7 @@
         <!-- BANNER SECTION -->
         @yield('banner')
     </div>
-    
+
     @yield('content')
 
     <!-- FOOTER SECTION -->
@@ -200,9 +201,20 @@
     <script src="{{ asset('/assets/js/animation.js') }}"></script>
     <script src="https://unpkg.com/ityped@0.0.10"></script>
     <script src="{{ asset('/assets/js/type.js') }}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="{{ asset('/assets/js/custom.js') }}"></script>
     @yield('js')
     @livewireScripts
     @stack('js')
+    <script>
+        $(document).ready(function() {
+            if ("{{ session()->has('fail') }}") {
+                toast("{{ session()->get('fail') }}", "danger");
+            } else if ("{{ session()->has('success') }}") {
+                toast("{{ session()->get('success') }}", "success")
+            }
+        });
+    </script>
 </body>
 
 <!-- Mirrored from html.designingmedia.com/yogastic/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 23 Jul 2023 13:27:20 GMT -->
