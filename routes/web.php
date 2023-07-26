@@ -20,8 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
+Route::get('/detail-class/{id}', [BaseController::class, 'detailClass'])->name('detail-class');
 Route::get('/packages', [BaseController::class, 'packages'])->name('packages');
+Route::get('/detail-packages/{id}', [BaseController::class, 'detailPackages'])->name('detail-packages');
 Route::get('/timetable', [BaseController::class, 'timetable'])->name('timetable');
+Route::get('/location', [BaseController::class, 'location'])->name('location');
+Route::get('/contactus', [BaseController::class, 'contactus'])->name('contactus');
 Route::get('/login', [BaseController::class, 'login'])->name('login');
 Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogin');
 Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');

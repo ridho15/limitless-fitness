@@ -72,7 +72,7 @@
                             </small>
                         </div>
                         <div class="text-center d-grid gap-2">
-                            <button class="btn custom-btn">Buy Now</button>
+                            <a href="{{ route('detail-packages', ['id' => 1]) }}" class="btn custom-btn">Buy Now</a>
                         </div>
                     </div>
                 </div>

@@ -46,12 +46,12 @@
                         <a class="nav-link mx-2 @if ($active == 'timetable') active @endif"
                             href="{{ route('timetable') }}">Timetable</a>
                     </li>
-                    <li class="nav-item nav-link-fs @if ($active == 'location') active @endif">
+                    <li class="nav-item nav-link-fs">
                         <a class="nav-link mx-2 @if ($active == 'location') active @endif"
-                            href="#">Location</a>
+                            href="{{ route('location') }}">Location</a>
                     </li>
-                    <li class="nav-item nav-link-fs @if ($active == 'contact us') active @endif">
-                        <a class="nav-link mx-2 @if ($active == 'contact us') active @endif" href="#">Contact
+                    <li class="nav-item nav-link-fs">
+                        <a class="nav-link mx-2 @if ($active == 'contact us') active @endif" href="{{ route('contactus') }}">Contact
                             us</a>
                     </li>
                 </ul>

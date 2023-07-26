@@ -30,14 +30,34 @@ class BaseController extends Controller
         return view('base-2.class', $data);
     }
 
+    public function detailClass(){
+        $data['active'] = 'class';
+        return view('base-2.detail-class', $data);
+    }
+
     public function packages(){
         $data['active'] = 'packages';
         return view('base-2.packages', $data);
     }
 
+    public function detailPackages(){
+        $data['active'] = 'packages';
+        return view('base-2.detail-packages', $data);
+    }
+
     public function timetable(){
         $data['active'] = 'timetable';
         return view('base-2.timetable', $data);
+    }
+
+    public function contactus(){
+        $data['active'] = 'contact us';
+        return view('base-2.contact-us', $data);
+    }
+
+    public function location(){
+        $data['active'] = 'location';
+        return view('base-2.location', $data);
     }
 
     public function login()

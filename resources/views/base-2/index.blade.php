@@ -57,7 +57,29 @@
                 </button>
             </div>
             <div class="row my-5">
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
+                    <div class="custom-card position-relative"
+                        style="background-image: url('https://ik.imagekit.io/rezeve/business/e046f57f-3236-4290-aea7-7925cc309467/image/class/f9d71570-c90b-4f43-9ee6-32682000fc74~PHOTO-2023-02-21-13-00-17.jpg')">
+                        <div class="h-100 position-absolute bg-gradient w-100 opacity-card-black"></div>
+                        <div class="position-absolute d-flex align-items-end justify-content-center h-100 w-100 card-class-text"
+                            style="z-index: 10;">
+                            <div class="px-4 py-4">
+                                <h2 class="text-white fw-bold">
+                                    Private Duet
+                                </h2>
+                                <div class="d-flex mb-5">
+                                    <small class="text-white fw-light"> <i class="fa-solid fa-star text-warning"></i> No Rating Yet</small>
+                                </div>
+                                <p class="fw-light text-white">
+                                    Bring a friend - two is better than one! This semi-private class is perfect for those
+                                    who don't like working out alone. ...
+                                </p>
+                                <a href="{{ route('detail-class', ['id' => 1]) }}" class="btn btn-outline-dark shadow-sm custom-btn-white">View More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
                     <div class="custom-card position-relative"
                         style="background-image: url('https://ik.imagekit.io/rezeve/business/e046f57f-3236-4290-aea7-7925cc309467/image/class/f9d71570-c90b-4f43-9ee6-32682000fc74~PHOTO-2023-02-21-13-00-17.jpg')">
                         <div class="h-100 position-absolute bg-gradient w-100 opacity-card-black"></div>
@@ -79,29 +101,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="custom-card position-relative"
-                        style="background-image: url('https://ik.imagekit.io/rezeve/business/e046f57f-3236-4290-aea7-7925cc309467/image/class/f9d71570-c90b-4f43-9ee6-32682000fc74~PHOTO-2023-02-21-13-00-17.jpg')">
-                        <div class="h-100 position-absolute bg-gradient w-100 opacity-card-black"></div>
-                        <div class="position-absolute d-flex align-items-end justify-content-center h-100 w-100 card-class-text"
-                            style="z-index: 10;">
-                            <div class="px-4 py-4">
-                                <h2 class="text-white fw-bold">
-                                    Private Duet
-                                </h2>
-                                <div class="d-flex mb-5">
-                                    <small class="text-white fw-light">No Rating Yet</small>
-                                </div>
-                                <p class="fw-light text-white">
-                                    Bring a friend - two is better than one! This semi-private class is perfect for those
-                                    who don't like working out alone. ...
-                                </p>
-                                <button class="btn btn-outline-dark shadow-sm custom-btn-white">View More</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <div class="custom-card position-relative"
                         style="background-image: url('https://ik.imagekit.io/rezeve/business/e046f57f-3236-4290-aea7-7925cc309467/image/class/f9d71570-c90b-4f43-9ee6-32682000fc74~PHOTO-2023-02-21-13-00-17.jpg')">
                         <div class="h-100 position-absolute bg-gradient w-100 opacity-card-black"></div>
