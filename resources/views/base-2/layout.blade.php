@@ -67,7 +67,7 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h3 class="fw-bold text-grey mb-5">Daily Dose Pilates</h3>
-                    <img src="" class="mb-4" alt="logo">
+                    <img src="{{ asset('assets/images/logo-sabrina.png') }}" width="200" height="100" class="mb-4" alt="logo">
                     <div class="d-flex justify-content-center align-items-center">
                         <small class="mx-2">Contact us</small>
                         <small class="mx-2">FAQ</small>
