@@ -35,7 +35,7 @@
     <link href="{{ asset('/assets/css/aos.css') }}" rel="stylesheet">
     <link href="{{ asset('/assets/css/custom.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/assets/css/magnific-popup.js/1.1.0/magnific-popup.css') }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     @yield('css')
     @livewireStyles
     @stack('css')
