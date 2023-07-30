@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pakets', function (Blueprint $table) {
-            $table->dropColumn(['id_user', 'image', 'is_show']);
+            $table->id();
             $table->string('nama');
-            $table->renameColumn('jumlah_training','jumlah_pertemuan');
+            $table->integer('jumlah_pertemuan');
+            $table->bigInteger('harga');
             $table->integer('valid_day')->default(0);
             $table->tinyInteger('kategori_kelas');
             $table->string('eligible');
@@ -22,6 +23,8 @@ return new class extends Migration
             $table->tinyInteger('type_kelas');
             $table->integer('location')->default(0)->comment('0 = All location');
             $table->integer('diskon')->default(0);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
