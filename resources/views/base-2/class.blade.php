@@ -9,16 +9,20 @@
                 </div>
             </div>
             <ul class="nav nav-underline d-none d-sm-flex">
-                <li class="nav-item">
-                    <a class="nav-link active custom-nav-link px-3" aria-current="page" href="#">All Classes</a>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active custom-nav-link px-3" role="tab" data-bs-toggle="tab" href="#all_class">All
+                        Classes</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link px-3" href="#">Group Classes</a>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
+                        href="#group_class">Group Classes</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link px-3" href="#">Private Classes</a>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
+                        href="#private_class">Private Classes</a>
                 </li>
             </ul>
+
 
             <div class="row d-sm-none my-3 align-items-center justify-content-center">
                 <div class="dropdown col-10">
@@ -64,266 +68,17 @@
                         <li><a class="dropdown-item" href="#">Open to all</a></li>
                     </ul>
                 </div>
+
             </div>
-            <div class="row mt-5 mb-5">
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="custom-card-classes">
-                        <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url(https://www.bcalife.co.id/storage/articles/share/bagus-untuk-kesehatan-simak-5-manfaat-olahraga-bagi-tubuh-ini-pantang-diabaikan-1653392364.jpg);">
-                        </div>
-                        <div class="px-4 py-4">
-                            <h5 class="fw-bold">Reformer Flow</h5>
-                            <div class="d-flex justify-content-start align-items-center my-3">
-                                <small class="me-2"><i class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i></small>
-                                <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">9
-                                    Review</small>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start my-2">
-                                <div class="me-2">
-                                    <small class="fw-bold">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        55 Mins</small>
-                                </div>
-                                <div class="ms-2">
-                                    <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>Open to
-                                        all</small>
-                                </div>
-                            </div>
-                            <div class="my-2">
-                                <p>New to Pilates? Let's get down to the nitty-gritty. Learn the basics through controlled
-                                    and precise movements. Contact our admin to learn more.</p>
-                            </div>
-                            <div>
-                                <button class="btn custom-btn">View More</button>
-                            </div>
-                        </div>
-                    </div>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="all_class">
+                    @livewire('class.all-class')
                 </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="custom-card-classes">
-                        <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url(https://www.bcalife.co.id/storage/articles/share/bagus-untuk-kesehatan-simak-5-manfaat-olahraga-bagi-tubuh-ini-pantang-diabaikan-1653392364.jpg);">
-                        </div>
-                        <div class="px-4 py-4">
-                            <h5 class="fw-bold">Reformer Flow</h5>
-                            <div class="d-flex justify-content-start align-items-center my-3">
-                                <small class="me-2"><i class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i></small>
-                                <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">9
-                                    Review</small>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start my-2">
-                                <div class="me-2">
-                                    <small class="fw-bold">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        55 Mins</small>
-                                </div>
-                                <div class="ms-2">
-                                    <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>Open to
-                                        all</small>
-                                </div>
-                            </div>
-                            <div class="my-2">
-                                <p>New to Pilates? Let's get down to the nitty-gritty. Learn the basics through controlled
-                                    and precise movements. Contact our admin to learn more.</p>
-                            </div>
-                            <div>
-                                <button class="btn custom-btn">View More</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="group_class">
+                   @livewire('class.group-class')
                 </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="custom-card-classes">
-                        <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url(https://www.bcalife.co.id/storage/articles/share/bagus-untuk-kesehatan-simak-5-manfaat-olahraga-bagi-tubuh-ini-pantang-diabaikan-1653392364.jpg);">
-                        </div>
-                        <div class="px-4 py-4">
-                            <h5 class="fw-bold">Reformer Flow</h5>
-                            <div class="d-flex justify-content-start align-items-center my-3">
-                                <small class="me-2"><i class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i></small>
-                                <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">9
-                                    Review</small>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start my-2">
-                                <div class="me-2">
-                                    <small class="fw-bold">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        55 Mins</small>
-                                </div>
-                                <div class="ms-2">
-                                    <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>Open to
-                                        all</small>
-                                </div>
-                            </div>
-                            <div class="my-2">
-                                <p>New to Pilates? Let's get down to the nitty-gritty. Learn the basics through controlled
-                                    and precise movements. Contact our admin to learn more.</p>
-                            </div>
-                            <div>
-                                <button class="btn custom-btn">View More</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="custom-card-classes">
-                        <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url(https://www.bcalife.co.id/storage/articles/share/bagus-untuk-kesehatan-simak-5-manfaat-olahraga-bagi-tubuh-ini-pantang-diabaikan-1653392364.jpg);">
-                        </div>
-                        <div class="px-4 py-4">
-                            <h5 class="fw-bold">Reformer Flow</h5>
-                            <div class="d-flex justify-content-start align-items-center my-3">
-                                <small class="me-2"><i class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i></small>
-                                <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">9
-                                    Review</small>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start my-2">
-                                <div class="me-2">
-                                    <small class="fw-bold">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        55 Mins</small>
-                                </div>
-                                <div class="ms-2">
-                                    <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>Open to
-                                        all</small>
-                                </div>
-                            </div>
-                            <div class="my-2">
-                                <p>New to Pilates? Let's get down to the nitty-gritty. Learn the basics through controlled
-                                    and precise movements. Contact our admin to learn more.</p>
-                            </div>
-                            <div>
-                                <button class="btn custom-btn">View More</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="custom-card-classes">
-                        <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url(https://www.bcalife.co.id/storage/articles/share/bagus-untuk-kesehatan-simak-5-manfaat-olahraga-bagi-tubuh-ini-pantang-diabaikan-1653392364.jpg);">
-                        </div>
-                        <div class="px-4 py-4">
-                            <h5 class="fw-bold">Reformer Flow</h5>
-                            <div class="d-flex justify-content-start align-items-center my-3">
-                                <small class="me-2"><i class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i></small>
-                                <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">9
-                                    Review</small>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start my-2">
-                                <div class="me-2">
-                                    <small class="fw-bold">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        55 Mins</small>
-                                </div>
-                                <div class="ms-2">
-                                    <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>Open to
-                                        all</small>
-                                </div>
-                            </div>
-                            <div class="my-2">
-                                <p>New to Pilates? Let's get down to the nitty-gritty. Learn the basics through controlled
-                                    and precise movements. Contact our admin to learn more.</p>
-                            </div>
-                            <div>
-                                <button class="btn custom-btn">View More</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="custom-card-classes">
-                        <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url(https://www.bcalife.co.id/storage/articles/share/bagus-untuk-kesehatan-simak-5-manfaat-olahraga-bagi-tubuh-ini-pantang-diabaikan-1653392364.jpg);">
-                        </div>
-                        <div class="px-4 py-4">
-                            <h5 class="fw-bold">Reformer Flow</h5>
-                            <div class="d-flex justify-content-start align-items-center my-3">
-                                <small class="me-2"><i class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i></small>
-                                <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">9
-                                    Review</small>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start my-2">
-                                <div class="me-2">
-                                    <small class="fw-bold">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        55 Mins</small>
-                                </div>
-                                <div class="ms-2">
-                                    <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>Open to
-                                        all</small>
-                                </div>
-                            </div>
-                            <div class="my-2">
-                                <p>New to Pilates? Let's get down to the nitty-gritty. Learn the basics through controlled
-                                    and precise movements. Contact our admin to learn more.</p>
-                            </div>
-                            <div>
-                                <button class="btn custom-btn">View More</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="custom-card-classes">
-                        <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url(https://www.bcalife.co.id/storage/articles/share/bagus-untuk-kesehatan-simak-5-manfaat-olahraga-bagi-tubuh-ini-pantang-diabaikan-1653392364.jpg);">
-                        </div>
-                        <div class="px-4 py-4">
-                            <h5 class="fw-bold">Reformer Flow</h5>
-                            <div class="d-flex justify-content-start align-items-center my-3">
-                                <small class="me-2"><i class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i><i
-                                        class="fa-solid fa-star text-warning"></i></small>
-                                <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">9
-                                    Review</small>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start my-2">
-                                <div class="me-2">
-                                    <small class="fw-bold">
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        55 Mins</small>
-                                </div>
-                                <div class="ms-2">
-                                    <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>Open to
-                                        all</small>
-                                </div>
-                            </div>
-                            <div class="my-2">
-                                <p>New to Pilates? Let's get down to the nitty-gritty. Learn the basics through controlled
-                                    and precise movements. Contact our admin to learn more.</p>
-                            </div>
-                            <div>
-                                <button class="btn custom-btn">View More</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="private_class">
+                    @livewire('class.private-class')
                 </div>
             </div>
         </div>

@@ -12,35 +12,33 @@
                     </div>
                     <h3 class="fw-bold mb-4">Your Package</h3>
                     <div class="mb-2 fw-light mb-4">
-                        <small class="d-block mb-1">Intro Offer (3 classes)</small>
-                        <small class="d-block mb-1">Expires in 14 days</small>
+                        <small class="d-block mb-1">{{ $paket->nama }}</small>
+                        <small class="d-block mb-1">Expires in {{ $paket->valid_day }} days</small>
                         <small class="d-block mb-1">Please approach our admin to purchase this package.</small>
                     </div>
                     <div class="border bg-white p-3 my-4" style="border-radius: 15px">
                         <div class="mb-2">
                             <span class="me-2"><i class="fa-regular fa-sun"></i></span>
-                            <small>3 Credits</small>
+                            <small>{{ $paket->jumlah_pertemuan }} Credits</small>
                         </div>
                         <div class="mb-2">
                             <span class="me-2"><i class="fa-solid fa-house-user"></i></span>
-                            <small>All Location</small>
+                            <small>{{ $paket->location_formatted }}</small>
                         </div>
                         <div class="mb-2">
                             <span class="me-2"><i class="fa-solid fa-calendar-days"></i></span>
-                            <small>Valid for 14 Days from date of first booking</small>
+                            <small>Valid for {{ $paket->valid_day }} Days from date of first booking</small>
                         </div>
                         <div class="mb-2">
                             <span class="me-2"><i class="fa-regular fa-circle-check"></i></span>
-                            <small>Onsite classes only</small>
+                            <small>{{ $paket->type_kelas_formatted }} classes only</small>
                         </div>
                     </div>
                     <h4 class="fw-bold mb-3">What you’re eligible</h4>
                     <ul class="row">
-                        <li class="col-md-6"><small class="fw-light">Wanda Funda </small></li>
-                        <li class="col-md-6"><small class="fw-light">Reformer Flow </small></li>
-                        <li class="col-md-6"><small class="fw-light">Tower Power </small></li>
-                        <li class="col-md-6"><small class="fw-light">Strengthen, Lengthen, Tone </small></li>
-                        <li class="col-md-6"><small class="fw-light">Arms, Booty, Core </small></li>
+                        @foreach ($eligiable as $item)
+                            <li class="col-md-6"><small class="fw-light">{{ $item }}</small></li>
+                        @endforeach
                     </ul>
                     <hr class="my-4">
                     <h3 class="fw-bold mb-4">Promote Code</h3>
@@ -61,36 +59,99 @@
                         </strong>
                     </small>
                     <div class="text-center">
-                        <button class="btn custom-btn w-100">Confirm and Pay</button>
+                        <button type="button" class="btn custom-btn w-100" id="btn_confirm_pembayaran">Confirm and
+                            Pay</button>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="px-4 py-5 bg-white shadow sticky-top" style="border-radius: 15px; top: 80px">
-                        <small class="d-block mb-2 fw-semibold text-uppercase text-secondary">Group Class</small>
-                    <h5 class="fw-semibold mb-3">Intro Offer (3 classes)</h5>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <small class="fw-light">All location access</small>
-                        <small class="fw-light">3 credits</small>
-                    </div>
-                    <hr class="my-3">
-                    <div class="fw-semibold mb-3">Price detail</div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="fw-light">Standard</small>
-                        <small class="fw-light">Rp.500.000</small>
-                    </div>
-                    <hr class="my-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="fw-light">Subtotal</small>
-                        <small class="fw-light">Rp.500.000</small>
-                    </div>
-                    <hr class="my-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="fw-bold">Grand Total</small>
-                        <small class="fw-bold">Rp.500.000</small>
-                    </div>
+                    <div class="px-4 py-5 bg-white shadow sticky-top" style="border-radius: 15px; top: 80px; z-index: 2 !important;">
+                        <small
+                            class="d-block mb-2 fw-semibold text-uppercase text-secondary">{{ $paket->kategori_formatted }}</small>
+                        <h5 class="fw-semibold mb-3">{{ $paket->nama }}</h5>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <small class="fw-light">{{ $paket->location_formatted }} access</small>
+                            <small class="fw-light">{{ $paket->jumlah_pertemuan }} credits</small>
+                        </div>
+                        <hr class="my-3">
+                        <div class="fw-semibold mb-3">Price detail</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="fw-light">Standard</small>
+                            <small class="fw-light">Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</small>
+                        </div>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="fw-light">Subtotal</small>
+                            <small class="fw-light">Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</small>
+                        </div>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="fw-bold">Grand Total</small>
+                            <small class="fw-bold">Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalConfirmPembayaran" tabindex="-1" aria-labelledby="modalConfirmPembayaran"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalConfirmPembayaran">Confirm Pembayaran</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('konfirm-pembayaran-paket', ['paket' => $paket->id]) }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            Kamu akan melakukan pembayaran pada:</div>
+                        paket : <strong>{{ $paket->nama }}</strong> <br>
+                        Harga : <strong>Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</strong>
+
+                        <div class="my-3">
+                            <span class="d-block mb-2">Silahkan Kirim Pembayaran Ke Rekening : </span>
+                            <div>
+                                Nomor Rekening : <strong>12345678901</strong>
+                            </div>
+                            <div>
+                                Atas Nama : <strong>Daily Dose Pilates</strong>
+                            </div>
+                        </div>
+
+                        <div class="my-3">
+                            Seltelah melakukan pembayaran, diharapkan untuk melakukan confirmasi dan mengirimkan bukti
+                            pembayaran pada admin.
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Apakah kamu menerima sayarat dan ketentuan yang berlaku
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn custom-btn-white" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn custom-btn"
+                            @if (!Auth::user()) disabled @endif>Konfirmasi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+
+        });
+
+        $('#btn_confirm_pembayaran').on('click', function() {
+            $('#modalConfirmPembayaran').modal('show')
+        })
+    </script>
 @endsection

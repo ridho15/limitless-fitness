@@ -12,22 +12,49 @@ class Kelas extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'kelas';
     protected $fillable = [
-        'id_user',
-        'harga_real',
         'is_active',
-        'jumlah_pertemuan',
-        'min_customer',
-        'max_customer',
+        'min_anggota',
+        'max_anggota',
         'keterangan',
-        'diskon',
         'nama_kelas',
-        'expired',
-        'foto'
+        'level',
+        'duration',
+        'bawaan',
+        'type',
+        'category'
     ];
 
     protected $appends = [
-        'harga', 'expired_formatted', 'status_aktif'
+        'status_aktif', 'rating', 'level_formatted'
     ];
+
+    public function getLevelFormattedAttribute()
+    {
+        switch ($this->level) {
+            case 0:
+                return 'Semua Level';
+                break;
+            case 1:
+                return 'Intermediate';
+                break;
+            case 2:
+                return 'Beginer';
+                break;
+            case 3:
+                return 'Advanced';
+                break;
+            default:
+                return 'Not Know';
+                break;
+        }
+    }
+
+    public function getRatingAttribute()
+    {
+        $jumlah = KelasRating::where('id_kelas', $this->id)->sum('rating');
+        $countKelasRating = KelasRating::where('id_kelas', $this->id)->count();
+        return $jumlah / $countKelasRating;
+    }
 
     public function getStatusAktifAttribute()
     {
@@ -38,18 +65,18 @@ class Kelas extends Model
         }
     }
 
-    public function getExpiredFormattedAttribute()
+    public function kelasImage()
     {
-        return Carbon::parse($this->created_at)->locale('id')->addDays($this->expired)->isoFormat('dddd, DD MMMM YYYY');
+        return $this->hasMany(KelasImage::class, 'id_kelas');
     }
 
-    public function getHargaAttribute()
+    public function kelasActivity()
     {
-        return $this->harga_real - ($this->harga_real * $this->diskon /  100);
+        return $this->hasMany(KelasActivity::class, 'id_kelas');
     }
 
-    public function user()
+    public function kelasRating()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->hasMany(KelasRating::class, 'id_kelas');
     }
 }

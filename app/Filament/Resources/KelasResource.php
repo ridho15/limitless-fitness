@@ -3,9 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\KelasResource\Pages;
+use App\Filament\Resources\KelasResource\RelationManagers\KelasActivityRelationManager;
+use App\Filament\Resources\KelasResource\RelationManagers\KelasImageRelationManager;
 use App\Models\Kelas;
 use App\Models\User;
 use Closure;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -39,66 +42,57 @@ class KelasResource extends Resource
         })->get()->pluck('name', 'id');
         return $form
             ->schema([
-                Fieldset::make('Form Kelas')
+                Card::make()
                     ->schema([
-                        Select::make('id_user')
-                            ->label('Instruktur')
-                            ->searchable()
-                            ->preload()
-                            ->options($instruktur),
-                        TextInput::make('nama_kelas')
-                            ->string()
-                            ->maxLength(255)
-                            ->required(),
-                        TextInput::make('jumlah_pertemuan')
-                            ->numeric()
-                            ->required(),
-                        TextInput::make('harga_real')
-                            ->name('Harga Asli')
-                            ->mask(fn (Mask $mask) => $mask->patternBlocks([
-                                'uang' => fn (Mask $mask) => $mask->numeric()
-                                    ->thousandsSeparator('.')
-                                    ->decimalSeparator(',')
-                            ])->pattern('Rp.uang'))
-                            ->numeric()
-                            ->required(),
-                        TextInput::make('diskon')
-                            ->afterStateUpdated(function (Closure $set, Closure $get, $state) {
-                                $harga = $get('harga_real') - ($get('harga_real') * $state / 100);
-                                $set('harga', $harga);
-                            })->numeric()
-                            ->reactive()
-                            ->required()
-                            ->maxValue(100)
-                            ->helperText('Masukkan persentase diskon'),
-                        TextInput::make('harga')
-                            ->disabled()
-                            ->prefix('Rp.')
-                            ->label('Harga'),
-                        TextInput::make('min_customer')
-                            ->label('Minimal Peserta')
-                            ->numeric()
-                            ->required(),
-                        TextInput::make('max_customer')
-                            ->label('Maximal Peserta')
-                            ->numeric()
-                            ->required(),
-                        Textarea::make('keterangan')
-                            ->nullable()
-                            ->string(),
-                        TextInput::make('expired')
-                            ->label('Tanggal Waktu Habis (Hari)')
-                            ->numeric()
-                            ->helperText('Masukkan jumlah hari berlaku paket kelas')
-                            ->minValue(0)
-                            ->required(),
-                        FileUpload::make('foto')
-                            ->label('Gambar')
-                            ->image()
-                            ->maxSize(2048)
-                            ->nullable(),
-                        Toggle::make('is_active')
-                            ->label('Status Aktif Kelas')
+                        Fieldset::make('Form Kelas')
+                            ->schema([
+                                TextInput::make('nama_kelas')
+                                    ->string()
+                                    ->maxLength(255)
+                                    ->required(),
+                                Select::make('level')
+                                    ->options([
+                                        '0' => 'Semua level',
+                                        '1' => 'intermediate',
+                                        '2' => 'Beginer',
+                                        '3' => 'Advanced',
+                                    ])
+                                    ->required(),
+                                TextInput::make('min_anggota')
+                                    ->label('Minimal Peserta')
+                                    ->numeric()
+                                    ->required(),
+                                TextInput::make('max_anggota')
+                                    ->label('Maximal Peserta')
+                                    ->numeric()
+                                    ->required(),
+                                TextInput::make('duration')
+                                    ->label('Durasi')
+                                    ->helperText("Hitungan Menit contoh : 10")
+                                    ->numeric()
+                                    ->required(),
+                                Select::make('type')
+                                    ->preload()
+                                    ->options([
+                                        '1' => 'Online',
+                                        '2' => 'Onsite',
+                                    ])->required(),
+                                Select::make('category')
+                                    ->preload()
+                                    ->options([
+                                        '1' => 'Private',
+                                        '2' => 'Group',
+                                    ])->required(),
+                                TextInput::make('bawaan')
+                                    ->string()
+                                    ->nullable()
+                                    ->helperText("Untuk pemisah dalam bawaan adalah koma ','"),
+                                Textarea::make('keterangan')
+                                    ->nullable()
+                                    ->string(),
+                                Toggle::make('is_active')
+                                    ->label('Status Aktif Kelas')
+                            ])
                     ])
             ]);
     }
@@ -107,38 +101,54 @@ class KelasResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('foto')
-                ->height(100)
-                ->width(200),
                 TextColumn::make('nama_kelas')
                     ->searchable(),
-                TextColumn::make('user.name')
-                    ->label('Instruktur')
-                    ->searchable(),
-                TextColumn::make('harga_real')
-                    ->label('Harga Asli')
-                    ->formatStateUsing(fn ($state) => 'Rp.' . number_format($state, 0, ',', '.'))
-                    ->sortable(),
-                TextColumn::make('diskon')
-                    ->label('Diskon')
-                    ->formatStateUsing(fn ($state) => $state . '%')
-                    ->sortable(),
-                TextColumn::make('harga')
-                    ->money('IDR')
-                    ->sortable(),
-                TextColumn::make('min_customer')
+                TextColumn::make('min_anggota')
                     ->formatStateUsing(fn ($state) => $state . ' Orang')
                     ->label('Minimal Peserta')
                     ->sortable(),
-                TextColumn::make('max_customer')
+                TextColumn::make('max_anggota')
                     ->label('Maximal Peserta')
                     ->formatStateUsing(fn ($state) => $state . ' Orang')
                     ->sortable(),
                 TextColumn::make('status_aktif')
                     ->label('Status Aktif Kelas'),
-                TextColumn::make('expired_formatted')
-                    ->sortable(),
-                TextColumn::make('keterangan'),
+                TextColumn::make('keterangan')
+                    ->label('Deskripsi'),
+                TextColumn::make('duration')
+                    ->label('Lama Latihan')
+                    ->formatStateUsing(fn ($state) => $state . ' Menit'),
+                TextColumn::make('level')
+                    ->formatStateUsing(function ($state) {
+                        if ($state == 0) {
+                            return 'Open to all';
+                        } elseif ($state == 1) {
+                            return 'Intermediate';
+                        } elseif ($state == 2) {
+                            return 'Beginner';
+                        } elseif ($state == 3) {
+                            return 'Advance';
+                        } else {
+                            return '';
+                        }
+                    }),
+                TextColumn::make('bawaan'),
+                TextColumn::make('type')
+                    ->formatStateUsing(function ($state) {
+                        if ($state == 1) {
+                            return 'Online';
+                        } elseif ($state == 2) {
+                            return 'Onsite';
+                        }
+                    }),
+                TextColumn::make('category')
+                    ->formatStateUsing(function ($state) {
+                        if ($state == 1) {
+                            return 'Private';
+                        } elseif ($state == 2) {
+                            return 'Group';
+                        }
+                    })
 
             ])
             ->filters([
@@ -157,7 +167,8 @@ class KelasResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            KelasImageRelationManager::class,
+            KelasActivityRelationManager::class
         ];
     }
 
