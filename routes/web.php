@@ -36,4 +36,6 @@ Route::middleware('auth')->group(function(){
     Route::get('/profile', [BaseController::class, 'profile'])->name('profile');
     Route::post('/update-profile', [BaseController::class, 'updateProfile'])->name('updateProfile');
     Route::post('/logout', [BaseController::class, 'logout'])->name('logout');
+    Route::post('/konfirm-pembayaran-paket/{paket}', [BaseController::class, 'confirmPembayaranPaket'])->name('konfirm-pembayaran-paket');
+    Route::get('/detail-timetable/{id}', [BaseController::class, 'detailTimetable'])->name('detail-timetable');
 });

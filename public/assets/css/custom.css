@@ -207,6 +207,12 @@ body{
     padding-bottom: 5px;
     border-radius: 15px;
     cursor: pointer;
+    color: black;
+}
+
+.card-date.active{
+    background-color: black;
+    color: white;
 }
 
 .card-date:hover{

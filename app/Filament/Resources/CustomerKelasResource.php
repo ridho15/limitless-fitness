@@ -56,11 +56,12 @@ class CustomerKelasResource extends Resource
                             ->required(),
                         Select::make('id_kelas')
                             ->searchable()
+                            ->reactive()
                             ->relationship('kelas', 'nama_kelas')
                             ->afterStateUpdated(function (Closure $set, $state) {
                                 $kelas = Kelas::find($state);
                                 if ($kelas) {
-                                    $set('jumlah_pertemuan', $kelas->jumlah_pertemuan);
+                                    $set('jumlah_pertemuan ', $kelas->jumlah_pertemuan);
                                 }
                             })
                             ->preload()
