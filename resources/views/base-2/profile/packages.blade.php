@@ -49,7 +49,6 @@
                                                     <span class="badge text-bg-info">Belum Lunas</span>
                                                 @endif
                                             </div>
-
                                         </div>
                                         <div class="row mt-4 align-items-center justify-content-between">
                                             <div class="col-md-4 fw-bold text-start">Pembayaran</div>
@@ -63,8 +62,9 @@
                                                 </small>
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}" class="d-none"
-                                                    method="POST" id="form_bukti_pembayaran" enctype="multipart/form-data">
+                                                <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}"
+                                                    wire: method="POST" id="form_bukti_pembayaran"
+                                                    enctype="multipart/form-data">
                                                     @csrf
                                                     @if ($item->bukti_pembayaran == null)
                                                         <label for="bukti_pembayaran" class="btn custom-btn-outline">
