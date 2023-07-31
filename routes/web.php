@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,11 +32,20 @@ Route::get('/login', [BaseController::class, 'login'])->name('login');
 Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogin');
 Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');
 Route::post('/post-registrasi', [BaseController::class, 'postRegistrasi'])->name('postRegistrasi');
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::get('/order-kelas', [BaseController::class, 'orderKelas'])->name('order-kelas');
-    Route::get('/profile', [BaseController::class, 'profile'])->name('profile');
     Route::post('/update-profile', [BaseController::class, 'updateProfile'])->name('updateProfile');
     Route::post('/logout', [BaseController::class, 'logout'])->name('logout');
     Route::post('/konfirm-pembayaran-paket/{paket}', [BaseController::class, 'confirmPembayaranPaket'])->name('konfirm-pembayaran-paket');
     Route::get('/detail-timetable/{id}', [BaseController::class, 'detailTimetable'])->name('detail-timetable');
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('profile');
+        Route::get('/booking', [ProfileController::class, 'bookings'])->name('profile.bookings');
+        Route::get('/packages', [ProfileController::class, 'packages'])->name('profile.packages');
+        Route::get('/memberships', [ProfileController::class, 'memberships'])->name('profile.memberships');
+        Route::get('/billing', [ProfileController::class, 'billing'])->name('profile.billing');
+        Route::get('/notification-settings', [ProfileController::class, 'notificationSettings'])->name('profile.notification-settings');
+        Route::get('/waiver-form', [ProfileController::class, 'waiverForm'])->name('profile.waiver-form');
+    });
+    Route::post('upload-bukti-pembayaran/{id}', [BaseController::class, 'uploadBuktiPembayaran'])->name('upload-bukti-pembayaran');
 });

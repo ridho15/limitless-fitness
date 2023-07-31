@@ -33,7 +33,7 @@
                                             <i class="fa-regular fa-star text-warning"></i>
                                         @endfor
                                         <span class="ms-2"
-                                            style="padding-right: 15px; padding-left: 15px; border: 1px solid white; border-radius: 15px;">{{ $item->kelasRating->count() }}
+                                            style="padding-right: 15px; padding-left: 15px; border: 1px solid white; border-radius: 15px;">{{ $item->jumlah_review }}
                                             Review</span>
                                     @else
                                         <i class="fa-solid fa-star text-warning"></i> No
@@ -46,7 +46,7 @@
                                 who don't like working out alone. ... --}}
                                 {{ substr($item->keterangan, 0, 100) }} ...
                             </p>
-                            <a href="{{ route('detail-class', ['id' => 1]) }}"
+                            <a href="{{ route('detail-class', ['id' => $item->id]) }}"
                                 class="btn btn-outline-dark shadow-sm custom-btn-white">View More</a>
                         </div>
                     </div>

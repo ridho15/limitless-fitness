@@ -10,8 +10,7 @@ class Kelas extends Component
     public $listKelas;
     public function render()
     {
-        $this->listKelas = ModelsKelas::with(['kelasImage', 'kelasRating'])
-        ->select(['nama_kelas', 'keterangan', 'id'])
+        $this->listKelas = ModelsKelas::select(['nama_kelas', 'keterangan', 'id'])
         ->take(3)->get();
         return view('livewire.home.kelas');
     }

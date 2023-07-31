@@ -13,6 +13,10 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('css')
@@ -69,27 +73,28 @@
                             <span class="mx-1">{{ Auth::user()->name }}</span>
                         </button>
                         <ul class="dropdown-menu bg-color-custom" style="z-index: 100">
-                            <li><a class="dropdown-item" href="#"><i class="fa-regular fa-circle-user"></i> <span
-                                        class="mx-2">My Profile</span></a>
+                            <li><a class="dropdown-item" href="{{ route('profile') }}"><i
+                                        class="fa-regular fa-circle-user"></i> <span class="mx-2">My
+                                        Profile</span></a>
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-regular fa-credit-card"></i> <span
+                            <li><a class="dropdown-item" href="{{ route('profile.bookings') }}"><i class="fa-regular fa-credit-card"></i> <span
                                         class="mx-2">My
                                         Bookings</span></a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-hand-holding-heart"></i>
+                            <li><a class="dropdown-item" href="{{ route('profile.packages') }}"><i class="fa-solid fa-hand-holding-heart"></i>
                                     <span class="mx-2">My Packages</span></a>
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-users-rectangle"></i>
+                            <li><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i class="fa-solid fa-users-rectangle"></i>
                                     <span class="mx-2">My Membership</span></a>
                             </li>
                             <li class="px-2">
                                 <hr>
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-comments-dollar"></i>
+                            <li><a class="dropdown-item" href="{{ route('profile.billing') }}"><i class="fa-solid fa-comments-dollar"></i>
                                     <span class="mx-2">Billing</span></a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bullhorn"></i> <span
+                            <li><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i class="fa-solid fa-bullhorn"></i> <span
                                         class="mx-2">Notification
                                         Settings</span></a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-clipboard"></i> <span
+                            <li><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i class="fa-solid fa-clipboard"></i> <span
                                         class="mx-2">Waiver Form</span></a>
                             </li>
                             <li>
@@ -117,8 +122,8 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h3 class="fw-bold text-grey mb-5">Daily Dose Pilates</h3>
-                    <img src="{{ asset('assets/images/logo.png') }}" width="200" height="100"
-                        class="mb-4" alt="logo" style="object-fit: contain">
+                    <img src="{{ asset('assets/images/logo.png') }}" width="200" height="100" class="mb-4"
+                        alt="logo" style="object-fit: contain">
                     <div class="d-flex justify-content-center align-items-center">
                         <small class="mx-2">Contact us</small>
                         <small class="mx-2">FAQ</small>
@@ -141,14 +146,20 @@
         </div>
     </footer>
     {{-- End Footer --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
-    </script>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
         integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('js')
     @livewireScripts
@@ -158,13 +169,13 @@
 
         });
 
-        if ('{{ session()->has("fail") }}') {
+        if ('{{ session()->has('fail') }}') {
             Toastify({
                 text: "{{ session('fail') }}",
                 className: "danger",
                 duration: 3000
             }).showToast();
-        }else if("{{ session()->has('success') }}"){
+        } else if ("{{ session()->has('success') }}") {
             Toastify({
                 text: "{{ session('success') }}",
                 className: "success",

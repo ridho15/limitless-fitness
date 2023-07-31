@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\KelasRatingResource\Pages;
 use App\Filament\Resources\KelasRatingResource\RelationManagers;
 use App\Models\Kelas;
+use App\Models\KelasActivity;
 use App\Models\KelasRating;
 use App\Models\User;
 use Filament\Forms;
@@ -22,6 +23,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Yepsua\Filament\Forms\Components\Rating;
 use Yepsua\Filament\Tables\Components\RatingColumn;
 
@@ -47,11 +49,14 @@ class KelasRatingResource extends Resource
                                         $query->where('name', 'Customer');
                                     })->select(['name', 'id'])->get()->pluck('name', 'id'))
                                     ->required(),
-                                Select::make('id_kelas')
-                                    ->label('Kelas')
+                                Select::make('id_kelas_activity')
+                                    ->label('Kelas Activity')
                                     ->searchable()
                                     ->preload()
-                                    ->options(Kelas::select(['nama_kelas', 'id'])->get()->pluck('nama_kelas', 'id'))
+                                    ->getOptionLabelUsing(function ($value): string {
+                                        $kelasActivity = KelasActivity::find($value);
+                                        return $kelasActivity->kelas->nama_kelas . ' ' . $kelasActivity->jam_latihan;
+                                    })
                                     ->required(),
                                 Textarea::make('comment')
                                     ->label('Review')
@@ -59,14 +64,6 @@ class KelasRatingResource extends Resource
                                 Rating::make('rating')
                                     ->label('Rating')
                                     ->required(),
-                                // Radio::make('rating')
-                                //     ->options([
-                                //         '1' => 'Bintang 1',
-                                //         '2' => 'Bintang 2',
-                                //         '3' => 'Bintang 3',
-                                //         '4' => 'Bintang 4',
-                                //         '5' => 'Bintang 5',
-                                //     ])->required()
 
                             ])
                     ])
@@ -80,8 +77,12 @@ class KelasRatingResource extends Resource
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable(),
-                TextColumn::make('kelas.nama_kelas')
+                TextColumn::make('id_kelas_activity')
                     ->label('Kelas')
+                    ->formatStateUsing(function($state){
+                        $kelasActivity = KelasActivity::find($state);
+                        return $kelasActivity->kelas->nama_kelas . ' ' . $kelasActivity->jam_latihan_formatted;
+                    })
                     ->searchable(),
                 TextColumn::make('comment')
                     ->label('Review')

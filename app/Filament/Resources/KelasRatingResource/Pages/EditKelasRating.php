@@ -4,6 +4,7 @@ namespace App\Filament\Resources\KelasRatingResource\Pages;
 
 use App\Filament\Resources\KelasRatingResource;
 use Filament\Pages\Actions;
+use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditKelasRating extends EditRecord
@@ -13,7 +14,9 @@ class EditKelasRating extends EditRecord
     protected function getActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make()
+                ->label('Hapus Kelas Rating')
+                ->icon('heroicon-o-trash')
         ];
     }
 

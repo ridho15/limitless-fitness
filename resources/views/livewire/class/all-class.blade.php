@@ -18,7 +18,8 @@
                                 @endfor
                             </small>
                             <small class="ms-2 px-2 py-2"
-                                style="border: 1px solid grey; border-radius: 20px">{{ $item->kelasRating->count() }}
+                                style="border: 1px solid grey; border-radius: 20px">
+                                {{ $item->jumlah_review }}
                                 Review</small>
                         </div>
                         <div class="d-flex align-items-center justify-content-start my-2">
@@ -36,7 +37,8 @@
                             <p>{{ substr($item->keterangan, 0, 150) }}...</p>
                         </div>
                         <div>
-                            <button class="btn custom-btn">View More</button>
+                            <a href="{{ route('detail-class', ['id' => $item->id]) }}" class="btn custom-btn">View
+                                More</a>
                         </div>
                     </div>
                 </div>

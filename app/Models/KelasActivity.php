@@ -21,14 +21,20 @@ class KelasActivity extends Model
     ];
 
     protected $appends = [
-        'status_formatted', 'simple_detail', 'status_aktivitas_kelas',
+        'status_formatted', 'simple_detail', 'status_aktivitas_kelas', 'jam_latihan_formatted'
     ];
+
+    public function getJamLatihanFormattedAttribute(){
+        return Carbon::parse($this->jam_latihan)->locale('id')->isoFormat('dddd, DD MMMM YYYY HH:mm');
+    }
 
     public function getStatusAktivitasKelasAttribute()
     {
         $kelas = Kelas::find($this->id_kelas);
         $carbon = Carbon::parse($this->jam_latihan)->addMinutes($kelas->duration);
         if ($this->status == 0) {
+            $this->status = 0;
+            $this->save();
             return 'Kelas di batalkan';
         } elseif (now() > $this->jam_latihan && $carbon > now()) {
             $this->status = 2;
@@ -86,5 +92,9 @@ class KelasActivity extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function kelasRating(){
+        return $this->hasMany(KelasRating::class, 'id_kelas_activity');
     }
 }

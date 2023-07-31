@@ -12,16 +12,30 @@ class KelasRating extends Model
     protected $table = 'kelas_ratings';
     protected $fillable = [
         'id_user',
-        'id_kelas',
+        'id_kelas_activity',
         'comment',
         'rating'
     ];
 
-    public function user(){
+    protected $appends = [
+        'waktu_lalu'
+    ];
+
+    public function getWaktuLaluAttribute()
+    {
+        $diffInDays = $this->created_at->diffInDays();
+        $showDiff = $this->created_at->diffForHumans();
+        if ($diffInDays > 0) $showDiff .= ', ' . $this->created_at->addDays($diffInDays)->diffInHours() . ' Hours';
+        return $showDiff;
+    }
+
+    public function user()
+    {
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function kelas(){
-        return $this->belongsTo(Kelas::class, 'id_kelas');
+    public function kelasActivity()
+    {
+        return $this->belongsTo(KelasActivity::class, 'id_kelas_activity');
     }
 }
