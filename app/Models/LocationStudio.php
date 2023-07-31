@@ -33,4 +33,8 @@ class LocationStudio extends Model
     {
         return $this->belongsTo(Location::class, 'id_location');
     }
+
+    public function kelasActivity(){
+        return $this->hasMany(KelasActivity::class, 'id_location_studio');
+    }
 }

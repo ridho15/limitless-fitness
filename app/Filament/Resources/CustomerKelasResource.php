@@ -37,6 +37,8 @@ class CustomerKelasResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Kelas Order';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form

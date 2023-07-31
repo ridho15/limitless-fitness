@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,8 +24,18 @@ class BookingOrder extends Model
     ];
 
     protected $appends = [
-        'harga_formatted', 'status_formatted',
+        'harga_formatted', 'status_formatted', 'expired_date_formatted', 'tanggal_pembayaran_formatted'
     ];
+
+    public function getTanggalPembayaranFormattedAttribute()
+    {
+        return Carbon::parse($this->tanggal_pembayaran)->locale('id')->isoFormat('dddd, DD MMMM YYYY HH:mm');
+    }
+
+    public function getExpiredDateFormattedAttribute()
+    {
+        return Carbon::parse($this->expired_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY HH:mm');
+    }
 
     public function getStatusFormattedAttribute()
     {

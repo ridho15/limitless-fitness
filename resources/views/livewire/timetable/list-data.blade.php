@@ -29,11 +29,13 @@
                                             class="text-secondary fw-bold">{{ $data->status_aktivitas_kelas }}</small>
                                     </div>
                                     <div class="col-md-3 text-end">
-                                        <a href="{{ route('detail-timetable', ['id' => $data->id]) }}"
-                                            class="btn custom-btn" @if ($data->status != 1) disabled @endif
-                                            style="padding-left: 50px; padding-right: 50px">Join
-                                            <br>
-                                            Waitlist</a>
+                                        <form action="{{ route('detail-timetable', ['id' => $data->id]) }}"
+                                            method="GET">
+                                            <button type="submit" class="btn custom-btn"
+                                                @if ($data->status != 1) disabled @endif
+                                                style="padding-left: 50px; padding-right: 50px">Join <br>
+                                                Waitlist</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

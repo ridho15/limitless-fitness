@@ -6,6 +6,7 @@ use App\Models\BookingOrder;
 use App\Models\CustomerKelas;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\Location;
 use App\Models\Paket;
 use App\Models\User;
 use Carbon\Carbon;
@@ -35,9 +36,30 @@ class BaseController extends Controller
         return view('base-2.class', $data);
     }
 
-    public function detailClass()
+    public function detailClass($id)
     {
         $data['active'] = 'class';
+        $kelas = Kelas::find($id);
+        if (!$kelas) {
+            return redirect()->back()->with('fail', 'Data kelas tidak ditemukan !');
+        }
+
+        $id_kelas = $kelas->id;
+        $jumlahReview = 0;
+        foreach ($kelas->kelasActivity as $kelasActivity) {
+            $jumlahReview += $kelasActivity->kelasRating->count();
+        }
+
+        $data['kelas'] = $kelas;
+        $data['jumlahReview'] = $jumlahReview;
+        $data['listLocation'] = Location::whereHas('locationStudio', function ($query) use ($id_kelas) {
+            $query->whereHas('kelasActivity', function ($query) use ($id_kelas) {
+                $query->where('id_kelas', $id_kelas);
+            });
+        })
+            ->get();
+
+        $data['relatedClass'] = Kelas::where('id', '!=', $kelas->id)->take(3)->get();
         return view('base-2.detail-class', $data);
     }
 
@@ -67,15 +89,15 @@ class BaseController extends Controller
         return view('base-2.timetable', $data);
     }
 
-    public function detailTimetable($id){
+    public function detailTimetable($id)
+    {
         $data['active'] = 'timetable';
         $kelasActivity = KelasActivity::find($id);
-        if(!$kelasActivity){
+        if (!$kelasActivity) {
             return redirect()->back()->with('fail', 'Data kelas tidak ditemukan !');
         }
 
         $data['kelasActivity'] = $kelasActivity;
-
         return view('base-2.detail-timetable', $data);
     }
 
@@ -163,7 +185,7 @@ class BaseController extends Controller
 
         BookingOrder::create($data);
 
-        return redirect()->route('packages')->with('success', 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih');
+        return redirect()->route('profile')->with('success', 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih');
     }
 
     public function postRegistrasi(Request $request)
@@ -203,11 +225,29 @@ class BaseController extends Controller
         return redirect()->route('login')->with('success', 'Akun berhasil di buat');
     }
 
-    public function profile()
+    public function uploadBuktiPembayaran(Request $request, $id)
     {
-        $user = Auth::user();
-        $data['user'] = $user;
-        return view('base.profile', $data);
+        $validator = Validator::make($request->all(), [
+            'bukti_pembayaran' => 'required|image|mimes:png,jpg,jpeg,pdf|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+        }
+
+        $bookingOrder = BookingOrder::find($id);
+        if (!$bookingOrder) {
+            return redirect()->back()->with('fail', 'Data tidak ditemukan !');
+        }
+
+        $path = $request->file('bukti_pembayaran')->store('public/bukti_pembayaran');
+        $path = str_replace('public/', '', $path);
+        $data['tanggal_pembayaran'] = now();
+        $data['bukti_pembayaran'] = $path;
+
+        $bookingOrder->update($data);
+
+        return redirect()->back()->with('success', 'Berhasil mengupdate bukti pembayaran. silahkan tunggu konfirmasi dari Admin');
     }
 
     public function updateProfile(Request $request)

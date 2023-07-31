@@ -25,8 +25,18 @@ class Kelas extends Model
     ];
 
     protected $appends = [
-        'status_aktif', 'rating', 'level_formatted'
+        'status_aktif', 'rating', 'level_formatted', 'jumlah_review'
     ];
+
+    public function getJumlahReviewAttribute(){
+        $kelasActivity = KelasActivity::where('id_kelas', $this->id)->get();
+        $jumlahReview = 0;
+        foreach($kelasActivity as $item){
+            $jumlahReview += $item->kelasRating->count();
+        }
+
+        return $jumlahReview;
+    }
 
     public function getLevelFormattedAttribute()
     {
@@ -51,9 +61,17 @@ class Kelas extends Model
 
     public function getRatingAttribute()
     {
-        $jumlah = KelasRating::where('id_kelas', $this->id)->sum('rating');
-        $countKelasRating = KelasRating::where('id_kelas', $this->id)->count();
-        return $jumlah / $countKelasRating;
+        $kelasActivity = KelasActivity::where('id_kelas', $this->id)->get();
+        $jumlahReview = 0;
+        $jumlahRating = 0;
+        foreach ($kelasActivity as $item) {
+            foreach ($item->kelasRating as $kelasRating) {
+                $jumlahReview++;
+                $jumlahRating += $kelasRating->rating;
+            }
+        }
+
+        return $jumlahReview == 0 ? 0 : $jumlahRating / $jumlahReview;
     }
 
     public function getStatusAktifAttribute()
@@ -73,10 +91,5 @@ class Kelas extends Model
     public function kelasActivity()
     {
         return $this->hasMany(KelasActivity::class, 'id_kelas');
-    }
-
-    public function kelasRating()
-    {
-        return $this->hasMany(KelasRating::class, 'id_kelas');
     }
 }
