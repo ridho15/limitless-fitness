@@ -182,7 +182,7 @@ class BaseController extends Controller
         }
 
         session()->regenerate();
-        if (Auth::user()->hasRole('Instruktur')) {
+        if (Auth::user()->hasRole('Instruktur') || Auth::user()->hasRole('Super Admin')) {
             return app(LoginResponse::class);
         }
         return redirect()->route('base')->with('success', 'Login Berhasil');

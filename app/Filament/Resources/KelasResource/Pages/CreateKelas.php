@@ -10,11 +10,6 @@ class CreateKelas extends CreateRecord
 {
     protected static string $resource = KelasResource::class;
 
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
-    }
-
     protected function getCreatedNotificationTitle(): ?string
     {
         return 'Berhasil membuat kelas baru';
