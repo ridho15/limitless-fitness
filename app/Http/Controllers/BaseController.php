@@ -140,7 +140,7 @@ class BaseController extends Controller
     public function detailLocation($id_location)
     {
         $location = Location::find($id_location);
-        if(!$location){
+        if (!$location) {
             return redirect()->back()->with('fail', 'Data lokasi tidak ditemukan !');
         }
         $data['location'] = $location;
@@ -182,7 +182,9 @@ class BaseController extends Controller
         }
 
         session()->regenerate();
-
+        if (Auth::user()->hasRole('Instruktur')) {
+            return app(LoginResponse::class);
+        }
         return redirect()->route('base')->with('success', 'Login Berhasil');
     }
 
