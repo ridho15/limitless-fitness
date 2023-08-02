@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookingKelas;
 use App\Models\BookingOrder;
 use App\Models\CustomerKelas;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\KelasPaket;
 use App\Models\Location;
+use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
 use Carbon\Carbon;
@@ -52,12 +55,7 @@ class BaseController extends Controller
 
         $data['kelas'] = $kelas;
         $data['jumlahReview'] = $jumlahReview;
-        $data['listLocation'] = Location::whereHas('locationStudio', function ($query) use ($id_kelas) {
-            $query->whereHas('kelasActivity', function ($query) use ($id_kelas) {
-                $query->where('id_kelas', $id_kelas);
-            });
-        })
-            ->get();
+        $data['listPaket'] = KelasPaket::where('id_kelas', $id)->get();
 
         $data['relatedClass'] = Kelas::where('id', '!=', $kelas->id)->take(3)->get();
         return view('base-2.detail-class', $data);
@@ -79,7 +77,6 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Paket tidak ditemukan !');
         }
         $data['paket'] = $paket;
-        $data['eligiable'] = explode(',', $paket->eligible);
         return view('base-2.detail-packages', $data);
     }
 
@@ -97,7 +94,21 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Data kelas tidak ditemukan !');
         }
 
+        $orderPaket = OrderPaket::where('id_user', Auth::id())
+            ->whereHas('paket', function ($query) use ($kelasActivity) {
+                $query->whereHas('kelasPaket', function ($query) use ($kelasActivity) {
+                    $query->where('id_kelas', $kelasActivity->id_kelas);
+                });
+            })->first();
+
+        $isActive = false;
+        if ($orderPaket && $orderPaket->status == 1 && $orderPaket->is_active == 1) {
+            $isActive = true;
+        }
+
         $data['kelasActivity'] = $kelasActivity;
+        $data['orderPaket'] = $orderPaket;
+        $data['isActive'] = $isActive;
         return view('base-2.detail-timetable', $data);
     }
 
@@ -183,9 +194,12 @@ class BaseController extends Controller
         $data['is_active'] = 0;
         $data['expired_date'] = Carbon::now()->addDays($paket->valid_day);
 
-        BookingOrder::create($data);
+        OrderPaket::create($data);
 
-        return redirect()->route('profile')->with('success', 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih');
+        return redirect()->route('profile.packages')->with([
+            'success' => 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih',
+            'info' => 'Silahkan masuk ke tab tidak aktif dapat dilihat pada halaman ini untuk mengupload bukti pembayaran.',
+        ]);
     }
 
     public function postRegistrasi(Request $request)
@@ -235,7 +249,7 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', $validator->errors()->all()[0]);
         }
 
-        $bookingOrder = BookingOrder::find($id);
+        $bookingOrder = OrderPaket::find($id);
         if (!$bookingOrder) {
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
         }
@@ -307,6 +321,33 @@ class BaseController extends Controller
         ]);
 
         return redirect()->route('profile')->with('success', 'Berhasil melakukan order kelas');
+    }
+
+
+    public function postOrderKelas(Request $request, $id_kelas_activity){
+        $kelasActivity = KelasActivity::find($id_kelas_activity);
+        if(!$kelasActivity){
+            return redirect()->back()->with('fail', 'Data tidak ditemukan !');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'set_jam' => 'required|numeric'
+        ], [
+            'set_jam.required' => 'Set jam tidak boleh kosong',
+            'set_jam.numeric' => 'Set jam tidak valid !'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+        }
+
+        $data['id_user'] = Auth::id();
+        $data['id_kelas_activity'] = $kelasActivity->id;
+        $data['set_jam'] = $request->set_jam;
+        $data['is_send_email'] = true;
+
+        BookingKelas::create($data);
+        return redirect()->route('profile.bookings')->with('success', 'Berhasil mengambil jadwal kelas');
     }
 
     public function logout(Request $request)

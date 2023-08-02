@@ -1,0 +1,138 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\TimetableResource\Pages;
+use App\Filament\Resources\TimetableResource\RelationManagers;
+use App\Models\KelasActivity;
+use App\Models\Timetable;
+use App\Models\User;
+use Filament\Forms;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\Form;
+use Filament\Resources\Resource;
+use Filament\Resources\Table;
+use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class TimetableResource extends Resource
+{
+    protected static ?string $model = KelasActivity::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+
+    protected static ?string $navigationLabel = 'Timetable';
+
+    protected static ?string $pluralModelLabel = 'Timetable';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Card::make()
+                    ->schema([
+                        Fieldset::make('Form timetable')->schema([
+                            Select::make('id_kelas')
+                                ->label('Kelas')
+                                ->preload()
+                                ->searchable()
+                                ->relationship('kelas', 'nama_kelas')
+                                ->required(),
+                            Select::make('id_location_studio')
+                                ->searchable()
+                                ->preload()
+                                ->relationship('locationStudio', 'nama')
+                                ->required(),
+                            DateTimePicker::make('jam_latihan')
+                                ->required(),
+                            TextInput::make('max_anggota')
+                                ->numeric()
+                                ->default(0)
+                                ->required(),
+                            Select::make('id_user')
+                                ->label('Instruktur')
+                                ->preload()
+                                ->searchable()
+                                ->options(User::whereHas('roles', function ($query) {
+                                    $query->where('name', 'Instruktur');
+                                })->get()->pluck('name', 'id'))
+                                ->required(),
+                            Select::make('status')
+                                ->searchable()
+                                ->required()
+                                ->options([
+                                    '0' => 'Dibatalkan',
+                                    '1' => 'Set',
+                                    '2' => 'Sedang berlangsung',
+                                    '3' => 'Sudah lewat',
+                                ]),
+                            Textarea::make('cancellation_policy')
+                                ->string()
+                                ->required(),
+                        ])
+                    ])
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('kelas.nama_kelas')
+                    ->label('Kelas')
+                    ->searchable(),
+                TextColumn::make('locationStudio.nama')
+                    ->label('Lokasi Studio')
+                    ->searchable(),
+                TextColumn::make('jam_latihan')
+                    ->sortable(),
+                TextColumn::make('max_anggota')
+                    ->label('Jumlah Maximal')
+                    ->sortable(),
+                TextColumn::make('user.name')
+                    ->label('Instruktur')
+                    ->searchable(),
+                TextColumn::make('cancellation_policy')
+                    ->searchable(),
+                TextColumn::make('status_formatted')
+                    ->label('Status Jadwal')
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                EditAction::make(),
+                DeleteAction::make(),
+                ViewAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListTimetables::route('/'),
+            'create' => Pages\CreateTimetable::route('/create'),
+            'edit' => Pages\EditTimetable::route('/{record}/edit'),
+        ];
+    }
+}

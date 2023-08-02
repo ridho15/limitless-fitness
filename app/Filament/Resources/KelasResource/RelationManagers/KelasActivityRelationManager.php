@@ -6,6 +6,7 @@ use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Form;
@@ -23,6 +24,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class KelasActivityRelationManager extends RelationManager
 {
     protected static string $relationship = 'KelasActivity';
+
+    protected static ?string $label = "Timetable";
+
+    protected static ?string $pluralModelLabel = "Timetable";
 
     protected static ?string $recordTitleAttribute = 'id_kelas';
 
@@ -57,7 +62,10 @@ class KelasActivityRelationManager extends RelationManager
                         '1' => 'Set',
                         '2' => 'Sedang berlangsung',
                         '3' => 'Sudah lewat',
-                    ])
+                    ]),
+                Textarea::make('cancelation_policy')
+                    ->string()
+                    ->required(),
             ]);
     }
 
@@ -77,7 +85,9 @@ class KelasActivityRelationManager extends RelationManager
                     ->label('Instruktur')
                     ->searchable(),
                 TextColumn::make('status_formatted')
-                    ->label('Status Jadwal')
+                    ->label('Status Jadwal'),
+                TextColumn::make('cancelation_policy')
+                    ->searchable(),
             ])
             ->filters([
                 //

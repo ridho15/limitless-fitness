@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BookingOrder;
+use App\Models\BookingKelas;
+use App\Models\OrderPaket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'bookings';
+        $data['listBookingKelas'] = BookingKelas::where('id_user', $user->id)->get();
         return view('base-2.profile.bookings', $data);
     }
 
@@ -29,14 +31,15 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'packages';
-        $listPaketExpired = BookingOrder::where('id_user', $user->id)->where('status', 2)->whereDate('expired_date', '<=', now())->get();
-        $listPaketAktif = BookingOrder::where('id_user', $user->id)->where(function ($query) {
+        $listPaketExpired = OrderPaket::where('id_user', $user->id)->where('status', 2)->whereDate('expired_date', '<=', now())->get();
+        $listPaketAktif = OrderPaket::where('id_user', $user->id)->where(function ($query) {
             $query->where('status', 1)
                 ->orWhere('status', 2);
-        })->where('is_active', 1)->get();
-        $listPaketTidakAktif = BookingOrder::where('id_user', $user->id)
-        ->where('is_active', 0)
-        ->get();
+        })->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
+        $listPaketTidakAktif = OrderPaket::where('id_user', $user->id)
+            ->where('is_active', 0)
+            ->orderBy('created_at', 'DESC')
+            ->get();
         $data['listPaketExpired'] = $listPaketExpired;
         $data['listPaketAktif'] = $listPaketAktif;
         $data['listPaketTidakAktif'] = $listPaketTidakAktif;

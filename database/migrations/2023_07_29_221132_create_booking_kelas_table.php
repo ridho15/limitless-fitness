@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id_kelas_activity');
             $table->integer('set_jam')->comment('contoh konfirmasi email 1 jam sebelum kehadiran');
             $table->boolean('is_send_email')->comment('status pengiriman pesan ke email / nomor hp');
-            $table->tinyInteger('status_kehadiran')->comment('hadis / izin / tida hadir');
+            $table->tinyInteger('status_kehadiran')->comment('hadir / izin / tidak hadir');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -17,7 +17,8 @@ class KelasActivity extends Model
         'id_location_studio',
         'jam_latihan',
         'id_user',
-        'status'
+        'status',
+        'cancellation_policy',
     ];
 
     protected $appends = [

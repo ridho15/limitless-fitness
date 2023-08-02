@@ -18,7 +18,7 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('css')
     @livewireStyles
     @stack('css')
@@ -77,25 +77,28 @@
                                         class="fa-regular fa-circle-user"></i> <span class="mx-2">My
                                         Profile</span></a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('profile.bookings') }}"><i class="fa-regular fa-credit-card"></i> <span
-                                        class="mx-2">My
+                            <li><a class="dropdown-item" href="{{ route('profile.bookings') }}"><i
+                                        class="fa-regular fa-credit-card"></i> <span class="mx-2">My
                                         Bookings</span></a></li>
-                            <li><a class="dropdown-item" href="{{ route('profile.packages') }}"><i class="fa-solid fa-hand-holding-heart"></i>
+                            <li><a class="dropdown-item" href="{{ route('profile.packages') }}"><i
+                                        class="fa-solid fa-hand-holding-heart"></i>
                                     <span class="mx-2">My Packages</span></a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i class="fa-solid fa-users-rectangle"></i>
+                            <li><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
+                                        class="fa-solid fa-users-rectangle"></i>
                                     <span class="mx-2">My Membership</span></a>
                             </li>
                             <li class="px-2">
                                 <hr>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('profile.billing') }}"><i class="fa-solid fa-comments-dollar"></i>
+                            <li><a class="dropdown-item" href="{{ route('profile.billing') }}"><i
+                                        class="fa-solid fa-comments-dollar"></i>
                                     <span class="mx-2">Billing</span></a></li>
-                            <li><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i class="fa-solid fa-bullhorn"></i> <span
-                                        class="mx-2">Notification
+                            <li><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
+                                        class="fa-solid fa-bullhorn"></i> <span class="mx-2">Notification
                                         Settings</span></a></li>
-                            <li><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i class="fa-solid fa-clipboard"></i> <span
-                                        class="mx-2">Waiver Form</span></a>
+                            <li><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
+                                        class="fa-solid fa-clipboard"></i> <span class="mx-2">Waiver Form</span></a>
                             </li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
@@ -159,27 +162,31 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('js')
     @livewireScripts
     @stack('js')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function() {});
 
-        });
-
-        if ('{{ session()->has('fail') }}') {
+        if ("{{ session()->has('fail') }}") {
             Toastify({
                 text: "{{ session('fail') }}",
                 className: "danger",
-                duration: 3000
+                duration: 3000,
+                style: {
+                    background: "linear-gradient(to right, #FD8D14, #C51605)"
+                }
             }).showToast();
         } else if ("{{ session()->has('success') }}") {
             Toastify({
                 text: "{{ session('success') }}",
                 className: "success",
-                duration: 3000
+                duration: 3000,
+                style: {
+                    background: "linear-gradient(to right, #7A9D54, #557A46)"
+                }
             }).showToast();
         }
     </script>

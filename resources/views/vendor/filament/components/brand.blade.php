@@ -1,1 +1,1 @@
-<h1 class="font-bold">Daily Dose Pilates</h1>
+<img src="{{ asset('assets/images/logo.png') }}" alt="">

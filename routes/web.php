@@ -33,7 +33,10 @@ Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogi
 Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');
 Route::post('/post-registrasi', [BaseController::class, 'postRegistrasi'])->name('postRegistrasi');
 Route::middleware('auth')->group(function () {
-    Route::get('/order-kelas', [BaseController::class, 'orderKelas'])->name('order-kelas');
+    Route::prefix('order-kelas')->group(function(){
+        Route::get('/', [BaseController::class, 'orderKelas'])->name('order-kelas');
+        Route::post('/order-kelas/{id_kelas_activity}', [BaseController::class, 'postOrderKelas'])->name('order-kelas.post');
+    });
     Route::post('/update-profile', [BaseController::class, 'updateProfile'])->name('updateProfile');
     Route::post('/logout', [BaseController::class, 'logout'])->name('logout');
     Route::post('/konfirm-pembayaran-paket/{paket}', [BaseController::class, 'confirmPembayaranPaket'])->name('konfirm-pembayaran-paket');

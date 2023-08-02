@@ -25,13 +25,50 @@ class Kelas extends Model
     ];
 
     protected $appends = [
-        'status_aktif', 'rating', 'level_formatted', 'jumlah_review'
+        'status_aktif', 'rating', 'level_formatted', 'jumlah_review', 'category_formatted', 'type_formatted'
     ];
 
-    public function getJumlahReviewAttribute(){
+    public function getTypeFormattedAttribute()
+    {
+        switch ($this->type) {
+            case 1:
+                return 'Online';
+                break;
+            case 2:
+                return 'Onsite';
+                break;
+            default:
+                return "Not Know";
+                break;
+        }
+    }
+
+    public function getCategoryFormattedAttribute()
+    {
+        switch ($this->category) {
+            case 1:
+                return "Private Class";
+                break;
+            case 2:
+                return "Group Class";
+                break;
+            case 3:
+                return "Private Duet";
+                break;
+            case 4:
+                return "Private Group";
+                break;
+            default:
+                return "Now Know";
+                break;
+        }
+    }
+
+    public function getJumlahReviewAttribute()
+    {
         $kelasActivity = KelasActivity::where('id_kelas', $this->id)->get();
         $jumlahReview = 0;
-        foreach($kelasActivity as $item){
+        foreach ($kelasActivity as $item) {
             $jumlahReview += $item->kelasRating->count();
         }
 
@@ -91,5 +128,9 @@ class Kelas extends Model
     public function kelasActivity()
     {
         return $this->hasMany(KelasActivity::class, 'id_kelas');
+    }
+
+    public function kelasPaket(){
+        return $this->hasMany(KelasPaket::class, 'id_kelas');
     }
 }

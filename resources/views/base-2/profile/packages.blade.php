@@ -24,6 +24,11 @@
                         </li>
                     </ul>
                     <hr>
+                    @if (session()->has('info'))
+                        <div class="alert alert-info" role="alert">
+                            {{ session('info') }}
+                        </div>
+                    @endif
                     <div class="tab-content">
                         <div class="tab-pane fade show active py-4" id="active">
                             @if (count($listPaketAktif) > 0)
@@ -31,7 +36,11 @@
                                     <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="fw-bold text-start">{{ $item->paket->nama }}</div>
+                                                <div class="fw-bold text-start">
+                                                    <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}" style="text-decoration: none; color: black">
+                                                        {{ $item->paket->nama }}
+                                                    </a>
+                                                </div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
                                                     Pertemuan</small>
                                             </div>
@@ -111,13 +120,16 @@
                                     <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="fw-bold text-start">{{ $item->paket->nama }}</div>
+                                                <div class="fw-bold text-start"> <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}" style="text-decoration: none; color: black">
+                                                        {{ $item->paket->nama }}
+                                                    </a></div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
                                                     Pertemuan</small>
                                             </div>
                                             <div class="col-md-4 text-center">
                                                 <div class="fw-bold text-center">{{ $item->harga_formatted }}</div>
-                                                <small class="d-block text-center">Diskon {{ $item->diskon }}%</small>
+                                                <small class="d-block text-center">Diskon
+                                                    {{ $item->paket->diskon }}%</small>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="fw-semibold text-end text-danger">{{ $item->expired_date }}
@@ -158,13 +170,16 @@
                                     <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="fw-bold text-start">{{ $item->paket->nama }}</div>
+                                                <div class="fw-bold text-start"> <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}" style="text-decoration: none; color: black">
+                                                        {{ $item->paket->nama }}
+                                                    </a></div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
                                                     Pertemuan</small>
                                             </div>
                                             <div class="col-md-4 text-center">
                                                 <div class="fw-bold text-center">{{ $item->harga_formatted }}</div>
-                                                <small class="d-block text-center">Diskon {{ $item->diskon }}%</small>
+                                                <small class="d-block text-center">Diskon
+                                                    {{ $item->paket->diskon }}%</small>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="fw-semibold text-end text-danger">{{ $item->expired_date }}
@@ -188,6 +203,34 @@
                                                 <button class="btn custom-btn-outline" disabled>
                                                     <small>Upload Bukti Pembayaran</small>
                                                 </button>
+                                            </div>
+                                            <div class="col-md-4 text-end">
+                                                <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}"
+                                                    wire: method="POST" id="form_bukti_pembayaran"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @if ($item->bukti_pembayaran == null)
+                                                        <label for="bukti_pembayaran" class="btn custom-btn-outline">
+                                                            <small>Upload Bukti Pembayaran</small>
+                                                        </label>
+                                                    @else
+                                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
+                                                            target="_blank" class="btn custom-btn-outline">
+                                                            Lihat Bukti Pembayaran
+                                                        </a>
+                                                    @endif
+                                                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
+                                                        class="form-control"
+                                                        accept="image/jpg, image/jpeg, image/png, .pdf"
+                                                        onchange="loadFile(event)" hidden>
+
+                                                    <div class="d-none text-center" id="sub_form">
+                                                        <img src="" id="output"
+                                                            class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
+                                                        <button type="submit"
+                                                            class="btn custom-btn-outline">Submit</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

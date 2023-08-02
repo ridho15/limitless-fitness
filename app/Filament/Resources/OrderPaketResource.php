@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BookingOrderResource\Pages;
-use App\Filament\Resources\BookingOrderResource\RelationManagers;
-use App\Models\BookingOrder;
+use App\Filament\Resources\OrderPaketResource\Pages;
+use App\Filament\Resources\OrderPaketResource\RelationManagers;
+use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
 use Closure;
@@ -16,7 +16,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TextInput\Mask;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -31,11 +30,11 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BookingOrderResource extends Resource
+class OrderPaketResource extends Resource
 {
-    protected static ?string $model = BookingOrder::class;
+    protected static ?string $model = OrderPaket::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-receipt-refund';
 
     public static function form(Form $form): Form
     {
@@ -133,9 +132,9 @@ class BookingOrderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBookingOrders::route('/'),
-            'create' => Pages\CreateBookingOrder::route('/create'),
-            'edit' => Pages\EditBookingOrder::route('/{record}/edit'),
+            'index' => Pages\ListOrderPakets::route('/'),
+            'create' => Pages\CreateOrderPaket::route('/create'),
+            'edit' => Pages\EditOrderPaket::route('/{record}/edit'),
         ];
     }
 }

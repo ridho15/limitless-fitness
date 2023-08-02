@@ -36,22 +36,24 @@
                         </div>
                     </div>
                     <div class="shadow bg-white p-4" style="border-radius: 15px">
-                        <div class="row align-items-center">
-                            <div class="col-md mb-3">
-                                <select name="location" class="form-control" data-control="select2" data-placeholder="Pilih"
-                                    id="location">
-                                    <option value="">Pilih</option>
-                                    @foreach ($listLocation as $item)
-                                        <option value="{{ $item }}">{{ $item->nama }}</option>
-                                    @endforeach
-                                </select>
+                        <form action="#" method="GET" id="form_book">
+                            <div class="row align-items-center">
+                                <div class="col-md mb-3">
+                                    <select name="location" class="form-control" data-control="select2"
+                                        data-placeholder="Pilih" id="location">
+                                        <option value="">Pilih</option>
+                                        @foreach ($listPaket as $item)
+                                            <option value="{{ $item->paket->id }}">{{ $item->paket->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2 mb-3 text-center">
+                                    <button type="submit" class="btn custom-btn w-100">
+                                        <small class="fw-light">Book Now</small>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-md-2 mb-3 text-center">
-                                <a href="{{ route('timetable') }}" class="btn custom-btn w-100">
-                                    <small class="fw-light">Book Now</small>
-                                </a>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -218,5 +220,10 @@
                 theme: 'bootstrap-5'
             });
         });
+
+        $('#location').on('change', function() {
+            const id = $(this).val()
+            $('#form_book').attr('action', "{{ config('app.url') }}/detail-packages/" + id);
+        })
     </script>
 @endsection

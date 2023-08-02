@@ -7,11 +7,11 @@
     </section>
     {{-- End Slider --}}
     {{-- List Class --}}
-    <section class="py-5">
+    {{-- <section class="py-5">
         @livewire('home.kelas')
-    </section>
+    </section> --}}
 
-    <section class="my-5">
+    {{-- <section class="my-5">
         <div class="container">
             <h3 class="fw-bold mb-4 text-center">Near The Heart of Jakarta</h3>
             <p class="fw-light text-center mb-5">We are located in a strategic part of Jakarta</p>
@@ -45,6 +45,6 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     {{-- End List Class --}}
 @endsection

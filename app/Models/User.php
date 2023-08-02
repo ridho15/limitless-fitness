@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -46,7 +47,8 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     protected $appends = [
-        'status_formatted'
+        'status_formatted',
+        'user_join'
     ];
 
     /**
@@ -64,11 +66,17 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasRole(['Super Admin', 'Admin', 'Instruktur', 'Customer']);
     }
 
-    public function getStatusFormattedAttribute(){
-        if($this->status == 1){
+    public function getStatusFormattedAttribute()
+    {
+        if ($this->status == 1) {
             return 'Aktif';
-        }else{
+        } else {
             return 'Tidak aktif';
         }
+    }
+
+    public function getUserJoinAttribute()
+    {
+        return Carbon::parse($this->created_at)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
     }
 }

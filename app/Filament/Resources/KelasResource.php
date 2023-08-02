@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\KelasResource\Pages;
 use App\Filament\Resources\KelasResource\RelationManagers\KelasActivityRelationManager;
 use App\Filament\Resources\KelasResource\RelationManagers\KelasImageRelationManager;
+use App\Filament\Resources\KelasResource\RelationManagers\KelasPaketRelationManager;
+use App\Filament\Resources\KelasResource\RelationManagers\PaketRelationManager;
 use App\Models\Kelas;
 use App\Models\User;
 use Closure;
@@ -76,12 +78,14 @@ class KelasResource extends Resource
                                     ->options([
                                         '1' => 'Online',
                                         '2' => 'Onsite',
-                                    ])->required(),
+                                    ])->default(2)->required(),
                                 Select::make('category')
                                     ->preload()
                                     ->options([
-                                        '1' => 'Private',
-                                        '2' => 'Group',
+                                        '1' => 'Private Class',
+                                        '2' => 'Group Class',
+                                        '3' => 'Private Duet',
+                                        '4' => 'Private Group',
                                     ])->required(),
                                 TextInput::make('bawaan')
                                     ->string()
@@ -118,38 +122,13 @@ class KelasResource extends Resource
                 TextColumn::make('duration')
                     ->label('Lama Latihan')
                     ->formatStateUsing(fn ($state) => $state . ' Menit'),
-                TextColumn::make('level')
-                    ->formatStateUsing(function ($state) {
-                        if ($state == 0) {
-                            return 'Open to all';
-                        } elseif ($state == 1) {
-                            return 'Intermediate';
-                        } elseif ($state == 2) {
-                            return 'Beginner';
-                        } elseif ($state == 3) {
-                            return 'Advance';
-                        } else {
-                            return '';
-                        }
-                    }),
+                TextColumn::make('level_formatted')
+                    ->label('Level'),
                 TextColumn::make('bawaan'),
-                TextColumn::make('type')
-                    ->formatStateUsing(function ($state) {
-                        if ($state == 1) {
-                            return 'Online';
-                        } elseif ($state == 2) {
-                            return 'Onsite';
-                        }
-                    }),
-                TextColumn::make('category')
-                    ->formatStateUsing(function ($state) {
-                        if ($state == 1) {
-                            return 'Private';
-                        } elseif ($state == 2) {
-                            return 'Group';
-                        }
-                    })
-
+                TextColumn::make('type_formatted')
+                    ->label('Type'),
+                TextColumn::make('category_formatted')
+                    ->label('Kategori'),
             ])
             ->filters([
                 //
@@ -168,6 +147,7 @@ class KelasResource extends Resource
     {
         return [
             KelasImageRelationManager::class,
+            KelasPaketRelationManager::class,
             KelasActivityRelationManager::class
         ];
     }

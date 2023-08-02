@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Filament\Resources\BookingOrderResource\Pages;
+namespace App\Filament\Resources\OrderPaketResource\Pages;
 
-use App\Filament\Resources\BookingOrderResource;
+use App\Filament\Resources\OrderPaketResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditBookingOrder extends EditRecord
+class EditOrderPaket extends EditRecord
 {
-    protected static string $resource = BookingOrderResource::class;
+    protected static string $resource = OrderPaketResource::class;
 
     protected function getActions(): array
     {
         return [
             DeleteAction::make()
+                ->label('Hapus Order Paket')
                 ->icon('heroicon-o-trash')
         ];
     }
@@ -24,8 +25,8 @@ class EditBookingOrder extends EditRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function getCreatedNotificationTitle(): ?string
+    protected function getSavedNotificationTitle(): ?string
     {
-        return 'Berhasil membuat booking order baru';
+        return 'Berhasil mengupdate data order paket';
     }
 }

@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaketResource\Pages;
 use App\Filament\Resources\PaketResource\RelationManagers;
+use App\Filament\Resources\PaketResource\RelationManagers\KelasPaketRelationManager;
+use App\Models\Kelas;
 use App\Models\Location;
 use App\Models\Paket;
 use Closure;
@@ -44,6 +46,7 @@ class PaketResource extends Resource
                         Fieldset::make('Form Paket')
                             ->schema([
                                 TextInput::make('nama')
+                                    ->label('Nama Paket')
                                     ->string()
                                     ->maxLength(255)
                                     ->required(),
@@ -54,30 +57,10 @@ class PaketResource extends Resource
                                     ->numeric()
                                     ->required()
                                     ->default(0),
-                                Select::make('kategori_kelas')
-                                    ->preload()
-                                    ->searchable()
-                                    ->options([
-                                        '1' => 'Group Class',
-                                        '2' => 'Private Class',
-                                        '3' => 'Private Duet',
-                                        '4' => 'Private Group',
-                                    ])->required(),
-                                Select::make('type_kelas')
-                                    ->preload()
-                                    ->searchable()
-                                    ->options([
-                                        '1' => 'Online',
-                                        '2' => 'Onsite',
-                                    ])->required(),
                                 Select::make('location')
                                     ->preload()
                                     ->searchable()
                                     ->options($location),
-                                TextInput::make('eligible')
-                                    ->string()
-                                    ->nullable()
-                                    ->helperText("Untuk pemisah dalam eligible adalah koma ','"),
                                 TextInput::make('harga')
                                     ->numeric()
                                     ->mask(fn (Mask $mask) => $mask->patternBlocks([
@@ -86,6 +69,7 @@ class PaketResource extends Resource
                                             ->decimalSeparator(',')
                                     ])->pattern('Rp.uang'))
                                     ->required(),
+                                TextInput::make('promote_code'),
                                 TextInput::make('diskon')
                                     ->numeric()
                                     ->default(0)
@@ -114,43 +98,6 @@ class PaketResource extends Resource
                     ->formatStateUsing(function ($state) {
                         return $state . ' Hari';
                     })->sortable(),
-                TextColumn::make('kategori_kelas')
-                    ->label('Kategori Kelas')
-                    ->formatStateUsing(function ($state) {
-                        switch ($state) {
-                            case 1:
-                                return 'Group Class';
-                                break;
-                            case 2:
-                                return 'Private Class';
-                                break;
-                            case 3:
-                                return 'Private Duet';
-                                break;
-                            case 4:
-                                return 'Private Group';
-                                break;
-                            default:
-                                return 'Not Know';
-                                break;
-                        }
-                    }),
-                TextColumn::make('type_kelas')
-                    ->label('Type Kelas')
-                    ->formatStateUsing(function ($state) {
-                        switch ($state) {
-                            case 1:
-                                return 'Online';
-                                break;
-                            case 2:
-                                return 'Onsite';
-                                break;
-                            default:
-                                return 'Not Know';
-                                break;
-                        }
-                    }), TextColumn::make('eligible')
-                    ->searchable(),
                 TextColumn::make('promote_code'),
                 TextColumn::make('diskon')
                     ->formatStateUsing(function ($state) {
@@ -182,7 +129,7 @@ class PaketResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            KelasPaketRelationManager::class
         ];
     }
 

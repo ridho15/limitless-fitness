@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Filament\Resources\BookingOrderResource\Pages;
+namespace App\Filament\Resources\OrderPaketResource\Pages;
 
-use App\Filament\Resources\BookingOrderResource;
+use App\Filament\Resources\OrderPaketResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
-class ListBookingOrders extends ListRecords
+class ListOrderPakets extends ListRecords
 {
-    protected static string $resource = BookingOrderResource::class;
+    protected static string $resource = OrderPaketResource::class;
 
     protected function getActions(): array
     {
         return [
             CreateAction::make()
+                ->label('Tambah Data')
                 ->icon('heroicon-o-plus-circle')
-                ->label('Tambah Booking Order')
         ];
     }
 }

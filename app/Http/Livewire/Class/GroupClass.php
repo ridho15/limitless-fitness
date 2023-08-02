@@ -10,8 +10,11 @@ class GroupClass extends Component
     public $listKelas;
     public function render()
     {
-        $this->listKelas = Kelas::where('category', 2)
-        ->get();
+        $this->listKelas = Kelas::where(function ($query) {
+            $query->where('category', 2)
+                ->orWhere('category', 4);
+        })
+            ->get();
         return view('livewire.class.group-class');
     }
 }
