@@ -119,13 +119,13 @@ class BookingKelasResource extends Resource
                 TextColumn::make('keterangan')
                     ->searchable(),
             ])
-            ->filters([
-                //
-            ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
                 ViewAction::make(),
+                DeleteAction::make(),
+            ])
+            ->filters([
+                //
             ])
             ->bulkActions([
                 DeleteBulkAction::make()

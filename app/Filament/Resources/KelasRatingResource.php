@@ -81,7 +81,11 @@ class KelasRatingResource extends Resource
                     ->label('Kelas')
                     ->formatStateUsing(function($state){
                         $kelasActivity = KelasActivity::find($state);
-                        return $kelasActivity->kelas->nama_kelas . ' ' . $kelasActivity->jam_latihan_formatted;
+                        if ($kelasActivity) {
+                            return $kelasActivity->kelas->nama_kelas . ' ' . $kelasActivity->jam_latihan_formatted;
+                        }
+
+                        return null;
                     })
                     ->searchable(),
                 TextColumn::make('comment')

@@ -266,7 +266,7 @@ return [
     |
     */
 
-    'favicon' => asset('assets/images/logo.png'),
+    'favicon' => env('FAVICON', 'https://yoga.medialatihan.com/assets/images/logo.png'),
 
     /*
     |--------------------------------------------------------------------------

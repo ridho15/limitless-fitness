@@ -15,8 +15,13 @@ class ListPakets extends ListRecords
     {
         return [
             CreateAction::make()
-            ->icon('heroicon-o-plus-circle')
-            ->label('Tambah Paket')
+                ->icon('heroicon-o-plus-circle')
+                ->label('Tambah Paket')
         ];
+    }
+
+    protected function getTableActionsPosition(): ?string
+    {
+        return Position::BeforeCells;
     }
 }

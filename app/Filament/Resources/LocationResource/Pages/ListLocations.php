@@ -6,6 +6,7 @@ use App\Filament\Resources\LocationResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\Position;
 
 class ListLocations extends ListRecords
 {
@@ -18,5 +19,10 @@ class ListLocations extends ListRecords
             ->label('Tambah Location')
             ->icon('heroicon-o-plus-circle')
         ];
+    }
+
+    protected function getTableActionsPosition(): ?string
+    {
+        return Position::BeforeCells;
     }
 }

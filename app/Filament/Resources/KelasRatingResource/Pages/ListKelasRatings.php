@@ -6,6 +6,7 @@ use App\Filament\Resources\KelasRatingResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\Position;
 
 class ListKelasRatings extends ListRecords
 {
@@ -18,5 +19,10 @@ class ListKelasRatings extends ListRecords
                 ->label('Tambah Rating Kelas')
                 ->icon('heroicon-o-plus-circle')
         ];
+    }
+
+    protected function getTableActionsPosition(): ?string
+    {
+        return Position::BeforeCells;
     }
 }

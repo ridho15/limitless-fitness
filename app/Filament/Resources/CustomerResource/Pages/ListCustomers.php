@@ -5,6 +5,7 @@ namespace App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\Position;
 
 class ListCustomers extends ListRecords
 {
@@ -17,5 +18,10 @@ class ListCustomers extends ListRecords
             ->label('Tambah Customer')
             ->icon('heroicon-o-plus-circle'),
         ];
+    }
+
+    protected function getTableActionsPosition(): ?string
+    {
+        return Position::BeforeCells;
     }
 }

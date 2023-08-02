@@ -6,6 +6,7 @@ use App\Filament\Resources\OrderPaketResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\Position;
 
 class ListOrderPakets extends ListRecords
 {
@@ -18,5 +19,10 @@ class ListOrderPakets extends ListRecords
                 ->label('Tambah Data')
                 ->icon('heroicon-o-plus-circle')
         ];
+    }
+
+    protected function getTableActionsPosition(): ?string
+    {
+        return Position::BeforeCells;
     }
 }

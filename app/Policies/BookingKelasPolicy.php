@@ -13,10 +13,7 @@ class BookingKelasPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->hasRole('Instruktur')){
-            return true;
-        }
-        return false;
+       
     }
 
     /**
