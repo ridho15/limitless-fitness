@@ -14,8 +14,8 @@
                         Classes</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
-                        href="#group_class">Group Classes</a>
+                    <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab" href="#group_class">Group
+                        Classes</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
@@ -31,9 +31,12 @@
                         All Class Types
                     </button>
                     <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="#">All Class Type</a></li>
-                        <li><a class="dropdown-item" href="#">Online</a></li>
-                        <li><a class="dropdown-item" href="#">Onsite</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassType(0)">All Class
+                                Type</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassType(1)">Online</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassType(2)">Onsite</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-2">
@@ -50,22 +53,25 @@
                         All Class Types
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All Class Type</a></li>
-                        <li><a class="dropdown-item" href="#">Online</a></li>
-                        <li><a class="dropdown-item" href="#">Onsite</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassType(0)">All Class Type</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassType(1)">Online</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassType(2)">Onsite</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="dropdown mx-2 col-md-2 col-lg-2 col-sm-5">
                     <button class="btn btn-custom-filter dropdown-toggle shadow-sm border" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        All Class Types
+                        All Difficulty Level
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All dificulty levels</a></li>
-                        <li><a class="dropdown-item" href="#">Intermediate</a></li>
-                        <li><a class="dropdown-item" href="#">Beginer</a></li>
-                        <li><a class="dropdown-item" href="#">Advanced</a></li>
-                        <li><a class="dropdown-item" href="#">Open to all</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassLevel(0)">All dificulty levels</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassLevel(1)">Intermediate</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassLevel(2)">Beginer</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassLevel(3)">Advanced</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeClassLevel(0)">Open to all</a></li>
                     </ul>
                 </div>
 
@@ -75,7 +81,7 @@
                     @livewire('class.all-class')
                 </div>
                 <div class="tab-pane fade" id="group_class">
-                   @livewire('class.group-class')
+                    @livewire('class.group-class')
                 </div>
                 <div class="tab-pane fade" id="private_class">
                     @livewire('class.private-class')
@@ -103,20 +109,21 @@
                             All class types
                         </label>
                         <input class="form-check-input" type="radio" name="types" id="all_class_types"
-                            value="option1" checked>
+                            onclick="changeClassType(0)" value="0" checked>
                     </div>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="online">
                             Online
                         </label>
-                        <input class="form-check-input" type="radio" name="types" id="online" value="option2">
-
+                        <input class="form-check-input" onclick="changeClassType(1)" type="radio" name="types"
+                            id="online" value="1">
                     </div>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="onsite">
                             Onsite
                         </label>
-                        <input class="form-check-input" type="radio" name="types" id="onsite" value="option3">
+                        <input class="form-check-input" onclick="changeClassType(2)" type="radio" name="types"
+                            id="onsite" value="2">
                     </div>
                     <hr>
                     <h5 class="fw-bold my-3">All Difficulty Levels</h5>
@@ -125,33 +132,36 @@
                             All dificulty levels
                         </label>
                         <input class="form-check-input" type="radio" name="levels" id="all_dificulty_levels"
-                            value="option1" checked>
+                            value="0" onclick="changeClassLevel(0)" checked>
                     </div>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="intermediate">
                             Intermediate
                         </label>
-                        <input class="form-check-input" type="radio" name="levels" id="intermediate"
-                            value="option2">
+                        <input class="form-check-input" type="radio" name="levels" id="intermediate" value="1"
+                            onclick="changeClassLevel(1)">
 
                     </div>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="beginer">
                             Beginer
                         </label>
-                        <input class="form-check-input" type="radio" name="levels" id="beginer" value="option3">
+                        <input class="form-check-input" type="radio" name="levels" id="beginer" value="2"
+                            onclick="changeClassLevel(2)">
                     </div>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="advanced">
                             Advanced
                         </label>
-                        <input class="form-check-input" type="radio" name="levels" id="advanced" value="option3">
+                        <input class="form-check-input" type="radio" name="levels" id="advanced" value="3"
+                            onclick="changeClassLevel(3)">
                     </div>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="open_to_all">
                             Open to all
                         </label>
-                        <input class="form-check-input" type="radio" name="levels" id="open_to_all" value="option3">
+                        <input class="form-check-input" type="radio" name="levels" id="open_to_all" value="0"
+                            onclick="changeClassLevel(0)">
                     </div>
                 </div>
             </div>
@@ -159,12 +169,20 @@
     </div>
 @endsection
 
-@section('js')
+@push('js')
     <script>
         $(document).ready(function() {});
 
         $('#btn-filter').on('click', function() {
             $('#modal_filter').modal('show')
         })
+
+        function changeClassType(type) {
+            Livewire.emit('changeTypes', type)
+        }
+
+        function changeClassLevel(level) {
+            Livewire.emit('changeLevel', level);
+        }
     </script>
-@endsection
+@endpush

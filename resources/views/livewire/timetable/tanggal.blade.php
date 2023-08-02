@@ -1,7 +1,9 @@
 <div>
     <div class="d-flex mb-2" style="overflow-x: scroll">
         @foreach ($listTanggal as $index => $item)
-            <a href="#{{ $index }}" wire:click="$emit('onClickTanggal', {{ $index }})" class="card-date @if($index == $indexTanggal) active @endif shadow-sm mx-1" style="text-decoration: none;">
+            <a href="#{{ $index }}" wire:click="$emit('onClickTanggal', {{ $index }})"
+                class="card-date @if ($index == $indexTanggal) active @endif shadow-sm mx-1"
+                style="text-decoration: none;">
                 <div class="text-center">
                     <small class="fw-light">{{ date('M', strtotime($item)) }}</small>
                 </div>
@@ -16,9 +18,16 @@
                 All Categories
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">All Categories</a></li>
-                <li><a class="dropdown-item" href="#">Group Classes</a></li>
-                <li><a class="dropdown-item" href="#">Private Classes</a></li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 0)">All Categories</a>
+                </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 1)">Private Class</a>
+                </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 2)">Group Class</a>
+                </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 3)">Private Duet</a>
+                </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 4)">Private Group</a>
+                </li>
             </ul>
         </div>
         <div class="dropdown col-md-2">
@@ -26,86 +35,68 @@
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Location
             </button>
-            <div class="w-100 dropdown-menu px-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-            </div>
+            <ul class="w-100 dropdown-menu px-2">
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLocation',0 )">All Location</a>
+                </li>
+                @foreach ($listLocation as $item)
+                    <li><a class="dropdown-item" href="#"
+                            wire:click="$emit('onChangeLocation', {{ $item->id }})">{{ $item->nama }}</a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
         <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Classes
             </button>
-            <div class="w-100 dropdown-menu px-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-            </div>
+            <ul class="w-100 dropdown-menu px-2">
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass',0 )">All Class</a>
+                </li>
+                @foreach ($listKelas as $item)
+                    <li><a class="dropdown-item" href="#"
+                            wire:click="$emit('onChangeClass', {{ $item->id }})">{{ $item->nama_kelas }}</a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
         <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Instructor
             </button>
-            <div class="w-100 dropdown-menu px-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-            </div>
+            <ul class="w-100 dropdown-menu px-2">
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeInstruktur', 0)">All
+                        Instruktur</a>
+                </li>
+                @foreach ($listInstruktur as $item)
+                    <li><a class="dropdown-item" href="#"
+                            wire:click="$emit('onChangeInstruktur', {{ $item->id }})">{{ $item->name }}</a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
-        <div class="dropdown col-md-2">
+        <div class="dropdown col-md-3">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Level of difficulty
             </button>
-            <div class="w-100 dropdown-menu px-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Default checkbox
-                    </label>
-                </div>
-            </div>
+            <ul class="w-100 dropdown-menu px-2">
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 0)">All Level</a>
+                </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 1)">Intermediated</a>
+                </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 2)">Beginer</a>
+                </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 3)">Advanced</a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="row d-sm-none my-3 align-items-center justify-content-center">
         <div class="dropdown col-10">
-            <button class="btn btn-custom-filter btn-block dropdown-toggle shadow-sm border w-100"
-                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-custom-filter btn-block dropdown-toggle shadow-sm border w-100" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
                 All Class Types
             </button>
             <ul class="dropdown-menu w-100">
@@ -126,6 +117,26 @@
     <script>
         Livewire.on('onClickTanggal', (tanggal) => {
             Livewire.emit('setTanggal', tanggal)
+        })
+
+        Livewire.on('onChangeCategory', (category) => {
+            Livewire.emit('changeCategory', category);
+        })
+
+        Livewire.on('onChangeLocation', (id_location) => {
+            Livewire.emit('changeLocation', id_location);
+        })
+
+        Livewire.on('onChangeClass', (id_kelas) => {
+            Livewire.emit('changeClass', id_kelas);
+        })
+
+        Livewire.on('onChangeInstruktur', (id_user) => {
+            Livewire.emit('changeInstruktur', id_user);
+        })
+
+        Livewire.on('onChangeLevel', (level) => {
+            Livewire.emit('changeLevel', level);
         })
     </script>
 @endpush

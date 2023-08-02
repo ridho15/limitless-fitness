@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daily Dose Pilates</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,34 +74,34 @@
                             <span class="mx-1">{{ Auth::user()->name }}</span>
                         </button>
                         <ul class="dropdown-menu bg-color-custom" style="z-index: 100">
-                            <li><a class="dropdown-item" href="{{ route('profile') }}"><i
+                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile') }}"><i
                                         class="fa-regular fa-circle-user"></i> <span class="mx-2">My
                                         Profile</span></a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('profile.bookings') }}"><i
+                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.bookings') }}"><i
                                         class="fa-regular fa-credit-card"></i> <span class="mx-2">My
                                         Bookings</span></a></li>
-                            <li><a class="dropdown-item" href="{{ route('profile.packages') }}"><i
+                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.packages') }}"><i
                                         class="fa-solid fa-hand-holding-heart"></i>
                                     <span class="mx-2">My Packages</span></a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
+                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
                                         class="fa-solid fa-users-rectangle"></i>
                                     <span class="mx-2">My Membership</span></a>
                             </li>
-                            <li class="px-2">
+                            <li class="my-2" class="px-2">
                                 <hr>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('profile.billing') }}"><i
+                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.billing') }}"><i
                                         class="fa-solid fa-comments-dollar"></i>
                                     <span class="mx-2">Billing</span></a></li>
-                            <li><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
+                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
                                         class="fa-solid fa-bullhorn"></i> <span class="mx-2">Notification
                                         Settings</span></a></li>
-                            <li><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
+                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
                                         class="fa-solid fa-clipboard"></i> <span class="mx-2">Waiver Form</span></a>
                             </li>
-                            <li>
+                            <li class="my-2">
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
                                     <button class="dropdown-item" type="submit"><i

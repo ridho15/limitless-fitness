@@ -2,6 +2,9 @@
 
 namespace App\Http\Livewire\Timetable;
 
+use App\Models\Kelas;
+use App\Models\Location;
+use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Livewire\Component;
@@ -13,6 +16,9 @@ class Tanggal extends Component
     ];
     private $listTanggal;
     public $indexTanggal;
+    public $listKelas = [];
+    public $listLocation = [];
+    public $listInstruktur = [];
     public function render()
     {
         $startDate = Carbon::now()->isoFormat('DD MMMM YYYY');
@@ -22,11 +28,17 @@ class Tanggal extends Component
         return view('livewire.timetable.tanggal', $data);
     }
 
-    public function  mount(){
-
+    public function  mount()
+    {
+        $this->listLocation = Location::get();
+        $this->listKelas = Kelas::get();
+        $this->listInstruktur = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Instruktur');
+        })->get();
     }
 
-    public function setTanggal($index){
+    public function setTanggal($index)
+    {
         $this->indexTanggal = $index;
     }
 }

@@ -25,7 +25,12 @@ class Kelas extends Model
     ];
 
     protected $appends = [
-        'status_aktif', 'rating', 'level_formatted', 'jumlah_review', 'category_formatted', 'type_formatted'
+        'status_aktif',
+        'rating',
+        'level_formatted',
+        'jumlah_review',
+        'category_formatted',
+        'type_formatted'
     ];
 
     public function getTypeFormattedAttribute()

@@ -120,6 +120,7 @@ class BaseController extends Controller
 
     public function location()
     {
+        $data['listLocation'] = Location::get();
         $data['active'] = 'location';
         return view('base-2.location', $data);
     }
@@ -136,8 +137,13 @@ class BaseController extends Controller
         return view('base-2.registrasi', $data);
     }
 
-    public function detailLocation()
+    public function detailLocation($id_location)
     {
+        $location = Location::find($id_location);
+        if(!$location){
+            return redirect()->back()->with('fail', 'Data lokasi tidak ditemukan !');
+        }
+        $data['location'] = $location;
         $data['active'] = 'location';
         return view('base-2.detail-location', $data);
     }
@@ -185,6 +191,10 @@ class BaseController extends Controller
         $paket = Paket::find($paket);
         if (!$paket) {
             return redirect()->back()->with('fail', 'Data peket tidak ditemukan !');
+        }
+
+        if (count($paket->kelasPaket) == 0) {
+            return redirect()->back()->with('fail', 'Kelas belum tersedia di dalam paket');
         }
 
         $data['id_user'] = Auth::user()->id;
@@ -324,9 +334,10 @@ class BaseController extends Controller
     }
 
 
-    public function postOrderKelas(Request $request, $id_kelas_activity){
+    public function postOrderKelas(Request $request, $id_kelas_activity)
+    {
         $kelasActivity = KelasActivity::find($id_kelas_activity);
-        if(!$kelasActivity){
+        if (!$kelasActivity) {
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
         }
 
@@ -337,7 +348,7 @@ class BaseController extends Controller
             'set_jam.numeric' => 'Set jam tidak valid !'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->with('fail', $validator->errors()->all()[0]);
         }
 

@@ -4,8 +4,8 @@
             <span class="fs-2 fw-bold text-white circle-profile-default"
                 style="">{{ substr(Auth::user()->name, 0, 2) }}</span>
         </div>
-        <span class="d-block mb-3 fw-light">RezevePass Account: {{ sprintf('%08d', Auth::user()->id) }}</span>
-        <span class="d-block mb-4 fw-light">Joined since {{ Auth::user()->user_join }}</span>
+        <small class="d-block mb-3 fw-light">RezevePass Account: {{ sprintf('%08d', Auth::user()->id) }}</small>
+        <small class="d-block mb-4 fw-light">Joined since {{ Auth::user()->user_join }}</small>
     </div>
     <hr>
     <div class="p-4">
