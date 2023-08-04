@@ -17,53 +17,11 @@
                         <h3 class="fw-bold mb-3">
                             Book this class
                         </h3>
-                        <small class="d-block fw-bold mb-2">Select the latest time prior to the class to be booked in
-                            automatically if there's an available slot</small>
-                        <small class="d-block mb-2">You will receive an email once you are successfully booked in.</small>
-                        <div class="row">
-                            <div class="form-check col-md-3">
-                                <input class="form-check-input" type="radio" name="set_jam" id="set_jam1" value="1"
-                                    required>
-                                <label class="form-check-label" for="set_jam1">
-                                    <small>1 hour before class</small>
-                                </label>
-                            </div>
-                            <div class="form-check col-md-3">
-                                <input class="form-check-input" type="radio" name="set_jam" id="set_jam2" value="2"
-                                    required>
-                                <label class="form-check-label" for="set_jam2">
-                                    <small>2 hours before class</small>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-check col-md-3">
-                                <input class="form-check-input" type="radio" name="set_jam" id="set_jam3" value="3"
-                                    required>
-                                <label class="form-check-label" for="set_jam3">
-                                    <small>3 hours before class</small>
-                                </label>
-                            </div>
-                            <div class="form-check col-md-3">
-                                <input class="form-check-input" type="radio" name="set_jam" id="set_jam6" value="6"
-                                    required>
-                                <label class="form-check-label" for="set_jam6">
-                                    <small>6 houre before class</small>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-check col-md-3">
-                                <input class="form-check-input" type="radio" name="set_jam" id="set_jam12" value="12"
-                                    required>
-                                <label class="form-check-label" for="set_jam12">
-                                    <small>12 houre before class</small>
-                                </label>
-                            </div>
-                        </div>
-                        <hr class="my-4" style="opacity: 0.1">
-                        <div class="fw-bold mb-4">Select your pricing plan</div>
+                        <small class="">Please confirm your presence before <strong>6 pm</strong> if you are unable to
+                            make it when practice starts</small>
                         @if (!$orderPaket)
+                            <div class="fw-bold mb-4">Select your pricing plan</div>
+                            <hr class="my-4" style="opacity: 0.1">
                             <div class="custom-bg-danger w-100 py-3 mb-4 text-center mb-3" style="border-radius: 20px">
                                 <small class="text-danger text-center">Anda tidak memiliki paket yang memenuhi syarat atau
                                     keanggotaan.</small>
@@ -90,16 +48,17 @@
                             </div>
                         @endif
                         <hr class="my-4" style="opacity: 0.1">
-                        <div class="fw-bold">Things to bring</div>
+                        <div class="fw-bold mb-2">Things to bring</div>
                         <ul>
                             <li><small>Pilates Socks</small></li>
                         </ul>
                         <hr class="my-4" style="opacity: 0.1">
-                        <div class="fw-bold">Getting there</div>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <small class="fw-light">{{ $kelasActivity->locationStudio->location->alamat }}</small>
+                        <div class="fw-bold mb-2">Getting there</div>
+                        <div class="">
+                            <small
+                                class="d-block fw-light mb-3">{{ $kelasActivity->locationStudio->location->alamat }}</small>
                             <a href="{{ $kelasActivity->locationStudio->location->url_location }}" target="_blank"
-                                class="btn custom-btn-outline" style="padding: 15px"><small>Get Directions</small></a>
+                                class="btn custom-btn-outline w-100" style="padding: 5px"><small>Get Directions</small></a>
                         </div>
                         <hr class="my-4" style="opacity: 0.1">
                         <div class="fw-bold">Cancellation policy</div>
@@ -130,8 +89,9 @@
                                     </div>
                                     <div class="col-md">
                                         <small
-                                            class="d-block">{{ \Carbon\Carbon::parse($kelasActivity->jam_latihan)->locale('id')->isoFormat('HH:mm') }},
-                                            {{ $kelasActivity->kelas->duration }} mins</small>
+                                            class="d-block">{{ \Carbon\Carbon::parse($kelasActivity->jam_mulai)->locale('id')->isoFormat('HH:mm') }}
+                                            -
+                                            {{ \Carbon\Carbon::parse($kelasActivity->jam_selesai)->locale('id')->isoFormat('HH:mm') }}</small>
                                         <small class="d-block text-secondary">Check-in anytime before class begins</small>
                                     </div>
                                 </div>
@@ -142,8 +102,7 @@
                                         </span>
                                     </div>
                                     <div class="col-md">
-                                        <small
-                                            class="d-block">{{ $kelasActivity->locationStudio->location->nama }}</small>
+                                        <small class="d-block">{{ $kelasActivity->locationStudio->location->nama }}</small>
                                         <small class="d-block">{{ $kelasActivity->locationStudio->nama }}</small>
                                     </div>
                                 </div>
@@ -158,8 +117,15 @@
                                     </div>
                                 </div>
                                 <div class="text-center">
+
+                                    @if ($isBooking)
+                                        <small class="d-block my-4">Anda sudah memesan kelas ini silahkan lihat pada bagian
+                                            <a class="text-decoration-none text-dark"
+                                                href="{{ route('profile.bookings') }}">
+                                                <Strong>Profile -> My Bookings</Strong></a></small>
+                                    @endif
                                     <button type="button" class="btn custom-btn w-100 mb-1" id="btn_book_now"
-                                        @if ($isActive == false) disabled @endif>
+                                        @if ($isActive == false || $isBooking == true) disabled @endif>
                                         Book Now
                                     </button>
                                     <div class="" style="font-size: 8pt">

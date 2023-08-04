@@ -13,7 +13,11 @@ class KelasRatingPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        if ($user->hasRole(['Instruktur'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -21,7 +25,11 @@ class KelasRatingPolicy
      */
     public function view(User $user, KelasRating $kelasRating)
     {
-        //
+        if ($user->hasRole(['Instruktur'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -1,13 +1,13 @@
 @extends('base-2.layout')
 
 @section('content')
-    <section class="my-4 py-4">
+    <section class="my-5 py-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
                     @livewire('profile.left-bar', ['active' => $active])
                 </div>
-                <div class="col-md py-4">
+                <div class="col-md ps-5">
                     <h4 class="fw-bold">My Packages</h4>
                     <ul class="nav nav-underline d-none d-sm-flex">
                         <li class="nav-item" role="presentation">
@@ -37,7 +37,8 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="fw-bold text-start">
-                                                    <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}" style="text-decoration: none; color: black">
+                                                    <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
+                                                        style="text-decoration: none; color: black">
                                                         {{ $item->paket->nama }}
                                                     </a>
                                                 </div>
@@ -82,7 +83,7 @@
                                                     @else
                                                         <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
                                                             target="_blank" class="btn custom-btn-outline">
-                                                            Lihat Bukti Pembayaran
+                                                            <small>Lihat Bukti Pembayaran</small>
                                                         </a>
                                                     @endif
                                                     <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
@@ -93,7 +94,7 @@
                                                         <img src="" id="output"
                                                             class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
                                                         <button type="submit"
-                                                            class="btn custom-btn-outline">Submit</button>
+                                                            class="btn custom-btn-outline"><small>Submit</small></button>
                                                     </div>
                                                 </form>
 
@@ -120,7 +121,9 @@
                                     <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="fw-bold text-start"> <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}" style="text-decoration: none; color: black">
+                                                <div class="fw-bold text-start"> <a
+                                                        href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
+                                                        style="text-decoration: none; color: black">
                                                         {{ $item->paket->nama }}
                                                     </a></div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
@@ -166,11 +169,13 @@
                         </div>
                         <div class="tab-pane fade py-4" id="tidak_aktif">
                             @if (count($listPaketTidakAktif) > 0)
-                                @foreach ($listPaketTidakAktif as $item)
+                                @foreach ($listPaketTidakAktif as $index => $item)
                                     <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="fw-bold text-start"> <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}" style="text-decoration: none; color: black">
+                                                <div class="fw-bold text-start"> <a
+                                                        href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
+                                                        style="text-decoration: none; color: black">
                                                         {{ $item->paket->nama }}
                                                     </a></div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
@@ -210,25 +215,34 @@
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @if ($item->bukti_pembayaran == null)
-                                                        <label for="bukti_pembayaran" class="btn custom-btn-outline">
-                                                            <small>Upload Bukti Pembayaran</small>
+                                                        <label
+                                                            for="@if ($item->expired_date >= now()) bukti_pembayaran_{{ $index }} @endif"
+                                                            class="btn custom-btn-outline">
+                                                            <small>
+                                                                @if ($item->expired_date <= now())
+                                                                    The order has expired
+                                                                @else
+                                                                    Upload Bukti Pembayaran
+                                                                @endif
+                                                            </small>
                                                         </label>
                                                     @else
                                                         <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
                                                             target="_blank" class="btn custom-btn-outline">
-                                                            Lihat Bukti Pembayaran
+                                                            <small>Lihat Bukti Pembayaran</small>
                                                         </a>
                                                     @endif
-                                                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
-                                                        class="form-control"
+                                                    <input type="file" id="bukti_pembayaran_{{ $index }}"
+                                                        name="bukti_pembayaran" class="form-control"
                                                         accept="image/jpg, image/jpeg, image/png, .pdf"
-                                                        onchange="loadFile(event)" hidden>
+                                                        onchange="loadFile(event)"
+                                                        @if ($item->expired_date <= now()) disabled @endif hidden>
 
                                                     <div class="d-none text-center" id="sub_form">
                                                         <img src="" id="output"
                                                             class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
                                                         <button type="submit"
-                                                            class="btn custom-btn-outline">Submit</button>
+                                                            class="btn custom-btn-outline"><small>Submit</small></button>
                                                     </div>
                                                 </form>
                                             </div>

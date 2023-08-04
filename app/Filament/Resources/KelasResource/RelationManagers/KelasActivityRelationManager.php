@@ -40,11 +40,11 @@ class KelasActivityRelationManager extends RelationManager
                     ->preload()
                     ->relationship('locationStudio', 'nama')
                     ->required(),
-                DateTimePicker::make('jam_latihan')
+                DateTimePicker::make('jam_mulai')
+                    ->label('Waktu Mulai')
                     ->required(),
-                TextInput::make('max_anggota')
-                    ->numeric()
-                    ->default(0)
+                DateTimePicker::make('jam_selesai')
+                    ->label('Waktu Selesai')
                     ->required(),
                 Select::make('id_user')
                     ->label('Instruktur')
@@ -76,10 +76,9 @@ class KelasActivityRelationManager extends RelationManager
                 TextColumn::make('locationStudio.nama')
                     ->label('Lokasi Studio')
                     ->searchable(),
-                TextColumn::make('jam_latihan')
+                TextColumn::make('jam_mulai_formatted')
                     ->sortable(),
-                TextColumn::make('max_anggota')
-                    ->label('Jumlah Maximal')
+                TextColumn::make('jam_selesai_formatted')
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Instruktur')

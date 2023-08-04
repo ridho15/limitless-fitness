@@ -29,6 +29,8 @@ class BaseController extends Controller
     use WithRateLimiting;
     public function index()
     {
+        // $helper = new HelperController;
+        // return $helper->updateData();
         $data['active'] = 'home';
         return view('base-2.index', $data);
     }
@@ -106,9 +108,15 @@ class BaseController extends Controller
             $isActive = true;
         }
 
+        $isBooking = false;
+        if($kelasActivity->bookingKelas->where('id_user', Auth::id())->first()){
+            $isBooking = true;
+        }
+
         $data['kelasActivity'] = $kelasActivity;
         $data['orderPaket'] = $orderPaket;
         $data['isActive'] = $isActive;
+        $data['isBooking'] = $isBooking;
         return view('base-2.detail-timetable', $data);
     }
 
@@ -281,6 +289,8 @@ class BaseController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|email',
+            'tanggal_lahir' => 'nullable|string',
+            'negara' => 'nullable|string',
             'no_hp' => ['required', 'regex:/^(\+62|0)(\d{8,12})$/'],
             'alamat' => 'required',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -305,7 +315,10 @@ class BaseController extends Controller
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['alamat'] = $request->alamat;
+        $data['jenis_kelamin'] = $request->jenis_kelamin;
         $data['no_hp'] = $request->no_hp;
+        $data['negara'] = $request->negara;
+        $data['tanggal_lahir'] = $request->tanggal_lahir;
 
         $id_user = Auth::id();
         $user = User::find($id_user);
@@ -341,17 +354,6 @@ class BaseController extends Controller
         $kelasActivity = KelasActivity::find($id_kelas_activity);
         if (!$kelasActivity) {
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
-        }
-
-        $validator = Validator::make($request->all(), [
-            'set_jam' => 'required|numeric'
-        ], [
-            'set_jam.required' => 'Set jam tidak boleh kosong',
-            'set_jam.numeric' => 'Set jam tidak valid !'
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
         }
 
         $data['id_user'] = Auth::id();

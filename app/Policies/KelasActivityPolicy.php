@@ -25,7 +25,11 @@ class KelasActivityPolicy
      */
     public function view(User $user, KelasActivity $kelasActivity)
     {
-        //
+        if ($user->hasRole(['Instruktur'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -33,7 +37,11 @@ class KelasActivityPolicy
      */
     public function create(User $user)
     {
-        //
+        if ($user->hasRole(['Instruktur'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -41,7 +49,11 @@ class KelasActivityPolicy
      */
     public function update(User $user, KelasActivity $kelasActivity)
     {
-        //
+        if ($user->hasRole(['Instruktur'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -49,7 +61,11 @@ class KelasActivityPolicy
      */
     public function delete(User $user, KelasActivity $kelasActivity)
     {
-        //
+        if ($user->hasRole(['Instruktur'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -57,7 +73,7 @@ class KelasActivityPolicy
      */
     public function restore(User $user, KelasActivity $kelasActivity)
     {
-        //
+
     }
 
     /**

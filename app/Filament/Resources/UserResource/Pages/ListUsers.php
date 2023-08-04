@@ -16,8 +16,8 @@ class ListUsers extends ListRecords
     {
         return [
             CreateAction::make()
-            ->label('Tambah User')
-            ->icon('heroicon-o-plus-circle')
+                ->label('Tambah User')
+                ->icon('heroicon-o-plus-circle')
         ];
     }
     protected function getTableActionsPosition(): ?string

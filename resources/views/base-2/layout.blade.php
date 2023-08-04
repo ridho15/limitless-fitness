@@ -73,7 +73,7 @@
                             </span>
                             <span class="mx-1">{{ Auth::user()->name }}</span>
                         </button>
-                        <ul class="dropdown-menu bg-color-custom" style="z-index: 100">
+                        <ul class="dropdown-menu bg-color-custom w-100" style="z-index: 100">
                             <li class="my-2"><a class="dropdown-item" href="{{ route('profile') }}"><i
                                         class="fa-regular fa-circle-user"></i> <span class="mx-2">My
                                         Profile</span></a>
@@ -85,22 +85,22 @@
                                         class="fa-solid fa-hand-holding-heart"></i>
                                     <span class="mx-2">My Packages</span></a>
                             </li>
-                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
+                            {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
                                         class="fa-solid fa-users-rectangle"></i>
                                     <span class="mx-2">My Membership</span></a>
-                            </li>
+                            </li> --}}
                             <li class="my-2" class="px-2">
                                 <hr>
                             </li>
                             <li class="my-2"><a class="dropdown-item" href="{{ route('profile.billing') }}"><i
                                         class="fa-solid fa-comments-dollar"></i>
                                     <span class="mx-2">Billing</span></a></li>
-                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
+                            {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
                                         class="fa-solid fa-bullhorn"></i> <span class="mx-2">Notification
-                                        Settings</span></a></li>
-                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
+                                        Settings</span></a></li> --}}
+                            {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
                                         class="fa-solid fa-clipboard"></i> <span class="mx-2">Waiver Form</span></a>
-                            </li>
+                            </li> --}}
                             <li class="my-2">
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf

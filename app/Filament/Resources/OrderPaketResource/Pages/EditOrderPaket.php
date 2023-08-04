@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OrderPaketResource\Pages;
 
 use App\Filament\Resources\OrderPaketResource;
+use Carbon\Carbon;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -18,6 +19,17 @@ class EditOrderPaket extends EditRecord
                 ->label('Hapus Order Paket')
                 ->icon('heroicon-o-trash')
         ];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if($data['status'] == 1){
+            $data['is_active'] = 1;
+            if($this->record->is_active != $data['is_active']){
+                $data['expired_date'] = Carbon::now()->addDays($this->record->paket->valid_day);
+            }
+        }
+        return $data;
     }
 
     protected function getRedirectUrl(): string

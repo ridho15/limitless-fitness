@@ -6,6 +6,7 @@ use App\Filament\Resources\TimetableResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditTimetable extends EditRecord
 {
@@ -18,6 +19,11 @@ class EditTimetable extends EditRecord
                 ->label('Hapus Timetable')
                 ->icon('heroicon-o-trash')
         ];
+    }
+
+    protected function getTitle(): string|Htmlable
+    {
+        return 'Edit Timetable';
     }
 
     protected function getRedirectUrl(): ?string

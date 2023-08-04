@@ -1,7 +1,7 @@
 <div class="bg-white shadow" style="border-radius: 15px">
     <div class="pt-5 text-center">
         <div class="text-center mb-5">
-            <span class="fs-2 fw-bold text-white circle-profile-default"
+            <span class="fs-2 fw-bold text-white circle-profile-default text-uppercase"
                 style="">{{ substr(Auth::user()->name, 0, 2) }}</span>
         </div>
         <small class="d-block mb-3 fw-light">RezevePass Account: {{ sprintf('%08d', Auth::user()->id) }}</small>
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </a>
-        <a href="{{ route('profile.memberships') }}" class="menu-profile">
+        {{-- <a href="{{ route('profile.memberships') }}" class="menu-profile">
             <div class="row mb-3 align-items-center @if ($active == 'memberships') active @endif">
                 <div class="col-md-2 col-2 fs-5">
                     <i class="fa-solid fa-users-rectangle"></i>
@@ -48,7 +48,7 @@
                     My memberships
                 </div>
             </div>
-        </a>
+        </a> --}}
         <a href="{{ route('profile.billing') }}" class="menu-profile">
             <div class="row mb-3 align-items-center @if ($active == 'billing') active @endif">
                 <div class="col-md-2 col-2 fs-5">
@@ -59,7 +59,7 @@
                 </div>
             </div>
         </a>
-        <a href="{{ route('profile.notification-settings') }}" class="menu-profile">
+        {{-- <a href="{{ route('profile.notification-settings') }}" class="menu-profile">
             <div class="row mb-3 align-items-center @if ($active == 'notification-settings') active @endif">
                 <div class="col-md-2 col-2 fs-5">
                     <i class="fa-solid fa-bullhorn"></i>
@@ -68,8 +68,8 @@
                     Notification settings
                 </div>
             </div>
-        </a>
-        <a href="{{ route('profile.waiver-form') }}" class="menu-profile">
+        </a> --}}
+        {{-- <a href="{{ route('profile.waiver-form') }}" class="menu-profile">
             <div class="row mb-3 align-items-center @if ($active == 'waiver-form') active @endif">
                 <div class="col-md-2 col-2 fs-5">
                     <i class="fa-solid fa-clipboard"></i>
@@ -78,7 +78,7 @@
                     Waiver Form
                 </div>
             </div>
-        </a>
+        </a> --}}
         <div class="menu-profile">
             <div class="row mb-3 align-items-center">
                 <div class="col-md-2 col-2 fs-5">

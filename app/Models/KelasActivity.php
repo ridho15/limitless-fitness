@@ -13,43 +13,52 @@ class KelasActivity extends Model
     protected $table = 'kelas_activities';
     protected $fillable = [
         'id_kelas',
-        'max_anggota',
         'id_location_studio',
-        'jam_latihan',
+        'jam_mulai',
+        'jam_selesai',
         'id_user',
         'status',
         'cancellation_policy',
     ];
 
     protected $appends = [
-        'status_formatted', 'simple_detail', 'status_aktivitas_kelas', 'jam_latihan_formatted'
+        'status_formatted',
+        'simple_detail',
+        'status_aktivitas_kelas',
+        'jam_mulai_formatted',
+        'jam_selesai_formatted'
     ];
 
-    public function getJamLatihanFormattedAttribute(){
-        return Carbon::parse($this->jam_latihan)->locale('id')->isoFormat('dddd, DD MMMM YYYY HH:mm');
+    public function getJamMulaiFormattedAttribute()
+    {
+        return Carbon::parse($this->jam_mulai)->locale('id')->isoFormat('DD MMMM YYYY HH:mm');
+    }
+
+    public function getJamSelesaiFormattedAttribute()
+    {
+        return Carbon::parse($this->jam_selesai)->locale('id')->isoFormat('DD MMMM YYYY HH:mm');
     }
 
     public function getStatusAktivitasKelasAttribute()
     {
-        $kelas = Kelas::find($this->id_kelas);
-        $carbon = Carbon::parse($this->jam_latihan)->addMinutes($kelas->duration);
         if ($this->status == 0) {
             $this->status = 0;
             $this->save();
             return 'Kelas di batalkan';
-        } elseif (now() > $this->jam_latihan && $carbon > now()) {
+        } elseif (now() > $this->jam_mulai && now() < $this->jam_selesai) {
             $this->status = 2;
             $this->save();
             return "Kelas Sedang Berlangsung";
-        } elseif ($carbon < now()) {
+        } elseif ($this->jam_selesai < now()) {
             $this->status = 3;
             $this->save();
             return 'Jadwal Kelas Sudah Lewat';
-        } elseif (now() < $this->jam_latihan) {
+        } elseif (now() < $this->jam_mulai) {
             $bookingKelas = BookingKelas::where('id_kelas_activity', $this->id)->count();
             $this->status = 1;
             $this->save();
-            return $bookingKelas . ' Waiting List';
+            $kelas = Kelas::find($this->id_kelas);
+            return $bookingKelas . ' / ' . $kelas->max_anggota . ' Waiting List';
         }
     }
 
@@ -82,7 +91,7 @@ class KelasActivity extends Model
 
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'id_kelas');
+        return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
     }
 
     public function locationStudio()
@@ -95,7 +104,12 @@ class KelasActivity extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function kelasRating(){
+    public function kelasRating()
+    {
         return $this->hasMany(KelasRating::class, 'id_kelas_activity');
+    }
+
+    public function bookingKelas(){
+        return $this->hasMany(BookingKelas::class, 'id_kelas_activity');
     }
 }

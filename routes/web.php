@@ -43,7 +43,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/detail-timetable/{id}', [BaseController::class, 'detailTimetable'])->name('detail-timetable');
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profile');
-        Route::get('/booking', [ProfileController::class, 'bookings'])->name('profile.bookings');
+        Route::prefix('booking')->group(function(){
+            Route::get('/', [ProfileController::class, 'bookings'])->name('profile.bookings');
+            Route::post('/update-kehadiran/{id_booking_kelas}', [ProfileController::class, 'updateKehadiran'])->name('profile.bookings.update-kehadiran');
+        });
         Route::get('/packages', [ProfileController::class, 'packages'])->name('profile.packages');
         Route::get('/memberships', [ProfileController::class, 'memberships'])->name('profile.memberships');
         Route::get('/billing', [ProfileController::class, 'billing'])->name('profile.billing');

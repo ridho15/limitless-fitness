@@ -3,12 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderPaketResource\Pages;
-use App\Filament\Resources\OrderPaketResource\RelationManagers;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
 use Closure;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
@@ -16,19 +14,16 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderPaketResource extends Resource
 {
@@ -83,8 +78,6 @@ class OrderPaketResource extends Resource
                                 FileUpload::make('bukti_pembayaran')
                                     ->image()
                                     ->maxSize(2048),
-                                Toggle::make('is_active')
-                                    ->label('Status Aktif'),
                             ])
                     ])
             ]);
@@ -104,6 +97,16 @@ class OrderPaketResource extends Resource
                     ->sortable(),
                 TextColumn::make('status_formatted')
                     ->label('Status'),
+                BadgeColumn::make('is_active')
+                    ->label('Status Aktif')
+                    ->enum([
+                        0 => 'Tidak aktif',
+                        1 => 'Aktif'
+                    ])
+                    ->colors([
+                        'danger' => 0,
+                        'primary' => 1
+                    ]),
                 ImageColumn::make('bukti_pembayaran'),
                 TextColumn::make('tanda_tangan'),
                 TextColumn::make('expired_date')->sortable(),

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\BookingKelas;
 use App\Models\OrderPaket;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -22,8 +24,69 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'bookings';
-        $data['listBookingKelas'] = BookingKelas::where('id_user', $user->id)->get();
+        $listOrderPaket = OrderPaket::where('id_user', $user->id)
+        ->where('is_active', 1)
+        ->get();
+
+        $jumlahKredit = 0;
+        foreach($listOrderPaket as $item){
+            $jumlahKredit += $item->paket->jumlah_pertemuan;
+        }
+
+        $jumlahDigunakan = BookingKelas::where('id_user', $user->id)
+        ->where(function($query){
+            $query->where('status_kehadiran', '0')
+            ->orWhere('status_kehadiran', '1');
+        })->count();
+
+        $jumlahHadir = BookingKelas::where('id_user', $user->id)
+        ->where('status_kehadiran', '1')
+        ->count();
+
+        $jumlahIzin = BookingKelas::where('id_user', $user->id)
+        ->where('status_kehadiran', '2')
+        ->count();
+
+        $jumlahTidakHadir = BookingKelas::where('id_user', $user->id)
+        ->where('status_kehadiran', '0')
+        ->count();
+
+        $sisaKredit = $jumlahKredit - $jumlahDigunakan;
+        $data['listBookingKelas'] = BookingKelas::where('id_user', $user->id)->orderBy('created_at', 'DESC')->get();
+        $data['jumlahKredit'] = $jumlahKredit;
+        $data['jumlahDigunakan'] = $jumlahDigunakan;
+        $data['sisaKredit'] = $sisaKredit;
+        $data['jumlahHadir'] = $jumlahHadir;
+        $data['jumlahIzin'] = $jumlahIzin;
+        $data['jumlahTidakHadir'] = $jumlahTidakHadir;
         return view('base-2.profile.bookings', $data);
+    }
+
+    public function updateKehadiran(Request $request,$id_booking_kelas){
+        $validator = Validator::make($request->all(), [
+            'status_kehadiran' => 'nullable|numeric'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+        }
+
+        $bookingKelas = BookingKelas::find($id_booking_kelas);
+        if(!$bookingKelas){
+            return redirect()->back()->with('fail', 'Data tidak ditemukan !');
+        }
+
+        $kelasActivity = $bookingKelas->kelasActivity;
+        $lastTimeClass = Carbon::parse($kelasActivity->jam_mulai)->subDays(1)->locale('id')->isoFormat('YYYY-MM-DD HH:mm:ss');
+        if($lastTimeClass <= now()){
+            return redirect()->back()->with('fail', 'Sudah tidak update kelas');
+        }
+
+        $bookingKelas->update([
+            'status_kehadiran' => $request->status_kehadiran
+        ]);
+
+        return redirect()->back()->with('success', 'Berhasil mengupdate status kehadiran');
     }
 
     public function packages()
@@ -59,6 +122,18 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'billing';
+
+        $listPaymentDue = OrderPaket::where('id_user', $user->id)
+        ->where('expired_date', '>=', now())
+        ->where('is_active', 0)
+        ->get();
+
+        $listTransactionHistory = OrderPaket::where('id_user', $user->id)
+        ->orderBy('created_at', 'DESC')
+        ->get();
+
+        $data['listPaymentDue'] = $listPaymentDue;
+        $data['listTransactionHistory'] = $listTransactionHistory;
         return view('base-2.profile.billing', $data);
     }
 

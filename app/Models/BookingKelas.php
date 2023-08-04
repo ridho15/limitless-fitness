@@ -14,7 +14,6 @@ class BookingKelas extends Model
     protected $fillable = [
         'id_user',
         'id_kelas_activity',
-        'set_jam',
         'is_send_email',
         'status_kehadiran',
         'keterangan'
@@ -35,7 +34,7 @@ class BookingKelas extends Model
             return 'Tidak Hadir';
         }elseif($this->status_kehadiran == 1){
             return 'Hadir';
-        }elseif($this->status_kehadiran == 1){
+        }elseif($this->status_kehadiran == 2){
             return 'Izin';
         }
     }
@@ -47,6 +46,6 @@ class BookingKelas extends Model
 
     public function kelasActivity()
     {
-        return $this->belongsTo(KelasActivity::class, 'id_kelas_activity');
+        return $this->belongsTo(KelasActivity::class, 'id_kelas_activity')->withDefault();
     }
 }

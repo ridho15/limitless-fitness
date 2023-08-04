@@ -18,4 +18,9 @@ class CreateTimetable extends CreateRecord
     {
         return 'Berhasil mengupdate data jadwal kelas';
     }
+
+    protected function getTitle(): string
+    {
+        return "Buat Timetable";
+    }
 }

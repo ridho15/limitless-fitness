@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TimetableResource\Pages;
 use App\Filament\Resources\TimetableResource\RelationManagers;
+use App\Filament\Resources\TimetableResource\RelationManagers\BookingKelasRelationManager;
+use App\Filament\Resources\TimetableResource\RelationManagers\KelasRatingRelationManager;
 use App\Models\KelasActivity;
 use App\Models\Timetable;
 use App\Models\User;
@@ -51,11 +53,11 @@ class TimetableResource extends Resource
                                 ->preload()
                                 ->relationship('locationStudio', 'nama')
                                 ->required(),
-                            DateTimePicker::make('jam_latihan')
+                            DateTimePicker::make('jam_mulai')
+                                ->label('Waktu Mulai')
                                 ->required(),
-                            TextInput::make('max_anggota')
-                                ->numeric()
-                                ->default(0)
+                            DateTimePicker::make('jam_selesai')
+                                ->label('Waktu Selesai')
                                 ->required(),
                             Select::make('id_user')
                                 ->label('Instruktur')
@@ -92,10 +94,11 @@ class TimetableResource extends Resource
                 TextColumn::make('locationStudio.nama')
                     ->label('Lokasi Studio')
                     ->searchable(),
-                TextColumn::make('jam_latihan')
+                TextColumn::make('jam_mulai_formatted')
+                    ->label('Jam Mulai')
                     ->sortable(),
-                TextColumn::make('max_anggota')
-                    ->label('Jumlah Maximal')
+                TextColumn::make('jam_selesai_formatted')
+                    ->label('Jam Selesai')
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Instruktur')
@@ -121,7 +124,8 @@ class TimetableResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BookingKelasRelationManager::class,
+            KelasRatingRelationManager::class
         ];
     }
 

@@ -55,9 +55,10 @@ class ListData extends Component
                         $query->where('id_user', $this->id_user);
                     }
                 })
-                ->whereDate('jam_latihan', $item)
-                ->orderBy('jam_latihan', 'ASC')
+                ->whereDate('jam_mulai', $item)
+                ->orderBy('jam_mulai', 'ASC')
                 ->get();
+
             array_push($this->listData, [
                 'tanggal' => $item,
                 'data' => $kelasActivity

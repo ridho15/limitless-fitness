@@ -55,18 +55,6 @@ class BookingKelasResource extends Resource
                                     ->preload()
                                     ->searchable()
                                     ->options(KelasActivity::get()->pluck('simple_detail', 'id')),
-                                Radio::make('set_jam')
-                                    ->label('Jam sebelum kehadiran')
-                                    ->options([
-                                        '1' => '1 hour before class',
-                                        '2' => '2 hour before class',
-                                        '3' => '3 hour before class',
-                                        '6' => '6 hour before class',
-                                        '12' => '12 hour before class',
-                                    ])
-                                    ->inline()
-                                    ->helperText('contoh konfirmasi email 1 jam sebelum kehadiran')
-                                    ->required(),
                                 Radio::make('status_kehadiran')
                                     ->options([
                                         '1' => 'Hadir',
@@ -93,27 +81,6 @@ class BookingKelasResource extends Resource
                     ->searchable(),
                 TextColumn::make('kelasActivity.simple_detail')
                     ->label('Kelas'),
-                TextColumn::make('set_jam')
-                    ->label('Set Jam')
-                    ->formatStateUsing(function ($state) {
-                        return $state . ' hour before class';
-                    })->sortable(), TextColumn::make('status_kehadiran')
-                    ->formatStateUsing(function ($state) {
-                        switch ($state) {
-                            case 0:
-                                return 'Tidak Hadir';
-                                break;
-                            case 1:
-                                return 'Hadir';
-                                break;
-                            case 2:
-                                return 'Izin';
-                                break;
-                            default:
-                                return 'Not Know';
-                                break;
-                        }
-                    }),
                 ToggleColumn::make('is_send_email')
                     ->label('Send Email'),
                 TextColumn::make('keterangan')
