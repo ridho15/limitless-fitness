@@ -17,6 +17,7 @@ class ListData extends Component
         'changeClass',
         'changeInstruktur',
         'changeLevel',
+        'setCari'
     ];
     public $listData;
     public $indexTanggal;
@@ -25,6 +26,7 @@ class ListData extends Component
     public $id_kelas;
     public $id_user;
     public $level;
+    public $cari;
     private $listTanggal = [];
     public function render()
     {
@@ -35,9 +37,12 @@ class ListData extends Component
         foreach ($this->listTanggal as $item) {
             $kelasActivity = KelasActivity::with('kelas')
                 ->whereHas('kelas', function ($query) {
+                    $query->where('nama_kelas', 'LIKE', '%' . $this->cari . '%');
+                })
+                ->where(function ($query) {
                     if ($this->category != 0 || $this->level != 0) {
                         $query->where('category', $this->category)
-                            ->orWhere('level', $this->level);;
+                            ->orWhere('level', $this->level);
                     }
                 })
                 ->where(function ($query) {
@@ -99,5 +104,10 @@ class ListData extends Component
     public function changeLevel($level)
     {
         $this->level = $level;
+    }
+
+    public function setCari($cari)
+    {
+        $this->cari = $cari;
     }
 }

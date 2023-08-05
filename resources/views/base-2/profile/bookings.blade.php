@@ -161,7 +161,7 @@
                                             </div>
                                             <div class="col-md-3 text-center">
                                                 <small class="fw-light">Waktu Latihan</small>
-                                                <div class="fw-bold">{{ $item->kelasActivity->jam_latihan_formatted }}
+                                                <div class="fw-bold">{{ $item->kelasActivity->jam_mulai_formatted }}
                                                 </div>
                                                 <small>Kehadiran :
                                                     <strong>{{ $item->status_kehadiran_formatted }}</strong></small>
@@ -169,7 +169,7 @@
                                             <div class="col-md-3 text-end">
                                                 <small class="fw-light">Lokasi</small>
                                                 <div class="fw-bold">
-                                                    <a href="{{ route('detail-location', ['id' => $item->kelasActivity->ruangan->locationStudio->id_location]) }}"
+                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->ruangan->locationStudio->id_location) ? $item->kelasActivity->ruangan->locationStudio->id_location : 0]) }}"
                                                         style="text-decoration: none; color: black">
                                                         {{ $item->kelasActivity->ruangan->locationStudio->location->nama }}</a>
                                                 </div>
@@ -209,11 +209,20 @@
                                                             @if ($item->status_kehadiran == '1') selected @endif>Hadir</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4 col-4 text-center">
+                                                <div class="col-md-2 col-2 text-center">
                                                     <button type="submit" class="btn custom-btn w-100"
                                                         @if ($isDisable) disabled @endif>Submit</button>
                                                 </div>
+                                                <div class="col-md-2 col-2 text-center">
+                                                    <button type="button" class="btn btn-danger w-100 btn-batal"
+                                                        data-id="{{ $item->id }}" style="border-radius: 20px"
+                                                        @if ($isDisable) disabled @endif> <i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                </div>
                                             </div>
+                                        </form>
+                                        <form action="{{ route('profile.bookings.batal', ['id' => $item->id]) }}"
+                                            method="POST" id="form_batal_{{ $item->id }}">
+                                            @csrf
                                         </form>
                                     </div>
                                 @endforeach
@@ -252,7 +261,7 @@
                                             </div>
                                             <div class="col-md-3 text-center">
                                                 <small class="fw-light">Waktu Latihan</small>
-                                                <div class="fw-bold">{{ $item->kelasActivity->jam_latihan_formatted }}
+                                                <div class="fw-bold">{{ $item->kelasActivity->jam_mulai_formatted }}
                                                 </div>
                                                 <small>Kehadiran :
                                                     <strong>{{ $item->status_kehadiran_formatted }}</strong></small>
@@ -260,11 +269,11 @@
                                             <div class="col-md-3 text-end">
                                                 <small class="fw-light">Lokasi</small>
                                                 <div class="fw-bold">
-                                                    <a href="{{ route('detail-location', ['id' => $item->kelasActivity->locationStudio->id_location]) }}"
+                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->locationStudio->id_location) ? $item->kelasActivity->locationStudio->id_location : 0]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->kelasActivity->locationStudio->location->nama }}</a>
+                                                        {{ $item->kelasActivity->ruangan->locationStudio->location->nama }}</a>
                                                 </div>
-                                                <small>{{ $item->kelasActivity->locationStudio->nama }}</small>
+                                                <small>{{ $item->kelasActivity->ruangan->locationStudio->nama }}</small>
                                             </div>
                                         </div>
                                         <form
@@ -295,17 +304,27 @@
                                                             @if ($item->status_kehadiran == '0') selected @endif>Tidak Hadir
                                                         </option>
                                                         <option value="2"
-                                                            @if ($item->status_kehadiran == '2') selected @endif>Izin</option>
+                                                            @if ($item->status_kehadiran == '2') selected @endif>Izin
+                                                        </option>
                                                         <option value="1"
                                                             @if ($item->status_kehadiran == '1') selected @endif>Hadir
                                                         </option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4 col-4 text-center">
+                                                <div class="col-md-2 col-2 text-center">
                                                     <button type="submit" class="btn custom-btn w-100"
                                                         @if ($isDisable) disabled @endif>Submit</button>
                                                 </div>
+                                                <div class="col-md-2 col-2 text-center">
+                                                    <button type="button" class="btn btn-danger w-100 btn-batal"
+                                                        data-id="{{ $item->id }}" style="border-radius: 20px"
+                                                        @if ($isDisable) disabled @endif> <i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                </div>
                                             </div>
+                                        </form>
+                                        <form action="{{ route('profile.bookings.batal', ['id' => $item->id]) }}"
+                                            method="POST" id="form_batal_{{ $item->id }}">
+                                            @csrf
                                         </form>
                                     </div>
                                 @endforeach
@@ -344,7 +363,7 @@
                                             </div>
                                             <div class="col-md-3 text-center">
                                                 <small class="fw-light">Waktu Latihan</small>
-                                                <div class="fw-bold">{{ $item->kelasActivity->jam_latihan_formatted }}
+                                                <div class="fw-bold">{{ $item->kelasActivity->jam_mulai_formatted }}
                                                 </div>
                                                 <small>Kehadiran :
                                                     <strong>{{ $item->status_kehadiran_formatted }}</strong></small>
@@ -352,7 +371,7 @@
                                             <div class="col-md-3 text-end">
                                                 <small class="fw-light">Lokasi</small>
                                                 <div class="fw-bold">
-                                                    <a href="{{ route('detail-location', ['id' => $item->kelasActivity->locationStudio->id_location]) }}"
+                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->locationStudio->id_location) ? $item->kelasActivity->locationStudio->id_location : 0]) }}"
                                                         style="text-decoration: none; color: black">
                                                         {{ $item->kelasActivity->locationStudio->location->nama }}</a>
                                                 </div>
@@ -394,11 +413,20 @@
                                                         </option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4 col-4 text-center">
+                                                <div class="col-md-2 col-2 text-center">
                                                     <button type="submit" class="btn custom-btn w-100"
                                                         @if ($isDisable) disabled @endif>Submit</button>
                                                 </div>
+                                                <div class="col-md-2 col-2 text-center">
+                                                    <button type="button" class="btn btn-danger w-100 btn-batal"
+                                                        data-id="{{ $item->id }}" style="border-radius: 20px"
+                                                        @if ($isDisable) disabled @endif><i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                </div>
                                             </div>
+                                        </form>
+                                        <form action="{{ route('profile.bookings.batal', ['id' => $item->id]) }}"
+                                            method="POST" id="form_batal_{{ $item->id }}">
+                                            @csrf
                                         </form>
                                     </div>
                                 @endforeach
@@ -437,7 +465,7 @@
                                             </div>
                                             <div class="col-md-3 text-center">
                                                 <small class="fw-light">Waktu Latihan</small>
-                                                <div class="fw-bold">{{ $item->kelasActivity->jam_latihan_formatted }}
+                                                <div class="fw-bold">{{ $item->kelasActivity->jam_mulai_formatted }}
                                                 </div>
                                                 <small>Kehadiran :
                                                     <strong>{{ $item->status_kehadiran_formatted }}</strong></small>
@@ -445,7 +473,7 @@
                                             <div class="col-md-3 text-end">
                                                 <small class="fw-light">Lokasi</small>
                                                 <div class="fw-bold">
-                                                    <a href="{{ route('detail-location', ['id' => $item->kelasActivity->locationStudio->id_location]) }}"
+                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->ruangan->locationStudio->id_location) ? $item->kelasActivity->ruangan->locationStudio->id_location : 0]) }}"
                                                         style="text-decoration: none; color: black">
                                                         {{ $item->kelasActivity->locationStudio->location->nama }}</a>
                                                 </div>
@@ -487,11 +515,20 @@
                                                         </option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4 col-4 text-center">
+                                                <div class="col-md-2 col-2 text-center">
                                                     <button type="submit" class="btn custom-btn w-100"
                                                         @if ($isDisable) disabled @endif>Submit</button>
                                                 </div>
+                                                <div class="col-md-2 col-2 text-center">
+                                                    <button type="button" class="btn btn-danger w-100 btn-batal"
+                                                        data-id="{{ $item->id }}" style="border-radius: 20px"
+                                                        @if ($isDisable) disabled @endif><i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                </div>
                                             </div>
+                                        </form>
+                                        <form action="{{ route('profile.bookings.batal', ['id' => $item->id]) }}"
+                                            method="POST" id="form_batal_{{ $item->id }}">
+                                            @csrf
                                         </form>
                                     </div>
                                 @endforeach
@@ -523,8 +560,17 @@
             })
         });
 
-        $('#btn-tambah-kredit').on('click', function(){
+        $('#btn-tambah-kredit').on('click', function() {
             $('#modal_tambah_kredit').modal('show')
+        })
+
+        $('.btn-batal').on('click', async function() {
+            const id = $(this).data('id')
+            const response = await sweetAlert('danger', 'Peringatan !',
+                'Apakah kamu yakin ingin membatalkan kelas ini ?', 'Ya, Batalkan')
+            if (response.isConfirmed == true) {
+                $('#form_batal_' + id).submit();
+            }
         })
     </script>
 @endpush

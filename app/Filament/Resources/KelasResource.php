@@ -52,14 +52,6 @@ class KelasResource extends Resource
                                     ->string()
                                     ->maxLength(255)
                                     ->required(),
-                                Select::make('level')
-                                    ->options([
-                                        '0' => 'Semua level',
-                                        '1' => 'intermediate',
-                                        '2' => 'Beginer',
-                                        '3' => 'Advanced',
-                                    ])
-                                    ->required(),
                                 TextInput::make('min_anggota')
                                     ->label('Minimal Peserta')
                                     ->numeric()
@@ -79,14 +71,6 @@ class KelasResource extends Resource
                                         '1' => 'Online',
                                         '2' => 'Onsite',
                                     ])->default(2)->required(),
-                                Select::make('category')
-                                    ->preload()
-                                    ->options([
-                                        '1' => 'Private Class',
-                                        '2' => 'Group Class',
-                                        '3' => 'Private Duet',
-                                        '4' => 'Private Group',
-                                    ])->required(),
                                 TextInput::make('bawaan')
                                     ->string()
                                     ->nullable()
@@ -122,13 +106,9 @@ class KelasResource extends Resource
                 TextColumn::make('duration')
                     ->label('Lama Latihan')
                     ->formatStateUsing(fn ($state) => $state . ' Menit'),
-                TextColumn::make('level_formatted')
-                    ->label('Level'),
                 TextColumn::make('bawaan'),
                 TextColumn::make('type_formatted')
                     ->label('Type'),
-                TextColumn::make('category_formatted')
-                    ->label('Kategori'),
             ])
             ->filters([
                 //

@@ -20,7 +20,7 @@ class BookingKelas extends Model
     ];
 
     protected $appends = [
-        'status_kehadiran_formatted', 'tanggal_booking'
+        'status_kehadiran_formatted', 'tanggal_booking',
     ];
 
     public function getTanggalBookingAttribute(){
@@ -41,7 +41,7 @@ class BookingKelas extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user')->withDefault();
     }
 
     public function kelasActivity()

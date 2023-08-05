@@ -29,7 +29,7 @@
     <nav class="navbar navbar-expand-lg bg-light bg-color-custom shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold text-white fs-4" href="#">Daily Dose Pilates</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -48,10 +48,12 @@
                         <a class="nav-link mx-2 text-white @if ($active == 'packages') active nav-link-fs @endif"
                             href="{{ route('packages') }}">Packages</a>
                     </li>
+                    @if (Auth::user())
                     <li class="nav-item ">
                         <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
                             href="{{ route('timetable') }}">Timetable</a>
                     </li>
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'location') active nav-link-fs @endif"
                             href="{{ route('location') }}">Location</a>

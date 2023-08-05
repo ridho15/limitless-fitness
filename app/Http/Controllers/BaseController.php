@@ -70,7 +70,7 @@ class BaseController extends Controller
         $listKelas = Kelas::get();
         $dataKelas = [];
         foreach ($listKelas as $item) {
-            $listPaket = Paket::whereHas('kelasPaket', function($query)use($item){
+            $listPaket = Paket::whereHas('kelasPaket', function ($query) use ($item) {
                 $query->where('id_kelas', $item->id);
             })->get();
 
@@ -109,6 +109,14 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Data kelas tidak ditemukan !');
         }
 
+        $bookingKelas = BookingKelas::where('id_user', Auth::id())
+        ->where('id_kelas_activity', $kelasActivity->id)
+        ->first();
+
+        if($bookingKelas){
+            return redirect()->back()->with('fail', 'Anda sudah mengambil kelas ini. silahkan konfirmasi kehadiran terlebih dahulu');
+        }
+
         $orderPaket = OrderPaket::where('id_user', Auth::id())
             ->whereHas('paket', function ($query) use ($kelasActivity) {
                 $query->whereHas('kelasPaket', function ($query) use ($kelasActivity) {
@@ -122,7 +130,7 @@ class BaseController extends Controller
         }
 
         $isBooking = false;
-        if($kelasActivity->bookingKelas->where('id_user', Auth::id())->first()){
+        if ($kelasActivity->bookingKelas->where('id_user', Auth::id())->first()) {
             $isBooking = true;
         }
 
@@ -231,7 +239,7 @@ class BaseController extends Controller
 
         OrderPaket::create($data);
 
-        return redirect()->route('profile.packages')->with([
+        return redirect()->route('profile.billing')->with([
             'success' => 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih',
             'info' => 'Silahkan masuk ke tab tidak aktif dapat dilihat pada halaman ini untuk mengupload bukti pembayaran.',
         ]);

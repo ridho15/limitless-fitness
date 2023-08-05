@@ -87,6 +87,9 @@ class OrderPaketResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('created_at')
+                    ->label('Tanggal Order')
+                    ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable(),

@@ -14,44 +14,50 @@
                 <div class="col-md-9">
                     <div class="w-100 shadow rounded p-3">
                         <div class="row">
-                            <div class="col-md-6 p-5">
+                            <div class="col-md-12 p-5">
                                 <div class="fw-bold fs-4 mb-2">
                                     Are you new to Bumi Pilates & Movement?
-                                </div>
-                                <div>
-                                    <span class="fw-light">Check out our</span>
-                                    <strong>FAQ</strong>
                                 </div>
                                 <hr class="my-4">
                                 <div class="fw-bold fs-5 mb-2">Find a location</div>
                                 <div>
                                     <span class="fw-light">To get in touch with our outlets visit our</span>
-                                    <strong>location</strong>
+                                    <a href="https://www.google.com/maps/place/Ruko+Green+Garden,+Jl.+Komp.+Green+Garden+Blok+B1+No.61,+RT.8%2FRW.3,+Kedoya+Utara,+Kec.+Kb.+Jeruk,+Kota+Jakarta+Barat,+Daerah+Khusus+Ibukota+Jakarta+11520/@-6.1631999,106.7536214,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f7b9ff5231b7:0x17fd8c03e89d219a!8m2!3d-6.1632053!4d106.7584923!16s%2Fg%2F11j0stqf6t?entry=ttu" class="text-decoration-none text-dark fw-bold" target="_blank">
+                                        <strong>location</strong>
+                                    </a>
                                 </div>
                                 <hr class="my-4">
                                 <div class="fw-bold fs-5 mb-2">
                                     Connect with us on social media
                                 </div>
-                                <div class="fs-4">
-                                    <i class="fa-brands fa-instagram"></i>
+                                <div class="row align-items-center">
+                                    <div class="col-md-1 col-1 fs-4">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </div>
+                                    <div class="col-md col">
+                                        <a href="https://www.instagram.com/dailydose.pilates/?hl=id" class="text-decoration-none text-dark fw-bold" target="_blank">
+                                            dailydose.pilates
+                                        </a>
+                                    </div>
                                 </div>
                                 <hr class="my-4">
-                                <div class="fw-bold fs-5 mb-2">Business information</div>
+                                <div class="fw-bold fs-5 mb-2">Daily Dose Pilates
+                                </div>
                                 <div class="row mb-2">
                                     <div class="col-md-1"><i class="fa-regular fa-envelope"></i></div>
                                     <div class="col-md fw-light">
-                                        bumistudiojakarta@gmail.com
+                                        dailydosepilates@gmail.com
                                     </div>
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-md-1"><i class="fa-regular fa-envelope"></i></div>
+                                    <div class="col-md-1"><i class="fa-solid fa-location-dot"></i></div>
                                     <div class="col-md fw-light">
-                                        Jl. Bumi No. 4, Kebayoran Baru, Jakarta Selatan, 12120, , Jakarta Selatan, DKI
-                                        Jakarta 12120
+                                        Komp. Ruko Green Garden Blk. A, Jl. Panjang No.30, Kedoya Utara, Kec. Kb. Jeruk,
+                                        Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11520
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 p-5">
+                            {{-- <div class="col-md-6 p-5">
                                 <div class="fw-bold mb-3">
                                     What can we help you with?
                                 </div>
@@ -86,7 +92,7 @@
                                         <button type="submit" class="btn custom-btn w-100">Submit</button>
                                     </div>
                                 </form>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

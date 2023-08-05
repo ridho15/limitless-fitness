@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\KelasResource\RelationManagers;
 
+use App\Models\Location;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
@@ -35,8 +37,39 @@ class KelasPaketRelationManager extends RelationManager
         return $table
             ->columns([
                 TextColumn::make('paket.nama')
-                    ->label('Paket')
+                    ->label('Nama Paket')
                     ->searchable(),
+                TextColumn::make('paket.jumlah_pertemuan')
+                    ->label('Jumlah Pertemuan')
+                    ->formatStateUsing(function ($state) {
+                        return $state . ' Pertemuan';
+                    })
+                    ->sortable(),
+                TextColumn::make('paket.harga_formatted')
+                    ->label('Harga')
+                    ->sortable(),
+                TextColumn::make('paket.valid_day')
+                    ->label('Valid Day')
+                    ->formatStateUsing(function ($state) {
+                        return $state . ' Hari';
+                    })->sortable(),
+                TextColumn::make('paket.promote_code')
+                    ->label('Promote Code'),
+                TextColumn::make('paket.diskon')
+                    ->label('Diskon')
+                    ->formatStateUsing(function ($state) {
+                        return $state . '%';
+                    }),
+                TextColumn::make('paket.location')
+                    ->label('Location')
+                    ->formatStateUsing(function ($state) {
+                        if ($state == 0) {
+                            return 'All Location';
+                        } else {
+                            $location = Location::find($state);
+                            return $location->nama;
+                        }
+                    })
             ])
             ->filters([
                 //

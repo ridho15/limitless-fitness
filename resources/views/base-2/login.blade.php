@@ -35,7 +35,7 @@
                             @csrf
                             @if (session()->has('fail'))
                                 <div class="text-center">
-                                    <div class="alert alert-danger" role="alert">
+                                    <div class="alert alert-danger text-danger" role="alert">
                                         {{ session('fail') }}
                                     </div>
                                 </div>

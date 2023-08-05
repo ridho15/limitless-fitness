@@ -17,19 +17,15 @@ class Kelas extends Model
         'max_anggota',
         'keterangan',
         'nama_kelas',
-        'level',
         'duration',
         'bawaan',
         'type',
-        'category'
     ];
 
     protected $appends = [
         'status_aktif',
         'rating',
-        'level_formatted',
         'jumlah_review',
-        'category_formatted',
         'type_formatted'
     ];
 
@@ -48,27 +44,6 @@ class Kelas extends Model
         }
     }
 
-    public function getCategoryFormattedAttribute()
-    {
-        switch ($this->category) {
-            case 1:
-                return "Private Class";
-                break;
-            case 2:
-                return "Group Class";
-                break;
-            case 3:
-                return "Private Duet";
-                break;
-            case 4:
-                return "Private Group";
-                break;
-            default:
-                return "Now Know";
-                break;
-        }
-    }
-
     public function getJumlahReviewAttribute()
     {
         $kelasActivity = KelasActivity::where('id_kelas', $this->id)->get();
@@ -78,27 +53,6 @@ class Kelas extends Model
         }
 
         return $jumlahReview;
-    }
-
-    public function getLevelFormattedAttribute()
-    {
-        switch ($this->level) {
-            case 0:
-                return 'Semua Level';
-                break;
-            case 1:
-                return 'Intermediate';
-                break;
-            case 2:
-                return 'Beginer';
-                break;
-            case 3:
-                return 'Advanced';
-                break;
-            default:
-                return 'Not Know';
-                break;
-        }
     }
 
     public function getRatingAttribute()

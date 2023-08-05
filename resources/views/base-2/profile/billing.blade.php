@@ -29,7 +29,7 @@
                         <div class="tab-pane fade show active py-4" id="payment_due">
                             @if (count($listPaymentDue))
                                 @foreach ($listPaymentDue as $item)
-                                    <div class="bg-white shadow border p-4 mb-3">
+                                    <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="fw-bold text-start">
@@ -79,7 +79,7 @@
                                                     @else
                                                         <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
                                                             target="_blank" class="btn custom-btn-outline">
-                                                            Lihat Bukti Pembayaran
+                                                            <small>Lihat Bukti Pembayaran</small>
                                                         </a>
                                                     @endif
                                                     <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
@@ -114,7 +114,7 @@
                         <div class="tab-pane fade py-4" id="transaction_history">
                             @if (count($listTransactionHistory))
                                 @foreach ($listTransactionHistory as $index => $item)
-                                    <div class="bg-white shadow border p-4 mb-3">
+                                    <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="fw-bold text-start">
@@ -210,3 +210,14 @@
         </div>
     </section>
 @endsection
+
+@push('js')
+    <script>
+        var loadFile = function(event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+            $('#sub_form').removeClass('d-none')
+        };
+    </script>
+@endpush
+

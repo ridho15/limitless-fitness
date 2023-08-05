@@ -12,13 +12,15 @@ use Livewire\Component;
 class Tanggal extends Component
 {
     public $listeners = [
-        'setTanggal'
+        'setTanggal',
+        'onClickCari'
     ];
     private $listTanggal;
     public $indexTanggal;
     public $listKelas = [];
     public $listLocation = [];
     public $listInstruktur = [];
+    public $cari;
     public function render()
     {
         $startDate = Carbon::now()->isoFormat('DD MMMM YYYY');
@@ -40,5 +42,9 @@ class Tanggal extends Component
     public function setTanggal($index)
     {
         $this->indexTanggal = $index;
+    }
+
+    public function onClickCari(){
+        $this->emit('setCari', $this->cari);
     }
 }

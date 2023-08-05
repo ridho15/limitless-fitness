@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('booking')->group(function(){
             Route::get('/', [ProfileController::class, 'bookings'])->name('profile.bookings');
             Route::post('/update-kehadiran/{id_booking_kelas}', [ProfileController::class, 'updateKehadiran'])->name('profile.bookings.update-kehadiran');
+            Route::post('/batal/{id}', [ProfileController::class, 'batalBookingKelas'])->name('profile.bookings.batal');
         });
         Route::get('/packages', [ProfileController::class, 'packages'])->name('profile.packages');
         Route::get('/memberships', [ProfileController::class, 'memberships'])->name('profile.memberships');

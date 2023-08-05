@@ -89,6 +89,16 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Berhasil mengupdate status kehadiran');
     }
 
+    public function batalBookingKelas($id){
+        $bookingKelas = BookingKelas::find($id);
+        if(!$bookingKelas){
+            return redirect()->back()->with('fail', 'Data Booking Kelas tidak ditemukan !');
+        }
+
+        $bookingKelas->delete();
+        return redirect()->back()->with('success', 'Kelas berhasil di batalkan !');
+    }
+
     public function packages()
     {
         $user = Auth::user();

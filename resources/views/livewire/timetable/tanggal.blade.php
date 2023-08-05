@@ -11,8 +11,8 @@
             </a>
         @endforeach
     </div>
-    <div class="row d-none d-sm-flex justify-content-center">
-        <div class="dropdown col-md-2">
+    <div class="row d-none d-sm-flex justify-content-start align-items-center">
+        {{-- <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 All Categories
@@ -29,7 +29,7 @@
                 <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 4)">Private Group</a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
         {{-- <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -45,6 +45,16 @@
                 @endforeach
             </ul>
         </div> --}}
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="cari" wire:model='cari' placeholder="Cari Kelas ..."
+                    aria-label="Tulis Kelas" aria-describedby="basic-addon2"
+                    style="padding-top: 10px; padding-bottom: 10px">
+                <span wire:click="onClickCari" class="input-group-text" id="basic-addon2" style="cursor: pointer">
+                    <i class="fa-solid fa-magnifying-glass"></i> Cari
+                </span>
+            </div>
+        </div>
         <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -109,6 +119,13 @@
             <a href="#" id="btn-filter">
                 <i class="fa-solid fa-sliders fs-4 text-dark"></i>
             </a>
+        </div>
+    </div>
+    <div class="text-center">
+        <div class="mt-3" wire:loading wire:target='onClickCari'>
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         </div>
     </div>
 </div>

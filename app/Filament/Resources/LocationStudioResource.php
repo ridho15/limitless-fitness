@@ -45,21 +45,9 @@ class LocationStudioResource extends Resource
                             ->label('Nama Studio')
                             ->string()
                             ->required(),
-                        Select::make('level')
-                            ->searchable()
-                            ->options([
-                                '0' => 'Semua Level',
-                                '1' => 'Intermediate',
-                                '2' => 'Beginer',
-                                '3' => 'Advanced'
-                            ])->required(),
                         TextInput::make('equipment')
                             ->helperText('Pisahkan setiap equipment dengan tanda koma ","')
                             ->nullable(),
-                        TextInput::make('max_peserta')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         FileUpload::make('image')
                             ->image()
                             ->maxSize(2048)
@@ -82,13 +70,7 @@ class LocationStudioResource extends Resource
                 TextColumn::make('nama')
                     ->label('Nama')
                     ->searchable(),
-                TextColumn::make('level_formatted')
-                    ->label('Level')
-                    ->sortable(),
                 TextColumn::make('equipment'),
-                TextColumn::make('max_peserta')
-                    ->label('Maximal Peserta')
-                    ->sortable(),
             ])
             ->filters([
                 //

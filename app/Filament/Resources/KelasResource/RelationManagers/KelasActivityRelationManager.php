@@ -4,6 +4,7 @@ namespace App\Filament\Resources\KelasResource\RelationManagers;
 
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -66,6 +67,7 @@ class KelasActivityRelationManager extends RelationManager
                     ->required(),
                 TimePicker::make('jam_selesai')
                     ->label('Waktu Selesai')
+                    ->hiddenOn('edit')
                     ->required(),
                 Select::make('id_user')
                     ->label('Instruktur')
@@ -96,21 +98,23 @@ class KelasActivityRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('nama_latihan')
                     ->searchable(),
-                TextColumn::make('locationStudio.nama')
+                TextColumn::make('ruangan.locationStudio.nama')
                     ->label('Lokasi Studio')
+                    ->searchable(),
+                TextColumn::make('ruangan.nama_ruangan')
+                    ->label('Ruangan')
                     ->searchable(),
                 TextColumn::make('level_formatted')
                     ->sortable(),
                 TextColumn::make('jam_mulai_formatted')
-                    ->sortable(),
-                TextColumn::make('jam_selesai_formatted')
+                    ->label('Jam Mulai')
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Instruktur')
                     ->searchable(),
                 TextColumn::make('status_formatted')
                     ->label('Status Jadwal'),
-                TextColumn::make('cancelation_policy')
+                TextColumn::make('cancellation_policy')
                     ->searchable(),
             ])
             ->filters([

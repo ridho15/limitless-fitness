@@ -21,8 +21,11 @@
                                         <span class="">{{ $data->nama_latihan }}</span>
                                     </div>
                                     <div class="col-md-3">
-                                        <span class="fw-bold d-block">{{ $data->ruangan->locationStudio->location->nama }}</span>
-                                        <small class="fw-light d-block">{{ $data->ruangan->locationStudio->nama }} ({{ $data->ruangan->nama_ruangan }})</small>
+                                        <span
+                                            class="fw-bold d-block">{{ $data->ruangan->locationStudio->location->nama }}</span>
+                                        <small class="fw-light d-block">{{ $data->ruangan->locationStudio->nama }}
+                                            ({{ $data->ruangan->nama_ruangan }})
+                                        </small>
                                     </div>
                                     <div class="col-md-3 text-center">
                                         <small
@@ -35,8 +38,14 @@
                                             method="GET">
                                             <button type="submit" class="btn custom-btn"
                                                 @if ($data->status != 1) disabled @endif
-                                                style="padding-left: 50px; padding-right: 50px">Join <br>
-                                                Waitlist</button>
+                                                style="padding-left: 50px; padding-right: 50px">
+                                                @if ($data->status != 1)
+                                                    Waitlist
+                                                @else
+                                                    Join <br>
+                                                    Class
+                                                @endif
+                                            </button>
                                         </form>
                                     </div>
                                 </div>

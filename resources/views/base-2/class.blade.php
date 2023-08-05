@@ -60,7 +60,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="dropdown mx-2 col-md-2 col-lg-2 col-sm-5">
+                {{-- <div class="dropdown mx-2 col-md-2 col-lg-2 col-sm-5">
                     <button class="btn btn-custom-filter dropdown-toggle shadow-sm border" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         All Difficulty Level
@@ -73,7 +73,7 @@
                         <li><a class="dropdown-item" href="#" onclick="changeClassLevel(3)">Advanced</a></li>
                         <li><a class="dropdown-item" href="#" onclick="changeClassLevel(0)">Open to all</a></li>
                     </ul>
-                </div>
+                </div> --}}
 
             </div>
             <div class="tab-content">
@@ -134,7 +134,7 @@
                         <input class="form-check-input" type="radio" name="levels" id="all_dificulty_levels"
                             value="0" onclick="changeClassLevel(0)" checked>
                     </div>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
+                    {{-- <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="intermediate">
                             Intermediate
                         </label>
@@ -162,7 +162,7 @@
                         </label>
                         <input class="form-check-input" type="radio" name="levels" id="open_to_all" value="0"
                             onclick="changeClassLevel(0)">
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

@@ -13,28 +13,13 @@ class LocationStudio extends Model
     protected $fillable = [
         'id_location',
         'nama',
-        'level',
         'equipment',
         'image',
-        'max_peserta'
     ];
 
     protected $appends = [
-        'nama_location', 'level_formatted'
+        'nama_location',
     ];
-
-    public function getLevelFormattedAttribute()
-    {
-        if ($this->level == 1) {
-            return 'Intermeidate';
-        } elseif ($this->level == 2) {
-            return 'Beginer';
-        } elseif ($this->level == 3) {
-            return 'Advanced';
-        }else{
-            return 'Open to all';
-        }
-    }
 
     public function getNamaLocationAttribute()
     {

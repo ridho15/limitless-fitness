@@ -65,17 +65,23 @@ class KelasActivity extends Model
             return 'Jadwal Kelas Sudah Lewat';
         } elseif (now() < $this->jam_mulai) {
             $bookingKelas = BookingKelas::where('id_kelas_activity', $this->id)->count();
-            $this->status = 1;
-            $this->save();
             $kelas = Kelas::find($this->id_kelas);
-            return $bookingKelas . ' / ' . $kelas->max_anggota . ' Waiting List';
+            if ($bookingKelas == $kelas->max_anggota) {
+                $this->status = 4;
+                $this->save();
+                return $bookingKelas . ' / ' . $kelas->max_anggota . ' Class Full';
+            } elseif ($bookingKelas < $kelas->max_anggota) {
+                $this->status = 1;
+                $this->save();
+                return $bookingKelas . ' / ' . $kelas->max_anggota . ' Waiting List';
+            }
         }
     }
 
     public function getSimpleDetailAttribute()
     {
         $kelas = Kelas::find($this->id_kelas);
-        if($kelas){
+        if ($kelas) {
             return $kelas->nama_kelas . ' ' . $this->jam_latihan;
         }
 
@@ -97,6 +103,9 @@ class KelasActivity extends Model
             case 3:
                 return 'Sudah lewat';
                 break;
+            case 4:
+                return 'Kelas Penuh';
+                break;
             default:
                 return 'now know';
                 break;
@@ -110,7 +119,7 @@ class KelasActivity extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user')->withDefault();
     }
 
     public function kelasRating()
@@ -123,7 +132,8 @@ class KelasActivity extends Model
         return $this->hasMany(BookingKelas::class, 'id_kelas_activity');
     }
 
-    public function ruangan(){
+    public function ruangan()
+    {
         return $this->belongsTo(Ruangan::class, 'id_ruangan')->withDefault();
     }
 }
