@@ -6,7 +6,7 @@
             <div class="row mb-3">
                 <div class="col-md-8 mb-3">
                     <div class="d-flex mb-3">
-                        <small class="fw-light mx-1">classes</small>
+                        <small class="fw-light mx-1">Classes</small>
                         <small class="mx-1"><i class="fa-solid fa-chevron-right"></i></small>
                         <small class="fw-bold mx-1">{{ $kelas->nama_kelas }}</small>
                     </div>

@@ -13,14 +13,14 @@
                     <a class="nav-link active custom-nav-link px-3" role="tab" data-bs-toggle="tab" href="#all_class">All
                         Classes</a>
                 </li>
-                <li class="nav-item" role="presentation">
+                {{-- <li class="nav-item" role="presentation">
                     <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab" href="#group_class">Group
                         Classes</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                         href="#private_class">Private Classes</a>
-                </li>
+                </li> --}}
             </ul>
 
 
@@ -80,12 +80,12 @@
                 <div class="tab-pane fade show active" id="all_class">
                     @livewire('class.all-class')
                 </div>
-                <div class="tab-pane fade" id="group_class">
+                {{-- <div class="tab-pane fade" id="group_class">
                     @livewire('class.group-class')
                 </div>
                 <div class="tab-pane fade" id="private_class">
                     @livewire('class.private-class')
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>

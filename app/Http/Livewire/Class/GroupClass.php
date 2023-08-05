@@ -15,15 +15,8 @@ class GroupClass extends Component
     public function render()
     {
         $this->listKelas = Kelas::where(function ($query) {
-            $query->where('category', 2)
-                ->orWhere('category', 4);
-        })->where(function ($query) {
             if ($this->type != 0) {
                 $query->where('type', $this->type);
-            }
-        })->where(function ($query) {
-            if ($this->level != 0) {
-                $query->where('level', $this->level);
             }
         })
             ->get();
@@ -40,7 +33,8 @@ class GroupClass extends Component
         $this->type = $type;
     }
 
-    public function changeLevel($level){
+    public function changeLevel($level)
+    {
         $this->level = $level;
     }
 }

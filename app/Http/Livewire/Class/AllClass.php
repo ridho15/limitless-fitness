@@ -17,10 +17,6 @@ class AllClass extends Component
             if ($this->type != 0) {
                 $query->where('type', $this->type);
             }
-        })->where(function ($query) {
-            if ($this->level != 0) {
-                $query->where('level', $this->level);
-            }
         })
             ->get();
         return view('livewire.class.all-class');
