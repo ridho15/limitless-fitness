@@ -6,16 +6,19 @@ use App\Filament\Resources\TimetableResource\Pages;
 use App\Filament\Resources\TimetableResource\RelationManagers;
 use App\Filament\Resources\TimetableResource\RelationManagers\BookingKelasRelationManager;
 use App\Filament\Resources\TimetableResource\RelationManagers\KelasRatingRelationManager;
+use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
 use App\Models\KelasActivity;
 use App\Models\Timetable;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -52,11 +55,11 @@ class TimetableResource extends Resource
                                 ->searchable()
                                 ->relationship('kelas', 'nama_kelas')
                                 ->required(),
-                            Select::make('id_location_studio')
+                            Select::make('id_ruangan')
                                 ->searchable()
                                 ->preload()
-                                ->relationship('locationStudio', 'nama')
-                                ->required(),
+                                ->required()
+                                ->relationship('ruangan', 'nama_ruangan'),
                             Select::make('level')
                                 ->required()
                                 ->options([
@@ -65,11 +68,15 @@ class TimetableResource extends Resource
                                     '2' => 'Beginer',
                                     '3' => 'Advanced'
                                 ]),
-                            DateTimePicker::make('jam_mulai')
+                            DatePicker::make('tanggal')
+                                ->label('Tanggal')
+                                ->required(),
+                            TimePicker::make('jam_mulai')
                                 ->label('Waktu Mulai')
                                 ->required(),
-                            DateTimePicker::make('jam_selesai')
+                            TimePicker::make('jam_selesai')
                                 ->label('Waktu Selesai')
+                                ->hiddenOn('edit')
                                 ->required(),
                             Select::make('id_user')
                                 ->label('Instruktur')
@@ -77,18 +84,18 @@ class TimetableResource extends Resource
                                 ->searchable()
                                 ->options(User::whereHas('roles', function ($query) {
                                     $query->where('name', 'Instruktur');
-                                })->get()->pluck('name', 'id'))
-                                ->required(),
+                                })->get()->pluck('name', 'id')),
                             Select::make('status')
                                 ->searchable()
-                                ->required()
+                                ->default(1)
                                 ->options([
                                     '0' => 'Dibatalkan',
                                     '1' => 'Set',
                                     '2' => 'Sedang berlangsung',
                                     '3' => 'Sudah lewat',
-                                ]),
+                                ])->hidden(),
                             Textarea::make('cancellation_policy')
+                                ->label('Terms and Conditions')
                                 ->string()
                                 ->required(),
                         ])

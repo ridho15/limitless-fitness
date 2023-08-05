@@ -3,6 +3,9 @@
 namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
+use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
+use App\Models\KelasActivity;
+use Carbon\CarbonPeriod;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -22,5 +25,41 @@ class CreateTimetable extends CreateRecord
     protected function getTitle(): string
     {
         return "Buat Timetable";
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $start = $data['jam_mulai'];
+        $end = $data['jam_selesai'];
+        $carbonPeriod = CarbonPeriod::since($start)->hours(1)->until($end)->toArray();
+        $jam = [];
+        foreach ($carbonPeriod as $item) {
+            array_push($jam, date('Y-m-d', strtotime($data['jam_mulai'])) . date(' H:i', strtotime($item)));
+        }
+        foreach ($jam as $index => $item) {
+            if ($index + 1 == count($jam)) {
+                $data['jam_mulai'] = $item;
+                $data['status'] = 1;
+                return $data;
+            }else{
+                KelasActivity::create([
+                    'id_kelas' => $data['id_kelas'],
+                    'nama_latihan' => $data['nama_latihan'],
+                    'id_ruangan' => $data['id_ruangan'],
+                    'jam_mulai' => $item,
+                    'id_user' => $data['id_user'],
+                    'status' => 1,
+                    'level' => $data['level'],
+                    'cancellation_policy' => $data['cancellation_policy']
+                ]);
+            }
+        }
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // CalendarWidget::class
+        ];
     }
 }

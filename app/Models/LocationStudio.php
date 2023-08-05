@@ -20,8 +20,21 @@ class LocationStudio extends Model
     ];
 
     protected $appends = [
-        'nama_location'
+        'nama_location', 'level_formatted'
     ];
+
+    public function getLevelFormattedAttribute()
+    {
+        if ($this->level == 1) {
+            return 'Intermeidate';
+        } elseif ($this->level == 2) {
+            return 'Beginer';
+        } elseif ($this->level == 3) {
+            return 'Advanced';
+        }else{
+            return 'Open to all';
+        }
+    }
 
     public function getNamaLocationAttribute()
     {
@@ -34,7 +47,13 @@ class LocationStudio extends Model
         return $this->belongsTo(Location::class, 'id_location');
     }
 
-    public function kelasActivity(){
+    public function kelasActivity()
+    {
         return $this->hasMany(KelasActivity::class, 'id_location_studio');
+    }
+
+    public function ruangan()
+    {
+        return $this->hasMany(Ruangan::class, 'id_location_studio');
     }
 }

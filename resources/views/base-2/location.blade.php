@@ -13,7 +13,7 @@
                 <div class="col-lg-4 col-md-6 mb-5">
                     <div class="custom-card-classes">
                         <div class="w-100 bg-dark image-custom-card"
-                            style="background-image: url({{ asset('storage/' . $item->image) }});">
+                            style="object-fit: contain; background-image: url({{ asset('storage/' . $item->image) }});">
                         </div>
                         <div class="px-4 py-4">
                             <h5 class="fw-bold">{{ $item->nama }}</h5>

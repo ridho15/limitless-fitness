@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
+use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
@@ -24,5 +25,12 @@ class ListTimetables extends ListRecords
     protected function getTableActionsPosition(): ?string
     {
         return Position::BeforeCells;
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            CalendarWidget::class
+        ];
     }
 }

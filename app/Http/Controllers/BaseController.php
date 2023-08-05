@@ -66,8 +66,21 @@ class BaseController extends Controller
     public function packages()
     {
         $data['active'] = 'packages';
-        $listPaket = Paket::get();
-        $data['listPaket'] = $listPaket;
+        $allPaket = Paket::get();
+        $listKelas = Kelas::get();
+        $dataKelas = [];
+        foreach ($listKelas as $item) {
+            $listPaket = Paket::whereHas('kelasPaket', function($query)use($item){
+                $query->where('id_kelas', $item->id);
+            })->get();
+
+            array_push($dataKelas, [
+                'kelas' => $item,
+                'listPaket' => $listPaket
+            ]);
+        }
+        $data['allPaket'] = $allPaket;
+        $data['listKelas'] = $dataKelas;
         return view('base-2.packages', $data);
     }
 
@@ -206,6 +219,8 @@ class BaseController extends Controller
         if (count($paket->kelasPaket) == 0) {
             return redirect()->back()->with('fail', 'Kelas belum tersedia di dalam paket');
         }
+
+        // Check Aktif Paket
 
         $data['id_user'] = Auth::user()->id;
         $data['id_paket'] = $paket->id;

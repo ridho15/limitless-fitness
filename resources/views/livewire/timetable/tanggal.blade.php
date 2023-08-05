@@ -30,7 +30,7 @@
                 </li>
             </ul>
         </div>
-        <div class="dropdown col-md-2">
+        {{-- <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Location
@@ -44,7 +44,7 @@
                     </li>
                 @endforeach
             </ul>
-        </div>
+        </div> --}}
         <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">

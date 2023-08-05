@@ -14,9 +14,8 @@ class KelasActivity extends Model
     protected $fillable = [
         'id_kelas',
         'nama_latihan',
-        'id_location_studio',
+        'id_ruangan',
         'jam_mulai',
-        'jam_selesai',
         'id_user',
         'status',
         'level',
@@ -28,7 +27,6 @@ class KelasActivity extends Model
         'simple_detail',
         'status_aktivitas_kelas',
         'jam_mulai_formatted',
-        'jam_selesai_formatted',
         'level_formatted'
     ];
 
@@ -50,22 +48,18 @@ class KelasActivity extends Model
         return Carbon::parse($this->jam_mulai)->locale('id')->isoFormat('DD MMMM YYYY HH:mm');
     }
 
-    public function getJamSelesaiFormattedAttribute()
-    {
-        return Carbon::parse($this->jam_selesai)->locale('id')->isoFormat('DD MMMM YYYY HH:mm');
-    }
-
     public function getStatusAktivitasKelasAttribute()
     {
+        $carbon = Carbon::parse($this->jam_mulai)->addHours(1);
         if ($this->status == 0) {
             $this->status = 0;
             $this->save();
             return 'Kelas di batalkan';
-        } elseif (now() > $this->jam_mulai && now() < $this->jam_selesai) {
+        } elseif (now() > $this->jam_mulai && now() <= $carbon) {
             $this->status = 2;
             $this->save();
             return "Kelas Sedang Berlangsung";
-        } elseif ($this->jam_selesai < now()) {
+        } elseif ($this->jam_mulai < now()) {
             $this->status = 3;
             $this->save();
             return 'Jadwal Kelas Sudah Lewat';
@@ -110,11 +104,6 @@ class KelasActivity extends Model
         return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
     }
 
-    public function locationStudio()
-    {
-        return $this->belongsTo(LocationStudio::class, 'id_location_studio');
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
@@ -128,5 +117,9 @@ class KelasActivity extends Model
     public function bookingKelas()
     {
         return $this->hasMany(BookingKelas::class, 'id_kelas_activity');
+    }
+
+    public function ruangan(){
+        return $this->belongsTo(Ruangan::class, 'id_ruangan');
     }
 }

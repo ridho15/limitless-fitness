@@ -8,7 +8,7 @@
                     </div>
                     <div class="px-4 py-4">
                         <h5 class="fw-bold">{{ $item->nama_kelas }}</h5>
-                        <div class="d-flex justify-content-start align-items-center my-3">
+                        {{-- <div class="d-flex justify-content-start align-items-center my-3">
                             <small class="me-2">
                                 @for ($i = 1; $i <= $item->rating; $i++)
                                     <i class="fa-solid fa-star text-warning"></i>
@@ -21,7 +21,7 @@
                                 style="border: 1px solid grey; border-radius: 20px">
                                 {{ $item->jumlah_review }}
                                 Review</small>
-                        </div>
+                        </div> --}}
                         <div class="d-flex align-items-center justify-content-start my-2">
                             <div class="me-2">
                                 <small class="fw-bold">

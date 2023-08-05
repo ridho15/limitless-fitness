@@ -14,6 +14,8 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -56,7 +58,22 @@ class LocationStudioRelationManager extends RelationManager
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([])
+            ->columns([
+                ImageColumn::make('image')
+                    ->circular()
+                    ->width(100)
+                    ->height(100),
+                TextColumn::make('nama')
+                    ->label('Nama')
+                    ->searchable(),
+                TextColumn::make('level_formatted')
+                    ->label('Level')
+                    ->sortable(),
+                TextColumn::make('equipment'),
+                TextColumn::make('max_peserta')
+                    ->label('Maximal Peserta')
+                    ->sortable(),
+            ])
             ->filters([
                 //
             ])

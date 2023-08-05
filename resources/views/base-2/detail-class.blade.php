@@ -11,7 +11,8 @@
                         <small class="fw-bold mx-1">{{ $kelas->nama_kelas }}</small>
                     </div>
                     <h3 class="fw-bold mb-2">{{ $kelas->nama_kelas }}</h3>
-                    <div class="d-flex align-items-center mb-3">
+
+                    {{-- <div class="d-flex align-items-center mb-3">
                         <div class="me-3">
                             @for ($i = 1; $i <= $kelas->rating; $i++)
                                 <i class="fa-solid fa-star text-warning"></i>
@@ -23,17 +24,17 @@
                         <span class="px-3 py-1" style="border: 1px solid grey; border-radius: 15px">
                             <small class="fw-light">{{ $jumlahReview }} Review</small>
                         </span>
-                    </div>
+                    </div> --}}
                     <div class="row mb-4 justify-content-start align-items-center">
-                        <div class="col-md-4 col-6 text-center">
+                        <div class="col-md-4 col-6 text-start">
                             <small class="d-block fw-semibold"><i class="fa-solid fa-clock-rotate-left"></i>
                                 Duration</small>
                             <small class="d-block fw-light">{{ $kelas->duration }} mins</small>
                         </div>
-                        <div class="col-md-4 col-6 text-center">
+                        {{-- <div class="col-md-4 col-6 text-center">
                             <small class="d-block fw-semibold"><i class="fa-solid fa-timeline"></i> Difficulty Level</small>
                             <small class="d-block fw-light">Untuk {{ $kelas->level_formatted }}</small>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="shadow bg-white p-4" style="border-radius: 15px">
                         <form action="#" method="GET" id="form_book">
@@ -94,7 +95,7 @@
                 </div>
             </div>
             <hr class="my-5">
-            <div class="row mb-5">
+            {{-- <div class="row mb-5">
                 <div class="col-md-6 fw-bold fs-4">
                     Reviews
                 </div>
@@ -147,9 +148,9 @@
                 <button class="btn custom-btn w-100">
                     <small>See all review</small>
                 </button>
-            </div>
+            </div> --}}
         </div>
-        <div class="container my-5">
+        {{-- <div class="container my-5">
             <hr>
         </div>
         <div class="container">
@@ -209,7 +210,7 @@
                     </div>
                 @endif
             </div>
-        </div>
+        </div> --}}
     </section>
 @endsection
 

@@ -45,12 +45,6 @@ class ListData extends Component
                         $query->where('id_kelas', $this->id_kelas);
                     }
                 })->where(function ($query) {
-                    if ($this->id_location != null) {
-                        $query->whereHas('locationStudio', function ($query) {
-                            $query->where('id_location', $this->id_location);
-                        });
-                    }
-                })->where(function ($query) {
                     if ($this->id_user != 0) {
                         $query->where('id_user', $this->id_user);
                     }

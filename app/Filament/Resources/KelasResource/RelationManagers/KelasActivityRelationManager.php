@@ -36,19 +36,35 @@ class KelasActivityRelationManager extends RelationManager
         return $form
             ->schema([
                 TextInput::make('nama_latihan')
-                    ->label('Nama Latihan')
                     ->string()
                     ->required()
                     ->maxLength(255),
-                Select::make('id_location_studio')
+                Select::make('id_kelas')
+                    ->label('Kelas')
+                    ->preload()
+                    ->searchable()
+                    ->relationship('kelas', 'nama_kelas')
+                    ->required(),
+                Select::make('id_ruangan')
                     ->searchable()
                     ->preload()
-                    ->relationship('locationStudio', 'nama')
+                    ->required()
+                    ->relationship('ruangan', 'nama_ruangan'),
+                Select::make('level')
+                    ->required()
+                    ->options([
+                        '0' => 'Open to all',
+                        '1' => 'Intermediate',
+                        '2' => 'Beginer',
+                        '3' => 'Advanced'
+                    ]),
+                DatePicker::make('tanggal')
+                    ->label('Tanggal')
                     ->required(),
-                DateTimePicker::make('jam_mulai')
+                TimePicker::make('jam_mulai')
                     ->label('Waktu Mulai')
                     ->required(),
-                DateTimePicker::make('jam_selesai')
+                TimePicker::make('jam_selesai')
                     ->label('Waktu Selesai')
                     ->required(),
                 Select::make('id_user')
@@ -57,26 +73,18 @@ class KelasActivityRelationManager extends RelationManager
                     ->searchable()
                     ->options(User::whereHas('roles', function ($query) {
                         $query->where('name', 'Instruktur');
-                    })->get()->pluck('name', 'id'))
-                    ->required(),
-                Select::make('level')
-                    ->searchable()
-                    ->options([
-                        '0' => 'Open To All',
-                        '1' => 'Intermediate',
-                        '2' => 'Beginer',
-                        '3' => 'Advanced',
-                    ]),
+                    })->get()->pluck('name', 'id')),
                 Select::make('status')
                     ->searchable()
-                    ->required()
+                    ->default(1)
                     ->options([
                         '0' => 'Dibatalkan',
                         '1' => 'Set',
                         '2' => 'Sedang berlangsung',
                         '3' => 'Sudah lewat',
-                    ]),
-                Textarea::make('cancelation_policy')
+                    ])->hidden(),
+                Textarea::make('cancellation_policy')
+                    ->label('Terms and Conditions')
                     ->string()
                     ->required(),
             ]);

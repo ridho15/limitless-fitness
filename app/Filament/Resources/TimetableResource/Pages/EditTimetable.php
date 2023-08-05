@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
+use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -21,6 +22,18 @@ class EditTimetable extends EditRecord
         ];
     }
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['tanggal'] = $data['jam_mulai'];
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['jam_mulai'] = date('Y-m-d', strtotime($data['tanggal'])) . ' ' . date('H:i:s', strtotime($data['jam_mulai']));
+        return $data;
+    }
+
     protected function getTitle(): string|Htmlable
     {
         return 'Edit Timetable';
@@ -34,5 +47,12 @@ class EditTimetable extends EditRecord
     protected function getSavedNotificationTitle(): ?string
     {
         return 'Berhasil mengupdate data jadwal kelas';
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // CalendarWidget::class
+        ];
     }
 }

@@ -169,11 +169,11 @@
                                             <div class="col-md-3 text-end">
                                                 <small class="fw-light">Lokasi</small>
                                                 <div class="fw-bold">
-                                                    <a href="{{ route('detail-location', ['id' => $item->kelasActivity->locationStudio->id_location]) }}"
+                                                    <a href="{{ route('detail-location', ['id' => $item->kelasActivity->ruangan->locationStudio->id_location]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->kelasActivity->locationStudio->location->nama }}</a>
+                                                        {{ $item->kelasActivity->ruangan->locationStudio->location->nama }}</a>
                                                 </div>
-                                                <small>{{ $item->kelasActivity->locationStudio->nama }}</small>
+                                                <small>{{ $item->kelasActivity->ruangan->locationStudio->nama }}</small>
                                             </div>
                                         </div>
                                         <form
