@@ -81,9 +81,13 @@
                         </div>
                         <hr class="my-4" style="opacity: 0.1">
                         <div class="fw-semibold mb-3">Price detail</div>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <small class="fw-light">Standard</small>
-                            <small class="fw-light">Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</small>
+                            <small class="fw-light">Rp.{{ number_format($paket->harga, 0, ',', '.') }}</small>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="fw-light">Diskon ({{ $paket->diskon }}%)</small>
+                            <small class="fw-light">Rp.{{ number_format($paket->harga * $paket->diskon / 100, 0, ',', '.') }}</small>
                         </div>
                         <hr class="my-4" style="opacity: 0.1">
                         <div class="d-flex justify-content-between align-items-center">

@@ -17,6 +17,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -110,7 +112,8 @@ class OrderPaketResource extends Resource
                         'danger' => 0,
                         'primary' => 1
                     ]),
-                ImageColumn::make('bukti_pembayaran'),
+                ImageColumn::make('bukti_pembayaran')
+                    ->size(100),
                 TextColumn::make('tanda_tangan'),
                 TextColumn::make('expired_date')->sortable(),
                 TextColumn::make('tanggal_pembayaran')->sortable(),
@@ -119,9 +122,18 @@ class OrderPaketResource extends Resource
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                ViewAction::make()
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    Action::make('bukti_pembayaran')
+                        ->icon('heroicon-o-photograph')
+                        ->label('View Bukti Pembayaran')
+                        ->url(function (OrderPaket $record) {
+                            return asset('storage/' . $record->bukti_pembayaran);
+                        })
+                        ->openUrlInNewTab(),
+                    ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 DeleteBulkAction::make()

@@ -91,16 +91,24 @@ class PaketResource extends Resource
                     })
                     ->sortable(),
                 TextColumn::make('harga_formatted')
+                    ->label('Harga')
+                    ->sortable(),
+                TextColumn::make('diskon')
+                    ->formatStateUsing(function ($state) {
+                        return $state . '%';
+                    }),
+                TextColumn::make('harga_diskon')
+                    ->label('Harga Diskon')
+                    ->formatStateUsing(function ($state) {
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    })
                     ->sortable(),
                 TextColumn::make('valid_day')
                     ->formatStateUsing(function ($state) {
                         return $state . ' Hari';
                     })->sortable(),
                 TextColumn::make('promote_code'),
-                TextColumn::make('diskon')
-                    ->formatStateUsing(function ($state) {
-                        return $state . '%';
-                    }),
+
                 TextColumn::make('location')
                     ->formatStateUsing(function ($state) {
                         if ($state == 0) {

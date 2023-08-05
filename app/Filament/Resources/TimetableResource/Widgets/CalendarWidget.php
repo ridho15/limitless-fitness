@@ -5,21 +5,17 @@ namespace App\Filament\Resources\TimetableResource\Widgets;
 use App\Filament\Resources\TimetableResource;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
-use App\Models\LocationStudio;
 use App\Models\Ruangan;
 use App\Models\User;
 use Carbon\CarbonPeriod;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
+use Illuminate\Support\Facades\Auth;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
-
-use Filament\Widgets\Widget;
-use Illuminate\Database\Eloquent\Model;
 
 class CalendarWidget extends FullCalendarWidget
 {
@@ -31,7 +27,11 @@ class CalendarWidget extends FullCalendarWidget
 
     public function getViewData(): array
     {
-        $kelasActivity = KelasActivity::get();
+        if (Auth::user()->hasRole('Instruktur')) {
+            $kelasActivity = KelasActivity::where('id_user', Auth::id())->get();
+        }else{
+            $kelasActivity = KelasActivity::get();
+        }
         $data = [];
         foreach ($kelasActivity as $item) {
             array_push($data, [
@@ -46,7 +46,6 @@ class CalendarWidget extends FullCalendarWidget
                 'level' => $item->level,
                 'cancellation_policy' => $item->cancellation_policy,
                 'url' => TimetableResource::getUrl('edit', ['record' => $item]),
-                'shouldOpenInNewTab' => true,
             ]);
         }
 
@@ -68,10 +67,38 @@ class CalendarWidget extends FullCalendarWidget
                 'nama_latihan' => $data['nama_latihan'],
                 'id_ruangan' => $data['id_ruangan'],
                 'jam_mulai' => $item,
-                'id_user' => $data['id_user'],
+                'id_user' => Auth::user()->hasRole('Instruktur') ? Auth::id() : $data['id_user'],
                 'status' => 1,
                 'level' => $data['level'],
-                'cancellation_policy' => $data['cancellation_policy']
+                'cancellation_policy' => '1. All payments must be received before your session begins.
+                2. Booking: All sessions must be booked in advance. Please
+                call our studio or use our online booking system to schedule
+                your session.
+                3. Attendance: Please arrive on time for your session. If you
+                arrive late, the session will still end at the scheduled time, and
+                you will still be charged the full session rate.
+                4. Attire: Please wear comfortable clothing that allows you to
+                move freely. We recommend wearing grip socks for hygiene
+                easons.
+                5. Equipment: Our studio provides mats, blocks, straps, and
+                other necessary equipment. Please do not bring your own
+                equipment unless approved by our instructors.
+                6. Health and Safety: Please inform your instructor of any
+                injuries or health conditions before starting your session. If you
+                feel any discomfort or pain during the session, inform your
+                instructor immediately.
+                7. If class is less than 2 pax in 1 session, studio is able to
+                cancel the class 3 hours before conduct,
+                8. Reschedule and Refunds:
+                a. All sessions purchased are non-refundable.
+                b. Rescheduling of a session must be done at least 24
+                 hours before the scheduled session time.
+                c. Late cancellations, Reschedule or no-shows will result in a
+                 penalty made less than 24 hours before the scheduled session
+                 time will result in the forfeit of that session.
+                d. Exceptions to these rules will be made in the event of
+                 sudden illness or emergency situations, and will be
+                 handled on a case-by-case basis.'
             ]);
         }
 
@@ -111,6 +138,7 @@ class CalendarWidget extends FullCalendarWidget
                     Select::make('id_user')
                         ->label('Instruktur')
                         ->preload()
+                        ->hidden(Auth::user()->hasRole('Instruktur') ? true : false)
                         ->searchable()
                         ->options(User::whereHas('roles', function ($query) {
                             $query->where('name', 'Instruktur');
@@ -136,11 +164,7 @@ class CalendarWidget extends FullCalendarWidget
                     TimePicker::make('jam_selesai')
                         ->label('Jam Selesai')
                         ->required(),
-                    Textarea::make('cancellation_policy')
-                        ->label('Terms and Conditions')
-                        ->string()
-                        ->required(),
-                ])->columns(2)
+                ])->columns(1)
         ];
     }
 }

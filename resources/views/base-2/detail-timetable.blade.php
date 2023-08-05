@@ -129,7 +129,7 @@
                                         Book Now
                                     </button>
                                     <div class="" style="font-size: 8pt">
-                                        By booking, you agree to the <a href="" class="text-dark">
+                                        By booking, you agree to the <a href="{{ route('term-condition') }}" class="text-dark">
                                             Terms & Conditions</a>.
                                     </div>
                                 </div>

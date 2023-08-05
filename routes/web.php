@@ -32,6 +32,7 @@ Route::get('/login', [BaseController::class, 'login'])->name('login');
 Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogin');
 Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');
 Route::post('/post-registrasi', [BaseController::class, 'postRegistrasi'])->name('postRegistrasi');
+Route::get('/term-and-condition', [BaseController::class, 'termCondition'])->name('term-condition');
 Route::middleware('auth')->group(function () {
     Route::prefix('order-kelas')->group(function(){
         Route::get('/', [BaseController::class, 'orderKelas'])->name('order-kelas');

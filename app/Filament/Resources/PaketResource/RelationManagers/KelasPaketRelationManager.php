@@ -41,6 +41,12 @@ class KelasPaketRelationManager extends RelationManager
                 TextColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
                     ->searchable(),
+                TextColumn::make('kelas.keterangan'),
+                TextColumn::make('kelas.duration')
+                    ->label('Durasi')
+                    ->sortable(),
+                TextColumn::make('kelas.bawaan')
+                    ->searchable(),
             ])
             ->filters([
                 //

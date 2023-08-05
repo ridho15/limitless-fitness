@@ -101,6 +101,11 @@ class BaseController extends Controller
         return view('base-2.timetable', $data);
     }
 
+    public function termCondition(){
+        $data['active'] = 'term-condition';
+        return view('base-2.term-condition', $data);
+    }
+
     public function detailTimetable($id)
     {
         $data['active'] = 'timetable';

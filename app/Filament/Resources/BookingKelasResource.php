@@ -57,11 +57,11 @@ class BookingKelasResource extends Resource
                                     ->options(KelasActivity::get()->pluck('simple_detail', 'id')),
                                 Radio::make('status_kehadiran')
                                     ->options([
+                                        '' => 'Belum di ketahui',
                                         '1' => 'Hadir',
                                         '2' => 'Izin',
                                         '0' => 'Tidak hadir'
-                                    ])
-                                    ->required(),
+                                    ]),
                                 Textarea::make('keterangan')
                                     ->nullable(),
                                 Toggle::make('is_send_email')

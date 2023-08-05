@@ -6,7 +6,7 @@
     <div class="carousel-inner">
         <div class="carousel-item active">
             <div class="custom-carousel"
-                style="background-image: url('https://cdnwpedutorenews.gramedia.net/wp-content/uploads/2022/05/30155159/yoga-4-scaled.jpg');">
+                style="background-size: cover; background-position: center; background-repeat: no-repeat; background-image: url({{ asset('assets/images/home.jpg') }});">
                 <div class="position-absolute h-100 w-100 bg-dark" style="--bs-bg-opacity: .5; z-index: 1; "></div>
                 <div class="position-absolute position-absolute d-flex flex-column justify-content-start align-items-start h-100 w-100"
                     style="z-index: 1; margin-top: 270px">

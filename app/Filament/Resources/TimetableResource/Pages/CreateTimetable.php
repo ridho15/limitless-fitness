@@ -8,6 +8,7 @@ use App\Models\KelasActivity;
 use Carbon\CarbonPeriod;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateTimetable extends CreateRecord
 {
@@ -47,7 +48,7 @@ class CreateTimetable extends CreateRecord
                     'nama_latihan' => $data['nama_latihan'],
                     'id_ruangan' => $data['id_ruangan'],
                     'jam_mulai' => $item,
-                    'id_user' => $data['id_user'],
+                    'id_user' => Auth::user()->hasRole('Intruktur') ? Auth::id() : $data['id_user'],
                     'status' => 1,
                     'level' => $data['level'],
                     'cancellation_policy' => $data['cancellation_policy']
