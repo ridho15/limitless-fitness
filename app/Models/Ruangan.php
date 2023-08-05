@@ -17,6 +17,6 @@ class Ruangan extends Model
     ];
 
     public function locationStudio(){
-        return $this->belongsTo(LocationStudio::class, 'id_location_studio');
+        return $this->belongsTo(LocationStudio::class, 'id_location_studio')->withDefault();
     }
 }

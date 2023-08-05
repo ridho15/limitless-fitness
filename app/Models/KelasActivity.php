@@ -124,6 +124,6 @@ class KelasActivity extends Model
     }
 
     public function ruangan(){
-        return $this->belongsTo(Ruangan::class, 'id_ruangan');
+        return $this->belongsTo(Ruangan::class, 'id_ruangan')->withDefault();
     }
 }
