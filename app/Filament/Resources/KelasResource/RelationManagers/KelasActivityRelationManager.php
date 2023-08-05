@@ -35,6 +35,11 @@ class KelasActivityRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                TextInput::make('nama_latihan')
+                    ->label('Nama Latihan')
+                    ->string()
+                    ->required()
+                    ->maxLength(255),
                 Select::make('id_location_studio')
                     ->searchable()
                     ->preload()
@@ -54,6 +59,14 @@ class KelasActivityRelationManager extends RelationManager
                         $query->where('name', 'Instruktur');
                     })->get()->pluck('name', 'id'))
                     ->required(),
+                Select::make('level')
+                    ->searchable()
+                    ->options([
+                        '0' => 'Open To All',
+                        '1' => 'Intermediate',
+                        '2' => 'Beginer',
+                        '3' => 'Advanced',
+                    ]),
                 Select::make('status')
                     ->searchable()
                     ->required()
@@ -73,9 +86,13 @@ class KelasActivityRelationManager extends RelationManager
     {
         return $table
             ->columns([
+                TextColumn::make('nama_latihan')
+                    ->searchable(),
                 TextColumn::make('locationStudio.nama')
                     ->label('Lokasi Studio')
                     ->searchable(),
+                TextColumn::make('level_formatted')
+                    ->sortable(),
                 TextColumn::make('jam_mulai_formatted')
                     ->sortable(),
                 TextColumn::make('jam_selesai_formatted')

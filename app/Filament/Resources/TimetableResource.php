@@ -42,6 +42,10 @@ class TimetableResource extends Resource
                 Card::make()
                     ->schema([
                         Fieldset::make('Form timetable')->schema([
+                            TextInput::make('nama_latihan')
+                                ->string()
+                                ->required()
+                                ->maxLength(255),
                             Select::make('id_kelas')
                                 ->label('Kelas')
                                 ->preload()
@@ -53,6 +57,14 @@ class TimetableResource extends Resource
                                 ->preload()
                                 ->relationship('locationStudio', 'nama')
                                 ->required(),
+                            Select::make('level')
+                                ->required()
+                                ->options([
+                                    '0' => 'Open to all',
+                                    '1' => 'Intermediate',
+                                    '2' => 'Beginer',
+                                    '3' => 'Advanced'
+                                ]),
                             DateTimePicker::make('jam_mulai')
                                 ->label('Waktu Mulai')
                                 ->required(),
@@ -88,12 +100,16 @@ class TimetableResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('nama_latihan')
+                    ->searchable(),
                 TextColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
                     ->searchable(),
                 TextColumn::make('locationStudio.nama')
                     ->label('Lokasi Studio')
                     ->searchable(),
+                TextColumn::make('level_formatted')
+                    ->sortable(),
                 TextColumn::make('jam_mulai_formatted')
                     ->label('Jam Mulai')
                     ->sortable(),

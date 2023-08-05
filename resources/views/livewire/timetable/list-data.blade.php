@@ -18,7 +18,7 @@
                                 <div class="row justify-content-center align-items-center">
                                     <div class="col-md-3">
                                         <span class="fw-bold d-block">{{ $data->kelas->nama_kelas }}</span>
-                                        <small class="fw-light d-block">{{ $data->user->name }}</small>
+                                        <span class="">{{ $data->nama_latihan }}</span>
                                     </div>
                                     <div class="col-md-3">
                                         <span class="fw-bold d-block">{{ $data->locationStudio->location->nama }}</span>
@@ -27,6 +27,8 @@
                                     <div class="col-md-3 text-center">
                                         <small
                                             class="text-secondary fw-bold">{{ $data->status_aktivitas_kelas }}</small>
+                                        <small class="fw-light d-block">{{ $data->user->name }}</small>
+
                                     </div>
                                     <div class="col-md-3 text-end">
                                         <form action="{{ route('detail-timetable', ['id' => $data->id]) }}"

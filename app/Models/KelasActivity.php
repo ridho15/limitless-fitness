@@ -13,11 +13,13 @@ class KelasActivity extends Model
     protected $table = 'kelas_activities';
     protected $fillable = [
         'id_kelas',
+        'nama_latihan',
         'id_location_studio',
         'jam_mulai',
         'jam_selesai',
         'id_user',
         'status',
+        'level',
         'cancellation_policy',
     ];
 
@@ -26,8 +28,22 @@ class KelasActivity extends Model
         'simple_detail',
         'status_aktivitas_kelas',
         'jam_mulai_formatted',
-        'jam_selesai_formatted'
+        'jam_selesai_formatted',
+        'level_formatted'
     ];
+
+    public function getLevelFormattedAttribute()
+    {
+        if ($this->level == '0') {
+            return 'Open to all';
+        } elseif ($this->level == '1') {
+            return 'Intermediate';
+        } elseif ($this->level == '2') {
+            return 'Beginer';
+        } elseif ($this->level == '3') {
+            return 'Advanced';
+        }
+    }
 
     public function getJamMulaiFormattedAttribute()
     {
@@ -109,7 +125,8 @@ class KelasActivity extends Model
         return $this->hasMany(KelasRating::class, 'id_kelas_activity');
     }
 
-    public function bookingKelas(){
+    public function bookingKelas()
+    {
         return $this->hasMany(BookingKelas::class, 'id_kelas_activity');
     }
 }
