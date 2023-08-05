@@ -28,7 +28,7 @@
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg bg-light bg-color-custom shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="#">Daily Dose Pilates</a>
+            <a class="navbar-brand fw-bold text-white fs-4" href="#">Daily Dose Pilates</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -37,27 +37,27 @@
             <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link mx-2 @if ($active == 'home') active nav-link-fs @endif"
+                        <a class="nav-link mx-2 text-white @if ($active == 'home') active nav-link-fs @endif"
                             aria-current="page" href="{{ route('base') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mx-2 @if ($active == 'class') active nav-link-fs @endif"
+                        <a class="nav-link mx-2 text-white @if ($active == 'class') active nav-link-fs @endif"
                             href="{{ route('class') }}">Class</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mx-2 @if ($active == 'packages') active nav-link-fs @endif"
+                        <a class="nav-link mx-2 text-white @if ($active == 'packages') active nav-link-fs @endif"
                             href="{{ route('packages') }}">Packages</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link mx-2 @if ($active == 'timetable') active nav-link-fs @endif"
+                        <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
                             href="{{ route('timetable') }}">Timetable</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mx-2 @if ($active == 'location') active nav-link-fs @endif"
+                        <a class="nav-link mx-2 text-white @if ($active == 'location') active nav-link-fs @endif"
                             href="{{ route('location') }}">Location</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mx-2 @if ($active == 'contact us') active nav-link-fs @endif"
+                        <a class="nav-link mx-2 text-white @if ($active == 'contact us') active nav-link-fs @endif"
                             href="{{ route('contactus') }}">Contact
                             us</a>
                     </li>
@@ -71,17 +71,17 @@
                                 style="background-color: purple; padding: 10px;">
                                 {{ substr(Auth::user()->name, 0, 2) }}
                             </span>
-                            <span class="mx-1">{{ Auth::user()->name }}</span>
+                            <span class="mx-1 text-white">{{ Auth::user()->name }}</span>
                         </button>
                         <ul class="dropdown-menu bg-color-custom w-100" style="z-index: 100">
-                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile') }}"><i
+                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile') }}"><i
                                         class="fa-regular fa-circle-user"></i> <span class="mx-2">My
                                         Profile</span></a>
                             </li>
-                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.bookings') }}"><i
+                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.bookings') }}"><i
                                         class="fa-regular fa-credit-card"></i> <span class="mx-2">My
                                         Bookings</span></a></li>
-                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.packages') }}"><i
+                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.packages') }}"><i
                                         class="fa-solid fa-hand-holding-heart"></i>
                                     <span class="mx-2">My Packages</span></a>
                             </li>
@@ -92,7 +92,7 @@
                             <li class="my-2" class="px-2">
                                 <hr>
                             </li>
-                            <li class="my-2"><a class="dropdown-item" href="{{ route('profile.billing') }}"><i
+                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.billing') }}"><i
                                         class="fa-solid fa-comments-dollar"></i>
                                     <span class="mx-2">Billing</span></a></li>
                             {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
@@ -104,7 +104,7 @@
                             <li class="my-2">
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button class="dropdown-item" type="submit"><i
+                                    <button class="dropdown-item text-white" type="submit"><i
                                             class="fa-solid fa-right-from-bracket"></i> <span
                                             class="mx-2">Logout</span></button>
                                 </form>
@@ -123,7 +123,7 @@
     {{-- Start Footer --}}
     <footer class="bg-color-custom pb-3 pt-5 mt-auto" id="footer">
         <div class="container">
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-md-12 text-center">
                     <h3 class="fw-bold text-grey mb-5">Daily Dose Pilates</h3>
                     <img src="{{ asset('assets/images/logo.png') }}" width="200" height="100" class="mb-4"
@@ -135,15 +135,15 @@
                     </div>
                 </div>
             </div>
-            <hr>
+            <hr> --}}
             <div class="row">
-                <div class="col-md-6 fw-light">
+                <div class="col-md-6 fw-light text-white">
                     Copyright © 2023 <strong>Dokgo</strong>
                 </div>
                 <div class="col-md-6 text-end fw-light">
                     <div class="country-timezone">
                         <span class="fi fi-id"></span>
-                        <p>Indonesia (GMT +07:00)</p>
+                        <p class="text-white">Indonesia (GMT +07:00)</p>
                     </div>
                 </div>
             </div>
