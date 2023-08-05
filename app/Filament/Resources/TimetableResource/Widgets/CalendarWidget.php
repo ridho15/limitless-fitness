@@ -74,72 +74,10 @@ class CalendarWidget extends FullCalendarWidget
                 'cancellation_policy' => $data['cancellation_policy']
             ]);
         }
-    }
 
-    // protected static function getEditEventFormSchema(): array
-    // {
-    //     return [
-    //         Grid::make('Form Timetable')
-    //             ->schema([
-    //                 TextInput::make('nama_latihan')
-    //                     ->string()
-    //                     ->required()
-    //                     ->maxLength(255),
-    //                 Select::make('id_kelas')
-    //                     ->label('Kelas')
-    //                     ->preload()
-    //                     ->searchable()
-    //                     ->options(Kelas::get()->pluck('nama_kelas', 'id'))
-    //                     ->required(),
-    //                 Select::make('id_ruangan')
-    //                     ->label('Ruangan')
-    //                     ->preload()
-    //                     ->searchable()
-    //                     ->options(Ruangan::get()->pluck('nama_ruangan', 'id'))
-    //                     ->required(),
-    //                 Select::make('level')
-    //                     ->required()
-    //                     ->options([
-    //                         '0' => 'Open to all',
-    //                         '1' => 'Intermediate',
-    //                         '2' => 'Beginer',
-    //                         '3' => 'Advanced'
-    //                     ]),
-    //                 Select::make('id_user')
-    //                     ->label('Instruktur')
-    //                     ->preload()
-    //                     ->searchable()
-    //                     ->options(User::whereHas('roles', function ($query) {
-    //                         $query->where('name', 'Instruktur');
-    //                     })->get()->pluck('name', 'id'))
-    //                     ->required(),
-    //                 Select::make('status')
-    //                     ->searchable()
-    //                     ->required()
-    //                     ->preload()
-    //                     ->options([
-    //                         '0' => 'Dibatalkan',
-    //                         '1' => 'Set',
-    //                         '2' => 'Sedang berlangsung',
-    //                         '3' => 'Sudah lewat',
-    //                     ])
-    //                     ->hidden()
-    //                     ->default(1),
-    //                 DatePicker::make('start')
-    //                     ->required(),
-    //                 TimePicker::make('jam_mulai')
-    //                     ->label('Jam Mulai')
-    //                     ->required(),
-    //                 TimePicker::make('jam_selesai')
-    //                     ->label('Jam Selesai')
-    //                     ->required(),
-    //                 Textarea::make('cancellation_policy')
-    //                     ->label('Terms and Conditions')
-    //                     ->string()
-    //                     ->required(),
-    //             ])->columns(2)
-    //     ];
-    // }
+        $this->refreshEvents();
+        $this->redirect(TimetableResource::getUrl('index'));
+    }
 
     protected static function getCreateEventFormSchema(): array
     {

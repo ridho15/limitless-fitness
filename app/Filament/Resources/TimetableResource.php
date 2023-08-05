@@ -136,7 +136,10 @@ class TimetableResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                ->after(function(){
+                    return CalendarWidget::refreshEvents();
+                }),
                 ViewAction::make(),
             ])
             ->bulkActions([
