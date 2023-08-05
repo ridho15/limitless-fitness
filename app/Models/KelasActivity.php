@@ -75,7 +75,11 @@ class KelasActivity extends Model
     public function getSimpleDetailAttribute()
     {
         $kelas = Kelas::find($this->id_kelas);
-        return $kelas->nama_kelas . ' ' . $this->jam_latihan;
+        if($kelas){
+            return $kelas->nama_kelas . ' ' . $this->jam_latihan;
+        }
+
+        return null;
     }
 
     public function getStatusFormattedAttribute()

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\RuanganResource\Pages;
 use App\Filament\Resources\RuanganResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\Position;
 
 class ListRuangans extends ListRecords
 {
@@ -17,5 +18,10 @@ class ListRuangans extends ListRecords
                 ->label('Tambah Ruangan')
                 ->icon('heroicon-o-plus-circle'),
         ];
+    }
+
+    protected function getTableActionsPosition(): ?string
+    {
+        return Position::BeforeCells;
     }
 }

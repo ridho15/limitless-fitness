@@ -5,6 +5,7 @@ namespace App\Filament\Resources\LocationStudioResource\Pages;
 use App\Filament\Resources\LocationStudioResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\Position;
 
 class ListLocationStudios extends ListRecords
 {
@@ -15,5 +16,10 @@ class ListLocationStudios extends ListRecords
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+    protected function getTableActionsPosition(): ?string
+    {
+        return Position::BeforeCells;
     }
 }
