@@ -113,7 +113,7 @@
                     </div>
                 @else
                     <a href="{{ route('login') }}"
-                        class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline">Login / Registrasi</a>
+                        class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline" style="border-color: white; color: white">Login / Registrasi</a>
                 @endif
             </div>
         </div>
