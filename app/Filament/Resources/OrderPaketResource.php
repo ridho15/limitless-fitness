@@ -165,8 +165,8 @@ class OrderPaketResource extends Resource
                         ->label('Approve Pembayaran')
                         ->action(fn (OrderPaket $record) => $record->update([
                             'status' => 1,
-                            'is_active' => 0
-                        ])),
+                            'is_active' => 1
+                        ]))->requiresConfirmation(),
                     ViewAction::make(),
                 ])
             ])
