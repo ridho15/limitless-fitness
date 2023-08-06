@@ -17,7 +17,8 @@ class ListData extends Component
         'changeClass',
         'changeInstruktur',
         'changeLevel',
-        'setCari'
+        'setCari',
+        'changeTanggal'
     ];
     public $listData;
     public $indexTanggal;
@@ -27,11 +28,12 @@ class ListData extends Component
     public $id_user;
     public $level;
     public $cari;
+    public $tanggal;
     private $listTanggal = [];
     public function render()
     {
-        $startDate = Carbon::now()->isoFormat('DD MMMM YYYY');
-        $endDate = Carbon::now()->addDays(30)->isoFormat('DD MMMM YYYY');
+        $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
+        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
         $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
         $this->listData = [];
         foreach ($this->listTanggal as $item) {
@@ -69,6 +71,7 @@ class ListData extends Component
     public function mount()
     {
         $this->category = 0;
+        $this->tanggal = now();
     }
 
     public function setListTanggal($listTanggal)
@@ -109,5 +112,9 @@ class ListData extends Component
     public function setCari($cari)
     {
         $this->cari = $cari;
+    }
+
+    public function changeTanggal($tanggal){
+        $this->tanggal = $tanggal;
     }
 }

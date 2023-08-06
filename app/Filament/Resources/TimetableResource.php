@@ -28,6 +28,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -105,34 +106,34 @@ class TimetableResource extends Resource
                                 ->label('Terms and Conditions')
                                 ->string()
                                 ->default('1. All payments must be received before your session begins.
-2. Booking: All sessions must be booked in advance. Please
-call our studio or use our online booking system to schedule
-your session.
-3. Attendance: Please arrive on time for your session. If you
-arrive late, the session will still end at the scheduled time, and
-you will still be charged the full session rate.
-4. Attire: Please wear comfortable clothing that allows you to
-move freely. We recommend wearing grip socks for hygiene
-easons.
-5. Equipment: Our studio provides mats, blocks, straps, and
-other necessary equipment. Please do not bring your own
-equipment unless approved by our instructors.
-6. Health and Safety: Please inform your instructor of any
-injuries or health conditions before starting your session. If you
-feel any discomfort or pain during the session, inform your
-instructor immediately.
-7. If class is less than 2 pax in 1 session, studio is able to
-cancel the class 3 hours before conduct,
-8. Reschedule and Refunds:
-a. All sessions purchased are non-refundable.
-b. Rescheduling of a session must be done at least 24
- hours before the scheduled session time.
-c. Late cancellations, Reschedule or no-shows will result in a
- penalty made less than 24 hours before the scheduled session
- time will result in the forfeit of that session.
-d. Exceptions to these rules will be made in the event of
- sudden illness or emergency situations, and will be
- handled on a case-by-case basis.')
+                                    2. Booking: All sessions must be booked in advance. Please
+                                    call our studio or use our online booking system to schedule
+                                    your session.
+                                    3. Attendance: Please arrive on time for your session. If you
+                                    arrive late, the session will still end at the scheduled time, and
+                                    you will still be charged the full session rate.
+                                    4. Attire: Please wear comfortable clothing that allows you to
+                                    move freely. We recommend wearing grip socks for hygiene
+                                    easons.
+                                    5. Equipment: Our studio provides mats, blocks, straps, and
+                                    other necessary equipment. Please do not bring your own
+                                    equipment unless approved by our instructors.
+                                    6. Health and Safety: Please inform your instructor of any
+                                    injuries or health conditions before starting your session. If you
+                                    feel any discomfort or pain during the session, inform your
+                                    instructor immediately.
+                                    7. If class is less than 2 pax in 1 session, studio is able to
+                                    cancel the class 3 hours before conduct,
+                                    8. Reschedule and Refunds:
+                                    a. All sessions purchased are non-refundable.
+                                    b. Rescheduling of a session must be done at least 24
+                                    hours before the scheduled session time.
+                                    c. Late cancellations, Reschedule or no-shows will result in a
+                                    penalty made less than 24 hours before the scheduled session
+                                    time will result in the forfeit of that session.
+                                    d. Exceptions to these rules will be made in the event of
+                                    sudden illness or emergency situations, and will be
+                                    handled on a case-by-case basis.')
                                 ->required(),
                         ])->columns(1)
                     ])
@@ -181,13 +182,12 @@ d. Exceptions to these rules will be made in the event of
                     ->label('Status Jadwal')
             ])
             ->filters([
-                //
             ])
             ->actions([
                 EditAction::make(),
                 DeleteAction::make()
                     ->after(function () {
-                        return CalendarWidget::refreshEvents();
+                        return redirect(TimetableResource::getUrl('index'));
                     }),
                 ViewAction::make(),
             ])

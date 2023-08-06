@@ -1,5 +1,5 @@
 <div>
-    <div class="d-flex mb-2" style="overflow-x: scroll">
+    <div class="d-flex mb-2 justify-content-evenly" style="overflow-x: auto">
         @foreach ($listTanggal as $index => $item)
             <a href="#{{ $index }}" wire:click="$emit('onClickTanggal', {{ $index }})"
                 class="card-date @if ($index == $indexTanggal) active @endif shadow-sm mx-1"
@@ -45,7 +45,7 @@
                 @endforeach
             </ul>
         </div> --}}
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="input-group">
                 <input type="text" class="form-control" name="cari" wire:model='cari' placeholder="Cari Kelas ..."
                     aria-label="Tulis Kelas" aria-describedby="basic-addon2"
@@ -53,6 +53,13 @@
                 <span wire:click="onClickCari" class="input-group-text" id="basic-addon2" style="cursor: pointer">
                     <i class="fa-solid fa-magnifying-glass"></i> Cari
                 </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="date" class="form-control" name="tanggal" wire:model='tanggal' wire:change='changeTanggal' placeholder="Cari Kelas ..."
+                    aria-label="Tulis Kelas" aria-describedby="basic-addon2"
+                    style="padding-top: 10px; padding-bottom: 10px">
             </div>
         </div>
         <div class="dropdown col-md-2">
@@ -86,7 +93,7 @@
                 @endforeach
             </ul>
         </div>
-        <div class="dropdown col-md-3">
+        <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Level of difficulty

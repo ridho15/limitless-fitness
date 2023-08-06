@@ -6,6 +6,7 @@ use App\Filament\Resources\TimetableResource;
 use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
 use App\Models\KelasActivity;
 use Carbon\CarbonPeriod;
+use Filament\Notifications\Notification;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
@@ -38,11 +39,21 @@ class CreateTimetable extends CreateRecord
             array_push($jam, date('Y-m-d', strtotime($data['jam_mulai'])) . date(' H:i', strtotime($item)));
         }
         foreach ($jam as $index => $item) {
+            // Check jadwal studio
+            $kelasActivity = KelasActivity::where('jam_mulai', $item)->where('id_ruangan', $data['id_ruangan'])
+                ->first();
+            if ($kelasActivity) {
+                Notification::make()
+                    ->title('Jadwal sudah ada di dalam ruangan studio')
+                    ->danger()
+                    ->send();
+                return [];
+            }
             if ($index + 1 == count($jam)) {
                 $data['jam_mulai'] = $item;
                 $data['status'] = 1;
                 return $data;
-            }else{
+            } else {
                 KelasActivity::create([
                     'id_kelas' => $data['id_kelas'],
                     'nama_latihan' => $data['nama_latihan'],

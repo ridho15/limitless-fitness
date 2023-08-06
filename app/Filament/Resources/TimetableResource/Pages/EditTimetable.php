@@ -4,6 +4,8 @@ namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
 use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
+use App\Models\KelasActivity;
+use Filament\Notifications\Notification;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -31,6 +33,15 @@ class EditTimetable extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['jam_mulai'] = date('Y-m-d', strtotime($data['tanggal'])) . ' ' . date('H:i:s', strtotime($data['jam_mulai']));
+        $kelasActivity = KelasActivity::where('jam_mulai', $data['jam_mulai'])
+        ->where('id_ruangan', $data['id_ruangan'])
+        ->first();
+        dd($kelasActivity);
+        Notification::make()
+            ->title('Jadwal sudah ada di dalam ruangan studio')
+            ->danger()
+            ->send();
+        return [];
         return $data;
     }
 

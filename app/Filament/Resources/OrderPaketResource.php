@@ -8,6 +8,7 @@ use App\Models\Paket;
 use App\Models\User;
 use Closure;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
@@ -26,6 +27,9 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrderPaketResource extends Resource
 {
@@ -119,12 +123,36 @@ class OrderPaketResource extends Resource
                 TextColumn::make('tanggal_pembayaran')->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('id_user')
+                    ->label('Customer')
+                    ->options(User::whereHas('roles', function ($query) {
+                        $query->where('name', 'Customer');
+                    })->get()->pluck('name', 'id'))
+                    ->searchable(),
+                SelectFilter::make('id_paket')
+                    ->label('Paket')
+                    ->options(Paket::get()->pluck('nama', 'id'))
+                    ->searchable(),
+                Filter::make('created_at')
+                    ->label('Tanggal Order')
+                    ->form([
+                        DatePicker::make('created_from'),
+                        DatePicker::make('created_until'),
+                    ])->query(function (Builder $query, array $data) {
+                        return $query->when(
+                            $data['created_from'],
+                            fn (Builder $query, $date) => $query->whereDate('created_at', '>=', $date),
+                        )->when($data['created_until'], fn (Builder $query, $date) => $query->whereDate('created_at', '<=', $date));
+                    }),
+                SelectFilter::make('is_active')->label('Status Aktif')->searchable()->options([
+                    0 => 'Tidak Aktif',
+                    1 => 'Aktif'
+                ]),
             ])
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
-                    DeleteAction::make(),
+                    DeleteAction::make()->successNotificationTitle('Berhasil menghapus order paket'),
                     Action::make('bukti_pembayaran')
                         ->icon('heroicon-o-photograph')
                         ->label('View Bukti Pembayaran')
@@ -132,6 +160,13 @@ class OrderPaketResource extends Resource
                             return asset('storage/' . $record->bukti_pembayaran);
                         })
                         ->openUrlInNewTab(),
+                    Action::make('approve')
+                        ->icon('heroicon-o-cash')
+                        ->label('Approve Pembayaran')
+                        ->action(fn (OrderPaket $record) => $record->update([
+                            'status' => 1,
+                            'is_active' => 0
+                        ])),
                     ViewAction::make(),
                 ])
             ])

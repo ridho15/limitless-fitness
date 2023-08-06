@@ -3,23 +3,18 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BookingKelasResource\Pages;
-use App\Filament\Resources\BookingKelasResource\RelationManagers;
 use App\Models\BookingKelas;
 use App\Models\KelasActivity;
-use App\Models\LocationStudio;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -27,7 +22,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class BookingKelasResource extends Resource
 {
@@ -54,7 +49,13 @@ class BookingKelasResource extends Resource
                                     ->label('Kelas Aktifitas')
                                     ->preload()
                                     ->searchable()
-                                    ->options(KelasActivity::get()->pluck('simple_detail', 'id')),
+                                    ->options(KelasActivity::where(function($query){
+                                        if(Auth::user()->hasRole('Instruktur')){
+                                            $query->where('id_user', Auth::id());
+                                        }
+                                    })
+                                    ->whereDate('jam_mulai', '>=', now())
+                                        ->get()->pluck('simple_detail', 'id')),
                                 Radio::make('status_kehadiran')
                                     ->options([
                                         '' => 'Belum di ketahui',
@@ -70,6 +71,15 @@ class BookingKelasResource extends Resource
                             ])
                     ])
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        if(Auth::user()->hasRole('Instruktur')){
+            return parent::getEloquentQuery()->where('id_user', Auth::id());
+        }else{
+            return parent::getEloquentQuery();
+        }
     }
 
     public static function table(Table $table): Table

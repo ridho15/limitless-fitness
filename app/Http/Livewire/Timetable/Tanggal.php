@@ -13,7 +13,8 @@ class Tanggal extends Component
 {
     public $listeners = [
         'setTanggal',
-        'onClickCari'
+        'onClickCari',
+        'changetanggal'
     ];
     private $listTanggal;
     public $indexTanggal;
@@ -21,10 +22,11 @@ class Tanggal extends Component
     public $listLocation = [];
     public $listInstruktur = [];
     public $cari;
+    public $tanggal;
     public function render()
     {
-        $startDate = Carbon::now()->isoFormat('DD MMMM YYYY');
-        $endDate = Carbon::now()->addDays(30)->isoFormat('DD MMMM YYYY');
+        $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
+        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
         $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
         $data['listTanggal'] = $this->listTanggal;
         return view('livewire.timetable.tanggal', $data);
@@ -37,6 +39,7 @@ class Tanggal extends Component
         $this->listInstruktur = User::whereHas('roles', function ($query) {
             $query->where('name', 'Instruktur');
         })->get();
+        $this->tanggal = now();
     }
 
     public function setTanggal($index)
@@ -46,5 +49,9 @@ class Tanggal extends Component
 
     public function onClickCari(){
         $this->emit('setCari', $this->cari);
+    }
+
+    public function changeTanggal(){
+        $this->emit('changeTanggal', $this->tanggal);
     }
 }

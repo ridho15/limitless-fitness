@@ -82,7 +82,7 @@ class KelasActivity extends Model
     {
         $kelas = Kelas::find($this->id_kelas);
         if ($kelas) {
-            return $kelas->nama_kelas . ' ' . $this->jam_latihan;
+            return $kelas->nama_kelas . ' ' . $this->jam_mulai;
         }
 
         return null;
