@@ -302,7 +302,7 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
         }
 
-        $path = $request->file('bukti_pembayaran')->store('public/bukti_pembayaran');
+        $path = $request->file('bukti_pembayaran')->store('public');
         $path = str_replace('public/', '', $path);
         $data['tanggal_pembayaran'] = now();
         $data['bukti_pembayaran'] = $path;
