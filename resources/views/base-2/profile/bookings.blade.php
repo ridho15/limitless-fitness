@@ -192,7 +192,7 @@
                                                 }
                                             @endphp
                                             <div class="row align-items-center mt-2">
-                                                <div class="col-md-8 col-8 text-center">
+                                                <div class="col-md-4ol-8 text-center">
                                                     <select name="status_kehadiran" class="form-control"
                                                         id="status_kehadiran"
                                                         @if ($isDisable) disabled @endif>
@@ -216,7 +216,8 @@
                                                 <div class="col-md-2 col-2 text-center">
                                                     <button type="button" class="btn btn-danger w-100 btn-batal"
                                                         data-id="{{ $item->id }}" style="border-radius: 20px"
-                                                        @if ($isDisable) disabled @endif> <i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                        @if ($isDisable) disabled @endif> <i
+                                                            class="fa-regular fa-circle-xmark"></i> Batalkan</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -318,7 +319,8 @@
                                                 <div class="col-md-2 col-2 text-center">
                                                     <button type="button" class="btn btn-danger w-100 btn-batal"
                                                         data-id="{{ $item->id }}" style="border-radius: 20px"
-                                                        @if ($isDisable) disabled @endif> <i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                        @if ($isDisable) disabled @endif> <i
+                                                            class="fa-regular fa-circle-xmark"></i> Batalkan</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -420,7 +422,8 @@
                                                 <div class="col-md-2 col-2 text-center">
                                                     <button type="button" class="btn btn-danger w-100 btn-batal"
                                                         data-id="{{ $item->id }}" style="border-radius: 20px"
-                                                        @if ($isDisable) disabled @endif><i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                        @if ($isDisable) disabled @endif><i
+                                                            class="fa-regular fa-circle-xmark"></i> Batalkan</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -522,7 +525,8 @@
                                                 <div class="col-md-2 col-2 text-center">
                                                     <button type="button" class="btn btn-danger w-100 btn-batal"
                                                         data-id="{{ $item->id }}" style="border-radius: 20px"
-                                                        @if ($isDisable) disabled @endif><i class="fa-regular fa-circle-xmark"></i> Batalkan</button>
+                                                        @if ($isDisable) disabled @endif><i
+                                                            class="fa-regular fa-circle-xmark"></i> Batalkan</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -550,6 +554,55 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal_tambah_kredit" tabindex="-1" aria-labelledby="modal_tambah_kredit"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color: #faf0e6">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modal_tambah_kredit">Tambah Kredit Paket</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img src="{{ asset('assets/images/logo.png') }}" class="img-fluid" alt="">
+                    </div>
+                    <div class="text-center mb-3">
+                        <span class="fs-1 fw-bold" style="color: #3c6553">PRICE LIST</span>
+                    </div>
+                    <div class="text-center mb-5">
+                        <div class="py-2" style="background-color: #3c6553; border-radius: 20px">
+                            <span class="text-white fw-semibold">PRIVATE CLASS</span>
+                        </div>
+                    </div>
+                    @if (count($listPaket) > 0)
+                        @foreach ($listPaket as $item)
+                            <div class="row mb-3 px-5">
+                                <div class="col-md-8 col-8 fw-bold" style="color: #3c6553">
+                                    {{ $item->nama_paket }}
+                                </div>
+                                <div class="col-md-4 col-4">
+                                    <a href="{{ route('detail-packages', ['id' => $item->id]) }}" class="btn custom-btn"
+                                        style="background-color: #3c6553 !important; color: white">Submit</a>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="py-5 text-center fw-bold" style="color: #3c6553">
+                            Tidak ada paket
+                        </div>
+                    @endif
+                    <small class="d-block text-center" style="color: #3c6553 !important">
+                        Certified trainer. Price is per session.
+                    </small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn custom-btn-outline" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')

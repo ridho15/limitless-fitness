@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BookingKelas;
 use App\Models\OrderPaket;
+use App\Models\Paket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,31 +26,37 @@ class ProfileController extends Controller
         $data['user'] = $user;
         $data['active'] = 'bookings';
         $listOrderPaket = OrderPaket::where('id_user', $user->id)
-        ->where('is_active', 1)
-        ->get();
+            ->where('is_active', 1)
+            ->get();
+
+        $listPaket = Paket::whereHas('kelasPaket', function ($query) {
+            $query->whereHas('kelas', function ($query) {
+                $query->where('nama_kelas', 'Private Class');
+            });
+        })->get();
 
         $jumlahKredit = 0;
-        foreach($listOrderPaket as $item){
+        foreach ($listOrderPaket as $item) {
             $jumlahKredit += $item->paket->jumlah_pertemuan;
         }
 
         $jumlahDigunakan = BookingKelas::where('id_user', $user->id)
-        ->where(function($query){
-            $query->where('status_kehadiran', '0')
-            ->orWhere('status_kehadiran', '1');
-        })->count();
+            ->where(function ($query) {
+                $query->where('status_kehadiran', '0')
+                    ->orWhere('status_kehadiran', '1');
+            })->count();
 
         $jumlahHadir = BookingKelas::where('id_user', $user->id)
-        ->where('status_kehadiran', '1')
-        ->count();
+            ->where('status_kehadiran', '1')
+            ->count();
 
         $jumlahIzin = BookingKelas::where('id_user', $user->id)
-        ->where('status_kehadiran', '2')
-        ->count();
+            ->where('status_kehadiran', '2')
+            ->count();
 
         $jumlahTidakHadir = BookingKelas::where('id_user', $user->id)
-        ->where('status_kehadiran', '0')
-        ->count();
+            ->where('status_kehadiran', '0')
+            ->count();
 
         $sisaKredit = $jumlahKredit - $jumlahDigunakan;
         $data['listBookingKelas'] = BookingKelas::where('id_user', $user->id)->orderBy('created_at', 'DESC')->get();
@@ -59,26 +66,28 @@ class ProfileController extends Controller
         $data['jumlahHadir'] = $jumlahHadir;
         $data['jumlahIzin'] = $jumlahIzin;
         $data['jumlahTidakHadir'] = $jumlahTidakHadir;
+        $data['listPaket'] = $listPaket;
         return view('base-2.profile.bookings', $data);
     }
 
-    public function updateKehadiran(Request $request,$id_booking_kelas){
+    public function updateKehadiran(Request $request, $id_booking_kelas)
+    {
         $validator = Validator::make($request->all(), [
             'status_kehadiran' => 'nullable|numeric'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->with('fail', $validator->errors()->all()[0]);
         }
 
         $bookingKelas = BookingKelas::find($id_booking_kelas);
-        if(!$bookingKelas){
+        if (!$bookingKelas) {
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
         }
 
         $kelasActivity = $bookingKelas->kelasActivity;
         $lastTimeClass = Carbon::parse($kelasActivity->jam_mulai)->subDays(1)->locale('id')->isoFormat('YYYY-MM-DD HH:mm:ss');
-        if($lastTimeClass <= now()){
+        if ($lastTimeClass <= now()) {
             return redirect()->back()->with('fail', 'Sudah tidak update kelas');
         }
 
@@ -89,9 +98,10 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Berhasil mengupdate status kehadiran');
     }
 
-    public function batalBookingKelas($id){
+    public function batalBookingKelas($id)
+    {
         $bookingKelas = BookingKelas::find($id);
-        if(!$bookingKelas){
+        if (!$bookingKelas) {
             return redirect()->back()->with('fail', 'Data Booking Kelas tidak ditemukan !');
         }
 
@@ -134,13 +144,13 @@ class ProfileController extends Controller
         $data['active'] = 'billing';
 
         $listPaymentDue = OrderPaket::where('id_user', $user->id)
-        ->where('expired_date', '>=', now())
-        ->where('is_active', 0)
-        ->get();
+            ->where('expired_date', '>=', now())
+            ->where('is_active', 0)
+            ->get();
 
         $listTransactionHistory = OrderPaket::where('id_user', $user->id)
-        ->orderBy('created_at', 'DESC')
-        ->get();
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
         $data['listPaymentDue'] = $listPaymentDue;
         $data['listTransactionHistory'] = $listTransactionHistory;
