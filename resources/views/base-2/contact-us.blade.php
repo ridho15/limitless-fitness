@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-12 p-5">
                                 <div class="fw-bold fs-4 mb-2">
-                                    Are you new to Bumi Pilates & Movement?
+                                    Are you new to Daily Dose Pilates & Movement?
                                 </div>
                                 <hr class="my-4">
                                 <div class="fw-bold fs-5 mb-2">Find a location</div>

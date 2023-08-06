@@ -30,40 +30,45 @@ class ListData extends Component
     public $cari;
     public $tanggal;
     private $listTanggal = [];
+
     public function render()
     {
         $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
         $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
         $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
         $this->listData = [];
-        foreach ($this->listTanggal as $item) {
-            $kelasActivity = KelasActivity::with('kelas')
-                ->whereHas('kelas', function ($query) {
-                    $query->where('nama_kelas', 'LIKE', '%' . $this->cari . '%');
-                })
-                ->where(function ($query) {
-                    if ($this->category != 0 || $this->level != 0) {
-                        $query->where('category', $this->category)
-                            ->orWhere('level', $this->level);
-                    }
-                })
-                ->where(function ($query) {
-                    if ($this->id_kelas != 0) {
-                        $query->where('id_kelas', $this->id_kelas);
-                    }
-                })->where(function ($query) {
-                    if ($this->id_user != 0) {
-                        $query->where('id_user', $this->id_user);
-                    }
-                })
-                ->whereDate('jam_mulai', $item)
-                ->orderBy('jam_mulai', 'ASC')
-                ->get();
+        if ($this->id_kelas) {
+            foreach ($this->listTanggal as $item) {
+                $kelasActivity = KelasActivity::with('kelas')
+                    ->whereHas('kelas', function ($query) {
+                        $query->where('nama_kelas', 'LIKE', '%' . $this->cari . '%');
+                    })
+                    ->where(function ($query) {
+                        if ($this->category != 0 || $this->level != 0) {
+                            $query->where('category', $this->category)
+                                ->orWhere('level', $this->level);
+                        }
+                    })
+                    ->where(function ($query) {
+                        if ($this->id_kelas != 0) {
+                            $query->where('id_kelas', $this->id_kelas);
+                        }
+                    })->where(function ($query) {
+                        if ($this->id_user != 0) {
+                            $query->where('id_user', $this->id_user);
+                        }
+                    })
+                    ->whereDate('jam_mulai', $item)
+                    ->orderBy('jam_mulai', 'ASC')
+                    ->get();
 
-            array_push($this->listData, [
-                'tanggal' => $item,
-                'data' => $kelasActivity
-            ]);
+                array_push($this->listData, [
+                    'tanggal' => $item,
+                    'data' => $kelasActivity
+                ]);
+            }
+        }else{
+            $this->listTanggal = [];
         }
         return view('livewire.timetable.list-data');
     }

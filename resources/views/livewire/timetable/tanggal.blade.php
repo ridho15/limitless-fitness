@@ -45,7 +45,7 @@
                 @endforeach
             </ul>
         </div> --}}
-        <div class="col-md-3">
+        {{-- <div class="col-md-3">
             <div class="input-group">
                 <input type="text" class="form-control" name="cari" wire:model='cari' placeholder="Cari Kelas ..."
                     aria-label="Tulis Kelas" aria-describedby="basic-addon2"
@@ -54,15 +54,9 @@
                     <i class="fa-solid fa-magnifying-glass"></i> Cari
                 </span>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="input-group">
-                <input type="date" class="form-control" name="tanggal" wire:model='tanggal' wire:change='changeTanggal' placeholder="Cari Kelas ..."
-                    aria-label="Tulis Kelas" aria-describedby="basic-addon2"
-                    style="padding-top: 10px; padding-bottom: 10px">
-            </div>
-        </div>
-        <div class="dropdown col-md-2">
+        </div> --}}
+
+        <div class="dropdown col-md-3">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Classes
@@ -93,7 +87,7 @@
                 @endforeach
             </ul>
         </div>
-        <div class="dropdown col-md-2">
+        <div class="dropdown col-md-3">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Level of difficulty
@@ -108,6 +102,13 @@
                 <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 3)">Advanced</a>
                 </li>
             </ul>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="date" class="form-control" name="tanggal" wire:model='tanggal'
+                    wire:change='changeTanggal' placeholder="Cari Kelas ..." aria-label="Tulis Kelas"
+                    aria-describedby="basic-addon2" style="padding-top: 10px; padding-bottom: 10px">
+            </div>
         </div>
     </div>
     <div class="row d-sm-none my-3 align-items-center justify-content-center">
