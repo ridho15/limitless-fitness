@@ -62,7 +62,7 @@
                 Classes
             </button>
             <ul class="w-100 dropdown-menu px-2">
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass',0 )">All Class</a>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass',0 )">Close Class</a>
                 </li>
                 @foreach ($listKelas as $item)
                     <li><a class="dropdown-item" href="#"
