@@ -249,7 +249,8 @@
                                                         </a>
                                                     @endif
                                                     <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
-                                                        class="form-control" accept="image/jpg, image/jpeg, image/png, .pdf"
+                                                        class="form-control"
+                                                        accept="image/jpg, image/jpeg, image/png, .pdf"
                                                         onchange="loadFile(event)" hidden>
 
                                                     <div class="d-none text-center" id="sub_form">
@@ -283,7 +284,7 @@
     </section>
 @endsection
 
-@section('js')
+@push('js')
     <script>
         var loadFile = function(event) {
             var image = document.getElementById('output');
@@ -291,4 +292,4 @@
             $('#sub_form').removeClass('d-none')
         };
     </script>
-@endsection
+@endpush
