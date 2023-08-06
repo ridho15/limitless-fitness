@@ -147,9 +147,33 @@
                                                 <small class="d-block text-center">Belum melakukan pembayaran</small>
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <button class="btn custom-btn-outline">
-                                                    <small>Upload Bukti Pembayaran</small>
-                                                </button>
+                                                <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}"
+                                                    wire: method="POST" id="form_bukti_pembayaran"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @if ($item->bukti_pembayaran == null)
+                                                        <label for="bukti_pembayaran" class="btn custom-btn-outline">
+                                                            <small>Upload Bukti Pembayaran</small>
+                                                        </label>
+                                                    @else
+                                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
+                                                            target="_blank" class="btn custom-btn-outline">
+                                                            <small>Lihat Bukti Pembayaran</small>
+                                                        </a>
+                                                    @endif
+                                                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
+                                                        class="form-control"
+                                                        accept="image/jpg, image/jpeg, image/png, .pdf"
+                                                        onchange="loadFile(event)" hidden>
+
+                                                    <div class="d-none text-center" id="sub_form">
+                                                        <img src="" id="output"
+                                                            class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
+                                                        <button type="submit"
+                                                            class="btn custom-btn-outline"><small>Submit</small></button>
+                                                    </div>
+                                                </form>
+
                                             </div>
                                         </div>
                                     </div>
@@ -215,16 +239,8 @@
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @if ($item->bukti_pembayaran == null)
-                                                        <label
-                                                            for="@if ($item->expired_date >= now()) bukti_pembayaran_{{ $index }} @endif"
-                                                            class="btn custom-btn-outline">
-                                                            <small>
-                                                                @if ($item->expired_date <= now())
-                                                                    The order has expired
-                                                                @else
-                                                                    Upload Bukti Pembayaran
-                                                                @endif
-                                                            </small>
+                                                        <label for="bukti_pembayaran" class="btn custom-btn-outline">
+                                                            <small>Upload Bukti Pembayaran</small>
                                                         </label>
                                                     @else
                                                         <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
@@ -232,11 +248,9 @@
                                                             <small>Lihat Bukti Pembayaran</small>
                                                         </a>
                                                     @endif
-                                                    <input type="file" id="bukti_pembayaran_{{ $index }}"
-                                                        name="bukti_pembayaran" class="form-control"
-                                                        accept="image/jpg, image/jpeg, image/png, .pdf"
-                                                        onchange="loadFile(event)"
-                                                        @if ($item->expired_date <= now()) disabled @endif hidden>
+                                                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
+                                                        class="form-control" accept="image/jpg, image/jpeg, image/png, .pdf"
+                                                        onchange="loadFile(event)" hidden>
 
                                                     <div class="d-none text-center" id="sub_form">
                                                         <img src="" id="output"
