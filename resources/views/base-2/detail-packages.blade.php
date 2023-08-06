@@ -60,9 +60,11 @@
                     </div> --}}
                     <hr class="my-5">
                     <small class="d-block fw-light mb-2">
-                        By purchasing you agree to the <strong>
-                            Terms & Conditions
-                        </strong>
+                        By purchasing you agree to the <a href="{{ route('term-condition') }}" class="text-decoration-none text-dark">
+                            <strong>
+                                Terms & Conditions
+                            </strong>
+                        </a>
                     </small>
                     <div class="text-center">
                         <button type="button" class="btn custom-btn w-100" id="btn_confirm_pembayaran">Confirm and
@@ -87,7 +89,8 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="fw-light">Diskon ({{ $paket->diskon }}%)</small>
-                            <small class="fw-light">Rp.{{ number_format($paket->harga * $paket->diskon / 100, 0, ',', '.') }}</small>
+                            <small
+                                class="fw-light">Rp.{{ number_format(($paket->harga * $paket->diskon) / 100, 0, ',', '.') }}</small>
                         </div>
                         <hr class="my-4" style="opacity: 0.1">
                         <div class="d-flex justify-content-between align-items-center">

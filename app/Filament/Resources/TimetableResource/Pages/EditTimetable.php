@@ -36,7 +36,6 @@ class EditTimetable extends EditRecord
         $kelasActivity = KelasActivity::where('jam_mulai', $data['jam_mulai'])
         ->where('id_ruangan', $data['id_ruangan'])
         ->first();
-        dd($kelasActivity);
         Notification::make()
             ->title('Jadwal sudah ada di dalam ruangan studio')
             ->danger()

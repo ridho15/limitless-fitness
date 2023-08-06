@@ -39,7 +39,7 @@
                                                 <div class="fw-bold text-start">
                                                     <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->paket->nama }}
+                                                        {{ $item->paket->nama }} {{ $item->id }}
                                                     </a>
                                                 </div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
@@ -77,7 +77,8 @@
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @if ($item->bukti_pembayaran == null)
-                                                        <label for="bukti_pembayaran" class="btn custom-btn-outline">
+                                                        <label for="bukti_pembayaran_{{ $item->id }}"
+                                                            class="btn custom-btn-outline">
                                                             <small>Upload Bukti Pembayaran</small>
                                                         </label>
                                                     @else
@@ -86,12 +87,12 @@
                                                             <small>Lihat Bukti Pembayaran</small>
                                                         </a>
                                                     @endif
-                                                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
-                                                        class="form-control" accept="image/jpg, image/jpeg, image/png, .pdf"
-                                                        onchange="loadFile(event)" hidden>
-
-                                                    <div class="d-none text-center" id="sub_form">
-                                                        <img src="" id="output"
+                                                    <input type="file" id="bukti_pembayaran_{{ $item->id }}"
+                                                        data-id="{{ $item->id }}" name="bukti_pembayaran"
+                                                        class="form-control bukti-pembayaran"
+                                                        accept="image/jpg, image/jpeg, image/png, .pdf" hidden>
+                                                    <div class="d-none text-center" id="sub_form_{{ $item->id }}">
+                                                        <img src="" id="output_{{ $item->id }}"
                                                             class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
                                                         <button type="submit"
                                                             class="btn custom-btn-outline"><small>Submit</small></button>
@@ -124,7 +125,7 @@
                                                 <div class="fw-bold text-start"> <a
                                                         href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->paket->nama }}
+                                                        {{ $item->paket->nama }} {{ $item->id }}
                                                     </a></div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
                                                     Pertemuan</small>
@@ -134,10 +135,14 @@
                                                 <small class="d-block text-center">Diskon
                                                     {{ $item->paket->diskon }}%</small>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-4 text-end">
                                                 <div class="fw-semibold text-end text-danger">{{ $item->expired_date }}
                                                 </div>
-                                                <small class="d-block text-end">{{ $item->status_formatted }}</small>
+                                                @if ($item->status == 1)
+                                                    <span class="badge text-bg-success">Lunas</span>
+                                                @elseif($item->status == 2)
+                                                    <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                                @endif
                                             </div>
 
                                         </div>
@@ -152,7 +157,8 @@
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @if ($item->bukti_pembayaran == null)
-                                                        <label for="bukti_pembayaran" class="btn custom-btn-outline">
+                                                        <label for="bukti_pembayaran_{{ $item->id }}"
+                                                            class="btn custom-btn-outline">
                                                             <small>Upload Bukti Pembayaran</small>
                                                         </label>
                                                     @else
@@ -161,13 +167,12 @@
                                                             <small>Lihat Bukti Pembayaran</small>
                                                         </a>
                                                     @endif
-                                                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
-                                                        class="form-control"
-                                                        accept="image/jpg, image/jpeg, image/png, .pdf"
-                                                        onchange="loadFile(event)" hidden>
-
-                                                    <div class="d-none text-center" id="sub_form">
-                                                        <img src="" id="output"
+                                                    <input type="file" id="bukti_pembayaran_{{ $item->id }}"
+                                                        data-id="{{ $item->id }}" name="bukti_pembayaran"
+                                                        class="form-control bukti-pembayaran"
+                                                        accept="image/jpg, image/jpeg, image/png, .pdf" hidden>
+                                                    <div class="d-none text-center" id="sub_form_{{ $item->id }}">
+                                                        <img src="" id="output_{{ $item->id }}"
                                                             class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
                                                         <button type="submit"
                                                             class="btn custom-btn-outline"><small>Submit</small></button>
@@ -200,7 +205,7 @@
                                                 <div class="fw-bold text-start"> <a
                                                         href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->paket->nama }}
+                                                        {{ $item->paket->nama }} {{ $item->id }}
                                                     </a></div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
                                                     Pertemuan</small>
@@ -210,10 +215,14 @@
                                                 <small class="d-block text-center">Diskon
                                                     {{ $item->paket->diskon }}%</small>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-4 text-end">
                                                 <div class="fw-semibold text-end text-danger">{{ $item->expired_date }}
                                                 </div>
-                                                <small class="d-block text-end">{{ $item->status_formatted }}</small>
+                                                @if ($item->status == 1)
+                                                    <span class="badge text-bg-success">Lunas</span>
+                                                @elseif($item->status == 2)
+                                                    <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                                @endif
                                             </div>
 
                                         </div>
@@ -239,7 +248,8 @@
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @if ($item->bukti_pembayaran == null)
-                                                        <label for="bukti_pembayaran" class="btn custom-btn-outline">
+                                                        <label for="bukti_pembayaran_{{ $item->id }}"
+                                                            class="btn custom-btn-outline">
                                                             <small>Upload Bukti Pembayaran</small>
                                                         </label>
                                                     @else
@@ -248,13 +258,12 @@
                                                             <small>Lihat Bukti Pembayaran</small>
                                                         </a>
                                                     @endif
-                                                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran"
-                                                        class="form-control"
-                                                        accept="image/jpg, image/jpeg, image/png, .pdf"
-                                                        onchange="loadFile(event)" hidden>
-
-                                                    <div class="d-none text-center" id="sub_form">
-                                                        <img src="" id="output"
+                                                    <input type="file" id="bukti_pembayaran_{{ $item->id }}"
+                                                        data-id="{{ $item->id }}" name="bukti_pembayaran"
+                                                        class="form-control bukti-pembayaran"
+                                                        accept="image/jpg, image/jpeg, image/png, .pdf" hidden>
+                                                    <div class="d-none text-center" id="sub_form_{{ $item->id }}">
+                                                        <img src="" id="output_{{ $item->id }}"
                                                             class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
                                                         <button type="submit"
                                                             class="btn custom-btn-outline"><small>Submit</small></button>
@@ -286,10 +295,20 @@
 
 @push('js')
     <script>
-        var loadFile = function(event) {
-            var image = document.getElementById('output');
-            image.src = URL.createObjectURL(event.target.files[0]);
-            $('#sub_form').removeClass('d-none')
-        };
+        $(document).ready(function() {
+            $('.bukti-pembayaran').each(function(index) {
+                const id = $(this).data('id');
+                $('#bukti_pembayaran_' + id).on('change', function(event) {
+                    const id = $(this).data('id')
+                    var image = document.getElementById('output_' + id);
+                    image.src = URL.createObjectURL(event.target.files[0]);
+                    $('#sub_form_' + id).removeClass('d-none')
+                })
+            })
+        });
+        // var loadFile = function(event, id) {
+        //     image.src = URL.createObjectURL(event.target.files[0]);
+        //     $('#sub_form_'+id).removeClass('d-none')
+        // };
     </script>
 @endpush
