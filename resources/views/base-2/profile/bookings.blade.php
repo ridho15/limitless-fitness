@@ -578,7 +578,7 @@
                     </div>
                     @if (count($listPaket) > 0)
                         @foreach ($listPaket as $item)
-                            <div class="row mb-3 px-5">
+                            <div class="row mb-3 px-5 align-items-center">
                                 <div class="col-md-8 col-8 fw-bold" style="color: #3c6553">
                                     {{ $item->nama }}
                                 </div>
