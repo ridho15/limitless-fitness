@@ -14,10 +14,10 @@
                             <a class="nav-link active px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                                 href="#credit">Credit</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link custom-nav-link px-3" role="tab" data-bs-toggle="tab"
                                 href="#belum_ada_status">Belum ada status</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item" role="presentation">
                             <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                                 href="#hadir">Hadir</a>
@@ -120,6 +120,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                @foreach ($listKelas as $item)
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card  shadow-sm" style="border-radius: 15px">
+                                            <div class="card-body d-flex align-items-end justify-content-center">
+                                                <div class="text-center">
+                                                    <small class="fw-light">{{ $item->nama_kelas }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                                 <div class="col-md-3 mb-3">
                                     <div class="card  shadow-sm" style="border-radius: 15px">
                                         <div class="card-body d-flex align-items-end justify-content-center">
@@ -139,7 +150,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade py-4" id="belum_ada_status">
+                        {{-- <div class="tab-pane fade py-4" id="belum_ada_status">
                             @if (count($listBookingKelas->where('status_kehadiran', null)) > 0)
                                 @foreach ($listBookingKelas->where('status_kehadiran', null) as $item)
                                     <div class="bg-white shadow-sm border p-4 mb-4" style="border-radius: 15px">
@@ -239,7 +250,7 @@
                                     <a href="{{ route('timetable') }}" class="btn custom-btn-outline">Booking Class</a>
                                 </div>
                             @endif
-                        </div>
+                        </div> --}}
                         <div class="tab-pane fade py-4" id="hadir">
                             @if (count($listBookingKelas->where('status_kehadiran', 1)) > 0)
                                 @foreach ($listBookingKelas->where('status_kehadiran', 1) as $item)
@@ -270,14 +281,14 @@
                                             <div class="col-md-3 text-end">
                                                 <small class="fw-light">Lokasi</small>
                                                 <div class="fw-bold">
-                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->locationStudio->id_location) ? $item->kelasActivity->locationStudio->id_location : 0]) }}"
+                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->ruangan->locationStudio->id_location) ? $item->kelasActivity->ruangan->locationStudio->id_location : 0]) }}"
                                                         style="text-decoration: none; color: black">
                                                         {{ $item->kelasActivity->ruangan->locationStudio->location->nama }}</a>
                                                 </div>
                                                 <small>{{ $item->kelasActivity->ruangan->locationStudio->nama }}</small>
                                             </div>
                                         </div>
-                                        <form
+                                        {{-- <form
                                             action="{{ route('profile.bookings.update-kehadiran', ['id_booking_kelas' => $item->id]) }}"
                                             method="POST">
                                             @csrf
@@ -327,7 +338,7 @@
                                         <form action="{{ route('profile.bookings.batal', ['id' => $item->id]) }}"
                                             method="POST" id="form_batal_{{ $item->id }}">
                                             @csrf
-                                        </form>
+                                        </form> --}}
                                     </div>
                                 @endforeach
                             @else
@@ -373,14 +384,14 @@
                                             <div class="col-md-3 text-end">
                                                 <small class="fw-light">Lokasi</small>
                                                 <div class="fw-bold">
-                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->locationStudio->id_location) ? $item->kelasActivity->locationStudio->id_location : 0]) }}"
+                                                    <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->ruangan->locationStudio->id_location) ? $item->kelasActivity->ruangan->locationStudio->id_location : 0]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->kelasActivity->locationStudio->location->nama }}</a>
+                                                        {{ $item->kelasActivity->ruangan->locationStudio->location->nama }}</a>
                                                 </div>
-                                                <small>{{ $item->kelasActivity->locationStudio->nama }}</small>
+                                                <small>{{ $item->kelasActivity->ruangan->locationStudio->nama }}</small>
                                             </div>
                                         </div>
-                                        <form
+                                        {{-- <form
                                             action="{{ route('profile.bookings.update-kehadiran', ['id_booking_kelas' => $item->id]) }}"
                                             method="POST">
                                             @csrf
@@ -430,7 +441,7 @@
                                         <form action="{{ route('profile.bookings.batal', ['id' => $item->id]) }}"
                                             method="POST" id="form_batal_{{ $item->id }}">
                                             @csrf
-                                        </form>
+                                        </form> --}}
                                     </div>
                                 @endforeach
                             @else
@@ -483,7 +494,7 @@
                                                 <small>{{ $item->kelasActivity->locationStudio->nama }}</small>
                                             </div>
                                         </div>
-                                        <form
+                                        {{-- <form
                                             action="{{ route('profile.bookings.update-kehadiran', ['id_booking_kelas' => $item->id]) }}"
                                             method="POST">
                                             @csrf
@@ -533,7 +544,7 @@
                                         <form action="{{ route('profile.bookings.batal', ['id' => $item->id]) }}"
                                             method="POST" id="form_batal_{{ $item->id }}">
                                             @csrf
-                                        </form>
+                                        </form> --}}
                                     </div>
                                 @endforeach
                             @else

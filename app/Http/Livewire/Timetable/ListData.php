@@ -33,8 +33,8 @@ class ListData extends Component
 
     public function render()
     {
-        $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
-        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
+        $startDate = Carbon::parse($this->tanggal)->isoFormat('YYYY-MM-DD');
+        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('YYYY-MM-DD');
         $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
         $this->listData = [];
         if ($this->id_kelas) {
@@ -58,7 +58,7 @@ class ListData extends Component
                             $query->where('id_user', $this->id_user);
                         }
                     })
-                    ->whereDate('jam_mulai', $item)
+                    ->whereDate('tanggal', $item)
                     ->orderBy('jam_mulai', 'ASC')
                     ->get();
 

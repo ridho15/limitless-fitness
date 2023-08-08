@@ -38,7 +38,7 @@ class ListTimetables extends ListRecords
     protected function getFooterWidgets(): array
     {
         return [
-            CalendarWidget::class
+            // CalendarWidget::class
         ];
     }
 

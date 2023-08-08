@@ -9,6 +9,7 @@ use Carbon\CarbonPeriod;
 use Filament\Notifications\Notification;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class CreateTimetable extends CreateRecord
@@ -29,6 +30,15 @@ class CreateTimetable extends CreateRecord
         return "Buat Timetable";
     }
 
+    protected function handleRecordCreation(array $data): Model
+    {
+        if(count($data) > 0){
+            return $this->getModel()::create($data);
+        }else{
+            return $this->getModel()::first();
+        }
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $start = $data['jam_mulai'];
@@ -47,7 +57,7 @@ class CreateTimetable extends CreateRecord
                     ->title('Jadwal sudah ada di dalam ruangan studio')
                     ->danger()
                     ->send();
-                return [];
+                $this->halt();
             }
             if ($index + 1 == count($jam)) {
                 $data['jam_mulai'] = $item;

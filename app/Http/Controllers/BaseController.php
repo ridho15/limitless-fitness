@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\Console\Input\Input;
 
 class BaseController extends Controller
 {
@@ -274,7 +275,7 @@ class BaseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'no_hp' => ['required', 'regex:/^(\+62|0)(\d{8,12})$/'], // +62 followed by 9 to 15 digits
+            'no_hp' => ['required', 'regex:/^(\+62|0)(\d{8,12})$/', 'digits_between:10,12'], // +62 followed by 9 to 15 digits
             'name' => 'required|string|max:225',
             'password' => 'required|min:8|max:20',
             'alamat' => 'required',
@@ -282,12 +283,17 @@ class BaseController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+            return redirect()->back()->with(array_merge([
+                'fail' => $validator->errors()->all()[0],
+            ], $request->all()));
+            // return redirect()->back()->with('fail', $validator->errors()->all()[0]);
         }
 
         $checkEmail = User::where('email', $request->email)->withTrashed()->first();
         if ($checkEmail) {
-            return redirect()->back()->with('fail', 'Email sudah digunakan');
+            return redirect()->back()->with(array_merge([
+                'fail' => 'Email sudah digunakan',
+            ], $request->all()));
         }
 
         $data['name'] = $request->name;
@@ -406,6 +412,7 @@ class BaseController extends Controller
         $data['id_user'] = Auth::id();
         $data['id_kelas_activity'] = $kelasActivity->id;
         $data['set_jam'] = $request->set_jam;
+        $data['status_kehadiran'] = 1;
         $data['is_send_email'] = true;
 
         BookingKelas::create($data);
@@ -418,5 +425,34 @@ class BaseController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('base');
+    }
+
+    public function konfirmasiKehadiran(Request $request)
+    {
+        return redirect()->route('profile.bookings')->with('success', 'Berhasil mengkonfirmasi kehadiran');
+    }
+
+    public function simpanKeterangan(Request $request, $id_booking_kelas)
+    {
+        $validator = Validator::make($request->all(), [
+            'keterangan' => 'nullable|string'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('base')->with('fail', 'Keterangan kosong');
+        }
+        $bookingKelas = BookingKelas::find($id_booking_kelas);
+        if (now() <= $bookingKelas->kelasActivity->tanggal . ' ' . $bookingKelas->kelasActivity->jam_mulai && date('H:i') <= '19:00') {
+            $keterangan = $request->keterangan;
+
+            $bookingKelas->update([
+                'keterangan' => $keterangan,
+                'status_kehadiran' => 2
+            ]);
+
+            return redirect()->route('profile.bookings')->with('success', 'Berhasil menghkonfirmasi kehadiran');
+        } else {
+            return redirect()->route('profile.bookings')->with('fail', 'Jadwal sudah tidak valid !');
+        }
     }
 }

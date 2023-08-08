@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PaketResource\Pages;
 use App\Filament\Resources\PaketResource\RelationManagers;
 use App\Filament\Resources\PaketResource\RelationManagers\KelasPaketRelationManager;
+use App\Filament\Resources\PaketResource\RelationManagers\OrderPaketRelationManager;
 use App\Models\Kelas;
 use App\Models\Location;
 use App\Models\Paket;
@@ -135,7 +136,8 @@ class PaketResource extends Resource
     public static function getRelations(): array
     {
         return [
-            KelasPaketRelationManager::class
+            KelasPaketRelationManager::class,
+            OrderPaketRelationManager::class,
         ];
     }
 

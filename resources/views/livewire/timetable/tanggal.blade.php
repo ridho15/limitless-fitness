@@ -11,7 +11,7 @@
             </a>
         @endforeach
     </div>
-    <div class="row d-none d-sm-flex justify-content-start align-items-center">
+    <div class="row d-none d-sm-flex justify-content-center align-items-center">
         {{-- <div class="dropdown col-md-2">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">

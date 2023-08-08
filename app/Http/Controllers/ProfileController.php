@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookingKelas;
+use App\Models\Kelas;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use Carbon\Carbon;
@@ -25,6 +26,37 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'bookings';
+
+        $listData = [];
+        $listKelas = Kelas::whereHas('kelasPaket', function($query){
+            $query->whereHas('paket', function($query){
+                $query->whereHas('orderPaket', function($query){
+                    $query->where('id_user', Auth::id())
+                    ->where('is_active', 1);
+                });
+            });
+        })->get();
+
+        foreach($listKelas as $index => $item){
+            $jumlahKredit = 0;
+            $listOrderPaket = OrderPaket::where('id_user', Auth::id())
+            ->whereHas('paket', function($query)use($item){
+                $query->whereHas('kelasPaket', function($query)use($item){
+                    $query->where('id_kelas', $item->id);
+                });
+            })
+            ->where('is_active', 1)
+            ->get();
+
+            foreach($listOrderPaket as $orderPaket){
+                $jumlahKredit += $orderPaket->paket->jumlah_pertemuan;
+            }
+            array_push($listData, [
+                'nama_kelas' => $item->nama_kelas,
+                'jumlah_kredit' => $jumlahKredit,
+            ]);
+        }
+
         $listOrderPaket = OrderPaket::where('id_user', $user->id)
             ->where('is_active', 1)
             ->get();
@@ -67,6 +99,7 @@ class ProfileController extends Controller
         $data['jumlahIzin'] = $jumlahIzin;
         $data['jumlahTidakHadir'] = $jumlahTidakHadir;
         $data['listPaket'] = $listPaket;
+        $data['listKelas'] = $listKelas;
         return view('base-2.profile.bookings', $data);
     }
 

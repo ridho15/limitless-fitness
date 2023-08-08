@@ -26,7 +26,8 @@
                 <div class="bg-white shadow min-vh-100 d-flex align-items-center justify-content-center py-5">
                     <div class="w-100 px-md-5 px-3">
                         <div class="text-center mb-3">
-                            <img src="{{ asset('assets/images/logo.png') }}" alt="" class="img-fluid" style="object-fit: cover">
+                            <img src="{{ asset('assets/images/logo.png') }}" alt="" class="img-fluid"
+                                style="object-fit: cover">
                         </div>
                         <div class="text-center fw-bold mb-5">
                             Enter Your Data Account
@@ -50,36 +51,37 @@
                             <div class="input-group mb-3">
                                 <input type="text" name="name" class="form-control padding-vertical-12"
                                     placeholder="Masukkan nama" aria-label="Masukkan nama"
-                                    aria-describedby="basic-addon2">
+                                    value="{{ session()->get('name') }}" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2"><i
                                         class="fa-solid fa-file-signature px-2"></i></span>
                             </div>
                             <label for="" class="form-label">Email</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control padding-vertical-12" name="email"
-                                    placeholder="Masukkan email" aria-label="Masukkan email"
-                                    aria-describedby="basic-addon2">
+                                    value="{{ session()->get('email') }}" placeholder="Masukkan email"
+                                    aria-label="Masukkan email" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2"><i
                                         class="fa-regular fa-envelope px-2"></i></span>
                             </div>
                             <label for="" class="form-label">Phone Number</label>
                             <div class="input-group mb-3">
                                 <input type="number" class="form-control padding-vertical-12" name="no_hp"
-                                    placeholder="Phone number" aria-label="Phone number"
-                                    aria-describedby="basic-addon2">
+                                    value="{{ session()->get('no_hp') }}" placeholder="Phone number"
+                                    aria-label="Phone number" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2"><i
                                         class="fa-solid fa-phone px-2"></i></span>
                             </div>
                             <label for="exampleInputPassword1" class="form-label">Password</label>
                             <div class="mb-3 input-group">
                                 <input type="password" class="form-control padding-vertical-12" name="password"
-                                    placeholder="Masukkan password" id="exampleInputPassword1">
+                                    value="{{ session()->get('password') }}" placeholder="Masukkan password"
+                                    id="exampleInputPassword1">
                                 <span class="input-group-text" id="basic-addon2"><i
                                         class="fa-solid fa-key px-2"></i></span>
                             </div>
                             <label for="exampleInputPassword1" class="form-label">Address</label>
                             <div class="mb-3 input-group">
-                                <textarea name="alamat" class="form-control padding-vertical-12" placeholder="Masukkan alamat"></textarea>
+                                <textarea name="alamat" class="form-control padding-vertical-12" placeholder="Masukkan alamat">{{ session()->get('alamat') }}</textarea>
                                 <span class="input-group-text" id="basic-addon2"><i
                                         class="fa-solid fa-map-location-dot px-2"></i></span>
                             </div>

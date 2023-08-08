@@ -60,7 +60,7 @@
                     </div> --}}
                     <hr class="my-5">
                     <small class="d-block fw-light mb-2">
-                        By purchasing you agree to the <a href="{{ route('term-condition') }}"
+                        By purchasing you agree to the <a href="{{ route('term-condition') }}" target="_blank"
                             class="text-decoration-none text-dark">
                             <strong>
                                 Terms & Conditions

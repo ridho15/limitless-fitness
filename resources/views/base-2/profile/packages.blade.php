@@ -51,12 +51,16 @@
                                                     {{ $item->paket->diskon }}%</small>
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <div class="fw-semibold text-danger">{{ $item->expired_date_formatted }}
-                                                </div>
                                                 @if ($item->status == 1)
-                                                    <span class="badge text-bg-success">Lunas</span>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <span class="fs-2 text-success mx-1"><i
+                                                                class="fa-regular fa-circle-check"></i></span>
+                                                        <span class="badge text-bg-success mx-1">Lunas</span>
+                                                    </div>
                                                 @elseif($item->status == 2)
-                                                    <span class="badge text-bg-info">Belum Lunas</span>
+                                                    <div class="text-center">
+                                                        <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
@@ -71,7 +75,12 @@
                                                     @endif
                                                 </small>
                                             </div>
-                                            <div class="col-md-4 text-end">
+                                            <div class="col-md-4 text-center d-none">
+                                                <button class="btn custom-btn-outline" disabled>
+                                                    <small>Upload Bukti Pembayaran</small>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-4 text-center">
                                                 <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}"
                                                     wire: method="POST" id="form_bukti_pembayaran"
                                                     enctype="multipart/form-data">
@@ -98,7 +107,6 @@
                                                             class="btn custom-btn-outline"><small>Submit</small></button>
                                                     </div>
                                                 </form>
-
                                             </div>
                                         </div>
                                     </div>
@@ -136,12 +144,16 @@
                                                     {{ $item->paket->diskon }}%</small>
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <div class="fw-semibold text-end text-danger">{{ $item->expired_date }}
-                                                </div>
                                                 @if ($item->status == 1)
-                                                    <span class="badge text-bg-success">Lunas</span>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <span class="fs-2 text-success mx-1"><i
+                                                                class="fa-regular fa-circle-check"></i></span>
+                                                        <span class="badge text-bg-success mx-1">Lunas</span>
+                                                    </div>
                                                 @elseif($item->status == 2)
-                                                    <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                                    <div class="text-center">
+                                                        <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                                    </div>
                                                 @endif
                                             </div>
 
@@ -149,9 +161,20 @@
                                         <div class="row mt-4 align-items-center justify-content-between">
                                             <div class="col-md-4 fw-bold text-start">Pembayaran</div>
                                             <div class="col-md-4 text-center">
-                                                <small class="d-block text-center">Belum melakukan pembayaran</small>
+                                                <small class="d-block text-center">
+                                                    @if ($item->tanggal_pembayaran == null)
+                                                        Belum melakukan pembayaran
+                                                    @else
+                                                        {{ $item->tanggal_pembayaran_formatted }}
+                                                    @endif
+                                                </small>
                                             </div>
-                                            <div class="col-md-4 text-end">
+                                            <div class="col-md-4 text-center d-none">
+                                                <button class="btn custom-btn-outline" disabled>
+                                                    <small>Upload Bukti Pembayaran</small>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-4 text-center">
                                                 <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}"
                                                     wire: method="POST" id="form_bukti_pembayaran"
                                                     enctype="multipart/form-data">
@@ -178,7 +201,6 @@
                                                             class="btn custom-btn-outline"><small>Submit</small></button>
                                                     </div>
                                                 </form>
-
                                             </div>
                                         </div>
                                     </div>
@@ -216,15 +238,18 @@
                                                     {{ $item->paket->diskon }}%</small>
                                             </div>
                                             <div class="col-md-4 text-end">
-                                                <div class="fw-semibold text-end text-danger">{{ $item->expired_date }}
-                                                </div>
                                                 @if ($item->status == 1)
-                                                    <span class="badge text-bg-success">Lunas</span>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <span class="fs-2 text-success mx-1"><i
+                                                                class="fa-regular fa-circle-check"></i></span>
+                                                        <span class="badge text-bg-success mx-1">Lunas</span>
+                                                    </div>
                                                 @elseif($item->status == 2)
-                                                    <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                                    <div class="text-center">
+                                                        <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                                    </div>
                                                 @endif
                                             </div>
-
                                         </div>
                                         <div class="row mt-4 align-items-center justify-content-between">
                                             <div class="col-md-4 fw-bold text-start">Pembayaran</div>
@@ -237,12 +262,12 @@
                                                     @endif
                                                 </small>
                                             </div>
-                                            <div class="col-md-4 text-end d-none">
+                                            <div class="col-md-4 text-center d-none">
                                                 <button class="btn custom-btn-outline" disabled>
                                                     <small>Upload Bukti Pembayaran</small>
                                                 </button>
                                             </div>
-                                            <div class="col-md-4 text-end">
+                                            <div class="col-md-4 text-center">
                                                 <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}"
                                                     wire: method="POST" id="form_bukti_pembayaran"
                                                     enctype="multipart/form-data">

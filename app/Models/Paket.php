@@ -56,4 +56,8 @@ class Paket extends Model
     public function kelasPaket(){
         return $this->hasMany(KelasPaket::class, 'id_paket');
     }
+
+    public function orderPaket(){
+        return $this->hasMany(OrderPaket::class, 'id_paket');
+    }
 }

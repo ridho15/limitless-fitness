@@ -62,7 +62,42 @@
                         </div>
                         <hr class="my-4" style="opacity: 0.1">
                         <div class="fw-bold">Cancellation policy</div>
-                        <small class="fw-light">{{ $kelasActivity->cancellation_policy }}</small>
+                        <small class="fw-light">
+                            <ol>
+                                <li>All payments must be received before your session begins.</li>
+                                <li>Booking: All sessions must be booked in advance. Please
+                                    call our studio or use our online booking system to schedule
+                                    your session.</li>
+                                <li>Attendance: Please arrive on time for your session. If you
+                                    arrive late, the session will still end at the scheduled time, and
+                                    you will still be charged the full session rate.</li>
+                                <li>Attire: Please wear comfortable clothing that allows you to
+                                    move freely. We recommend wearing grip socks for hygiene
+                                    easons.</li>
+                                <li>Equipment: Our studio provides mats, blocks, straps, and
+                                    other necessary equipment. Please do not bring your own
+                                    equipment unless approved by our instructors.</li>
+                                <li>Health and Safety: Please inform your instructor of any
+                                    injuries or health conditions before starting your session. If you
+                                    feel any discomfort or pain during the session, inform your
+                                    instructor immediately.</li>
+                                <li>If class is less than 2 pax in 1 session, studio is able to
+                                    cancel the class 3 hours before conduct,</li>
+                                <li>Reschedule and Refunds:
+                                    <ul>
+                                        <li>All sessions purchased are non-refundable.</li>
+                                        <li>Rescheduling of a session must be done at least 24
+                                            hours before the scheduled session time.</li>
+                                        <li>Late cancellations, Reschedule or no-shows will result in a
+                                            penalty made less than 24 hours before the scheduled session
+                                            time will result in the forfeit of that session.</li>
+                                        <li>Exceptions to these rules will be made in the event of
+                                            sudden illness or emergency situations, and will be
+                                            handled on a case-by-case basis.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </small>
                     </div>
                     <div class="col-md-4">
                         <div class="w-100 border shadow-sm sticky-top" style="border-radius: 15px; z-index: 1; top: 70px">
@@ -102,8 +137,10 @@
                                         </span>
                                     </div>
                                     <div class="col-md">
-                                        <small class="d-block">{{ $kelasActivity->ruangan->locationStudio->location->nama }}</small>
-                                        <small class="d-block">{{ $kelasActivity->ruangan->locationStudio->nama }} ({{ $kelasActivity->ruangan->nama_ruangan }})</small>
+                                        <small
+                                            class="d-block">{{ $kelasActivity->ruangan->locationStudio->location->nama }}</small>
+                                        <small class="d-block">{{ $kelasActivity->ruangan->locationStudio->nama }}
+                                            ({{ $kelasActivity->ruangan->nama_ruangan }})</small>
                                     </div>
                                 </div>
                                 <div class="mb-2 d-flex align-items-center">
@@ -129,7 +166,8 @@
                                         Book Now
                                     </button>
                                     <div class="" style="font-size: 8pt">
-                                        By booking, you agree to the <a href="{{ route('term-condition') }}" class="text-dark">
+                                        By booking, you agree to the <a href="{{ route('term-condition') }}"
+                                            target="_blank" class="text-dark">
                                             Terms & Conditions</a>.
                                     </div>
                                 </div>

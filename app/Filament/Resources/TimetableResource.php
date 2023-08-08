@@ -95,6 +95,21 @@ class TimetableResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('tanggal')
+                    ->label('Tanggal')
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->locale('id')->isoFormat('DD MMMM YYYY');
+                    })
+                    ->sortable(),
+                TextColumn::make('jam_mulai')
+                    ->label('Jam Mulai')
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->locale('id')->isoFormat('HH:mm');
+                    })
+                    ->sortable(),
+                TextColumn::make('user.name')
+                    ->label('Instruktur')
+                    ->searchable(),
                 TextColumn::make('nama_latihan')
                     ->searchable(),
                 TextColumn::make('kelas.nama_kelas')
@@ -108,22 +123,6 @@ class TimetableResource extends Resource
                     ->searchable(),
                 TextColumn::make('level_formatted')
                     ->label('Level'),
-                TextColumn::make('tanggal')
-                    ->label('Tanggal')
-                    ->formatStateUsing(function ($state) {
-                        return Carbon::parse($state)->locale('id')->isoFormat('DD MMMM YYYY');
-                    })
-                    ->sortable(),
-                TextColumn::make('jam_mulai')
-                    ->label('Jam Mulai')
-                    ->formatStateUsing(function ($state) {
-                        return Carbon::parse($state)->locale('id')->isoFormat('HH:mm');
-                    })
-                    ->sortable(),
-
-                TextColumn::make('user.name')
-                    ->label('Instruktur')
-                    ->searchable(),
                 TextColumn::make('status_aktivitas_kelas')
                     ->label('Status Jadwal')
             ])
