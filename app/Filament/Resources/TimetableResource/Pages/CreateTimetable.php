@@ -56,13 +56,10 @@ class CreateTimetable extends CreateRecord
             } else {
                 KelasActivity::create([
                     'id_kelas' => $data['id_kelas'],
-                    'nama_latihan' => $data['nama_latihan'],
                     'id_ruangan' => $data['id_ruangan'],
                     'jam_mulai' => $item,
                     'id_user' => Auth::user()->hasRole('Intruktur') ? Auth::id() : $data['id_user'],
                     'status' => 1,
-                    'level' => $data['level'],
-                    'cancellation_policy' => $data['cancellation_policy']
                 ]);
             }
         }
