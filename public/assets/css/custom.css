@@ -118,10 +118,10 @@ body{
     padding-bottom: 8px;
     padding-right: 20px;
     padding-left: 20px;
-    border: 1px solid grey;
+    border: 1px solid #396552;
     border-radius: 20px;
     color: white;
-    background-color: #212529;
+    background-color: #396552;
 }
 
 .custom-btn-white{
@@ -131,13 +131,13 @@ body{
     padding-left: 20px;
     border: 1px solid rgb(255, 255, 255);
     border-radius: 20px;
-    color: rgb(0, 0, 0);
+    color: #396552;
     background-color: #ffffff;
 }
 
 .custom-btn-outline{
-    border: 1px solid grey;
-    color: #212529;
+    border: 1px solid #396552;
+    color: #396552;
     border-radius: 20px;
     background-color: transparent;
 }
@@ -156,19 +156,19 @@ body{
 .custom-btn-outline:hover{
     border: 1px solid grey !important;
     color: white !important;
-    background-color: #212529 !important;
+    background-color: #396552 !important;
 }
 
 .custom-btn-outline-white:hover{
     border: 1px solid rgb(255, 255, 255) !important;
-    color: rgb(0, 0, 0) !important;
+    color: #396552 !important;
     background-color: #ffffff !important;
 }
 
 .custom-btn:hover{
     background-color: transparent;
-    color: #212529;
-    border: 1px solid grey;
+    color: #396552;
+    border: 1px solid #396552;
 }
 
 .nav-link-fs{

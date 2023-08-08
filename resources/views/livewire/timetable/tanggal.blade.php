@@ -87,7 +87,7 @@
                 @endforeach
             </ul>
         </div>
-        <div class="dropdown col-md-3">
+        {{-- <div class="dropdown col-md-3">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Level of difficulty
@@ -102,7 +102,7 @@
                 <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 3)">Advanced</a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
         <div class="col-md-3">
             <div class="input-group">
                 <input type="date" class="form-control" name="tanggal" wire:model='tanggal'

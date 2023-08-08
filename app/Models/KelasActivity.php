@@ -12,13 +12,14 @@ class KelasActivity extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'kelas_activities';
     protected $fillable = [
-        'id_kelas',
-        'nama_latihan',
-        'id_ruangan',
+        'id_kelas', // null
+        'nama_latihan', // null
+        'id_ruangan', // null
         'jam_mulai',
-        'id_user',
+        'id_user', // null
         'status',
-        'level',
+        'level', //level
+        'tanggal',
         'cancellation_policy',
     ];
 
@@ -50,30 +51,37 @@ class KelasActivity extends Model
 
     public function getStatusAktivitasKelasAttribute()
     {
+        $combineJadwal = date('Y-m-d', strtotime($this->tanggal)) . ' ' . date('H:i:s', strtotime($this->jam_mulai));
         $carbon = Carbon::parse($this->jam_mulai)->addHours(1);
         if ($this->status == 0) {
             $this->status = 0;
             $this->save();
             return 'Kelas di batalkan';
-        } elseif (now() > $this->jam_mulai && now() <= $carbon) {
+        } elseif (now() > $combineJadwal && now() <= $carbon) {
             $this->status = 2;
             $this->save();
             return "Kelas Sedang Berlangsung";
-        } elseif ($this->jam_mulai < now()) {
+        } elseif ($combineJadwal < now()) {
             $this->status = 3;
             $this->save();
             return 'Jadwal Kelas Sudah Lewat';
-        } elseif (now() < $this->jam_mulai) {
+        } elseif (now() < $combineJadwal) {
             $bookingKelas = BookingKelas::where('id_kelas_activity', $this->id)->count();
             $kelas = Kelas::find($this->id_kelas);
-            if ($bookingKelas == $kelas->max_anggota) {
-                $this->status = 4;
+            if ($kelas) {
+                if ($bookingKelas == $kelas->max_anggota) {
+                    $this->status = 4;
+                    $this->save();
+                    return $bookingKelas . ' / ' . $kelas->max_anggota . ' Class Full';
+                } elseif ($bookingKelas < $kelas->max_anggota) {
+                    $this->status = 1;
+                    $this->save();
+                    return $bookingKelas . ' / ' . $kelas->max_anggota . ' Waiting List';
+                }
+            } else {
+                $this->status == 1;
                 $this->save();
-                return $bookingKelas . ' / ' . $kelas->max_anggota . ' Class Full';
-            } elseif ($bookingKelas < $kelas->max_anggota) {
-                $this->status = 1;
-                $this->save();
-                return $bookingKelas . ' / ' . $kelas->max_anggota . ' Waiting List';
+                return 'Kelas belum ditentukan';
             }
         }
     }

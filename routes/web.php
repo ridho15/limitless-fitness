@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::get('view-registration-success', function(){
+    return view('base-2.registration-success');
+});
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
 Route::get('/detail-class/{id}', [BaseController::class, 'detailClass'])->name('detail-class');
@@ -33,6 +36,7 @@ Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogi
 Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');
 Route::post('/post-registrasi', [BaseController::class, 'postRegistrasi'])->name('postRegistrasi');
 Route::get('/term-and-condition', [BaseController::class, 'termCondition'])->name('term-condition');
+Route::get('/konfirm-akun/{id_user}', [BaseController::class, 'konfirmasiAkun'])->name('konfirm-akun');
 Route::middleware('auth')->group(function () {
     Route::prefix('order-kelas')->group(function(){
         Route::get('/', [BaseController::class, 'orderKelas'])->name('order-kelas');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
 use App\Models\BookingOrder;
 use App\Models\CustomerKelas;
@@ -21,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -101,7 +103,8 @@ class BaseController extends Controller
         return view('base-2.timetable', $data);
     }
 
-    public function termCondition(){
+    public function termCondition()
+    {
         $data['active'] = 'term-condition';
         return view('base-2.term-condition', $data);
     }
@@ -115,10 +118,10 @@ class BaseController extends Controller
         }
 
         $bookingKelas = BookingKelas::where('id_user', Auth::id())
-        ->where('id_kelas_activity', $kelasActivity->id)
-        ->first();
+            ->where('id_kelas_activity', $kelasActivity->id)
+            ->first();
 
-        if($bookingKelas){
+        if ($bookingKelas) {
             return redirect()->back()->with('fail', 'Anda sudah mengambil kelas ini. silahkan konfirmasi kehadiran terlebih dahulu');
         }
 
@@ -144,6 +147,23 @@ class BaseController extends Controller
         $data['isActive'] = $isActive;
         $data['isBooking'] = $isBooking;
         return view('base-2.detail-timetable', $data);
+    }
+
+    public function konfirmasiAkun($id_user)
+    {
+        $id_user = Crypt::decryptString($id_user);
+        $user = User::find($id_user);
+
+        if (!$user) {
+            return redirect()->back()->with('fail', 'Data user tidak ditemukan !');
+        }
+
+        $user->update([
+            'status' => 1,
+            'email_verified_at' => now()
+        ]);
+
+        return redirect()->route('login')->with('success', 'Akun dan email berhasil di konfirmasi');
     }
 
     public function contactus()
@@ -265,26 +285,25 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', $validator->errors()->all()[0]);
         }
 
-        $checkEmail = User::where('email', $request->email)->first();
+        $checkEmail = User::where('email', $request->email)->withTrashed()->first();
         if ($checkEmail) {
             return redirect()->back()->with('fail', 'Email sudah digunakan');
         }
 
-        // $path = $request->file('foto')->store('public/customer');
-        // $path = str_replace('public/', '', $path);
-        // $data['foto'] = $path;
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['password'] = Hash::make($request->password);
         $data['alamat'] = $request->alamat;
-        $data['status'] = 1;
+        $data['status'] = 0;
         $data['no_hp'] = $request->no_hp;
 
         $user = User::create($data);
 
         $user->assignRole('Customer');
 
-        return redirect()->route('login')->with('success', 'Akun berhasil di buat');
+        Mail::to($request->email)->send(new RegistrasiKonfirmasiMail($user));
+        // return redirect()->route('login')->with('success', 'Akun berhasil di buat');
+        return view('base-2.registration-success')->with('success', 'Akun berhasil di buat');
     }
 
     public function uploadBuktiPembayaran(Request $request, $id)

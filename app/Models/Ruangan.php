@@ -19,4 +19,8 @@ class Ruangan extends Model
     public function locationStudio(){
         return $this->belongsTo(LocationStudio::class, 'id_location_studio')->withDefault();
     }
+
+    public function kelasActivity(){
+        return $this->hasMany(KelasActivity::class, 'id_ruangan');
+    }
 }

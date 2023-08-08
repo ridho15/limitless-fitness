@@ -4,7 +4,7 @@ namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
 use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
-use Filament\Pages\Actions;
+use App\Filament\Resources\TimetableResource\Widgets\ManageTimetableWidget;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Position;
@@ -30,7 +30,16 @@ class ListTimetables extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            CalendarWidget::class
+            ManageTimetableWidget::class,
+            // CalendarWidget::class,
+        ];
+    }
+
+    protected function getHeaderWidgetsColumns(): int|string|array
+    {
+        return [
+            'md' => 1,
+            'xl' => 1
         ];
     }
 }

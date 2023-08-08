@@ -60,7 +60,8 @@
                     </div> --}}
                     <hr class="my-5">
                     <small class="d-block fw-light mb-2">
-                        By purchasing you agree to the <a href="{{ route('term-condition') }}" class="text-decoration-none text-dark">
+                        By purchasing you agree to the <a href="{{ route('term-condition') }}"
+                            class="text-decoration-none text-dark">
                             <strong>
                                 Terms & Conditions
                             </strong>
@@ -127,11 +128,12 @@
 
                         <div class="my-3">
                             <span class="d-block mb-2">Silahkan Kirim Pembayaran Ke Rekening : </span>
+                            <div>Bank : <strong>Bank Central Asia</strong></div>
                             <div>
-                                Nomor Rekening : <strong>12345678901</strong>
+                                Nomor Rekening : <strong>6600-4829-11</strong>
                             </div>
                             <div>
-                                Atas Nama : <strong>Daily Dose Pilates</strong>
+                                Atas Nama : <strong>Gerald Reyner Liando</strong>
                             </div>
                         </div>
 

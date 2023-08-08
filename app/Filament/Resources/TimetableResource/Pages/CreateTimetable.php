@@ -34,6 +34,7 @@ class CreateTimetable extends CreateRecord
         $start = $data['jam_mulai'];
         $end = $data['jam_selesai'];
         $carbonPeriod = CarbonPeriod::since($start)->hours(1)->until($end)->toArray();
+        dd($carbonPeriod);
         $jam = [];
         foreach ($carbonPeriod as $item) {
             array_push($jam, date('Y-m-d', strtotime($data['jam_mulai'])) . date(' H:i', strtotime($item)));
