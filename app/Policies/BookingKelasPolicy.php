@@ -13,7 +13,7 @@ class BookingKelasPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->hasRole(['Instruktur'])){
+        if ($user->hasRole(['Instruktur'])) {
             return true;
         }
 
@@ -25,7 +25,7 @@ class BookingKelasPolicy
      */
     public function view(User $user, BookingKelas $bookingKelas)
     {
-        if($user->hasRole(['Instruktur'])){
+        if ($user->hasRole(['Instruktur'])) {
             return true;
         }
 
@@ -37,11 +37,6 @@ class BookingKelasPolicy
      */
     public function create(User $user)
     {
-        if($user->hasRole(['Instruktur'])){
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -49,11 +44,6 @@ class BookingKelasPolicy
      */
     public function update(User $user, BookingKelas $bookingKelas)
     {
-        if($user->hasRole(['Instruktur'])){
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -61,11 +51,6 @@ class BookingKelasPolicy
      */
     public function delete(User $user, BookingKelas $bookingKelas)
     {
-        if($user->hasRole(['Instruktur'])){
-            return true;
-        }
-
-        return false;
     }
 
     /**

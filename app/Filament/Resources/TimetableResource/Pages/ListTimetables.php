@@ -17,8 +17,8 @@ class ListTimetables extends ListRecords
     {
         return [
             CreateAction::make()
-            ->label('Tambah Timetable')
-            ->icon('heroicon-o-plus-circle')
+                ->label('Tambah Timetable')
+                ->icon('heroicon-o-plus-circle')
         ];
     }
 
@@ -32,6 +32,13 @@ class ListTimetables extends ListRecords
         return [
             ManageTimetableWidget::class,
             // CalendarWidget::class,
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            CalendarWidget::class
         ];
     }
 

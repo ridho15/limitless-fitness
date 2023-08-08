@@ -3,7 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InstrukturJadwalResource\Pages;
+use App\Filament\Resources\InstrukturJadwalResource\Pages\ViewInstrukturJadwal;
 use App\Filament\Resources\InstrukturJadwalResource\RelationManagers;
+use App\Filament\Resources\InstrukturJadwalResource\RelationManagers\BookingKelasRelationManager;
 use App\Models\InstrukturJadwal;
 use App\Models\KelasActivity;
 use Carbon\Carbon;
@@ -59,7 +61,7 @@ class InstrukturJadwalResource extends Resource
                                 TimePicker::make('jam_selesai')
                                     ->label('Waktu Selesai')
                                     ->disabledOn('edit')
-                                    ->hiddenOn('edit')
+                                    ->hiddenOn(['edit', 'view'])
                                     ->required(),
                                 TextInput::make('nama_latihan')
                                     ->label('Nama Latihan')
@@ -132,7 +134,7 @@ class InstrukturJadwalResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BookingKelasRelationManager::class
         ];
     }
 
@@ -141,6 +143,7 @@ class InstrukturJadwalResource extends Resource
         return [
             'index' => Pages\ListInstrukturJadwals::route('/'),
             'create' => Pages\CreateInstrukturJadwal::route('/create'),
+            'view' => ViewInstrukturJadwal::route('/{record}'),
             'edit' => Pages\EditInstrukturJadwal::route('/{record}/edit'),
         ];
     }

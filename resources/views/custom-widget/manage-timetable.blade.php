@@ -51,14 +51,18 @@
                     @endforeach
                 </tr>
                 <tr>
-                    @foreach ($listStudio as $item)
-                        <th class="border px-4 py-2" colspan="{{ count($item->ruangan) }}">{{ $item->nama }}</th>
+                    @foreach ($listTanggal as $tanggal)
+                        @foreach ($listStudio as $item)
+                            <th class="border px-4 py-2" colspan="{{ count($item->ruangan) }}">{{ $item->nama }}</th>
+                        @endforeach
                     @endforeach
                 </tr>
                 <tr>
-                    @foreach ($listStudio as $item)
-                        @foreach ($item->ruangan as $ruangan)
-                            <th class="border px-4 py-2">{{ $ruangan->nama_ruangan }}</th>
+                    @foreach ($listTanggal as $tanggal)
+                        @foreach ($listStudio as $item)
+                            @foreach ($item->ruangan as $ruangan)
+                                <th class="border px-4 py-2">{{ $ruangan->nama_ruangan }}</th>
+                            @endforeach
                         @endforeach
                     @endforeach
                 </tr>

@@ -63,7 +63,7 @@ class TimetableResource extends Resource
                                         ->required(),
                                     TimePicker::make('jam_selesai')
                                         ->label('Waktu Selesai')
-                                        ->hiddenOn('edit')
+                                        ->hiddenOn(['edit', 'view'])    
                                         ->required(),
                                     Select::make('id_user')
                                         ->label('Instruktur')
