@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\ProfileController;
+use App\Mail\RegistrasiKonfirmasiMail;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,8 +22,11 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('view-registration-success', function(){
-    return view('base-2.registration-success');
+Route::get('testing', function(){
+    $user = User::where('email', 'kukertadesabetung@gmail.com')
+    ->first();
+    Mail::to($user->email)->send(new RegistrasiKonfirmasiMail($user));
+    return $user;
 });
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
