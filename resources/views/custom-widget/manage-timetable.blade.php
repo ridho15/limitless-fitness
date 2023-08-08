@@ -70,8 +70,7 @@
             <tbody>
                 @foreach ($listJam as $jam)
                     <tr class="bg-current">
-                        <td class="border px-4 py-2 text-center" rowspan="{{ $pesertaTerbanyak }}"
-                            style="font-weight: bold">
+                        <td class="border px-4 py-2 text-center" style="font-weight: bold">
                             {{ \Carbon\Carbon::parse($jam->jam_mulai)->locale('id')->isoFormat('HH:mm') }}
                         </td>
                         @foreach ($listTanggal as $tanggal)

@@ -58,6 +58,7 @@ class CreateTimetable extends CreateRecord
                     'id_kelas' => $data['id_kelas'],
                     'id_ruangan' => $data['id_ruangan'],
                     'jam_mulai' => $item,
+                    'tanggal' => $data['tanggal'],
                     'id_user' => Auth::user()->hasRole('Intruktur') ? Auth::id() : $data['id_user'],
                     'status' => 1,
                 ]);
