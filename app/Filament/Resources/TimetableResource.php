@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TimetableResource\Pages;
 use App\Filament\Resources\TimetableResource\RelationManagers\BookingKelasRelationManager;
 use App\Filament\Resources\TimetableResource\Widgets\ManageTimetableWidget;
+use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\Ruangan;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Forms\Components\Card;
@@ -48,13 +50,14 @@ class TimetableResource extends Resource
                                         ->label('Kelas')
                                         ->preload()
                                         ->searchable()
-                                        ->relationship('kelas', 'nama_kelas')
+                                        ->options(Kelas::get()->pluck('nama_kelas', 'id'))
                                         ->required(),
                                     Select::make('id_ruangan')
+                                        ->label('Ruangan')
                                         ->searchable()
                                         ->preload()
                                         ->required()
-                                        ->relationship('ruangan', 'nama_ruangan'),
+                                        ->options(Ruangan::get()->pluck('nama_ruangan', 'id')),
                                     DatePicker::make('tanggal')
                                         ->label('Tanggal')
                                         ->required(),

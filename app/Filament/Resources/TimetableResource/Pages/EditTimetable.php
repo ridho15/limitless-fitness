@@ -13,6 +13,8 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditTimetable extends EditRecord
 {
+    public $isSuccess = false;
+
     protected static string $resource = TimetableResource::class;
 
     protected function getActions(): array
@@ -24,23 +26,18 @@ class EditTimetable extends EditRecord
         ];
     }
 
-    protected function mutateFormDataBeforeFill(array $data): array
-    {
-        $data['tanggal'] = $data['jam_mulai'];
-        return $data;
-    }
-
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data['jam_mulai'] = date('Y-m-d', strtotime($data['tanggal'])) . ' ' . date('H:i:s', strtotime($data['jam_mulai']));
-        $kelasActivity = KelasActivity::where('jam_mulai', $data['jam_mulai'])
-        ->where('id_ruangan', $data['id_ruangan'])
-        ->first();
-        Notification::make()
-            ->title('Jadwal sudah ada di dalam ruangan studio')
-            ->danger()
-            ->send();
-        return [];
+        $kelasActivity = KelasActivity::where('id', '!=', $this->getRecord()->id)
+            ->where('jam_mulai', $data['jam_mulai'])
+            ->where('tanggal', $data['tanggal'])
+            ->where('id_ruangan', $data['id_ruangan'])
+            ->first();
+        if ($kelasActivity) {
+            $this->isSuccess = false;
+            return $this->getRecord()->toArray();
+        }
+        $this->isSuccess = true;
         return $data;
     }
 
@@ -54,9 +51,17 @@ class EditTimetable extends EditRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function getSavedNotificationTitle(): ?string
+    protected function getSavedNotification(): ?Notification
     {
-        return 'Berhasil mengupdate data jadwal kelas';
+        if ($this->isSuccess == true) {
+            return Notification::make()
+                ->success()
+                ->title("Berhasil mengupdate data jadwal kelas");
+        } else {
+            return Notification::make()
+                ->danger()
+                ->title("Jadwal sudah ada di dalam ruangan studio");
+        }
     }
 
     protected function getHeaderWidgets(): array

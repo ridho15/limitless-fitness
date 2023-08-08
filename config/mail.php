@@ -41,7 +41,7 @@ return [
             'port' => env('MAIL_PORT', 465),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME', 'dailydose@yoga.medialatihan.com'),
-            'password' => env('MAIL_PASSWORD', "!Lp~5)b7bK5d"),
+            'password' => env('MAIL_PASSWORD', '!Lp~5)b7bK5d'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
