@@ -63,7 +63,7 @@ class TimetableResource extends Resource
                                         ->required(),
                                     TimePicker::make('jam_selesai')
                                         ->label('Waktu Selesai')
-                                        ->hiddenOn(['edit', 'view'])    
+                                        ->hiddenOn(['edit', 'view'])
                                         ->required(),
                                     Select::make('id_user')
                                         ->label('Instruktur')
@@ -86,15 +86,6 @@ class TimetableResource extends Resource
                         ])->columns(1)
                     ])
             ]);
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        if (Auth::user()->hasRole('Instruktur')) {
-            return parent::getEloquentQuery()->where('id_user', Auth::id());
-        } else {
-            return parent::getEloquentQuery();
-        }
     }
 
     public static function table(Table $table): Table
