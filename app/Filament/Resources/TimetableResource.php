@@ -3,10 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TimetableResource\Pages;
+use App\Filament\Resources\TimetableResource\Pages\ViewTimetable;
 use App\Filament\Resources\TimetableResource\RelationManagers\BookingKelasRelationManager;
 use App\Filament\Resources\TimetableResource\Widgets\ManageTimetableWidget;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\LocationStudio;
 use App\Models\Ruangan;
 use App\Models\User;
 use Carbon\Carbon;
@@ -15,6 +17,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -52,12 +55,12 @@ class TimetableResource extends Resource
                                         ->searchable()
                                         ->options(Kelas::get()->pluck('nama_kelas', 'id'))
                                         ->required(),
-                                    Select::make('id_ruangan')
-                                        ->label('Ruangan')
+                                    Select::make('id_loacation_studio')
+                                        ->label('Studio')
                                         ->searchable()
                                         ->preload()
                                         ->required()
-                                        ->options(Ruangan::get()->pluck('nama_ruangan', 'id')),
+                                        ->options(LocationStudio::get()->pluck('nama', 'id')),
                                     DatePicker::make('tanggal')
                                         ->label('Tanggal')
                                         ->required(),
@@ -85,6 +88,11 @@ class TimetableResource extends Resource
                                             '2' => 'Sedang berlangsung',
                                             '3' => 'Sudah lewat',
                                         ])->hidden(),
+                                    TextInput::make('honor')
+                                        ->numeric()
+                                        ->label('Pembayaran Instruktur')
+                                        ->default(0)
+                                        ->required(),
                                 ])->columns(2),
                         ])->columns(1)
                     ])
@@ -115,11 +123,8 @@ class TimetableResource extends Resource
                 TextColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
                     ->searchable(),
-                TextColumn::make('ruangan.locationStudio.nama')
-                    ->label('Lokasi Studio')
-                    ->searchable(),
-                TextColumn::make('ruangan.nama_ruangan')
-                    ->label('Ruangan')
+                TextColumn::make('locationStudio.nama')
+                    ->label('Studio')
                     ->searchable(),
                 TextColumn::make('level_formatted')
                     ->label('Level'),
@@ -160,6 +165,7 @@ class TimetableResource extends Resource
         return [
             'index' => Pages\ListTimetables::route('/'),
             'create' => Pages\CreateTimetable::route('/create'),
+            'view' => ViewTimetable::route('/{record}'),
             'edit' => Pages\EditTimetable::route('/{record}/edit'),
         ];
     }

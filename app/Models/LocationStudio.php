@@ -40,9 +40,4 @@ class LocationStudio extends Model
     {
         return $this->hasMany(KelasActivity::class, 'id_location_studio');
     }
-
-    public function ruangan()
-    {
-        return $this->hasMany(Ruangan::class, 'id_location_studio');
-    }
 }

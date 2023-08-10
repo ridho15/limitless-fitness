@@ -18,6 +18,8 @@ class Paket extends Model
         'promote_code',
         'location',
         'diskon',
+        'id_kelas',
+        'honor'
     ];
 
     protected $appends = [
@@ -53,11 +55,18 @@ class Paket extends Model
         return 'Rp.' . number_format($this->harga, 0, ',', '.');
     }
 
-    public function kelasPaket(){
+    public function kelasPaket()
+    {
         return $this->hasMany(KelasPaket::class, 'id_paket');
     }
 
-    public function orderPaket(){
+    public function orderPaket()
+    {
         return $this->hasMany(OrderPaket::class, 'id_paket');
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
     }
 }

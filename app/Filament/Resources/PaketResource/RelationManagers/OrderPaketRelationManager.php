@@ -42,6 +42,10 @@ class OrderPaketRelationManager extends RelationManager
                         $query->where('name', 'Customer');
                     })->pluck('name', 'id'))
                     ->required(),
+                TextInput::make('jumlah_pertemuan')
+                    ->label('Jumlah Pertemuan')
+                    ->required()
+                    ->default(0),
                 TextInput::make('harga')
                     ->numeric()
                     ->required(),
@@ -60,7 +64,6 @@ class OrderPaketRelationManager extends RelationManager
                 FileUpload::make('bukti_pembayaran')
                     ->image()
                     ->maxSize(2048),
-
             ]);
     }
 
@@ -74,6 +77,8 @@ class OrderPaketRelationManager extends RelationManager
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable(),
+                TextColumn::make('jumlah_pertemuan')
+                    ->sortable(),
                 TextColumn::make('harga_formatted')
                     ->sortable(),
                 TextColumn::make('status_formatted')

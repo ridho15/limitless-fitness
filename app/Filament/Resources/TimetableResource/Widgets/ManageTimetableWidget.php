@@ -26,11 +26,9 @@ class ManageTimetableWidget extends Widget
             ->whereDate('tanggal', '<=', $this->endDate)
             ->groupBy('tanggal')
             ->get();
-        $this->listStudio = LocationStudio::whereHas('ruangan', function ($query) {
-            $query->whereHas('kelasActivity', function ($query) {
-                $query->whereDate('tanggal', '>=', $this->startDate)
-                    ->whereDate('tanggal', '<=', $this->endDate);
-            });
+        $this->listStudio = LocationStudio::whereHas('kelasActivity', function ($query) {
+            $query->whereDate('tanggal', '>=', $this->startDate)
+                ->whereDate('tanggal', '<=', $this->endDate);
         })->get();
 
         $this->listJam = KelasActivity::select('tanggal')

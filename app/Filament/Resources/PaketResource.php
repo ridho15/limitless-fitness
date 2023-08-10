@@ -3,14 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaketResource\Pages;
-use App\Filament\Resources\PaketResource\RelationManagers;
-use App\Filament\Resources\PaketResource\RelationManagers\KelasPaketRelationManager;
 use App\Filament\Resources\PaketResource\RelationManagers\OrderPaketRelationManager;
 use App\Models\Kelas;
 use App\Models\Location;
 use App\Models\Paket;
-use Closure;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
@@ -19,7 +15,6 @@ use Filament\Forms\Components\TextInput\Mask;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -49,6 +44,11 @@ class PaketResource extends Resource
                                     ->string()
                                     ->maxLength(255)
                                     ->required(),
+                                Select::make('id_kelas')
+                                    ->label('Kelas')
+                                    ->preload()
+                                    ->searchable()
+                                    ->options(Kelas::get()->pluck('nama_kelas', 'id')),
                                 TextInput::make('jumlah_pertemuan')
                                     ->numeric()
                                     ->required(),
@@ -72,7 +72,13 @@ class PaketResource extends Resource
                                 TextInput::make('diskon')
                                     ->numeric()
                                     ->default(0)
-                                    ->required()
+                                    ->required(),
+                                TextInput::make('honor')
+                                    ->label('Pembayaran Instruktur')
+                                    ->helperText('Pembayaran instruktur per order paket')
+                                    ->numeric()
+                                    ->default(0)
+                                    ->required(),
                             ])
                     ])
             ]);
@@ -84,6 +90,9 @@ class PaketResource extends Resource
             ->columns([
                 TextColumn::make('nama')
                     ->label('Nama Paket')
+                    ->searchable(),
+                TextColumn::make('kelas.nama_kelas')
+                    ->label('Kelas')
                     ->searchable(),
                 TextColumn::make('jumlah_pertemuan')
                     ->label('Jumlah Pertemuan')
@@ -104,12 +113,16 @@ class PaketResource extends Resource
                         return 'Rp.' . number_format($state, 0, ',', '.');
                     })
                     ->sortable(),
+                TextColumn::make('honor')
+                    ->label('Pembayaran Instruktur')
+                    ->formatStateUsing(function ($state) {
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    })->sortable(),
                 TextColumn::make('valid_day')
                     ->formatStateUsing(function ($state) {
                         return $state . ' Hari';
                     })->sortable(),
                 TextColumn::make('promote_code'),
-
                 TextColumn::make('location')
                     ->formatStateUsing(function ($state) {
                         if ($state == 0) {
@@ -136,7 +149,6 @@ class PaketResource extends Resource
     public static function getRelations(): array
     {
         return [
-            KelasPaketRelationManager::class,
             OrderPaketRelationManager::class,
         ];
     }

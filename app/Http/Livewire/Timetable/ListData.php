@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Timetable;
 use App\Models\KelasActivity;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ListData extends Component
@@ -41,6 +42,13 @@ class ListData extends Component
             foreach ($this->listTanggal as $item) {
                 $kelasActivity = KelasActivity::with('kelas')
                     ->whereHas('kelas', function ($query) {
+                        $query->where('id_kelas', $this->id_kelas)->whereHas('paket', function ($query) {
+                            $query->whereHas('orderPaket', function ($query) {
+                                $query->where('id_user', Auth::id());
+                            });
+                        });
+                    })
+                    ->whereHas('kelas', function ($query) {
                         $query->where('nama_kelas', 'LIKE', '%' . $this->cari . '%');
                     })
                     ->where(function ($query) {
@@ -67,7 +75,7 @@ class ListData extends Component
                     'data' => $kelasActivity
                 ]);
             }
-        }else{
+        } else {
             $this->listTanggal = [];
         }
         return view('livewire.timetable.list-data');
@@ -119,7 +127,8 @@ class ListData extends Component
         $this->cari = $cari;
     }
 
-    public function changeTanggal($tanggal){
+    public function changeTanggal($tanggal)
+    {
         $this->tanggal = $tanggal;
     }
 }

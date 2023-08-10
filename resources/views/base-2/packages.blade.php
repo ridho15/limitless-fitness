@@ -16,7 +16,7 @@
                 @foreach ($listKelas as $item)
                     <li class="nav-item">
                         <a class="nav-link px-3" role="tab" data-bs-toggle="tab"
-                            href="#{{ $item['kelas']->id }}">{{ $item['kelas']->nama_kelas }}</a>
+                            href="#kelas_{{ $item->id }}">{{ $item->nama_kelas }}</a>
                     </li>
                 @endforeach
             </ul>
@@ -81,10 +81,10 @@
                     </div>
                 </div>
                 @foreach ($listKelas as $item)
-                    <div class="tab-pane fade" id="{{ $item['kelas']->id }}">
+                    <div class="tab-pane fade" id="kelas_{{ $item->id }}">
                         <div class="row my-5">
-                            @if (count($item['listPaket']) > 0)
-                                @foreach ($item['listPaket'] as $paket)
+                            @if (count($item->paket) > 0)
+                                @foreach ($item->paket as $paket)
                                     <div class="col-md-3">
                                         <div class="custom-card-package p-3 mb-4">
                                             <div class="mb-3">

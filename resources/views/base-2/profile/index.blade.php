@@ -107,7 +107,7 @@
                             <div class="fw-semibold">{{ $user->email }}</div>
                             <small class="fw-light d-block">Communications and transactions history will be sent to this
                                 email address</small>
-                            <a href="" style="text-decoration: none"><small>Resend verification email</small></a>
+                            <a href="{{ route('profile.resend-verifikasi-email', ['id' => $user->id]) }}" style="text-decoration: none"><small>Verified At {{ $user->email_verified_at }}</small></a>
                         </div>
                     </div>
                     <hr class="my-5">
@@ -131,40 +131,6 @@
                         </div>
                     </div>
                     <hr class="my-5">
-                    <h5 class="fw-bold mb-3">
-                        Social accounts
-                    </h5>
-                    <div class="mb-4">Connect with your social accounts for simple and secure sign-in.</div>
-                    <div class="row align-items-center mb-4">
-                        <div class="col-md-1 col-1">
-                            <img src="{{ asset('assets/images/icon_fb.png') }}" alt=""
-                                style="height: 50px; width: 50px; object-fit: contain">
-                        </div>
-                        <div class="col-md-5 col-5">Facebook</div>
-                        <div class="col-md-6 col-5">
-                            <button class="btn custom-btn">Connect</button>
-                        </div>
-                    </div>
-                    <div class="row align-items-center mb-4">
-                        <div class="col-md-1 col-1">
-                            <img src="{{ asset('assets/images/icon_google.png') }}" alt=""
-                                style="height: 50px; width: 50px; object-fit: contain">
-                        </div>
-                        <div class="col-md-5 col-5">Google</div>
-                        <div class="col-md-6 col-5">
-                            <button class="btn custom-btn">Connect</button>
-                        </div>
-                    </div>
-                    <div class="row align-items-center mb-4">
-                        <div class="col-md-1 col-1">
-                            <img src="{{ asset('assets/images/icon_instagram.png') }}" alt=""
-                                style="height: 50px; width: 50px; object-fit: contain">
-                        </div>
-                        <div class="col-md-5 col-5">Instagram</div>
-                        <div class="col-md-6 col-5">
-                            <button class="btn custom-btn">Connect</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

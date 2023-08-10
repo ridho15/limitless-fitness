@@ -21,6 +21,10 @@ class BookingKelasRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'id_kelas_activity';
 
+    protected static ?string $pluralModelLabel = 'Kehadiran';
+
+    protected static ?string $modelLabel = "Kehadiran";
+
     public static function form(Form $form): Form
     {
         return $form

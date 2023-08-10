@@ -36,28 +36,10 @@
                     </div>
                     <h4 class="fw-bold mb-3">What you’re eligible</h4>
                     <ul class="row">
-                        @if (count($paket->kelasPaket) > 0)
-                            @foreach ($paket->kelasPaket as $item)
-                                <li class="col-md-6"><small class="fw-light">{{ $item->kelas->nama_kelas }}</small></li>
-                            @endforeach
-                        @else
-                            <div class="col-md-12 fw-light text-center">
-                                <small>Tidak adak kelas</small>
-                            </div>
-                        @endif
+                        <li class="col-md-6">
+                            {{ $paket->kelas->nama_kelas }}
+                        </li>
                     </ul>
-                    {{-- <hr class="my-4">
-                    <h3 class="fw-bold mb-4">Promote Code</h3>
-                    <div class="input-group input-group">
-                        <span class="input-group-text bg-white" id="inputGroup-sizing-lg"><i
-                                class="fa-solid fa-tag"></i></span>
-                        <input type="text" class="form-control" aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-lg" placeholder="Promote Code"
-                            style="padding-top: 15px; padding-bottom: 15px">
-                        <span class="input-group-text text-sm bg-white" id="basic-addon2">
-                            <small style="font-size: 13px">Apply</small>
-                        </span>
-                    </div> --}}
                     <hr class="my-5">
                     <small class="d-block fw-light mb-2">
                         By purchasing you agree to the <a href="{{ route('term-condition') }}" target="_blank"

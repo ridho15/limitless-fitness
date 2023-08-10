@@ -64,4 +64,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/waiver-form', [ProfileController::class, 'waiverForm'])->name('profile.waiver-form');
     });
     Route::post('upload-bukti-pembayaran/{id}', [BaseController::class, 'uploadBuktiPembayaran'])->name('upload-bukti-pembayaran');
+    Route::get('resend-verifikasi-email/{id}', [ProfileController::class, 'resendVerifikasiEmail'])->name('profile.resend-verifikasi-email');
 });

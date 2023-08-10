@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderPaketResource\Pages;
+use App\Models\Jurnal;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
@@ -62,12 +63,24 @@ class OrderPaketResource extends Resource
                                         $paket = Paket::find($state);
                                         if ($paket) {
                                             $set('harga', $paket->harga_diskon);
+                                            $set('jumlah_pertemuan', $paket->jumlah_pertemuan);
+                                            $set('honor', $paket->honor);
                                         }
                                     })
                                     ->relationship('paket', 'nama')
                                     ->required(),
+                                TextInput::make('jumlah_pertemuan')
+                                    ->label('Jumlah Pertemuan')
+                                    ->required()
+                                    ->default(0),
                                 TextInput::make('harga')
                                     ->numeric()
+                                    ->required(),
+                                TextInput::make('honor')
+                                    ->label('Pembayaran Instruktur')
+                                    ->helperText('Pembayaran instruktur per order paket')
+                                    ->numeric()
+                                    ->default(0)
                                     ->required(),
                                 Radio::make('status')
                                     ->options([
@@ -102,6 +115,8 @@ class OrderPaketResource extends Resource
                 TextColumn::make('paket.nama')
                     ->label('Paket')
                     ->searchable(),
+                TextColumn::make('jumlah_pertemuan')
+                    ->sortable(),
                 TextColumn::make('harga_formatted')
                     ->sortable(),
                 TextColumn::make('status_formatted')
@@ -118,6 +133,12 @@ class OrderPaketResource extends Resource
                     ]),
                 ImageColumn::make('bukti_pembayaran')
                     ->size(100),
+                TextColumn::make('honor')
+                    ->label('Pembayaran Instruktur')
+                    ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    }),
                 TextColumn::make('tanda_tangan'),
                 TextColumn::make('expired_date')->sortable(),
                 TextColumn::make('tanggal_pembayaran')->sortable(),
@@ -163,10 +184,33 @@ class OrderPaketResource extends Resource
                     Action::make('approve')
                         ->icon('heroicon-o-cash')
                         ->label('Approve Pembayaran')
-                        ->action(fn (OrderPaket $record) => $record->update([
-                            'status' => 1,
-                            'is_active' => 1
-                        ]))->requiresConfirmation(),
+                        ->action(function (OrderPaket $record) {
+                            $jurnal = Jurnal::updateOrCreate([
+                                'id_order_paket' => $record->id,
+                                'tipe' => 1
+                            ], [
+                                'nama' => "Peserta an, " . $record->user->name . ' ' . $record->paket->nama,
+                                'jumlah_uang' => $record->harga,
+                                'tipe' => 1,
+                                'struk' => $record->bukti_pembayaran,
+                                'tanggal' => now()
+                            ]);
+                            Jurnal::updateOrCreate([
+                                'id_order_paket' => $record->id,
+                                'id_parent' => $jurnal->id,
+                                'tipe' => 0,
+                            ], [
+                                'nama' => 'Biaya Instruktur 1px group @' . $record->honor,
+                                'jumlah_uang' => $record->honor * $record->jumlah_pertemuan,
+                                'tipe' => '0',
+                                'struk' => null,
+                                'tanggal' => now()
+                            ]);
+                            $record->update([
+                                'status' => 1,
+                                'is_active' => 1
+                            ]);
+                        })->requiresConfirmation(),
                     ViewAction::make(),
                 ])
             ])

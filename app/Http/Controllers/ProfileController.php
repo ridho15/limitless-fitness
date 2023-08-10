@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
 use App\Models\Kelas;
+use App\Models\KelasActivity;
 use App\Models\OrderPaket;
 use App\Models\Paket;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -28,33 +32,39 @@ class ProfileController extends Controller
         $data['active'] = 'bookings';
 
         $listData = [];
-        $listKelas = Kelas::whereHas('kelasPaket', function($query){
-            $query->whereHas('paket', function($query){
-                $query->whereHas('orderPaket', function($query){
-                    $query->where('id_user', Auth::id())
+        $listKelas = Kelas::whereHas('paket', function ($query) {
+            $query->whereHas('orderPaket', function ($query) {
+                $query->where('id_user', Auth::id())
                     ->where('is_active', 1);
-                });
             });
         })->get();
 
-        foreach($listKelas as $index => $item){
+        foreach ($listKelas as $index => $item) {
             $jumlahKredit = 0;
-            $listOrderPaket = OrderPaket::where('id_user', Auth::id())
-            ->whereHas('paket', function($query)use($item){
-                $query->whereHas('kelasPaket', function($query)use($item){
-                    $query->where('id_kelas', $item->id);
-                });
-            })
-            ->where('is_active', 1)
-            ->get();
-
-            foreach($listOrderPaket as $orderPaket){
-                $jumlahKredit += $orderPaket->paket->jumlah_pertemuan;
+            $listOrderPaket = OrderPaket::whereHas('paket', function ($query) use ($item) {
+                $query->where('id_kelas', $item->id);
+            })->where('is_active', 1)
+                ->get();
+            foreach ($listOrderPaket as $orderPaket) {
+                $jumlahKredit += $orderPaket->jumlah_pertemuan;
             }
-            array_push($listData, [
-                'nama_kelas' => $item->nama_kelas,
-                'jumlah_kredit' => $jumlahKredit,
-            ]);
+
+            $digunakan = BookingKelas::where('id_user', Auth::id())
+                ->whereHas('kelasActivity', function ($query) use ($item) {
+                    $query->where('id_kelas', $item->id);
+                })
+                ->whereIn('status_kehadiran', ['0', '1'])
+                ->count();
+
+            $sisa = $jumlahKredit - $digunakan;
+
+            $digunakan = $jumlahKredit -
+                array_push($listData, [
+                    'nama_kelas' => $item->nama_kelas,
+                    'jumlah_kredit' => $jumlahKredit,
+                    'digunakan' => $digunakan,
+                    'sisa' => $sisa
+                ]);
         }
 
         $listOrderPaket = OrderPaket::where('id_user', $user->id)
@@ -100,6 +110,7 @@ class ProfileController extends Controller
         $data['jumlahTidakHadir'] = $jumlahTidakHadir;
         $data['listPaket'] = $listPaket;
         $data['listKelas'] = $listKelas;
+        $data['listData'] = $listData;
         return view('base-2.profile.bookings', $data);
     }
 
@@ -185,8 +196,14 @@ class ProfileController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
+        $listGenerateInvoice = OrderPaket::where('id_user', $user->id)
+            ->where('is_active', 1)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
         $data['listPaymentDue'] = $listPaymentDue;
         $data['listTransactionHistory'] = $listTransactionHistory;
+        $data['listGenerateInvoice'] = $listGenerateInvoice;
         return view('base-2.profile.billing', $data);
     }
 
@@ -204,5 +221,17 @@ class ProfileController extends Controller
         $data['user'] = $user;
         $data['active'] = 'waiver-form';
         return view('base-2.profile.waiver-form', $data);
+    }
+
+    public function resendVerifikasiEmail($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return redirect()->back()->with('fail', 'User tidak ditemukan !');
+        }
+
+        Mail::to($user->email)->send(new RegistrasiKonfirmasiMail($user));
+
+        return redirect()->back()->with('success', 'Berhasil mengirimkan konfirmasi konfirmasi email');
     }
 }

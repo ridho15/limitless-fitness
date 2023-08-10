@@ -16,7 +16,7 @@ class ListJurnals extends ListRecords
     {
         return [
             CreateAction::make()
-                ->label('Buat Jurnal')
+                ->label('Manual Jurnal')
                 ->icon('heroicon-o-plus-circle'),
         ];
     }

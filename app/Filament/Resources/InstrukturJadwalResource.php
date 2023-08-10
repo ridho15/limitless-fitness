@@ -51,23 +51,18 @@ class InstrukturJadwalResource extends Resource
                         Fieldset::make('Form Jadwal')
                             ->schema([
                                 DatePicker::make('tanggal')
-                                    ->label('Tanggal Avaiable')
-                                    ->disabledOn('edit')
+                                    ->label('Tanggal Available')
                                     ->required(),
                                 TimePicker::make('jam_mulai')
                                     ->label('Waktu Mulai')
-                                    ->disabledOn('edit')
                                     ->required(),
                                 TimePicker::make('jam_selesai')
                                     ->label('Waktu Selesai')
-                                    ->disabledOn('edit')
                                     ->hiddenOn(['edit', 'view'])
                                     ->required(),
                                 TextInput::make('nama_latihan')
-                                    ->label('Nama Latihan')
-                                    ->disabledOn('create'),
+                                    ->label('Nama Latihan'),
                                 Select::make('level')
-                                    ->disabledOn('create')
                                     ->options([
                                         '0' => 'Semua Level',
                                         '1' => 'Intermediate',

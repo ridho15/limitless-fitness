@@ -7,6 +7,7 @@ use App\Filament\Resources\KelasResource\RelationManagers\KelasActivityRelationM
 use App\Filament\Resources\KelasResource\RelationManagers\KelasImageRelationManager;
 use App\Filament\Resources\KelasResource\RelationManagers\KelasPaketRelationManager;
 use App\Filament\Resources\KelasResource\RelationManagers\PaketRelationManager;
+use App\Filament\Resources\KelasResource\RelationManagers\PaketRelationManagerRelationManager;
 use App\Models\Kelas;
 use App\Models\User;
 use Closure;
@@ -127,7 +128,7 @@ class KelasResource extends Resource
     {
         return [
             KelasImageRelationManager::class,
-            KelasPaketRelationManager::class,
+            PaketRelationManager::class,
             KelasActivityRelationManager::class
         ];
     }

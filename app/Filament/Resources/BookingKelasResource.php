@@ -30,6 +30,10 @@ class BookingKelasResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-color-swatch';
 
+    protected static ?string $navigationLabel = 'Kehadiran';
+
+    protected static ?string $pluralModelLabel = 'Kehadiran';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -49,12 +53,12 @@ class BookingKelasResource extends Resource
                                     ->label('Kelas Aktifitas')
                                     ->preload()
                                     ->searchable()
-                                    ->options(KelasActivity::where(function($query){
-                                        if(Auth::user()->hasRole('Instruktur')){
+                                    ->options(KelasActivity::where(function ($query) {
+                                        if (Auth::user()->hasRole('Instruktur')) {
                                             $query->where('id_user', Auth::id());
                                         }
                                     })
-                                    ->whereDate('jam_mulai', '>=', now())
+                                        ->whereDate('jam_mulai', '>=', now())
                                         ->get()->pluck('simple_detail', 'id')),
                                 Radio::make('status_kehadiran')
                                     ->options([
@@ -75,9 +79,9 @@ class BookingKelasResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        if(Auth::user()->hasRole('Instruktur')){
+        if (Auth::user()->hasRole('Instruktur')) {
             return parent::getEloquentQuery()->where('id_user', Auth::id());
-        }else{
+        } else {
             return parent::getEloquentQuery();
         }
     }

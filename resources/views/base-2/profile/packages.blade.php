@@ -18,10 +18,10 @@
                             <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                                 href="#expired">Expired</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                                 href="#tidak_aktif">Tidak Aktif</a>
-                        </li>
+                        </li> --}}
                     </ul>
                     <hr>
                     @if (session()->has('info'))

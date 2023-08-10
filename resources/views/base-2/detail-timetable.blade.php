@@ -106,14 +106,14 @@
                                 alt="" style="border-top-left-radius: 15px; border-top-right-radius: 15px">
                             <div class="p-4">
                                 <h5 class="fw-bold mb-3">{{ $kelasActivity->kelas->nama_kelas }}</h5>
-                                <div class="mb-2 row align-items-center">
+                                <div class="mb-2 d-flex align-items-center">
                                     <div class="col-md-1">
                                         <span class="me-3 fs-5">
                                             <i class="fa-solid fa-calendar-week"></i>
                                         </span>
                                     </div>
                                     <div class="col-md">
-                                        <small>{{ \Carbon\Carbon::parse($kelasActivity->jam_latihan)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</small>
+                                        <small>{{ \Carbon\Carbon::parse($kelasActivity->tanggal)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</small>
                                     </div>
                                 </div>
                                 <div class="mb-2 d-flex align-items-center">
@@ -126,7 +126,7 @@
                                         <small
                                             class="d-block">{{ \Carbon\Carbon::parse($kelasActivity->jam_mulai)->locale('id')->isoFormat('HH:mm') }}
                                             -
-                                            {{ \Carbon\Carbon::parse($kelasActivity->jam_selesai)->locale('id')->isoFormat('HH:mm') }}</small>
+                                            {{ \Carbon\Carbon::parse($kelasActivity->jam_mulai)->locale('id')->addHours(1)->isoFormat('HH:mm') }}</small>
                                         <small class="d-block text-secondary">Check-in anytime before class begins</small>
                                     </div>
                                 </div>

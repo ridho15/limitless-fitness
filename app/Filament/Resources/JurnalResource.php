@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\JurnalResource\Pages;
 use App\Filament\Resources\JurnalResource\RelationManagers;
 use App\Models\Jurnal;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
@@ -39,11 +40,11 @@ class JurnalResource extends Resource
             ->schema([
                 Fieldset::make('Form Jurnal')
                     ->schema([
-                        Select::make('id_coa')
-                            ->relationship('coa', 'nomor')
-                            ->searchable()
-                            ->preload()
-                            ->required(),
+                        Select::make('id_parent')
+                            ->label('With Parent')
+                            ->nullable()
+                            ->options(Jurnal::get()->pluck('nama', 'id'))
+                            ->helperText("Parent dipilih jika pengeluaran dari biaya parent"),
                         TextInput::make('nama')
                             ->label('Nama Pembayaran')
                             ->string()
@@ -78,19 +79,40 @@ class JurnalResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('coa.nomor')
-                    ->label('Coa')
-                    ->searchable(),
-                TextColumn::make('nama')
-                    ->searchable(),
-                TextColumn::make('tipe_formatted'),
-                TextColumn::make('jumlah_uang')
-                    ->money('IDR')
-                    ->sortable(),
-                ImageColumn::make('struk'),
                 TextColumn::make('tanggal')
                     ->dateTime('D, d M Y')
-                    ->sortable()
+                    ->sortable(),
+                TextColumn::make('nama')
+                    ->color(function ($record) {
+                        if ($record->tipe == '0') {
+                            return 'danger';
+                        }
+                    })
+                    ->searchable(),
+                TextColumn::make('parent.nama')
+                    ->searchable(),
+                TextColumn::make('debit')
+                    ->label('Debit')
+                    ->formatStateUsing(function ($record) {
+                        if ($record->tipe == 1) {
+                            return 'Rp.' . number_format($record->jumlah_uang, 0, ',', '.');
+                        }
+                    }),
+                TextColumn::make('kredit')
+                    ->label('Kredit')
+                    ->formatStateUsing(function ($record) {
+                        if ($record->tipe == '0') {
+                            return 'Rp.' . number_format($record->jumlah_uang, 0, ',', '.');
+                        }
+                    })->color('danger'),
+                TextColumn::make('jumlah_uang')
+                    ->label('Saldo')
+                    ->formatStateUsing(function ($state) {
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    })
+                    ->sortable(),
+                ImageColumn::make('struk')
+                    ->hidden(),
             ])
             ->filters([
                 //

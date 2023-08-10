@@ -70,20 +70,9 @@ class BaseController extends Controller
     {
         $data['active'] = 'packages';
         $allPaket = Paket::get();
-        $listKelas = Kelas::get();
-        $dataKelas = [];
-        foreach ($listKelas as $item) {
-            $listPaket = Paket::whereHas('kelasPaket', function ($query) use ($item) {
-                $query->where('id_kelas', $item->id);
-            })->get();
-
-            array_push($dataKelas, [
-                'kelas' => $item,
-                'listPaket' => $listPaket
-            ]);
-        }
+        $listKelas = Kelas::with('paket')->get();
         $data['allPaket'] = $allPaket;
-        $data['listKelas'] = $dataKelas;
+        $data['listKelas'] = $listKelas;
         return view('base-2.packages', $data);
     }
 
@@ -128,14 +117,14 @@ class BaseController extends Controller
 
         $orderPaket = OrderPaket::where('id_user', Auth::id())
             ->whereHas('paket', function ($query) use ($kelasActivity) {
-                $query->whereHas('kelasPaket', function ($query) use ($kelasActivity) {
-                    $query->where('id_kelas', $kelasActivity->id_kelas);
-                });
-            })->first();
+                $query->where('id_kelas', $kelasActivity->id_kelas);
+            })->where('is_active', 1)
+            ->first();
 
-        $isActive = false;
-        if ($orderPaket && $orderPaket->status == 1 && $orderPaket->is_active == 1) {
+        if ($orderPaket) {
             $isActive = true;
+        } else {
+            $isActive = false;
         }
 
         $isBooking = false;
@@ -231,9 +220,10 @@ class BaseController extends Controller
             'email' => $data['email'],
             'password' => $data['password'],
         ], $data['remember'])) {
-            throw ValidationException::withMessages([
+            $error = ValidationException::withMessages([
                 'email' => __('filament::login.messages.failed'),
             ]);
+            return redirect()->back()->with('fail', $error->validator->getMessageBag()->getMessages()['email'][0]);
         }
 
         session()->regenerate();
@@ -250,10 +240,6 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Data peket tidak ditemukan !');
         }
 
-        if (count($paket->kelasPaket) == 0) {
-            return redirect()->back()->with('fail', 'Kelas belum tersedia di dalam paket');
-        }
-
         // Check Aktif Paket
 
         $data['id_user'] = Auth::user()->id;
@@ -261,6 +247,7 @@ class BaseController extends Controller
         $data['harga'] = $paket->harga_diskon;
         $data['status'] = 2;
         $data['is_active'] = 0;
+        $data['honor'] = $paket->honor;
         $data['expired_date'] = Carbon::now()->addDays($paket->valid_day);
 
         OrderPaket::create($data);
@@ -286,7 +273,6 @@ class BaseController extends Controller
             return redirect()->back()->with(array_merge([
                 'fail' => $validator->errors()->all()[0],
             ], $request->all()));
-            // return redirect()->back()->with('fail', $validator->errors()->all()[0]);
         }
 
         $checkEmail = User::where('email', $request->email)->withTrashed()->first();
@@ -429,6 +415,12 @@ class BaseController extends Controller
 
     public function konfirmasiKehadiran(Request $request)
     {
+        $bookingKelas = BookingKelas::find($request->id_booking_kelas);
+        $tanggal = Carbon::parse($bookingKelas->kelasActivity->tanggal)->locale('id')->subDays(1)->isoFormat('YYYY-MM-DD');
+        $waktu = $tanggal . ' ' . date('H:i:s');
+        if (date('Y-m-d') . ' ' . '19:00:00' >= $waktu) {
+            return redirect()->route('profile.bookings')->with('fail', "Confirmation of attendance is no longer valid");
+        }
         return redirect()->route('profile.bookings')->with('success', 'Berhasil mengkonfirmasi kehadiran');
     }
 

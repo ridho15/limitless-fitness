@@ -23,13 +23,7 @@
                 <tr>
                     <th class="border px-4 py-2" @if (count($listTanggal) > 0) rowspan="4" @endif>Date Time</th>
                     @foreach ($listTanggal as $index => $item)
-                        @php
-                            $jumlahRuangan = 0;
-                            foreach ($listStudio as $studio) {
-                                $jumlahRuangan += count($studio->ruangan);
-                            }
-                        @endphp
-                        <th class="border px-4 py-2" colspan="{{ $jumlahRuangan }}">
+                        <th class="border px-4 py-2" colspan="{{ count($listStudio) }}">
                             {{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd') }}</th>
                     @endforeach
                 </tr>
@@ -40,29 +34,14 @@
                 @endif
                 <tr>
                     @foreach ($listTanggal as $item)
-                        @php
-                            $jumlahRuangan = 0;
-                            foreach ($listStudio as $studio) {
-                                $jumlahRuangan += count($studio->ruangan);
-                            }
-                        @endphp
-                        <th class="border px-4 py-2" colspan="{{ $jumlahRuangan }}">
+                        <th class="border px-4 py-2" colspan="{{ count($listStudio) }}">
                             {{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('DD MMMM YYYY') }}</th>
                     @endforeach
                 </tr>
                 <tr>
                     @foreach ($listTanggal as $tanggal)
                         @foreach ($listStudio as $item)
-                            <th class="border px-4 py-2" colspan="{{ count($item->ruangan) }}">{{ $item->nama }}</th>
-                        @endforeach
-                    @endforeach
-                </tr>
-                <tr>
-                    @foreach ($listTanggal as $tanggal)
-                        @foreach ($listStudio as $item)
-                            @foreach ($item->ruangan as $ruangan)
-                                <th class="border px-4 py-2">{{ $ruangan->nama_ruangan }}</th>
-                            @endforeach
+                            <th class="border px-4 py-2">{{ $item->nama }}</th>
                         @endforeach
                     @endforeach
                 </tr>
@@ -75,25 +54,23 @@
                         </td>
                         @foreach ($listTanggal as $tanggal)
                             @foreach ($listStudio as $studio)
-                                @foreach ($studio->ruangan as $ruangan)
-                                    @php
-                                        $listKelasActivity = \App\Models\KelasActivity::whereTime('jam_mulai', $jam->jam_mulai)
-                                            ->where('id_ruangan', $ruangan->id)
-                                            ->whereDate('tanggal', $tanggal->tanggal)
-                                            ->get();
-                                    @endphp
-                                    <td class="border">
-                                        @foreach ($listKelasActivity as $kelasActivity)
-                                            <div class="border px-4 py-2 text-center"
-                                                style="background-color: #22543d; color: white">
-                                                {{ $kelasActivity->user->name }}</div>
-                                            @foreach ($kelasActivity->bookingKelas as $bookingKelas)
-                                                <div class="border px-4 py-2 text-center">
-                                                    {{ $bookingKelas->user->name }}</div>
-                                            @endforeach
+                                @php
+                                    $listKelasActivity = \App\Models\KelasActivity::whereTime('jam_mulai', $jam->jam_mulai)
+                                        ->where('id_location_studio', $studio->id)
+                                        ->whereDate('tanggal', $tanggal->tanggal)
+                                        ->get();
+                                @endphp
+                                <td class="border">
+                                    @foreach ($listKelasActivity as $kelasActivity)
+                                        <div class="border px-4 py-2 text-center"
+                                            style="background-color: #22543d; color: white">
+                                            {{ $kelasActivity->user->name }}</div>
+                                        @foreach ($kelasActivity->bookingKelas as $bookingKelas)
+                                            <div class="border px-4 py-2 text-center">
+                                                {{ $bookingKelas->user->name }}</div>
                                         @endforeach
-                                    </td>
-                                @endforeach
+                                    @endforeach
+                                </td>
                             @endforeach
                         @endforeach
                     </tr>

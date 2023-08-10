@@ -21,6 +21,8 @@ class OrderPaket extends Model
         'expired_date',
         'tanggal_pembayaran',
         'bukti_pembayaran',
+        'jumlah_pertemuan',
+        'honor'
     ];
 
     protected $appends = [
@@ -68,5 +70,9 @@ class OrderPaket extends Model
     public function paket()
     {
         return $this->belongsTo(Paket::class, 'id_paket')->withDefault();
+    }
+
+    public function jurnal(){
+        return $this->hasOne(Jurnal::class, 'id_order_paket');
     }
 }

@@ -14,13 +14,14 @@ class KelasActivity extends Model
     protected $fillable = [
         'id_kelas', // null
         'nama_latihan', // null
-        'id_ruangan', // null
+        'id_location_studio', // null
         'jam_mulai',
         'id_user', // null
         'status',
         'level', //level
         'tanggal',
         'cancellation_policy',
+        'honor'
     ];
 
     protected $appends = [
@@ -140,8 +141,8 @@ class KelasActivity extends Model
         return $this->hasMany(BookingKelas::class, 'id_kelas_activity');
     }
 
-    public function ruangan()
+    public function locationStudio()
     {
-        return $this->belongsTo(Ruangan::class, 'id_ruangan')->withDefault();
+        return $this->belongsTo(LocationStudio::class, 'id_location_studio');
     }
 }
