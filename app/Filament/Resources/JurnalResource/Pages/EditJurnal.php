@@ -6,6 +6,7 @@ use App\Filament\Resources\JurnalResource;
 use App\Models\Coa;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 
 class EditJurnal extends EditRecord
 {
@@ -42,6 +43,8 @@ class EditJurnal extends EditRecord
                 ]);
             }
         }
+
+        $data['id_user'] = Auth::id();
         return $data;
     }
 }

@@ -32,6 +32,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class OrderPaketResource extends Resource
 {
@@ -187,7 +188,8 @@ class OrderPaketResource extends Resource
                                 'jumlah_uang' => $record->harga,
                                 'tipe' => 1,
                                 'struk' => $record->bukti_pembayaran,
-                                'tanggal' => now()
+                                'tanggal' => now(),
+                                'id_user' => Auth::id(),
                             ]);
                             Jurnal::updateOrCreate([
                                 'id_order_paket' => $record->id,
@@ -198,7 +200,8 @@ class OrderPaketResource extends Resource
                                 'jumlah_uang' => $record->paket->kelas->honor * $record->jumlah_pertemuan,
                                 'tipe' => '0',
                                 'struk' => null,
-                                'tanggal' => now()
+                                'tanggal' => now(),
+                                'id_user' => Auth::id(),
                             ]);
                             if ($record->is_active != 1) {
                                 $tanggalExpired = Carbon::now()->addDays($record->paket->valid_day);

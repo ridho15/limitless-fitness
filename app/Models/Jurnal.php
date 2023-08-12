@@ -18,6 +18,7 @@ class Jurnal extends Model
         'tanggal',
         'id_parent',
         'id_order_paket',
+        'id_user'
     ];
 
     protected $appends = [
@@ -50,5 +51,9 @@ class Jurnal extends Model
 
     public function orderPaket(){
         return $this->belongsTo(OrderPaket::class, 'id_order_paket');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user');
     }
 }

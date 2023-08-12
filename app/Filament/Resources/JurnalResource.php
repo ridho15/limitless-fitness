@@ -109,10 +109,10 @@ class JurnalResource extends Resource
                     ->label('Saldo')
                     ->formatStateUsing(function ($record) {
                         $saldo = $record->jumlah_uang;
-                        if($record->parent){
+                        if ($record->parent) {
                             $pengeluaran = 0;
-                            foreach($record->parent->children as $item){
-                                if($item->tipe == '0'){
+                            foreach ($record->parent->children as $item) {
+                                if ($item->tipe == '0') {
                                     $pengeluaran += $item->jumlah_uang;
                                 }
                             }
@@ -121,6 +121,10 @@ class JurnalResource extends Resource
                         return 'Rp.' . number_format($saldo, 0, ',', '.');
                     })
                     ->sortable(),
+                TextColumn::make('user.name')
+                    ->label('Pembuat')
+                    ->toggleable()
+                    ->searchable(),
                 ImageColumn::make('struk')
                     ->hidden(),
             ])
