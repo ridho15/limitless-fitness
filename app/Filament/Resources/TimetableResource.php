@@ -71,14 +71,6 @@ class TimetableResource extends Resource
                                         ->label('Waktu Selesai')
                                         ->hiddenOn(['edit', 'view'])
                                         ->required(),
-                                    Select::make('id_user')
-                                        ->label('Instruktur')
-                                        ->preload()
-                                        ->searchable()
-                                        ->hidden(Auth::user()->hasRole('Instruktur') ? true : false)
-                                        ->options(User::whereHas('roles', function ($query) {
-                                            $query->where('name', 'Instruktur');
-                                        })->get()->pluck('name', 'id')),
                                     Select::make('status')
                                         ->searchable()
                                         ->default(1)
