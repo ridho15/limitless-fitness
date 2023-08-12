@@ -41,6 +41,8 @@ class CreateInstrukturJadwal extends CreateRecord
                 KelasActivity::create([
                     'tanggal' => $data['tanggal'],
                     'jam_mulai' => $item,
+                    'nama_latihan' => $data['nama_latihan'],
+                    'level' => $data['level'],
                     'id_user' => $data['id_user'],
                     'status' => $data['status']
                 ]);

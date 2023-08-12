@@ -99,7 +99,7 @@ class BookingKelasResource extends Resource
                 TextColumn::make('kelasActivity.nama_latihan')
                     ->label('Kelas')
                     ->url(function($record){
-                        return TimetableResource::getUrl('view', ['record' => $record->kelasActivity]);
+                        return InstrukturJadwalResource::getUrl('view', ['record' => $record->kelasActivity]);
                     }),
                 TextColumn::make('kelasActivity.tanggal')
                     ->formatStateUsing(function ($state) {

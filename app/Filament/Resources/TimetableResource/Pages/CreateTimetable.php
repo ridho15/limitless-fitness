@@ -32,9 +32,9 @@ class CreateTimetable extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        if(count($data) > 0){
+        if (count($data) > 0) {
             return $this->getModel()::create($data);
-        }else{
+        } else {
             return $this->getModel()::first();
         }
     }
@@ -67,6 +67,8 @@ class CreateTimetable extends CreateRecord
                 KelasActivity::create([
                     'id_kelas' => $data['id_kelas'],
                     'id_location_studio' => $data['id_location_studio'],
+                    'nama_latihan' => $data['nama_latihan'],
+                    'level' => $data['level'],
                     'jam_mulai' => $item,
                     'tanggal' => $data['tanggal'],
                     'id_user' => Auth::user()->hasRole('Intruktur') ? Auth::id() : $data['id_user'],
