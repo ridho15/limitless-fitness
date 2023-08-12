@@ -22,6 +22,6 @@ class EditKelas extends EditRecord
 
     protected function getSavedNotificationTitle(): ?string
     {
-        return 'Berhasil membuat kelas baru';
+        return 'Berhasil update data kelas';
     }
 }

@@ -20,6 +20,7 @@ class Kelas extends Model
         'duration',
         'bawaan',
         'type',
+        'honor',
     ];
 
     protected $appends = [

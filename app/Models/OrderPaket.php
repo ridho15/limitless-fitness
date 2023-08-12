@@ -22,7 +22,6 @@ class OrderPaket extends Model
         'tanggal_pembayaran',
         'bukti_pembayaran',
         'jumlah_pertemuan',
-        'honor'
     ];
 
     protected $appends = [

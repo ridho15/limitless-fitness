@@ -50,7 +50,7 @@ class CreateTimetable extends CreateRecord
         }
         foreach ($jam as $index => $item) {
             // Check jadwal studio
-            $kelasActivity = KelasActivity::where('jam_mulai', $item)->where('id_ruangan', $data['id_ruangan'])
+            $kelasActivity = KelasActivity::where('jam_mulai', $item)->where('id_location_studio', $data['id_location_studio'])
                 ->first();
             if ($kelasActivity) {
                 Notification::make()
@@ -66,7 +66,7 @@ class CreateTimetable extends CreateRecord
             } else {
                 KelasActivity::create([
                     'id_kelas' => $data['id_kelas'],
-                    'id_ruangan' => $data['id_ruangan'],
+                    'id_location_studio' => $data['id_location_studio'],
                     'jam_mulai' => $item,
                     'tanggal' => $data['tanggal'],
                     'id_user' => Auth::user()->hasRole('Intruktur') ? Auth::id() : $data['id_user'],

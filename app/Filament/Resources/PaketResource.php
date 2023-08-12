@@ -74,12 +74,6 @@ class PaketResource extends Resource
                                     ->numeric()
                                     ->default(0)
                                     ->required(),
-                                TextInput::make('honor')
-                                    ->label('Pembayaran Instruktur')
-                                    ->helperText('Pembayaran instruktur per order paket')
-                                    ->numeric()
-                                    ->default(0)
-                                    ->required(),
                             ])
                     ])
             ]);

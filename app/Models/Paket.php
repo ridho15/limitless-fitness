@@ -19,7 +19,6 @@ class Paket extends Model
         'location',
         'diskon',
         'id_kelas',
-        'honor'
     ];
 
     protected $appends = [

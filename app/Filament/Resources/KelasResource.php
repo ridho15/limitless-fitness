@@ -79,6 +79,15 @@ class KelasResource extends Resource
                                 Textarea::make('keterangan')
                                     ->nullable()
                                     ->string(),
+                                TextInput::make('honor')
+                                    ->label('Pembayaran Instruktur')
+                                    ->numeric()
+                                    ->mask(fn (Mask $mask) => $mask->patternBlocks([
+                                        'uang' => fn (Mask $mask) => $mask->numeric()
+                                            ->thousandsSeparator('.')
+                                            ->decimalSeparator(',')
+                                    ])->pattern('Rp.uang'))
+                                    ->required(),
                                 Toggle::make('is_active')
                                     ->label('Status Aktif Kelas')
                             ])
@@ -108,6 +117,11 @@ class KelasResource extends Resource
                     ->label('Lama Latihan')
                     ->formatStateUsing(fn ($state) => $state . ' Menit'),
                 TextColumn::make('bawaan'),
+                TextColumn::make('honor')
+                    ->label('Pembayaran Insruktur')
+                    ->formatStateUsing(function ($state) {
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    })->sortable(),
                 TextColumn::make('type_formatted')
                     ->label('Type'),
             ])

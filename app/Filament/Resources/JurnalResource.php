@@ -107,8 +107,18 @@ class JurnalResource extends Resource
                     })->color('danger'),
                 TextColumn::make('jumlah_uang')
                     ->label('Saldo')
-                    ->formatStateUsing(function ($state) {
-                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    ->formatStateUsing(function ($record) {
+                        $saldo = $record->jumlah_uang;
+                        if($record->parent){
+                            $pengeluaran = 0;
+                            foreach($record->parent->children as $item){
+                                if($item->tipe == '0'){
+                                    $pengeluaran += $item->jumlah_uang;
+                                }
+                            }
+                            $saldo = $record->parent->jumlah_uang - $pengeluaran;
+                        }
+                        return 'Rp.' . number_format($saldo, 0, ',', '.');
                     })
                     ->sortable(),
                 ImageColumn::make('struk')

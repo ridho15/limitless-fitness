@@ -21,7 +21,6 @@ class KelasActivity extends Model
         'level', //level
         'tanggal',
         'cancellation_policy',
-        'honor'
     ];
 
     protected $appends = [

@@ -65,7 +65,6 @@ class OrderPaketResource extends Resource
                                         if ($paket) {
                                             $set('harga', $paket->harga_diskon);
                                             $set('jumlah_pertemuan', $paket->jumlah_pertemuan);
-                                            $set('honor', $paket->honor);
                                         }
                                     })
                                     ->relationship('paket', 'nama')
@@ -134,12 +133,6 @@ class OrderPaketResource extends Resource
                     ]),
                 ImageColumn::make('bukti_pembayaran')
                     ->size(100),
-                TextColumn::make('honor')
-                    ->label('Pembayaran Instruktur')
-                    ->sortable()
-                    ->formatStateUsing(function ($state) {
-                        return 'Rp.' . number_format($state, 0, ',', '.');
-                    }),
                 TextColumn::make('tanda_tangan'),
                 TextColumn::make('expired_date')->sortable(),
                 TextColumn::make('tanggal_pembayaran')->sortable(),
@@ -201,8 +194,8 @@ class OrderPaketResource extends Resource
                                 'id_parent' => $jurnal->id,
                                 'tipe' => 0,
                             ], [
-                                'nama' => 'Biaya Instruktur 1px group @' . $record->honor,
-                                'jumlah_uang' => $record->honor * $record->jumlah_pertemuan,
+                                'nama' => 'Biaya Instruktur 1px group @' . $record->paket->kelas->honor,
+                                'jumlah_uang' => $record->paket->kelas->honor * $record->jumlah_pertemuan,
                                 'tipe' => '0',
                                 'struk' => null,
                                 'tanggal' => now()

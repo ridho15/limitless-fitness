@@ -55,7 +55,7 @@ class TimetableResource extends Resource
                                         ->searchable()
                                         ->options(Kelas::get()->pluck('nama_kelas', 'id'))
                                         ->required(),
-                                    Select::make('id_loacation_studio')
+                                    Select::make('id_location_studio')
                                         ->label('Studio')
                                         ->searchable()
                                         ->preload()
@@ -88,11 +88,6 @@ class TimetableResource extends Resource
                                             '2' => 'Sedang berlangsung',
                                             '3' => 'Sudah lewat',
                                         ])->hidden(),
-                                    TextInput::make('honor')
-                                        ->numeric()
-                                        ->label('Pembayaran Instruktur')
-                                        ->default(0)
-                                        ->required(),
                                 ])->columns(2),
                         ])->columns(1)
                     ])

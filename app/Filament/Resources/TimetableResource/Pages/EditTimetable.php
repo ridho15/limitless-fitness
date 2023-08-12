@@ -31,11 +31,12 @@ class EditTimetable extends EditRecord
         $kelasActivity = KelasActivity::where('id', '!=', $this->getRecord()->id)
             ->where('jam_mulai', $data['jam_mulai'])
             ->where('tanggal', $data['tanggal'])
-            ->where('id_ruangan', $data['id_ruangan'])
+            ->where('id_location_studio', $data['id_location_studio'])
             ->first();
         if ($kelasActivity) {
             $this->isSuccess = false;
-            return $this->getRecord()->toArray();
+            $this->halt();
+            // return $this->getRecord()->toArray();
         }
         $this->isSuccess = true;
         return $data;
