@@ -138,9 +138,8 @@
                                     </div>
                                     <div class="col-md">
                                         <small
-                                            class="d-block">{{ $kelasActivity->ruangan->locationStudio->location->nama }}</small>
-                                        <small class="d-block">{{ $kelasActivity->ruangan->locationStudio->nama }}
-                                            ({{ $kelasActivity->ruangan->nama_ruangan }})</small>
+                                            class="d-block">{{ $kelasActivity->locationStudio->location->nama }}</small>
+                                        <small class="d-block">{{ $kelasActivity->locationStudio->nama }}
                                     </div>
                                 </div>
                                 <div class="mb-2 d-flex align-items-center">
