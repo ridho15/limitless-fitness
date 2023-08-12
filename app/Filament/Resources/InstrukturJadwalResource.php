@@ -92,11 +92,8 @@ class InstrukturJadwalResource extends Resource
                 TextColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
                     ->searchable(),
-                TextColumn::make('ruangan.locationStudio.nama')
-                    ->label('Lokasi Studio')
-                    ->searchable(),
-                TextColumn::make('ruangan.nama_ruangan')
-                    ->label('Ruangan')
+                TextColumn::make('locationStudio.nama')
+                    ->label('Studio')
                     ->searchable(),
                 TextColumn::make('tanggal')
                     ->label('Tanggal')
