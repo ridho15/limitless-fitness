@@ -26,7 +26,11 @@ class OrderPaketPolicy
      */
     public function view(User $user, OrderPaket $orderPaket)
     {
-        //
+        if($user->hasRole(['Admin'])){
+            return true;
+        }
+
+        return false;
     }
 
     /**

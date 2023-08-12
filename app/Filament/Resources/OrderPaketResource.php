@@ -7,6 +7,7 @@ use App\Models\Jurnal;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
+use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
@@ -206,10 +207,14 @@ class OrderPaketResource extends Resource
                                 'struk' => null,
                                 'tanggal' => now()
                             ]);
-                            $record->update([
-                                'status' => 1,
-                                'is_active' => 1
-                            ]);
+                            if ($record->is_active != 1) {
+                                $tanggalExpired = Carbon::now()->addDays($record->paket->valid_day);
+                                $record->update([
+                                    'status' => 1,
+                                    'is_active' => 1,
+                                    'expired_date' => $tanggalExpired
+                                ]);
+                            }
                         })->requiresConfirmation(),
                     ViewAction::make(),
                 ])

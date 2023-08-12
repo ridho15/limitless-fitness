@@ -46,7 +46,9 @@ class ProfileController extends Controller
             })->where('is_active', 1)
                 ->get();
             foreach ($listOrderPaket as $orderPaket) {
-                $jumlahKredit += $orderPaket->jumlah_pertemuan;
+                if ($orderPaket->expired_date >= now()) {
+                    $jumlahKredit += $orderPaket->jumlah_pertemuan;
+                }
             }
 
             $digunakan = BookingKelas::where('id_user', Auth::id())
@@ -56,7 +58,12 @@ class ProfileController extends Controller
                 ->whereIn('status_kehadiran', ['0', '1'])
                 ->count();
 
-            $sisa = $jumlahKredit - $digunakan;
+            if($jumlahKredit == 0){
+                $sisa = 0;
+                $digunakan = 0;
+            }else{
+                $sisa = $jumlahKredit - $digunakan;
+            }
 
             $digunakan = $jumlahKredit -
                 array_push($listData, [
@@ -71,10 +78,8 @@ class ProfileController extends Controller
             ->where('is_active', 1)
             ->get();
 
-        $listPaket = Paket::whereHas('kelasPaket', function ($query) {
-            $query->whereHas('kelas', function ($query) {
-                $query->where('nama_kelas', 'Private Class');
-            });
+        $listPaket = Paket::whereHas('kelas', function($query){
+            $query->where('nama_kelas', 'Private Class');
         })->get();
 
         $jumlahKredit = 0;
@@ -158,18 +163,42 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'packages';
-        $listPaketExpired = OrderPaket::where('id_user', $user->id)->where('status', 2)->whereDate('expired_date', '<=', now())->get();
         $listPaketAktif = OrderPaket::where('id_user', $user->id)->where(function ($query) {
             $query->where('status', 1)
                 ->orWhere('status', 2);
         })->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
-        $listPaketTidakAktif = OrderPaket::where('id_user', $user->id)
-            ->where('is_active', 0)
+
+        // Update paket
+        foreach($listPaketAktif as $item){
+            if($item->expired_date < now()){
+                $item->update([
+                    'is_active' => 0
+                ]);
+            }
+            $bookingKelas = OrderPaket::where('id_user', Auth::id())
+            ->where('id', $item->id)
+            ->whereHas('paket', function($query){
+                $query->whereHas('kelas', function($query){
+                    $query->whereHas('kelasActivity', function($query){
+                        $query->whereHas('bookingKelas', function($query){
+                            $query->where('id_user', Auth::id())
+                            ->where('status_kehadiran', 1);
+                        });
+                    });
+                });
+            })->first();
+            if($bookingKelas){
+                $item['keterangan'] = 'Paket sudah digunakan';
+            }else{
+                $item['keterangan'] = 'Paket belum digunakan';
+            }
+        }
+        $listPaketExpired = OrderPaket::where('id_user', $user->id)
+        ->where('expired_date', '<=', now())
             ->orderBy('created_at', 'DESC')
             ->get();
-        $data['listPaketExpired'] = $listPaketExpired;
         $data['listPaketAktif'] = $listPaketAktif;
-        $data['listPaketTidakAktif'] = $listPaketTidakAktif;
+        $data['listPaketExpired'] = $listPaketExpired;
         return view('base-2.profile.packages', $data);
     }
 

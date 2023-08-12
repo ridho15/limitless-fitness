@@ -28,6 +28,8 @@ class EditOrderPaket extends EditRecord
             if($this->record->is_active != $data['is_active']){
                 $data['expired_date'] = Carbon::now()->addDays($this->record->paket->valid_day);
             }
+        }else{
+            $data['is_active'] = 0;
         }
         return $data;
     }

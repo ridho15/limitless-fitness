@@ -56,6 +56,7 @@
                                                         <span class="fs-2 text-success mx-1"><i
                                                                 class="fa-regular fa-circle-check"></i></span>
                                                         <span class="badge text-bg-success mx-1">Lunas</span>
+                                                        <span class="badge text-bg-danger mx-1">{{ \Carbon\Carbon::parse($item->expired_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</span>
                                                     </div>
                                                 @elseif($item->status == 2)
                                                     <div class="text-center">
@@ -71,7 +72,8 @@
                                                     @if ($item->tanggal_pembayaran == null)
                                                         Belum melakukan pembayaran
                                                     @else
-                                                        {{ $item->tanggal_pembayaran_formatted }}
+                                                        <div>{{ $item->tanggal_pembayaran_formatted }}</div>
+                                                        <div>{{ $item->keterangan }}</div>
                                                     @endif
                                                 </small>
                                             </div>
@@ -165,100 +167,7 @@
                                                     @if ($item->tanggal_pembayaran == null)
                                                         Belum melakukan pembayaran
                                                     @else
-                                                        {{ $item->tanggal_pembayaran_formatted }}
-                                                    @endif
-                                                </small>
-                                            </div>
-                                            <div class="col-md-4 text-center d-none">
-                                                <button class="btn custom-btn-outline" disabled>
-                                                    <small>Upload Bukti Pembayaran</small>
-                                                </button>
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <form action="{{ route('upload-bukti-pembayaran', ['id' => $item->id]) }}"
-                                                    wire: method="POST" id="form_bukti_pembayaran"
-                                                    enctype="multipart/form-data">
-                                                    @csrf
-                                                    @if ($item->bukti_pembayaran == null)
-                                                        <label for="bukti_pembayaran_{{ $item->id }}"
-                                                            class="btn custom-btn-outline">
-                                                            <small>Upload Bukti Pembayaran</small>
-                                                        </label>
-                                                    @else
-                                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
-                                                            target="_blank" class="btn custom-btn-outline">
-                                                            <small>Lihat Bukti Pembayaran</small>
-                                                        </a>
-                                                    @endif
-                                                    <input type="file" id="bukti_pembayaran_{{ $item->id }}"
-                                                        data-id="{{ $item->id }}" name="bukti_pembayaran"
-                                                        class="form-control bukti-pembayaran"
-                                                        accept="image/jpg, image/jpeg, image/png, .pdf" hidden>
-                                                    <div class="d-none text-center" id="sub_form_{{ $item->id }}">
-                                                        <img src="" id="output_{{ $item->id }}"
-                                                            class="img-fluid mt-3 rounded shadow-sm mb-2" alt="">
-                                                        <button type="submit"
-                                                            class="btn custom-btn-outline"><small>Submit</small></button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="d-flex align-items-center flex-column justify-content-center"
-                                    style="height: 50vh">
-                                    <span class="fs-1 text-center">
-                                        <i class="fa-solid fa-file-pen"></i>
-                                    </span>
-                                    <small class="d-block mb-3">
-                                        You don't have any active packages.
-                                    </small>
-                                    <a href="{{ route('packages') }}" class="btn custom-btn-outline">Buy Packet</a>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="tab-pane fade py-4" id="tidak_aktif">
-                            @if (count($listPaketTidakAktif) > 0)
-                                @foreach ($listPaketTidakAktif as $index => $item)
-                                    <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="fw-bold text-start"> <a
-                                                        href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
-                                                        style="text-decoration: none; color: black">
-                                                        {{ $item->paket->nama }} {{ $item->id }}
-                                                    </a></div>
-                                                <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
-                                                    Pertemuan</small>
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <div class="fw-bold text-center">{{ $item->harga_formatted }}</div>
-                                                <small class="d-block text-center">Diskon
-                                                    {{ $item->paket->diskon }}%</small>
-                                            </div>
-                                            <div class="col-md-4 text-end">
-                                                @if ($item->status == 1)
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="fs-2 text-success mx-1"><i
-                                                                class="fa-regular fa-circle-check"></i></span>
-                                                        <span class="badge text-bg-success mx-1">Lunas</span>
-                                                    </div>
-                                                @elseif($item->status == 2)
-                                                    <div class="text-center">
-                                                        <span class="badge text-bg-info text-white">Belum Lunas</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="row mt-4 align-items-center justify-content-between">
-                                            <div class="col-md-4 fw-bold text-start">Pembayaran</div>
-                                            <div class="col-md-4 text-center">
-                                                <small class="d-block text-center">
-                                                    @if ($item->tanggal_pembayaran == null)
-                                                        Belum melakukan pembayaran
-                                                    @else
-                                                        {{ $item->tanggal_pembayaran_formatted }}
+                                                        <div>{{ $item->tanggal_pembayaran_formatted }}</div>
                                                     @endif
                                                 </small>
                                             </div>
