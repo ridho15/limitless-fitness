@@ -53,7 +53,7 @@ class KelasActivity extends Model
     public function getStatusAktivitasKelasAttribute()
     {
         $combineJadwal = date('Y-m-d', strtotime($this->tanggal)) . ' ' . date('H:i:s', strtotime($this->jam_mulai));
-        $carbon = Carbon::parse($this->jam_mulai)->addHours(1);
+        $carbon = Carbon::parse($combineJadwal)->addHours(1)->isoFormat('YYYY-MM-DD HH:mm:ss');
         if ($this->status == 0) {
             $this->status = 0;
             $this->save();
