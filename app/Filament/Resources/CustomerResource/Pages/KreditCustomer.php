@@ -73,16 +73,30 @@ class KreditCustomer extends Page
 
     public function updateSession()
     {
+        $kelas = Kelas::find($this->id_kelas);
+
+        $jumlahKredit = 0;
+        foreach ($kelas->paket as $paket) {
+            foreach ($paket->orderPaket as $orderPaket) {
+                if ($orderPaket->is_active == 1 && $orderPaket->id_user == $this->id_user && $orderPaket->expired_date >= now()) {
+                    $jumlahKredit += $orderPaket->jumlah_pertemuan;
+                }
+            }
+        }
+
+        $penambahan = $this->jumlahSession - $jumlahKredit;
+
         $orderPaket = OrderPaket::where('id_user', $this->id_user)
             ->whereHas('paket', function ($query) {
                 $query->where('id_kelas', $this->id_kelas);
             })->where('is_active', 1)
             ->where('expired_date', '>=', now())
+            ->orderBy('created_at', 'DESC')
             ->first();
 
         if ($orderPaket) {
             $orderPaket->update([
-                'jumlah_pertemuan' => $this->jumlahSession
+                'jumlah_pertemuan' => $orderPaket->jumlah_pertemuan + $penambahan
             ]);
         }
 
