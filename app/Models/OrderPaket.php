@@ -25,7 +25,10 @@ class OrderPaket extends Model
     ];
 
     protected $appends = [
-        'harga_formatted', 'status_formatted' , 'expired_date_formatted', 'tanggal_pembayaran_formatted'
+        'harga_formatted',
+        'status_formatted' ,
+        'expired_date_formatted',
+        'tanggal_pembayaran_formatted',
     ];
 
     public function getTanggalPembayaranFormattedAttribute()

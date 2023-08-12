@@ -3,8 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomerResource\Pages;
+use App\Filament\Resources\CustomerResource\Pages\KreditCustomer;
 use App\Filament\Resources\CustomerResource\Pages\ViewCustomer;
 use App\Filament\Resources\CustomerResource\RelationManagers\BookingKelasRelationManager;
+use App\Filament\Resources\CustomerResource\RelationManagers\KreditKelasRelationManager;
 use App\Filament\Resources\CustomerResource\RelationManagers\OrderPaketRelationManager;
 use App\Models\OrderPaket;
 use App\Models\Role;
@@ -20,6 +22,8 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
@@ -125,9 +129,14 @@ class CustomerResource extends Resource
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                ViewAction::make()
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    ViewAction::make(),
+                    Action::make('kredit')
+                        ->label('View Kredit')
+                        ->url(fn ($record) => CustomerResource::getUrl('kredit-customer', ['record' => $record]))
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -139,6 +148,7 @@ class CustomerResource extends Resource
         return [
             BookingKelasRelationManager::class,
             OrderPaketRelationManager::class,
+            KreditKelasRelationManager::class,
         ];
     }
 
@@ -148,6 +158,7 @@ class CustomerResource extends Resource
             'index' => Pages\ListCustomers::route('/'),
             'create' => Pages\CreateCustomer::route('/create'),
             'view' => ViewCustomer::route('/{record}'),
+            'kredit-customer' => KreditCustomer::route('/kredit-customer/{record}'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
     }

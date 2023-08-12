@@ -12,6 +12,7 @@ use App\Models\LocationStudio;
 use App\Models\Ruangan;
 use App\Models\User;
 use Carbon\Carbon;
+use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
@@ -40,6 +41,8 @@ class TimetableResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Timetable';
 
+    public $instruktur = [];
+
     public static function form(Form $form): Form
     {
         return $form
@@ -64,12 +67,40 @@ class TimetableResource extends Resource
                                     DatePicker::make('tanggal')
                                         ->label('Tanggal')
                                         ->required(),
-                                    TimePicker::make('jam_mulai')
+                                    Select::make('jam_mulai')
                                         ->label('Waktu Mulai')
+                                        ->multiple()
+                                        ->reactive()
+                                        ->searchable()
+                                        ->preload()
+                                        ->options(function (Closure $get) {
+                                            $jam = [];
+                                            for ($i = 0; $i <= 24; $i++) {
+                                                $time = sprintf("%02d", $i) . ':00:00';
+                                                array_push($jam, $time);
+                                            }
+                                            return $jam;
+                                        })
                                         ->required(),
-                                    TimePicker::make('jam_selesai')
-                                        ->label('Waktu Selesai')
-                                        ->hiddenOn(['edit', 'view'])
+                                    Select::make('id_user')
+                                        ->label('Instruktur')
+                                        ->preload()
+                                        ->searchable()
+                                        ->options(function (Closure $get) {
+                                            $jam = [];
+                                            foreach ($get('jam_mulai') as $item) {
+                                                $time = sprintf("%02d", $item) . ':00:00';
+                                                array_push($jam, $time);
+                                            }
+                                            $instruktur = User::whereHas('kelasActivity', function ($query) use ($jam, $get) {
+                                                $query->where('tanggal', date('Y-m-d', strtotime($get('tanggal'))))
+                                                    ->where('id_kelas', null)
+                                                    ->where('id_location_studio', null)
+                                                    ->whereJamMulai($jam);
+                                            })->get()->pluck('name', 'id');
+
+                                            return $instruktur;
+                                        })
                                         ->required(),
                                     Select::make('status')
                                         ->searchable()

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CustomerResource\RelationManagers;
 
+use App\Models\Kelas;
 use App\Models\Paket;
 use Closure;
 use Filament\Forms;
@@ -18,6 +19,7 @@ use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderPaketRelationManager extends RelationManager
@@ -89,6 +91,7 @@ class OrderPaketRelationManager extends RelationManager
                 TextColumn::make('jumlah_pertemuan')
                     ->sortable(),
                 TextColumn::make('harga_formatted')
+                    ->label('Harga')
                     ->sortable(),
                 TextColumn::make('status_formatted')
                     ->label('Status'),
@@ -127,5 +130,10 @@ class OrderPaketRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    public function getRelationship(): Relation|Builder
+    {
+        return Kelas::first();
     }
 }

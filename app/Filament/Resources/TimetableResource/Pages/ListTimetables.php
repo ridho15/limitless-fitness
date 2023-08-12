@@ -16,9 +16,9 @@ class ListTimetables extends ListRecords
     protected function getActions(): array
     {
         return [
-            // CreateAction::make()
-            //     ->label('Tambah Timetable')
-            //     ->icon('heroicon-o-plus-circle')
+            CreateAction::make()
+                ->label('Tambah Timetable')
+                ->icon('heroicon-o-plus-circle')
         ];
     }
 

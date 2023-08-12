@@ -34,6 +34,15 @@ class BaseController extends Controller
     {
         // $helper = new HelperController;
         // return $helper->updateData();
+        // $instruktur = User::with('kelasActivity')->whereHas('roles', function ($query) {
+        //     $query->where('name', 'Instruktur');
+        // })->whereHas('kelasActivity', function ($query) {
+        //     $query->where('tanggal', '2023-08-16')
+        //         ->whereJamMulai([
+        //             '10:00:00', '08:00:00', '12:00:00'
+        //         ]);
+        // })->get();
+        // return $instruktur;
         $data['active'] = 'home';
         return view('base-2.index', $data);
     }
