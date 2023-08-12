@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\OrderPaket;
 use App\Models\User;
+use GuzzleHttp\RetryMiddleware;
 use Illuminate\Auth\Access\Response;
 
 class OrderPaketPolicy
@@ -13,7 +14,11 @@ class OrderPaketPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        if($user->hasRole(['Admin'])){
+            return true;
+        }
+
+        return false;
     }
 
     /**

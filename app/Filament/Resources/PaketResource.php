@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaketResource\Pages;
+use App\Filament\Resources\PaketResource\Pages\ViewPaket;
 use App\Filament\Resources\PaketResource\RelationManagers\OrderPaketRelationManager;
 use App\Models\Kelas;
 use App\Models\Location;
@@ -158,6 +159,7 @@ class PaketResource extends Resource
         return [
             'index' => Pages\ListPakets::route('/'),
             'create' => Pages\CreatePaket::route('/create'),
+            'view' => ViewPaket::route('/{record}'),
             'edit' => Pages\EditPaket::route('/{record}/edit'),
         ];
     }

@@ -13,7 +13,7 @@ class KelasActivityPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasRole(['Instruktur'])) {
+        if ($user->hasRole(['Instruktur', 'Admin'])) {
             return true;
         }
 
@@ -25,7 +25,7 @@ class KelasActivityPolicy
      */
     public function view(User $user, KelasActivity $kelasActivity)
     {
-        if ($user->hasRole(['Instruktur'])) {
+        if ($user->hasRole(['Instruktur', 'Admin'])) {
             return true;
         }
 
@@ -37,7 +37,7 @@ class KelasActivityPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasRole(['Instruktur'])) {
+        if ($user->hasRole(['Instruktur', 'Admin'])) {
             return true;
         }
 
@@ -49,7 +49,7 @@ class KelasActivityPolicy
      */
     public function update(User $user, KelasActivity $kelasActivity)
     {
-        if ($user->hasRole(['Instruktur'])) {
+        if ($user->hasRole(['Instruktur', 'Admin'])) {
             return true;
         }
 
@@ -61,7 +61,7 @@ class KelasActivityPolicy
      */
     public function delete(User $user, KelasActivity $kelasActivity)
     {
-        if ($user->hasRole(['Instruktur'])) {
+        if ($user->hasRole(['Instruktur', 'Admin'])) {
             return true;
         }
 

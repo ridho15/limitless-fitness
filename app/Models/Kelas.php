@@ -89,10 +89,6 @@ class Kelas extends Model
         return $this->hasMany(KelasActivity::class, 'id_kelas');
     }
 
-    public function kelasPaket(){
-        return $this->hasMany(KelasPaket::class, 'id_kelas');
-    }
-
     public function paket(){
         return $this->hasMany(Paket::class, 'id_kelas');
     }

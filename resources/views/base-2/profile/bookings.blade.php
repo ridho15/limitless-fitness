@@ -46,7 +46,7 @@
                         <div class="tab-pane fade py-4 show active" id="credit">
                             <h4 class="fw-bold">Kredit</h4>
                             <div class="row">
-                                <div class="col-md-3 mb-3">
+                                {{-- <div class="col-md-3 mb-3">
                                     <div class="card h-100 shadow-sm" style="border-radius: 15px">
                                         <div class="card-body d-flex align-items-center justify-content-center">
                                             <div class="text-center">
@@ -123,7 +123,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 @foreach ($listData as $item)
                                     <div class="col-md-3 mb-3">
                                         <div class="card h-100 shadow-sm" style="border-radius: 15px">
@@ -149,7 +149,7 @@
                                 @endforeach
                                 <div class="col-md-3 mb-3">
                                     <div class="card h-100 shadow-sm" style="border-radius: 15px">
-                                        <div class="card-body d-flex align-items-end justify-content-center">
+                                        <div class="card-body d-flex align-items-center justify-content-center">
                                             <div class="text-center">
                                                 <h6 class="fw-light">Tambah Kredit</h6>
                                                 <h2 class="fw-bold">

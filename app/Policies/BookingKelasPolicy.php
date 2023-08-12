@@ -13,7 +13,7 @@ class BookingKelasPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasRole(['Instruktur'])) {
+        if ($user->hasRole(['Instruktur', 'Admin'])) {
             return true;
         }
 
@@ -25,7 +25,7 @@ class BookingKelasPolicy
      */
     public function view(User $user, BookingKelas $bookingKelas)
     {
-        if ($user->hasRole(['Instruktur'])) {
+        if ($user->hasRole(['Instruktur', 'Admin'])) {
             return true;
         }
 

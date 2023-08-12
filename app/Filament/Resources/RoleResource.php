@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RoleResource\Pages;
+use App\Filament\Resources\RoleResource\RelationManagers\UserRelationManager;
 use App\Models\Role;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -68,7 +69,6 @@ class RoleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 

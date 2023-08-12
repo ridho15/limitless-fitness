@@ -67,7 +67,7 @@
                                             {{ $kelasActivity->user->name }}</div>
                                         @foreach ($kelasActivity->bookingKelas as $bookingKelas)
                                             <div class="border px-4 py-2 text-center">
-                                                {{ $bookingKelas->user->name }}</div>
+                                                <a href="{{ app\Filament\Resources\CustomerResource::getUrl('view', ['record' => $bookingKelas->user]) }}" class="text-dark">{{ $bookingKelas->user->name }}</a></div>
                                         @endforeach
                                     @endforeach
                                 </td>

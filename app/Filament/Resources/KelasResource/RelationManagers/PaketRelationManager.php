@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\KelasResource\RelationManagers;
 
+use App\Filament\Resources\PaketResource;
 use App\Models\Location;
+use App\Models\Paket;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -11,6 +13,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -110,6 +113,10 @@ class PaketRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                ViewAction::make()
+                ->url(function($record){
+                    return PaketResource::getUrl('view', ['record' => $record]);
+                })
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

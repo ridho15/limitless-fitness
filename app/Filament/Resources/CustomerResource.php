@@ -3,6 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomerResource\Pages;
+use App\Filament\Resources\CustomerResource\Pages\ViewCustomer;
+use App\Filament\Resources\CustomerResource\RelationManagers\BookingKelasRelationManager;
+use App\Filament\Resources\CustomerResource\RelationManagers\OrderPaketRelationManager;
+use App\Models\OrderPaket;
 use App\Models\Role;
 use App\Models\User;
 use Filament\Forms\Components\Card;
@@ -133,7 +137,8 @@ class CustomerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BookingKelasRelationManager::class,
+            OrderPaketRelationManager::class,
         ];
     }
 
@@ -142,6 +147,7 @@ class CustomerResource extends Resource
         return [
             'index' => Pages\ListCustomers::route('/'),
             'create' => Pages\CreateCustomer::route('/create'),
+            'view' => ViewCustomer::route('/{record}'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
     }
