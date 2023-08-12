@@ -38,7 +38,7 @@
                                             <form action="{{ route('detail-timetable', ['id' => $data->id]) }}"
                                                 method="GET">
                                                 <button type="submit" class="btn custom-btn"
-                                                    @if ($data->status != 1 || $data->id_user == Auth::id()) disabled @endif
+                                                    @if ($data->status != 1) disabled @endif
                                                     style="padding-left: 50px; padding-right: 50px">
                                                     @if ($data->status != 1)
                                                         Waitlist
