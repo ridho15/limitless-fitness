@@ -56,8 +56,8 @@
                         <div class="fw-bold mb-2">Getting there</div>
                         <div class="">
                             <small
-                                class="d-block fw-light mb-3">{{ $kelasActivity->ruangan->locationStudio->location->alamat }}</small>
-                            <a href="{{ $kelasActivity->ruangan->locationStudio->location->url_location }}" target="_blank"
+                                class="d-block fw-light mb-3">{{ $kelasActivity->locationStudio->location->alamat }}</small>
+                            <a href="{{ $kelasActivity->locationStudio->location->url_location }}" target="_blank"
                                 class="btn custom-btn-outline w-100" style="padding: 5px"><small>Get Directions</small></a>
                         </div>
                         <hr class="my-4" style="opacity: 0.1">
