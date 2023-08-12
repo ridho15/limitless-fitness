@@ -131,9 +131,4 @@ class OrderPaketRelationManager extends RelationManager
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-
-    public function getRelationship(): Relation|Builder
-    {
-        return Kelas::first();
-    }
 }
