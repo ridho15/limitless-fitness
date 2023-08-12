@@ -134,6 +134,7 @@ class CustomerResource extends Resource
                     DeleteAction::make(),
                     ViewAction::make(),
                     Action::make('kredit')
+                        ->icon('heroicon-o-arrow-circle-down')
                         ->label('View Kredit')
                         ->url(fn ($record) => CustomerResource::getUrl('kredit-customer', ['record' => $record]))
                 ])
@@ -148,7 +149,7 @@ class CustomerResource extends Resource
         return [
             BookingKelasRelationManager::class,
             OrderPaketRelationManager::class,
-            KreditKelasRelationManager::class,
+            // KreditKelasRelationManager::class,
         ];
     }
 
