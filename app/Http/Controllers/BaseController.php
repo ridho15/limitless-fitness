@@ -248,6 +248,7 @@ class BaseController extends Controller
         $data['status'] = 2;
         $data['is_active'] = 0;
         $data['honor'] = $paket->honor;
+        $data['jumlah_pertemuan'] = $paket->jumlah_pertemuan;
         $data['expired_date'] = Carbon::now()->addDays($paket->valid_day);
 
         OrderPaket::create($data);
