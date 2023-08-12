@@ -6,6 +6,7 @@ use App\Filament\Resources\BookingKelasResource\Pages;
 use App\Models\BookingKelas;
 use App\Models\KelasActivity;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Radio;
@@ -80,7 +81,9 @@ class BookingKelasResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         if (Auth::user()->hasRole('Instruktur')) {
-            return parent::getEloquentQuery()->where('id_user', Auth::id());
+            return parent::getEloquentQuery()->whereHas('kelasActivity', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
         } else {
             return parent::getEloquentQuery();
         }
@@ -93,8 +96,23 @@ class BookingKelasResource extends Resource
                 TextColumn::make('user.name')
                     ->label('Nama Customer')
                     ->searchable(),
-                TextColumn::make('kelasActivity.simple_detail')
-                    ->label('Kelas'),
+                TextColumn::make('kelasActivity.nama_latihan')
+                    ->label('Kelas')
+                    ->url(function($record){
+                        return TimetableResource::getUrl('view', ['record' => $record->kelasActivity]);
+                    }),
+                TextColumn::make('kelasActivity.tanggal')
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
+                    })
+                    ->label('Tanggal')
+                    ->sortable(),
+                TextColumn::make('kelasActivity.jam_mulai')
+                    ->label('Jam Mulai')
+                    ->sortable(),
+                TextColumn::make('status_kehadiran_formatted')
+                    ->label('Status Kehadiran')
+                    ->sortable(),
                 ToggleColumn::make('is_send_email')
                     ->label('Send Email'),
                 TextColumn::make('keterangan')
