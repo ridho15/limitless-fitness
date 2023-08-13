@@ -49,7 +49,7 @@
             <tbody>
                 @foreach ($listJam as $jam)
                     <tr class="bg-current">
-                        <td class="border px-4 py-2 text-center" style="font-weight: bold">
+                        <td class="border px-4 py-2 text-center bg-white" style="font-weight: bold">
                             {{ \Carbon\Carbon::parse($jam->jam_mulai)->locale('id')->isoFormat('HH:mm') }}
                         </td>
                         @foreach ($listTanggal as $tanggal)
@@ -60,14 +60,15 @@
                                         ->whereDate('tanggal', $tanggal->tanggal)
                                         ->get();
                                 @endphp
-                                <td class="border">
+                                <td class="border bg-white">
                                     @foreach ($listKelasActivity as $kelasActivity)
                                         <div class="border px-4 py-2 text-center"
                                             style="background-color: #22543d; color: white">
-                                            {{ $kelasActivity->user->name }}</div>
+                                            <a href="{{ app\Filament\Resources\TimetableResource::getUrl('view', ['record' => $kelasActivity]) }}">
+                                                {{ $kelasActivity->user->name }}</a></div>
                                         @foreach ($kelasActivity->bookingKelas as $bookingKelas)
                                             <div class="border px-4 py-2 text-center">
-                                                <a href="{{ app\Filament\Resources\CustomerResource::getUrl('view', ['record' => $bookingKelas->user]) }}" class="text-dark">{{ $bookingKelas->user->name }}</a></div>
+                                                <a href="{{ app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) }}" class="text-dark">{{ $bookingKelas->user->name }}</a></div>
                                         @endforeach
                                     @endforeach
                                 </td>

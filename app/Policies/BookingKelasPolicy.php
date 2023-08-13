@@ -44,6 +44,11 @@ class BookingKelasPolicy
      */
     public function update(User $user, BookingKelas $bookingKelas)
     {
+        if($user->hasRole(['Admin'])){
+            return true;
+        }
+
+        return false;
     }
 
     /**

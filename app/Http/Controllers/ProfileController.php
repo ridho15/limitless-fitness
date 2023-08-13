@@ -9,6 +9,8 @@ use App\Models\KelasActivity;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,10 +60,10 @@ class ProfileController extends Controller
                 ->whereIn('status_kehadiran', ['0', '1'])
                 ->count();
 
-            if($jumlahKredit == 0){
+            if ($jumlahKredit == 0) {
                 $sisa = 0;
                 $digunakan = 0;
-            }else{
+            } else {
                 $sisa = $jumlahKredit - $digunakan;
             }
 
@@ -78,7 +80,7 @@ class ProfileController extends Controller
             ->where('is_active', 1)
             ->get();
 
-        $listPaket = Paket::whereHas('kelas', function($query){
+        $listPaket = Paket::whereHas('kelas', function ($query) {
             $query->where('nama_kelas', 'Private Class');
         })->get();
 
@@ -105,8 +107,22 @@ class ProfileController extends Controller
             ->where('status_kehadiran', '0')
             ->count();
 
+        $listBookingKelas = BookingKelas::where('id_user', $user->id)
+            ->whereHas('kelasActivity', function ($query) {
+                $query->whereDate('tanggal', '<=', now());
+            })->orderBy('created_at', 'DESC')
+            ->get();
+
+        $listKelasConfirmed = BookingKelas::where('id_user', $user->id)
+        ->whereHas('kelasActivity', function($query){
+            $query->whereDate('tanggal', '>=', now());
+        })->whereStatusKehadiran([
+            '1', '0'
+        ])->orderBy('created_at', 'DESC')
+        ->get();
         $sisaKredit = $jumlahKredit - $jumlahDigunakan;
-        $data['listBookingKelas'] = BookingKelas::where('id_user', $user->id)->orderBy('created_at', 'DESC')->get();
+
+        $data['listBookingKelas'] = $listBookingKelas;
         $data['jumlahKredit'] = $jumlahKredit;
         $data['jumlahDigunakan'] = $jumlahDigunakan;
         $data['sisaKredit'] = $sisaKredit;
@@ -116,6 +132,7 @@ class ProfileController extends Controller
         $data['listPaket'] = $listPaket;
         $data['listKelas'] = $listKelas;
         $data['listData'] = $listData;
+        $data['listKelasConfirmed'] = $listKelasConfirmed;
         return view('base-2.profile.bookings', $data);
     }
 
@@ -169,32 +186,32 @@ class ProfileController extends Controller
         })->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
 
         // Update paket
-        foreach($listPaketAktif as $item){
-            if($item->expired_date < now()){
+        foreach ($listPaketAktif as $item) {
+            if ($item->expired_date < now()) {
                 $item->update([
                     'is_active' => 0
                 ]);
             }
             $bookingKelas = OrderPaket::where('id_user', Auth::id())
-            ->where('id', $item->id)
-            ->whereHas('paket', function($query){
-                $query->whereHas('kelas', function($query){
-                    $query->whereHas('kelasActivity', function($query){
-                        $query->whereHas('bookingKelas', function($query){
-                            $query->where('id_user', Auth::id())
-                            ->where('status_kehadiran', 1);
+                ->where('id', $item->id)
+                ->whereHas('paket', function ($query) {
+                    $query->whereHas('kelas', function ($query) {
+                        $query->whereHas('kelasActivity', function ($query) {
+                            $query->whereHas('bookingKelas', function ($query) {
+                                $query->where('id_user', Auth::id())
+                                    ->where('status_kehadiran', 1);
+                            });
                         });
                     });
-                });
-            })->first();
-            if($bookingKelas){
+                })->first();
+            if ($bookingKelas) {
                 $item['keterangan'] = 'Paket sudah digunakan';
-            }else{
+            } else {
                 $item['keterangan'] = 'Paket belum digunakan';
             }
         }
         $listPaketExpired = OrderPaket::where('id_user', $user->id)
-        ->where('expired_date', '<=', now())
+            ->where('expired_date', '<=', now())
             ->orderBy('created_at', 'DESC')
             ->get();
         $data['listPaketAktif'] = $listPaketAktif;
@@ -262,5 +279,19 @@ class ProfileController extends Controller
         Mail::to($user->email)->send(new RegistrasiKonfirmasiMail($user));
 
         return redirect()->back()->with('success', 'Berhasil mengirimkan konfirmasi konfirmasi email');
+    }
+
+    public function invoice($id){
+        $orderPaket = OrderPaket::find($id);
+        if(!$orderPaket){
+            return redirect()->back()->with('fail', 'Data tidak ditemukan !');
+        }
+
+        $data['orderPaket'] = $orderPaket;
+
+        $pdf = FacadePdf::loadView('pdf.invoice', $data);
+        return $pdf->stream();
+
+        // return view('pdf.invoice', $data);
     }
 }

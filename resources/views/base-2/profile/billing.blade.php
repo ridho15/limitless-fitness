@@ -16,7 +16,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link custom-nav-link px-3" role="tab" data-bs-toggle="tab"
-                                href="#generate_invoice">Generate Invoice</a>
+                                href="#generate_invoice">Completed Transactions</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
@@ -188,6 +188,10 @@
                                                         <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
                                                             target="_blank" class="btn custom-btn-outline">
                                                             <small>Lihat Bukti Pembayaran</small>
+                                                        </a>
+                                                        <a href="{{ route('profile.invoice', ['id' => $item->id]) }}"
+                                                            target="_blank" class="btn custom-btn-outline">
+                                                            <small>Invoice</small>
                                                         </a>
                                                     @endif
                                                     <input type="file" id="bukti_pembayaran_{{ $item->id }}"

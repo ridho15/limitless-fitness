@@ -3,12 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InstrukturJadwalResource\Pages;
+use App\Filament\Resources\InstrukturJadwalResource\Pages\ManageTimetablePage;
 use App\Filament\Resources\InstrukturJadwalResource\Pages\ViewInstrukturJadwal;
 use App\Filament\Resources\InstrukturJadwalResource\RelationManagers;
 use App\Filament\Resources\InstrukturJadwalResource\RelationManagers\BookingKelasRelationManager;
+use App\Filament\Resources\InstrukturJadwalResource\Widgets\ManageTimetableWidget;
 use App\Models\InstrukturJadwal;
 use App\Models\KelasActivity;
 use Carbon\Carbon;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
@@ -61,8 +64,22 @@ class InstrukturJadwalResource extends Resource
                                     ->hiddenOn(['edit', 'view'])
                                     ->required(),
                                 TextInput::make('nama_latihan')
+                                    ->disabled(function (Closure $get) {
+                                        if ($get('id_kelas') != null && $get('id_location_studio') != null) {
+                                            return false;
+                                        }
+
+                                        return true;
+                                    })
                                     ->label('Nama Latihan'),
                                 Select::make('level')
+                                    ->disabled(function (Closure $get) {
+                                        if ($get('id_kelas') != null && $get('id_location_studio') != null) {
+                                            return false;
+                                        }
+
+                                        return true;
+                                    })
                                     ->options([
                                         '0' => 'Semua Level',
                                         '1' => 'Intermediate',
@@ -87,6 +104,9 @@ class InstrukturJadwalResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('user.name')
+                    ->label('Instruktur')
+                    ->searchable(),
                 TextColumn::make('nama_latihan')
                     ->searchable(),
                 TextColumn::make('kelas.nama_kelas')
@@ -130,13 +150,30 @@ class InstrukturJadwalResource extends Resource
         ];
     }
 
+    public static function getWidgets(): array
+    {
+        return [
+            ManageTimetableWidget::class
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInstrukturJadwals::route('/'),
+            // 'index' => Pages\ListInstrukturJadwals::route('/'),
+            'index' => ManageTimetablePage::route('/'),
             'create' => Pages\CreateInstrukturJadwal::route('/create'),
             'view' => ViewInstrukturJadwal::route('/{record}'),
             'edit' => Pages\EditInstrukturJadwal::route('/{record}/edit'),
         ];
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::user()->hasRole(['Instruktur', 'Super Admin'])){
+            return true;
+        }
+
+        return false;
     }
 }

@@ -74,7 +74,7 @@ class JurnalResource extends Resource
                     ])
             ]);
     }
-
+    protected static int $saldo = 0;
     public static function table(Table $table): Table
     {
         return $table
@@ -108,17 +108,12 @@ class JurnalResource extends Resource
                 TextColumn::make('jumlah_uang')
                     ->label('Saldo')
                     ->formatStateUsing(function ($record) {
-                        $saldo = $record->jumlah_uang;
-                        if ($record->parent) {
-                            $pengeluaran = 0;
-                            foreach ($record->parent->children as $item) {
-                                if ($item->tipe == '0') {
-                                    $pengeluaran += $item->jumlah_uang;
-                                }
-                            }
-                            $saldo = $record->parent->jumlah_uang - $pengeluaran;
+                        if ($record->tipe == '0') {
+                            static::$saldo -= $record->jumlah_uang;
+                        } else {
+                            static::$saldo += $record->jumlah_uang;
                         }
-                        return 'Rp.' . number_format($saldo, 0, ',', '.');
+                        return 'Rp.' . number_format(static::$saldo, 0, ',', '.');
                     })
                     ->sortable(),
                 TextColumn::make('user.name')

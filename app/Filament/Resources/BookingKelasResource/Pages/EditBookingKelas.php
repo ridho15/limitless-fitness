@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\BookingKelasResource\Pages;
 
 use App\Filament\Resources\BookingKelasResource;
+use App\Filament\Resources\TimetableResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -22,7 +23,7 @@ class EditBookingKelas extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl('index');
+        return TimetableResource::getUrl('index');
     }
 
     protected function getCreatedNotificationTitle(): ?string

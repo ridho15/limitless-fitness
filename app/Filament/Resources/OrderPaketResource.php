@@ -190,6 +190,7 @@ class OrderPaketResource extends Resource
                                 'struk' => $record->bukti_pembayaran,
                                 'tanggal' => now(),
                                 'id_user' => Auth::id(),
+                                'id_order_paket' => $record->id
                             ]);
                             Jurnal::updateOrCreate([
                                 'id_order_paket' => $record->id,
@@ -202,6 +203,7 @@ class OrderPaketResource extends Resource
                                 'struk' => null,
                                 'tanggal' => now(),
                                 'id_user' => Auth::id(),
+                                'id_order_paket' => $record->id
                             ]);
                             if ($record->is_active != 1) {
                                 $tanggalExpired = Carbon::now()->addDays($record->paket->valid_day);

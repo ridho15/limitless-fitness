@@ -21,6 +21,7 @@ class KelasActivity extends Model
         'level', //level
         'tanggal',
         'cancellation_policy',
+        'user_update'
     ];
 
     protected $appends = [
@@ -72,11 +73,11 @@ class KelasActivity extends Model
                 if ($bookingKelas == $kelas->max_anggota) {
                     $this->status = 4;
                     $this->save();
-                    return $bookingKelas . ' / ' . $kelas->max_anggota . ' Class Full';
+                    return 'Class Full';
                 } elseif ($bookingKelas < $kelas->max_anggota) {
                     $this->status = 1;
                     $this->save();
-                    return $bookingKelas . ' / ' . $kelas->max_anggota . ' Waiting List';
+                    return $bookingKelas . ' / ' . $kelas->max_anggota . ' Slots Available';
                 }
             } else {
                 $this->status == 1;
@@ -90,7 +91,7 @@ class KelasActivity extends Model
     {
         $kelas = Kelas::find($this->id_kelas);
         if ($kelas) {
-            return $kelas->nama_kelas . ' ' . $this->jam_mulai;
+            return $kelas->nama_kelas . ' ' . date('d-m-Y', strtotime($this->tanggal)) . ' ' . $this->jam_mulai;
         }
 
         return null;
@@ -143,5 +144,9 @@ class KelasActivity extends Model
     public function locationStudio()
     {
         return $this->belongsTo(LocationStudio::class, 'id_location_studio');
+    }
+
+    public function userUpdate(){
+        return $this->belongsTo(User::class, 'user_update');
     }
 }

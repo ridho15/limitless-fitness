@@ -51,14 +51,15 @@ class BookingKelasResource extends Resource
                                         $query->where('name', 'Customer');
                                     })->get()->pluck('name', 'id')),
                                 Select::make('id_kelas_activity')
-                                    ->label('Kelas Aktifitas')
+                                    ->label('Jadwal Kelas')
                                     ->preload()
                                     ->searchable()
                                     ->options(KelasActivity::where(function ($query) {
                                         if (Auth::user()->hasRole('Instruktur')) {
                                             $query->where('id_user', Auth::id());
                                         }
-                                    })
+                                    })->where('id_kelas', '!=', null)
+                                        ->where('id_location_studio', '!=', null)
                                         ->whereDate('jam_mulai', '>=', now())
                                         ->get()->pluck('simple_detail', 'id')),
                                 Radio::make('status_kehadiran')
@@ -98,7 +99,7 @@ class BookingKelasResource extends Resource
                     ->searchable(),
                 TextColumn::make('kelasActivity.nama_latihan')
                     ->label('Kelas')
-                    ->url(function($record){
+                    ->url(function ($record) {
                         return InstrukturJadwalResource::getUrl('view', ['record' => $record->kelasActivity]);
                     }),
                 TextColumn::make('kelasActivity.tanggal')
@@ -145,5 +146,14 @@ class BookingKelasResource extends Resource
             'create' => Pages\CreateBookingKelas::route('/create'),
             'edit' => Pages\EditBookingKelas::route('/{record}/edit'),
         ];
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        if (Auth::user()->hasRole(['Instruktur', 'Admin'])) {
+            return false;
+        }
+
+        return true;
     }
 }

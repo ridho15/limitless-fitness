@@ -51,6 +51,7 @@ class ListData extends Component
                     ->whereHas('kelas', function ($query) {
                         $query->where('nama_kelas', 'LIKE', '%' . $this->cari . '%');
                     })
+                    ->whereHas('locationStudio')
                     ->where(function ($query) {
                         if ($this->category != 0 || $this->level != 0) {
                             $query->where('category', $this->category)

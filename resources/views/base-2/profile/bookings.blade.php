@@ -425,8 +425,8 @@
                             @endif
                         </div>
                         <div class="tab-pane fade py-4" id="confirmed">
-                            @if (count($listBookingKelas->where('status_kehadiran', '0')) > 0)
-                                @foreach ($listBookingKelas->where('status_kehadiran', '0') as $item)
+                            @if (count($listKelasConfirmed) > 0)
+                                @foreach ($listKelasConfirmed as $item)
                                     <div class="bg-white shadow-sm border p-4 mb-4" style="border-radius: 15px">
                                         <div class="row justify-content-between">
                                             <div class="col-md-3 text-start">

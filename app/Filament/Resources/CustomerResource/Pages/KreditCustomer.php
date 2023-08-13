@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CustomerResource\Pages;
 
+use App\Filament\Resources\BookingKelasResource\Pages\ListBookingKelas;
 use App\Filament\Resources\CustomerResource;
 use App\Models\BookingKelas;
 use App\Models\Kelas;
@@ -9,6 +10,7 @@ use App\Models\OrderPaket;
 use App\Models\User;
 use Filament\Resources\Pages\Page;
 use HtmlSanitizer\Extension\Table\NodeVisitor\ThNodeVisitor;
+use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\View\View;
 
 class KreditCustomer extends Page
@@ -27,12 +29,20 @@ class KreditCustomer extends Page
     public $user;
     public $id_kelas;
     public $jumlahSession = 0;
+    public $jumlahDigunakanTerbanyak;
 
     public function mount($record)
     {
         $this->id_user = $record;
         $this->user = User::find($this->id_user);
         $this->getData();
+    }
+
+    public function render(): View
+    {
+        $this->getData();
+        return view(static::$view, $this->getViewData())
+            ->layout(static::$layout, $this->getLayoutData());
     }
 
     public function getData()
@@ -55,19 +65,25 @@ class KreditCustomer extends Page
                 }
             }
 
-            $jumlahDigunakan = BookingKelas::where('id_user', $this->id_user)
+            $listBookingKelas = BookingKelas::with('kelasActivity')
+            ->where('id_user', $this->id_user)
                 ->whereHas('kelasActivity', function ($query) use ($item) {
                     $query->where('id_kelas', $item->id);
                 })
                 ->whereStatusKehadiran([
-                    '0', '1'
-                ])->count();
+                    '1', '0'
+                ])->get();
 
-            $sisa = $jumlahKredit - $jumlahDigunakan;
+            if ($this->jumlahDigunakanTerbanyak <= count($listBookingKelas)) {
+                $this->jumlahDigunakanTerbanyak = count($listBookingKelas);
+            }
+
+            $sisa = $jumlahKredit - count($listBookingKelas);
 
             $this->listKelas[$index]->jumlah_kredit = $jumlahKredit;
-            $this->listKelas[$index]->jumlah_digunakan = $jumlahDigunakan;
+            $this->listKelas[$index]->jumlah_digunakan = count($listBookingKelas);
             $this->listKelas[$index]->sisa = $sisa;
+            $this->listKelas[$index]->listBookingKelas = $listBookingKelas ?? [];
         }
     }
 

@@ -12,7 +12,7 @@ export default {
         extend: {
             colors: {
                 danger: colors.rose,
-                primary: colors.blue,
+                primary: colors.green,
                 success: colors.green,
                 warning: colors.yellow,
             },
