@@ -33,7 +33,7 @@ class OmsetChart extends LineChartWidget
                 array_push($listWaktu, date('H:i', strtotime($item->tanggal)));
             }
         } elseif ($this->filter == 'week') {
-            $periode = CarbonPeriod::create(Carbon::now()->subDays(7)->isoFormat('YYYY-MM-DD'), date('Y-m-d'));
+            $periode = CarbonPeriod::create(Carbon::now()->subDays(6)->isoFormat('YYYY-MM-DD'), date('Y-m-d'));
             foreach ($periode as $key => $value) {
                 $jumlah_uang = Jurnal::whereDate('tanggal', $value)
                     ->where('tipe', 1)
@@ -62,11 +62,6 @@ class OmsetChart extends LineChartWidget
                 array_push($listData, $jumlah_uang);
                 array_push($listWaktu, $item);
             }
-            $jurnal = Jurnal::whereDate('tanggal', '<=', now())
-                ->whereDate('tanggal', '>=', Carbon::now()->subYears())
-                ->orderBy('tanggal')
-                ->where('tipe', 1)
-                ->get();
         } else {
             $jurnal = Jurnal::orderBy('tanggal')
                 ->where('tipe', 1)

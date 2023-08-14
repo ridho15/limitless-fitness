@@ -20,8 +20,17 @@ class BookingKelas extends Model
     ];
 
     protected $appends = [
-        'status_kehadiran_formatted', 'tanggal_booking',
+        'status_kehadiran_formatted', 'tanggal_booking', 'honor'
     ];
+
+    public function getHonorAttribute(){
+        $kelasActivity = KelasActivity::find($this->id_kelas_activity);
+        if($kelasActivity){
+            return $kelasActivity->kelas->honor;
+        }else{
+            return 0;
+        }
+    }
 
     public function getTanggalBookingAttribute(){
         return Carbon::parse($this->created_at)->locale('id')->isoFormat('dddd, DD MMMM YYYY, HH:mm');

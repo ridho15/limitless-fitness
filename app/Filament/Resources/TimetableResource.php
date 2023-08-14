@@ -69,7 +69,13 @@ class TimetableResource extends Resource
                                         ->required(),
                                     Select::make('jam_mulai')
                                         ->label('Waktu Mulai')
-                                        ->multiple()
+                                        ->multiple(function () {
+                                            if (request()->segment(4) == 'edit') {
+                                                return false;
+                                            } else {
+                                                return true;
+                                            }
+                                        })
                                         ->reactive()
                                         ->searchable()
                                         ->preload()
@@ -87,10 +93,14 @@ class TimetableResource extends Resource
                                         ->preload()
                                         ->searchable()
                                         ->options(function (Closure $get) {
-                                            $jam = [];
-                                            foreach ($get('jam_mulai') as $item) {
-                                                $time = sprintf("%02d", $item) . ':00:00';
-                                                array_push($jam, $time);
+                                            if ($get('jam_mulai') != null && !is_string($get('jam_mulai'))) {
+                                                $jam = [];
+                                                foreach ($get('jam_mulai') as $item) {
+                                                    $time = sprintf("%02d", $item) . ':00:00';
+                                                    array_push($jam, $time);
+                                                }
+                                            } else {
+                                                $jam = $get('jam_mulai');
                                             }
                                             $instruktur = User::whereHas('kelasActivity', function ($query) use ($jam, $get) {
                                                 $query->where('tanggal', date('Y-m-d', strtotime($get('tanggal'))))
