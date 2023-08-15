@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Auth;
 
 class RoleResource extends Resource
 {
@@ -58,7 +59,12 @@ class RoleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus data role');
+                    }),
                 ViewAction::make(),
             ])
             ->bulkActions([
@@ -68,8 +74,7 @@ class RoleResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-        ];
+        return [];
     }
 
     public static function getPages(): array

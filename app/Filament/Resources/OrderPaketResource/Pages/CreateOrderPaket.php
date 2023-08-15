@@ -7,6 +7,7 @@ use App\Models\Paket;
 use Carbon\Carbon;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateOrderPaket extends CreateRecord
 {
@@ -18,7 +19,7 @@ class CreateOrderPaket extends CreateRecord
         if ($data['status'] == 1) {
             $data['is_active'] = 1;
             $data['expired_date'] = Carbon::now()->addDays($paket->valid_day);
-        }else{
+        } else {
             $data['is_active'] = 0;
         }
         return $data;
@@ -31,6 +32,9 @@ class CreateOrderPaket extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Membuat data order paket baru');
         return 'Berhasil membuat order paket baru';
     }
 }

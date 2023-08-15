@@ -15,7 +15,13 @@ class EditJurnal extends EditRecord
     protected function getActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->icon('heroicon-o-trash')
+                ->after(function () {
+                    activity()
+                        ->causedBy(Auth::user())
+                        ->log('menghapus data jurnal');
+                }),
         ];
     }
 
@@ -26,6 +32,9 @@ class EditJurnal extends EditRecord
 
     protected function getSavedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Melakukan update data jurnal');
         return 'Data jurnal berhasil di update';
     }
 

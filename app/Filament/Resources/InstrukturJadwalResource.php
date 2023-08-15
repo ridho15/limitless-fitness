@@ -135,7 +135,12 @@ class InstrukturJadwalResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus atur jadwal');
+                    }),
                 ViewAction::make(),
             ])
             ->bulkActions([
@@ -170,7 +175,7 @@ class InstrukturJadwalResource extends Resource
 
     protected static function shouldRegisterNavigation(): bool
     {
-        if(Auth::user()->hasRole(['Instruktur', 'Super Admin'])){
+        if (Auth::user()->hasRole(['Instruktur', 'Super Admin'])) {
             return true;
         }
 

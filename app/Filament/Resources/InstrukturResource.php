@@ -122,7 +122,12 @@ class InstrukturResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus data instruktur');
+                    }),
                 ViewAction::make()
             ])
             ->bulkActions([
@@ -155,7 +160,7 @@ class InstrukturResource extends Resource
 
     protected static function shouldRegisterNavigation(): bool
     {
-        if(Auth::user()->hasRole(['Super Admin'])){
+        if (Auth::user()->hasRole(['Super Admin'])) {
             return true;
         }
 

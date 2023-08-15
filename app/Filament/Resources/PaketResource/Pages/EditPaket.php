@@ -6,6 +6,7 @@ use App\Filament\Resources\PaketResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 
 class EditPaket extends EditRecord
 {
@@ -22,6 +23,9 @@ class EditPaket extends EditRecord
 
     protected function getSavedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Melakukan update paket');
         return 'Berhasil mengupdate paket';
     }
 }

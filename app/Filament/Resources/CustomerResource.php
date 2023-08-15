@@ -30,6 +30,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerResource extends Resource
@@ -131,7 +132,12 @@ class CustomerResource extends Resource
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
-                    DeleteAction::make(),
+                    DeleteAction::make()
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Menghapus data customer');
+                        }),
                     ViewAction::make(),
                     Action::make('kredit')
                         ->icon('heroicon-o-arrow-circle-down')

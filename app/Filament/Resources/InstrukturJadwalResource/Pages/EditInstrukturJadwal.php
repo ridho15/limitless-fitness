@@ -6,6 +6,7 @@ use App\Filament\Resources\InstrukturJadwalResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 
 class EditInstrukturJadwal extends EditRecord
 {
@@ -16,11 +17,19 @@ class EditInstrukturJadwal extends EditRecord
         return [
             DeleteAction::make()
                 ->icon('heroicon-o-trash')
+                ->after(function () {
+                    activity()
+                        ->causedBy(Auth::user())
+                        ->log('Menghapus data jadwal');
+                })
         ];
     }
 
     protected function getSavedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Melakukan update data jadwal');
         return 'Berhasil mengupdate data jadwal';
     }
 

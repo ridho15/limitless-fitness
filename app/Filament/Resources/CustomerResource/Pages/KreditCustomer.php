@@ -11,6 +11,7 @@ use App\Models\User;
 use Filament\Resources\Pages\Page;
 use HtmlSanitizer\Extension\Table\NodeVisitor\ThNodeVisitor;
 use Illuminate\Contracts\View\View as ViewView;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class KreditCustomer extends Page
@@ -66,7 +67,7 @@ class KreditCustomer extends Page
             }
 
             $listBookingKelas = BookingKelas::with('kelasActivity')
-            ->where('id_user', $this->id_user)
+                ->where('id_user', $this->id_user)
                 ->whereHas('kelasActivity', function ($query) use ($item) {
                     $query->where('id_kelas', $item->id);
                 })
@@ -118,6 +119,10 @@ class KreditCustomer extends Page
 
         $this->jumlahSession = 0;
         $this->id_kelas = 0;
+
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Melakukan update data sesi pada customer');
 
         $this->getData();
     }

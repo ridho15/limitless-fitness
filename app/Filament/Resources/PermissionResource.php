@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionResource extends Resource
 {
@@ -57,7 +58,12 @@ class PermissionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus data permission');
+                    }),
                 ViewAction::make()
             ])
             ->bulkActions([

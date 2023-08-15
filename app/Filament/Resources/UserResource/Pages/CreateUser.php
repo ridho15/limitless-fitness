@@ -5,6 +5,7 @@ namespace App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateUser extends CreateRecord
 {
@@ -16,6 +17,9 @@ class CreateUser extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Membuat user baru');
         return 'Berhasil membuat user baru';
     }
 }

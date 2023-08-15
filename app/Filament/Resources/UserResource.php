@@ -111,7 +111,12 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus data user');
+                    }),
                 ViewAction::make()
             ])
             ->bulkActions([

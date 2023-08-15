@@ -5,6 +5,7 @@ namespace App\Filament\Resources\InstrukturResource\Pages;
 use App\Filament\Resources\InstrukturResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateInstruktur extends CreateRecord
 {
@@ -12,6 +13,9 @@ class CreateInstruktur extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Menambah instruktur baru');
         return "Berhasil membuat instruktur baru";
     }
 

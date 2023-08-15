@@ -10,6 +10,7 @@ use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Auth;
 
 class EditTimetable extends EditRecord
 {
@@ -23,6 +24,11 @@ class EditTimetable extends EditRecord
             DeleteAction::make()
                 ->label('Hapus Timetable')
                 ->icon('heroicon-o-trash')
+                ->after(function () {
+                    activity()
+                        ->causedBy(Auth::user())
+                        ->log('Menghapus data timetable');
+                })
         ];
     }
 
@@ -49,6 +55,9 @@ class EditTimetable extends EditRecord
 
     protected function getRedirectUrl(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Melakukan update data timetable');
         return $this->getResource()::getUrl('index');
     }
 

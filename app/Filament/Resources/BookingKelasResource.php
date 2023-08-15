@@ -122,7 +122,12 @@ class BookingKelasResource extends Resource
             ->actions([
                 EditAction::make(),
                 ViewAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus data booking kelas');
+                    }),
             ])
             ->filters([
                 //

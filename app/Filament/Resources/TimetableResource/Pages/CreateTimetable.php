@@ -22,6 +22,9 @@ class CreateTimetable extends CreateRecord
     }
     protected function getCreatedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Membuat data timetable baru');
         return 'Berhasil mengupdate data jadwal kelas';
     }
 

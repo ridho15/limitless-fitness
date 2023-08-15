@@ -29,6 +29,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Support\Facades\Auth;
 
 class KelasResource extends Resource
 {
@@ -132,6 +133,11 @@ class KelasResource extends Resource
                 EditAction::make(),
                 ViewAction::make(),
                 DeleteAction::make()
+                    ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus data kelas');
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

@@ -162,6 +162,9 @@ class BaseController extends Controller
             'email_verified_at' => now()
         ]);
 
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan Konfirmasi akun');
+
         return redirect()->route('login')->with('success', 'Akun dan email berhasil di konfirmasi');
     }
 
@@ -237,6 +240,8 @@ class BaseController extends Controller
 
         Auth::logoutOtherDevices($data['password']);
         session()->regenerate();
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan login');
         if (Auth::user()->hasRole(['Super Admin', 'Instruktur', 'Admin'])) {
             return app(LoginResponse::class);
         }
@@ -262,6 +267,9 @@ class BaseController extends Controller
         $data['expired_date'] = Carbon::now()->addDays($paket->valid_day);
 
         OrderPaket::create($data);
+
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan konfirmasi pembayaran paket');
 
         return redirect()->route('profile.billing')->with([
             'success' => 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih',
@@ -331,6 +339,9 @@ class BaseController extends Controller
 
         $bookingOrder->update($data);
 
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan upload bukti pembayaran');
+
         return redirect()->back()->with('success', 'Berhasil mengupdate bukti pembayaran. silahkan tunggu konfirmasi dari Admin');
     }
 
@@ -374,6 +385,9 @@ class BaseController extends Controller
         $user = User::find($id_user);
         $user->update($data);
 
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan update profile');
+
         return redirect()->back()->with('success', 'Profile berhasil di update');
     }
 
@@ -413,6 +427,9 @@ class BaseController extends Controller
         $data['is_send_email'] = true;
 
         BookingKelas::create($data);
+
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan Bookingk kelas');
         return redirect()->route('profile.bookings')->with('success', 'Berhasil mengambil jadwal kelas');
     }
 
@@ -421,6 +438,8 @@ class BaseController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        activity()->causedBy(Auth::user())
+            ->log('Logout account');
         return redirect()->route('base');
     }
 
@@ -432,6 +451,9 @@ class BaseController extends Controller
         if (date('Y-m-d') . ' ' . '19:00:00' >= $waktu) {
             return redirect()->route('profile.bookings')->with('fail', "Confirmation of attendance is no longer valid");
         }
+
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan konfirmasi kehadiran');
         return redirect()->route('profile.bookings')->with('success', 'Berhasil mengkonfirmasi kehadiran');
     }
 
@@ -452,6 +474,9 @@ class BaseController extends Controller
                 'keterangan' => $keterangan,
                 'status_kehadiran' => 2
             ]);
+
+            activity()->causedBy(Auth::user())
+                ->log('Menyimpan keterangan kehadiran');
 
             return redirect()->route('profile.bookings')->with('success', 'Berhasil menghkonfirmasi kehadiran');
         } else {

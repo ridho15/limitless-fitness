@@ -114,12 +114,12 @@ class ProfileController extends Controller
             ->get();
 
         $listKelasConfirmed = BookingKelas::where('id_user', $user->id)
-        ->whereHas('kelasActivity', function($query){
-            $query->whereDate('tanggal', '>=', now());
-        })->whereStatusKehadiran([
-            '1', '0'
-        ])->orderBy('created_at', 'DESC')
-        ->get();
+            ->whereHas('kelasActivity', function ($query) {
+                $query->whereDate('tanggal', '>=', now());
+            })->whereStatusKehadiran([
+                '1', '0'
+            ])->orderBy('created_at', 'DESC')
+            ->get();
         $sisaKredit = $jumlahKredit - $jumlahDigunakan;
 
         $data['listBookingKelas'] = $listBookingKelas;
@@ -161,6 +161,9 @@ class ProfileController extends Controller
             'status_kehadiran' => $request->status_kehadiran
         ]);
 
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan update kehadiran');
+
         return redirect()->back()->with('success', 'Berhasil mengupdate status kehadiran');
     }
 
@@ -172,6 +175,9 @@ class ProfileController extends Controller
         }
 
         $bookingKelas->delete();
+
+        activity()->causedBy(Auth::user())
+            ->log('Melakukan pembatalan booking kelas');
         return redirect()->back()->with('success', 'Kelas berhasil di batalkan !');
     }
 
@@ -281,9 +287,10 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Berhasil mengirimkan konfirmasi konfirmasi email');
     }
 
-    public function invoice($id){
+    public function invoice($id)
+    {
         $orderPaket = OrderPaket::find($id);
-        if(!$orderPaket){
+        if (!$orderPaket) {
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
         }
 

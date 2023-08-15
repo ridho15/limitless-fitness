@@ -5,6 +5,7 @@ namespace App\Filament\Resources\BookingKelasResource\Pages;
 use App\Filament\Resources\BookingKelasResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateBookingKelas extends CreateRecord
 {
@@ -17,6 +18,10 @@ class CreateBookingKelas extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
-        return 'Berhasil membuat booking kelas baru';
+        $message = 'Berhasil membuat booking kelas baru';
+        activity()
+            ->causedBy(Auth::user())
+            ->log($message);
+        return $message;
     }
 }

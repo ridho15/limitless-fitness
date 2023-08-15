@@ -179,10 +179,20 @@ class OrderPaketResource extends Resource
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
-                    DeleteAction::make()->successNotificationTitle('Berhasil menghapus order paket'),
+                    DeleteAction::make()->successNotificationTitle('Berhasil menghapus order paket')
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Menghapus data order paket');
+                        }),
                     Action::make('bukti_pembayaran')
                         ->icon('heroicon-o-photograph')
                         ->label('View Bukti Pembayaran')
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('View bukti pembayaran');
+                        })
                         ->url(function (OrderPaket $record) {
                             return asset('storage/' . $record->bukti_pembayaran);
                         })
@@ -190,6 +200,11 @@ class OrderPaketResource extends Resource
                     Action::make('approve')
                         ->icon('heroicon-o-cash')
                         ->label('Approve Pembayaran')
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Melakukan approve pembayaran order paket');
+                        })
                         ->action(function (OrderPaket $record) {
                             $jurnal = Jurnal::updateOrCreate([
                                 'id_order_paket' => $record->id,

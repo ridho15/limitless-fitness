@@ -21,6 +21,9 @@ class CreateInstrukturJadwal extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Membuat jadwal instruktur');
         return 'Berhasil membuat jadwal baru';
     }
 

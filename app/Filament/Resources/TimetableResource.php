@@ -164,6 +164,9 @@ class TimetableResource extends Resource
                 EditAction::make(),
                 DeleteAction::make()
                     ->after(function () {
+                        activity()
+                            ->causedBy(Auth::user())
+                            ->log('Menghapus data timetable');
                         return redirect(TimetableResource::getUrl('index'));
                     }),
                 ViewAction::make(),

@@ -19,6 +19,9 @@ class CreateJurnal extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('Membuat data jurnal baru');
         return 'Berhasil menyimpan data jurnal baru';
     }
 

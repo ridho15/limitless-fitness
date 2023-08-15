@@ -7,6 +7,7 @@ use App\Filament\Resources\TimetableResource;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 
 class EditBookingKelas extends EditRecord
 {
@@ -18,6 +19,11 @@ class EditBookingKelas extends EditRecord
             DeleteAction::make()
                 ->icon('heroicon-o-trash')
                 ->label('Hapus Data')
+                ->after(function () {
+                    activity()
+                        ->causedBy(Auth::user())
+                        ->log('Menghapus data booking kelas');
+                })
         ];
     }
 
@@ -28,6 +34,10 @@ class EditBookingKelas extends EditRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
-        return 'Berhasil membuat booking kelas baru';
+        $message = 'Berhasil membuat booking kelas baru';
+        activity()
+            ->causedBy(Auth::user())
+            ->log($message);
+        return $message;
     }
 }
