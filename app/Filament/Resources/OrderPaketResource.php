@@ -119,8 +119,19 @@ class OrderPaketResource extends Resource
                 TextColumn::make('jumlah_pertemuan')
                     ->sortable(),
                 TextColumn::make('harga_formatted')
+                    ->label('Harga')
                     ->sortable(),
-                TextColumn::make('status_formatted')
+                BadgeColumn::make('status')
+                    ->sortable()
+                    ->enum([
+                        1 => 'Lunas',
+                        0 => 'Batal',
+                        2 => 'Belum bayar',
+                    ])->colors([
+                        'primary' => 1,
+                        'danger' => 0,
+                        'danger' => 2,
+                    ])
                     ->label('Status'),
                 BadgeColumn::make('is_active')
                     ->label('Status Aktif')

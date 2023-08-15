@@ -22,13 +22,12 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class InstrukturResource extends Resource
 {
     protected static ?string $model = User::class;
-
-
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
@@ -152,5 +151,14 @@ class InstrukturResource extends Resource
         return parent::getEloquentQuery()->whereHas('roles', function ($query) {
             $query->where('name', 'Instruktur');
         });
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::user()->hasRole(['Super Admin'])){
+            return true;
+        }
+
+        return false;
     }
 }

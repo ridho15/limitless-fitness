@@ -235,8 +235,9 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', $error->validator->getMessageBag()->getMessages()['email'][0]);
         }
 
+        Auth::logoutOtherDevices($data['password']);
         session()->regenerate();
-        if (Auth::user()->hasRole('Instruktur') || Auth::user()->hasRole('Super Admin')) {
+        if (Auth::user()->hasRole(['Super Admin', 'Instruktur', 'Admin'])) {
             return app(LoginResponse::class);
         }
         return redirect()->route('base')->with('success', 'Login Berhasil');

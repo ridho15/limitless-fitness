@@ -33,7 +33,8 @@ class User extends Authenticatable implements FilamentUser
         'foto',
         'tanggal_lahir',
         'jenis_kelamin',
-        'negara'
+        'negara',
+        'ip_address'
     ];
 
     /**
