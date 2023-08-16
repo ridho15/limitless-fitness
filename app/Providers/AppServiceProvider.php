@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
         Filament::serving(function () {
             // Filament::registerViteTheme('resources/css/filament.css');
 
-            // Filament::registerTheme(mix('css/filament.css'));
+            Filament::registerTheme(mix('css/filament.css'));
 
             // ...
             // $primaryColor = '#FF8834'; // For example, put your tenant primary color here
