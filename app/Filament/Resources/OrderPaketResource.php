@@ -79,12 +79,6 @@ class OrderPaketResource extends Resource
                                 TextInput::make('harga')
                                     ->numeric()
                                     ->required(),
-                                TextInput::make('honor')
-                                    ->label('Pembayaran Instruktur')
-                                    ->helperText('Pembayaran instruktur per order paket')
-                                    ->numeric()
-                                    ->default(0)
-                                    ->required(),
                                 Radio::make('status')
                                     ->options([
                                         '0' => 'Batal',
