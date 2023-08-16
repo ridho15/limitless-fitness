@@ -48,9 +48,6 @@ class ListData extends Component
                             });
                         });
                     })
-                    ->whereHas('kelas', function ($query) {
-                        $query->where('nama_kelas', 'LIKE', '%' . $this->cari . '%');
-                    })
                     ->whereHas('locationStudio')
                     ->where(function ($query) {
                         if ($this->category != 0 || $this->level != 0) {
@@ -61,10 +58,6 @@ class ListData extends Component
                     ->where(function ($query) {
                         if ($this->id_kelas != 0) {
                             $query->where('id_kelas', $this->id_kelas);
-                        }
-                    })->where(function ($query) {
-                        if ($this->id_user != 0) {
-                            $query->where('id_user', $this->id_user);
                         }
                     })
                     ->whereDate('tanggal', $item)

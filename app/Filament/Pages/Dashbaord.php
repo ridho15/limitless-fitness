@@ -46,7 +46,7 @@ class Dashbaord extends BasePage
     protected function getWidgets(): array
     {
         // return Filament::getWidgets();
-        if(Auth::user()->hasRole(['Admin', 'Super Admin'])){
+        if(Auth::user()->hasRole(['Super Admin'])){
             $listWidget = [
                 TotalJamInstruktur::class,
                 ListTimetable::class,

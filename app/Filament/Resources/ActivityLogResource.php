@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityLogResource extends Resource
 {
@@ -70,5 +71,14 @@ class ActivityLogResource extends Resource
             'create' => Pages\CreateActivityLog::route('/create'),
             'edit' => Pages\EditActivityLog::route('/{record}/edit'),
         ];
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::user()->hasRole('Super Admin')){
+            return true;
+        }
+
+        return false;
     }
 }

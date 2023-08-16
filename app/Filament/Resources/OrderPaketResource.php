@@ -27,8 +27,10 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -107,47 +109,97 @@ class OrderPaketResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('created_at')
+
+                ViewColumn::make('created_at')
                     ->label('Tanggal Order')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => date('d-m-Y H:i', strtotime($record->created_at))
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
                     ->sortable(),
-                TextColumn::make('user.name')
+                ViewColumn::make('user.name')
                     ->label('Customer')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->user->name
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
                     ->searchable(),
-                TextColumn::make('paket.nama')
+                ViewColumn::make('paket.nama')
                     ->label('Paket')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->paket->nama
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
                     ->searchable(),
-                TextColumn::make('jumlah_pertemuan')
+                ViewColumn::make('jumlah_pertemuan')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->jumlah_pertemuan
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
                     ->sortable(),
-                TextColumn::make('harga_formatted')
+                ViewColumn::make('harga_formatted')
+                    ->view('custom-column.order-paket')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->harga_formatted
+                        ]);
+                    })
                     ->label('Harga')
                     ->sortable(),
-                BadgeColumn::make('status')
+                ViewColumn::make('status')
+                    ->view('custom-column.order-paket')
+                    ->getStateUsing(function ($record) {
+                        if ($record->status == 1) {
+                            $text = 'Lunas';
+                        } elseif ($record->status == 2) {
+                            $text = 'Belum Lunas';
+                        } else {
+                            $text = 'Batal';
+                        }
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $text
+                        ]);
+                    })
                     ->sortable()
-                    ->enum([
-                        1 => 'Lunas',
-                        0 => 'Batal',
-                        2 => 'Belum bayar',
-                    ])->colors([
-                        'primary' => 1,
-                        'danger' => 0,
-                        'danger' => 2,
-                    ])
                     ->label('Status'),
-                BadgeColumn::make('is_active')
+                ViewColumn::make('is_active')
                     ->label('Status Aktif')
-                    ->enum([
-                        0 => 'Tidak aktif',
-                        1 => 'Aktif'
-                    ])
-                    ->colors([
-                        'danger' => 0,
-                        'primary' => 1
-                    ]),
-                ImageColumn::make('bukti_pembayaran')
-                    ->size(100),
-                TextColumn::make('tanda_tangan'),
-                TextColumn::make('expired_date')->sortable(),
-                TextColumn::make('tanggal_pembayaran')->sortable(),
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->is_active == 1 ? 'Aktif' : 'Tidak Aktif'
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
+                    ->sortable(),
+                ViewColumn::make('expired_date')->view('custom-column.order-paket')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->jumlah_pertemuan
+                        ]);
+                    })->sortable(),
+                ViewColumn::make('tanggal_pembayaran')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->tanggal_pembayaran
+                        ]);
+                    })->view('custom-column.order-paket')->sortable(),
             ])
             ->filters([
                 SelectFilter::make('id_user')
@@ -246,6 +298,11 @@ class OrderPaketResource extends Resource
             ->bulkActions([
                 DeleteBulkAction::make()
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->orderBy('status', 'DESC');
     }
 
     public static function getRelations(): array
