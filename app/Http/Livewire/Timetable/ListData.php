@@ -42,7 +42,7 @@ class ListData extends Component
             foreach ($this->listTanggal as $item) {
                 $kelasActivity = KelasActivity::with('kelas')
                     ->whereHas('kelas', function ($query) {
-                        $query->where('id_kelas', $this->id_kelas)->whereHas('paket', function ($query) {
+                        $query->whereHas('paket', function ($query) {
                             $query->whereHas('orderPaket', function ($query) {
                                 $query->where('id_user', Auth::id());
                             });
@@ -50,14 +50,13 @@ class ListData extends Component
                     })
                     ->whereHas('locationStudio')
                     ->where(function ($query) {
-                        if ($this->category != 0 || $this->level != 0) {
-                            $query->where('category', $this->category)
-                                ->orWhere('level', $this->level);
+                        if ($this->id_kelas != 0) {
+                            $query->where('id_kelas', $this->id_kelas);
                         }
                     })
                     ->where(function ($query) {
-                        if ($this->id_kelas != 0) {
-                            $query->where('id_kelas', $this->id_kelas);
+                        if ($this->id_user) {
+                            $query->where('id_user', $this->id_user);
                         }
                     })
                     ->whereDate('tanggal', $item)

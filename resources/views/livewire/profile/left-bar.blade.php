@@ -1,4 +1,4 @@
-<div class="bg-white shadow" style="border-radius: 15px">
+<div class="bg-white shadow mb-5" style="border-radius: 15px">
     <div class="pt-5 text-center">
         <div class="text-center mb-5">
             <span class="fs-2 fw-bold text-white circle-profile-default text-uppercase"

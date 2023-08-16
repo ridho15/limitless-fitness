@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Filament\Resources\CustomerResource;
 use App\Models\OrderPaket;
+use Carbon\Carbon;
 use Closure;
 use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
@@ -21,27 +22,30 @@ class CustomerOrderExpired extends BaseWidget
 
     protected function getTableQuery(): Builder
     {
-        return OrderPaket::whereMonth('expired_date', now())
+        $duaMinggu = Carbon::now()->addWeeks(2)->isoFormat('YYYY-MM-DD');
+        $query = OrderPaket::where(function ($query) use ($duaMinggu) {
+            $query->whereDate('expired_date', '>=', date('Y-m-d'))
+                ->whereDate('expired_date', "<=", $duaMinggu);
+        })
             ->where('is_active', 1)
             ->orderBy('expired_date', 'DESC');
+        return $query;
     }
 
     protected function getTableActions(): array
     {
         return [
             ViewAction::make()
-            ->url(function($record){
-                return CustomerResource::getUrl('kredit-customer', ['record' => $record->user]);
-            })
+                ->url(function ($record) {
+                    return CustomerResource::getUrl('kredit-customer', ['record' => $record->user]);
+                })
         ];
     }
 
     protected function getTableColumns(): array
     {
         return [
-            TextColumn::make('created_at')
-                ->label('Tanggal Order')
-                ->sortable(),
+            TextColumn::make('expired_date')->sortable(),
             TextColumn::make('user.name')
                 ->label('Customer')
                 ->searchable(),
@@ -49,9 +53,6 @@ class CustomerOrderExpired extends BaseWidget
                 ->label('Paket')
                 ->searchable(),
             TextColumn::make('jumlah_pertemuan')
-                ->sortable(),
-            TextColumn::make('harga_formatted')
-                ->toggleable()
                 ->sortable(),
             TextColumn::make('status_formatted')
                 ->label('Status'),
@@ -66,11 +67,9 @@ class CustomerOrderExpired extends BaseWidget
                     'danger' => 0,
                     'primary' => 1
                 ]),
-            ImageColumn::make('bukti_pembayaran')
-                ->toggleable()
-                ->size(100),
-            TextColumn::make('tanda_tangan')->toggleable(),
-            TextColumn::make('expired_date')->sortable(),
+            TextColumn::make('created_at')
+                ->label('Tanggal Order')
+                ->sortable(),
             TextColumn::make('tanggal_pembayaran')->toggleable()->sortable()
         ];
     }

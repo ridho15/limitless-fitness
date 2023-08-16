@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-md-9 ps-5">
                     <h4 class="fw-bold">Billing</h4>
-                    <ul class="nav nav-underline d-none d-sm-flex">
+                    <ul class="nav nav-underline d-flex">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active custom-nav-link px-3" role="tab" data-bs-toggle="tab"
                                 href="#payment_due">Payment Due</a>

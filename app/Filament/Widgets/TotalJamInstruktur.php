@@ -2,11 +2,15 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\CustomerResource;
+use App\Filament\Resources\InstrukturResource;
+use App\Http\Livewire\Base\Instruktur;
 use App\Models\Jurnal;
 use App\Models\KelasActivity;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
+use Illuminate\Support\Facades\Auth;
 
 class TotalJamInstruktur extends BaseWidget
 {
@@ -14,16 +18,6 @@ class TotalJamInstruktur extends BaseWidget
 
     protected function getCards(): array
     {
-        $totalJamInstrukturAssingTimetable = KelasActivity::where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)
-            ->where('jam_mulai', '!=', null)
-            ->where('tanggal', '!=', null)
-            ->count();
-
-        $totalInstrukturJadwal = KelasActivity::where('id_kelas', null)
-            ->where('id_location_studio', null)
-            ->count();
-
         $jurnal = Jurnal::where('id_order_paket', '!=', null)
             ->get();
 
@@ -41,19 +35,36 @@ class TotalJamInstruktur extends BaseWidget
             $query->where('name', 'Customer');
         })->whereMonth('created_at', now())->count();
 
-        return [
-            Card::make('Gross Profit', 'Rp.' . number_format($omset - $pengeluaran, 0, ',', '.'))
+        $listInstruktur = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Instruktur');
+        })->get();
+
+        $listCard = [];
+
+        if (Auth::user()->hasRole('Super Admin')) {
+            array_push($listCard, Card::make('Gross Profit', 'Rp.' . number_format($omset - $pengeluaran, 0, ',', '.'))
                 ->description('Omeset di kurangi dengan fee instruktur')
-                ->color('primary'),
-            Card::make('Jumlah Customer', $jumlahCustomer)
+                ->color('primary'));
+
+            array_push($listCard,  Card::make('Jumlah Customer', $jumlahCustomer)
                 ->description('Jumlah Customer Dalam Bulan Ini')
-                ->color('primary'),
-            Card::make('Total Jam', $totalJamInstrukturAssingTimetable)
-                ->color('primary')
-                ->description('Total instructor hours'),
-            Card::make('Total Jadwal', $totalInstrukturJadwal)
-                ->description('number of hours available now')
-                ->color('primary'),
-        ];
+                ->color('primary'));
+        }
+
+        foreach ($listInstruktur as $item) {
+            $jumlahJadwal = $item->kelasActivity->count();
+            $jumlahAssing = KelasActivity::where('id_user', $item->id)
+                ->where('id_location_studio', '!=', null)
+                ->where('id_kelas', '!=', null)
+                ->whereDate('tanggal', '!=', null)
+                ->where('jam_mulai', '!=', null)->count();
+
+            array_push($listCard, Card::make($item->name, $jumlahAssing . '/' . $jumlahJadwal)
+                ->url(InstrukturResource::getUrl('view', ['record' => $item]))
+                ->description('Jumlah assing / Jumlah jadwal instruktur')
+                ->color('primary'));
+        }
+
+        return $listCard;
     }
 }

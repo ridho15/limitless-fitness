@@ -115,12 +115,13 @@
         <div class="dropdown col-10">
             <button class="btn btn-custom-filter btn-block dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                All Class Types
+                Class
             </button>
             <ul class="dropdown-menu w-100">
-                <li><a class="dropdown-item" href="#">All Class Type</a></li>
-                <li><a class="dropdown-item" href="#">Online</a></li>
-                <li><a class="dropdown-item" href="#">Onsite</a></li>
+                <li><a class="dropdown-item" href="#"  wire:click="$emit('onChangeClass',0 )">Close Class</a></li>
+                @foreach ($listKelas as $item)
+                    <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass', {{ $item->id }})">{{ $item->nama_kelas }}</a></li>
+                @endforeach
             </ul>
         </div>
         <div class="col-2">

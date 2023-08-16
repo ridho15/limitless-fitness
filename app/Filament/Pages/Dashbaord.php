@@ -46,7 +46,7 @@ class Dashbaord extends BasePage
     protected function getWidgets(): array
     {
         // return Filament::getWidgets();
-        if(Auth::user()->hasRole(['Super Admin'])){
+        if (Auth::user()->hasRole(['Super Admin'])) {
             $listWidget = [
                 TotalJamInstruktur::class,
                 ListTimetable::class,
@@ -56,12 +56,18 @@ class Dashbaord extends BasePage
                 PengeluaranChart::class,
                 BelumBayarChart::class
             ];
-        }elseif(Auth::user()->hasRole('Instruktur')){
+        } elseif (Auth::user()->hasRole('Admin')) {
+            $listWidget = [
+                TotalJamInstruktur::class,
+                ListTimetable::class,
+                ListAturJadwal::class,
+                CustomerOrderExpired::class,
+            ];
+        } elseif (Auth::user()->hasRole('Instruktur')) {
             $listWidget = [
                 PendapatanInstruktur::class
             ];
-        }
-        else{
+        } else {
             $listWidget = [];
         }
 

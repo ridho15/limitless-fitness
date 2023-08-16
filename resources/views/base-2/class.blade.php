@@ -126,14 +126,14 @@
                             id="onsite" value="2">
                     </div>
                     <hr>
-                    <h5 class="fw-bold my-3">All Difficulty Levels</h5>
+                    {{-- <h5 class="fw-bold my-3">All Difficulty Levels</h5>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="all_dificulty_levels">
                             All dificulty levels
                         </label>
                         <input class="form-check-input" type="radio" name="levels" id="all_dificulty_levels"
                             value="0" onclick="changeClassLevel(0)" checked>
-                    </div>
+                    </div> --}}
                     {{-- <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="intermediate">
                             Intermediate

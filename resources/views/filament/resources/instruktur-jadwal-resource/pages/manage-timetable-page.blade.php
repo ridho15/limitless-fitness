@@ -72,7 +72,7 @@
                                             </div>
                                             @foreach ($kelasActivity->bookingKelas as $bookingKelas)
                                                 <div class="border px-4 py-2 text-center">
-                                                    <a href="{{ app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) }}"
+                                                    <a href="#"
                                                         class="text-dark">{{ $bookingKelas->user->name }}</a>
                                                 </div>
                                             @endforeach

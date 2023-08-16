@@ -26,9 +26,10 @@ class OrderPaket extends Model
 
     protected $appends = [
         'harga_formatted',
-        'status_formatted' ,
+        'status_formatted',
         'expired_date_formatted',
         'tanggal_pembayaran_formatted',
+        'sisa_session'
     ];
 
     public function getTanggalPembayaranFormattedAttribute()
@@ -59,6 +60,27 @@ class OrderPaket extends Model
         }
     }
 
+    public function getSisaSessionAttribute()
+    {
+        $paket = Paket::find($this->id_paket);
+        $bookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($paket) {
+            $query->whereHas('kelas', function ($query) {
+                $query->whereHas('paket', function ($query) {
+                    $query->whereHas('orderPaket', function ($query) {
+                        $query->where('id_user', $this->id_user);
+                    });
+                });
+            });
+        })->where('id_user', $this->id_user)
+            ->where(function ($query) {
+                $query->where('status_kehadiran', '0')
+                    ->orWhere('status_kehadiran', '1');
+            })->count();
+
+        $sisa = $this->jumlah_pertemuan - $bookingKelas;
+        return $sisa;
+    }
+
     public function getHargaFormattedAttribute()
     {
         return 'Rp.' . number_format($this->harga, 0, ',', '.');
@@ -74,7 +96,8 @@ class OrderPaket extends Model
         return $this->belongsTo(Paket::class, 'id_paket')->withDefault();
     }
 
-    public function jurnal(){
+    public function jurnal()
+    {
         return $this->hasOne(Jurnal::class, 'id_order_paket');
     }
 }

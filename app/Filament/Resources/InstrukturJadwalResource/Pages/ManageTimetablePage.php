@@ -42,7 +42,7 @@ class ManageTimetablePage extends Page
             CreateAction::make()
                 ->label('Buat Jadwal')
                 ->icon('heroicon-o-plus-circle')
-                ->url(function(){
+                ->url(function () {
                     return InstrukturJadwalResource::getUrl('create');
                 }),
         ];
@@ -58,7 +58,11 @@ class ManageTimetablePage extends Page
     public function getData()
     {
         $this->listTanggal = KelasActivity::select('tanggal')
-            ->where('id_user', Auth::id())
+            ->where(function ($query) {
+                if (Auth::user()->hasRole('Instruktur')) {
+                    $query->where('id_user', Auth::id());
+                }
+            })
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
@@ -67,7 +71,11 @@ class ManageTimetablePage extends Page
             ->get();
         $this->listStudio = LocationStudio::whereHas('kelasActivity', function ($query) {
             $query->whereDate('tanggal', '>=', $this->startDate)
-                ->where('id_user', Auth::id())
+                ->where(function ($query) {
+                    if (Auth::user()->hasRole('Instruktur')) {
+                        $query->where('id_user', Auth::id());
+                    }
+                })
                 ->whereDate('tanggal', '<=', $this->endDate)
                 ->where('id_kelas', '!=', null)
                 ->where('id_location_studio', '!=', null);
@@ -75,7 +83,11 @@ class ManageTimetablePage extends Page
 
         $this->listJam = KelasActivity::select('tanggal')
             ->select('jam_mulai')
-            ->where('id_user', Auth::id())
+            ->where(function ($query) {
+                if (Auth::user()->hasRole('Instruktur')) {
+                    $query->where('id_user', Auth::id());
+                }
+            })
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
@@ -87,7 +99,11 @@ class ManageTimetablePage extends Page
             $listKelasActivity = KelasActivity::whereDate('tanggal', '>=', $this->startDate)
                 ->whereDate('tanggal', '<=', $this->endDate)
                 ->whereTime('jam_mulai', $item->jam_mulai)
-                ->where('id_user', Auth::id())
+                ->where(function ($query) {
+                    if (Auth::user()->hasRole('Instruktur')) {
+                        $query->where('id_user', Auth::id());
+                    }
+                })
                 ->where('id_kelas', '!=', null)
                 ->where('id_location_studio', '!=', null)
                 ->get();

@@ -90,41 +90,45 @@ class KreditCustomer extends Page
 
     public function updateSession()
     {
-        $kelas = Kelas::find($this->id_kelas);
+        if (Auth::user()->hasRole('Super Admin')) {
+            $kelas = Kelas::find($this->id_kelas);
 
-        $jumlahKredit = 0;
-        foreach ($kelas->paket as $paket) {
-            foreach ($paket->orderPaket as $orderPaket) {
-                if ($orderPaket->is_active == 1 && $orderPaket->id_user == $this->id_user && $orderPaket->expired_date >= now()) {
-                    $jumlahKredit += $orderPaket->jumlah_pertemuan;
+            $jumlahKredit = 0;
+            foreach ($kelas->paket as $paket) {
+                foreach ($paket->orderPaket as $orderPaket) {
+                    if ($orderPaket->is_active == 1 && $orderPaket->id_user == $this->id_user && $orderPaket->expired_date >= now()) {
+                        $jumlahKredit += $orderPaket->jumlah_pertemuan;
+                    }
                 }
             }
+
+            $penambahan = $this->jumlahSession - $jumlahKredit;
+
+            $orderPaket = OrderPaket::where('id_user', $this->id_user)
+                ->whereHas('paket', function ($query) {
+                    $query->where('id_kelas', $this->id_kelas);
+                })->where('is_active', 1)
+                ->where('expired_date', '>=', now())
+                ->orderBy('created_at', 'DESC')
+                ->first();
+
+            if ($orderPaket) {
+                $orderPaket->update([
+                    'jumlah_pertemuan' => $orderPaket->jumlah_pertemuan + $penambahan
+                ]);
+            }
+
+            $this->jumlahSession = 0;
+            $this->id_kelas = 0;
+
+            activity()
+                ->causedBy(Auth::user())
+                ->log('Melakukan update data sesi pada customer');
+
+            $this->getData();
+        } else {
+            return session()->flash('fail', 'Anda tidak dizinkan !');
         }
-
-        $penambahan = $this->jumlahSession - $jumlahKredit;
-
-        $orderPaket = OrderPaket::where('id_user', $this->id_user)
-            ->whereHas('paket', function ($query) {
-                $query->where('id_kelas', $this->id_kelas);
-            })->where('is_active', 1)
-            ->where('expired_date', '>=', now())
-            ->orderBy('created_at', 'DESC')
-            ->first();
-
-        if ($orderPaket) {
-            $orderPaket->update([
-                'jumlah_pertemuan' => $orderPaket->jumlah_pertemuan + $penambahan
-            ]);
-        }
-
-        $this->jumlahSession = 0;
-        $this->id_kelas = 0;
-
-        activity()
-            ->causedBy(Auth::user())
-            ->log('Melakukan update data sesi pada customer');
-
-        $this->getData();
     }
 
     public function clickEditSession($id_kelas)

@@ -9,10 +9,12 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class BookingKelasRelationManager extends RelationManager
 {
@@ -50,7 +52,8 @@ class BookingKelasRelationManager extends RelationManager
                         'primary' => 1,
                         'secondary' => 0
                     ]),
-                BadgeColumn::make('status_kehadiran_formatted'),
+                BadgeColumn::make('status_kehadiran_formatted')
+                ->label('Status Kehadiran'),
                 TextColumn::make('keterangan')
                     ->searchable(),
             ])
@@ -61,7 +64,14 @@ class BookingKelasRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make()
+                    ->hidden(function () {
+                        if (Auth::user()->hasRole('Instruktur')) {
+                            return true;
+                        }
+
+                        return false;
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

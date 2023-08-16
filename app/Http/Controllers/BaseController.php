@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Livewire\Base\Instruktur;
 use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
 use App\Models\BookingOrder;
@@ -87,6 +88,10 @@ class BaseController extends Controller
 
     public function timetable()
     {
+        $listInstruktur = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Instruktur');
+        })->where('status', 1)->get();
+        $data['listInstruktur'] = $listInstruktur;
         $data['active'] = 'timetable';
         return view('base-2.timetable', $data);
     }

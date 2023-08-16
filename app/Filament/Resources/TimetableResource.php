@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TimetableResource\Pages;
+use App\Filament\Resources\TimetableResource\Pages\ManageTimetablePage;
 use App\Filament\Resources\TimetableResource\Pages\ViewTimetable;
 use App\Filament\Resources\TimetableResource\RelationManagers\BookingKelasRelationManager;
 use App\Filament\Resources\TimetableResource\Widgets\ManageTimetableWidget;
@@ -18,8 +19,6 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -66,6 +65,13 @@ class TimetableResource extends Resource
                                         ->options(LocationStudio::get()->pluck('nama', 'id')),
                                     DatePicker::make('tanggal')
                                         ->label('Tanggal')
+                                        ->disabled(function ($state) {
+                                            if (Auth::user()->hasRole('Super Admin')) {
+                                                return false;
+                                            }
+
+                                            return true;
+                                        })
                                         ->required(),
                                     Select::make('jam_mulai')
                                         ->label('Waktu Mulai')
@@ -75,6 +81,13 @@ class TimetableResource extends Resource
                                             } else {
                                                 return true;
                                             }
+                                        })
+                                        ->disabled(function ($state) {
+                                            if (Auth::user()->hasRole('Super Admin')) {
+                                                return false;
+                                            }
+
+                                            return true;
                                         })
                                         ->reactive()
                                         ->searchable()
@@ -92,6 +105,7 @@ class TimetableResource extends Resource
                                         ->label('Instruktur')
                                         ->preload()
                                         ->searchable()
+                                        ->disabledOn('edit')
                                         ->options(function (Closure $get) {
                                             if ($get('jam_mulai') != null && !is_string($get('jam_mulai'))) {
                                                 $jam = [];
@@ -194,7 +208,8 @@ class TimetableResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTimetables::route('/'),
+            // 'index' => Pages\ListTimetables::route('/'),
+            'index' => ManageTimetablePage::route('/'),
             'create' => Pages\CreateTimetable::route('/create'),
             'view' => ViewTimetable::route('/{record}'),
             'edit' => Pages\EditTimetable::route('/{record}/edit'),

@@ -8,7 +8,7 @@
                     <h3 class="fw-bold">Packages</h3>
                 </div>
             </div>
-            <ul class="nav nav-underline d-none d-sm-flex">
+            <ul class="nav nav-underline d-flex">
                 <li class="nav-item">
                     <a class="nav-link active custom-nav-link px-3" role="tab" data-bs-toggle="tab" aria-current="page"
                         href="#all">All</a>
@@ -141,21 +141,22 @@
                     </div>
                 @endforeach
             </div>
-            <div class="row d-sm-none my-3 align-items-center justify-content-center">
+            {{-- <div class="row d-sm-none my-3 align-items-center justify-content-center">
                 <div class="dropdown col-12">
                     <button class="btn btn-custom-filter btn-block dropdown-toggle shadow-sm border w-100" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         All
                     </button>
                     <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="#">All</a></li>
-                        <li><a class="dropdown-item" href="#">Group Class</a></li>
-                        <li><a class="dropdown-item" href="#">Private Class</a></li>
-                        <li><a class="dropdown-item" href="#">Private Duet</a></li>
-                        <li><a class="dropdown-item" href="#">Private Group</a></li>
+                        <li><a class="dropdown-item nav-link active custom-nav-link" role="tab" data-bs-toggle="tab"
+                                href="#all">All</a></li>
+                        @foreach ($listKelas as $item)
+                            <li><a class="dropdown-item nav-link px-3" role="tab" data-bs-toggle="tab"
+                                    href="#kelas_{{ $item->id }}">{{ $item->nama_kelas }}</a></li>
+                        @endforeach
                     </ul>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
     </section>

@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InstrukturResource\Pages;
+use App\Filament\Resources\InstrukturResource\Pages\ViewInstruktur;
+use App\Filament\Resources\InstrukturResource\RelationManagers\KelasActivityRelationManager;
 use App\Models\Role;
 use App\Models\User;
 use Filament\Forms\Components\Card;
@@ -138,7 +140,7 @@ class InstrukturResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            KelasActivityRelationManager::class
         ];
     }
 
@@ -147,6 +149,7 @@ class InstrukturResource extends Resource
         return [
             'index' => Pages\ListInstrukturs::route('/'),
             'create' => Pages\CreateInstruktur::route('/create'),
+            'view' => ViewInstruktur::route('/{record}'),
             'edit' => Pages\EditInstruktur::route('/{record}/edit'),
         ];
     }

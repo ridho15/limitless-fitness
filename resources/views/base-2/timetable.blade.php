@@ -26,69 +26,33 @@
                             <h2 class="modal-title fw-bold" id="modalFilter">Filters</h2>
                         </div>
                         <div class="col-2">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     </div>
-                    <h5 class="fw-bold my-3">All Class Types</h5>
+                    <h5 class="fw-bold my-3">Instruktur</h5>
                     <div class="my-4 d-flex align-items-center justify-content-between">
                         <label class="form-check-label" for="all_class_types">
-                            All class types
+                            All Instructor
                         </label>
-                        <input class="form-check-input" type="radio" name="types" id="all_class_types"
-                            value="option1" checked>
+                        <input class="form-check-input" type="radio" name="instruktur" id="all_class_types" value="0"
+                            checked>
                     </div>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="online">
-                            Online
-                        </label>
-                        <input class="form-check-input" type="radio" name="types" id="online" value="option2">
-
-                    </div>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="onsite">
-                            Onsite
-                        </label>
-                        <input class="form-check-input" type="radio" name="types" id="onsite" value="option3">
-                    </div>
+                    @foreach ($listInstruktur as $item)
+                        <div class="my-4 d-flex align-items-center justify-content-between">
+                            <label class="form-check-label" for="instruktur_{{ $item->id }}">
+                                {{ $item->name }}
+                            </label>
+                            <input class="form-check-input" type="radio" name="instruktur"
+                                wire:click="$emit('onChangeInstruktur', {{ $item->id }})"
+                                id="instruktur_{{ $item->id }}" value="{{ $item->id }}">
+                        </div>
+                    @endforeach
                     <hr>
-                    <h5 class="fw-bold my-3">All Difficulty Levels</h5>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="all_dificulty_levels">
-                            All dificulty levels
-                        </label>
-                        <input class="form-check-input" type="radio" name="levels" id="all_dificulty_levels"
-                            value="option1" checked>
+                    <h5 class="fw-bold my-3">Tanggal</h5>
+                    <div>
+                        <input type="date" name="tanggal" class="form-control" id="tanggal"
+                            data-dropdown-parent="modal_filter">
                     </div>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="intermediate">
-                            Intermediate
-                        </label>
-                        <input class="form-check-input" type="radio" name="levels" id="intermediate"
-                            value="option2">
-
-                    </div>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="beginer">
-                            Beginer
-                        </label>
-                        <input class="form-check-input" type="radio" name="levels" id="beginer" value="option3">
-                    </div>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="advanced">
-                            Advanced
-                        </label>
-                        <input class="form-check-input" type="radio" name="levels" id="advanced" value="option3">
-                    </div>
-                    <div class="my-4 d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="open_to_all">
-                            Open to all
-                        </label>
-                        <input class="form-check-input" type="radio" name="levels" id="open_to_all" value="option3">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button>Testing</button>
                 </div>
             </div>
         </div>
@@ -97,10 +61,24 @@
 
 @section('js')
     <script>
-        $(document).ready(function() {});
+        $(document).ready(function() {
+            console.log(Modernizr);
+        });
 
         $('#btn-filter').on('click', function() {
             $('#modal_filter').modal('show')
         })
+
+        $('input[name="instruktur"]').on('change', function() {
+            Livewire.emit('changeInstruktur', $(this).val())
+        })
+
+        $(function() {
+            if (!Modernizr.inputtypes.date) {
+                $('input[type=date]').datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+            }
+        });
     </script>
 @endsection

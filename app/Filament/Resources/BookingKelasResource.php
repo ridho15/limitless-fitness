@@ -68,7 +68,13 @@ class BookingKelasResource extends Resource
                                         '1' => 'Hadir',
                                         '2' => 'Izin',
                                         '0' => 'Tidak hadir'
-                                    ]),
+                                    ])->hidden(function($state){
+                                        if(Auth::user()->hasRole('Super Admin')){
+                                            return false;
+                                        }else{
+                                            return true;
+                                        }
+                                    }),
                                 Textarea::make('keterangan')
                                     ->nullable(),
                                 Toggle::make('is_send_email')
