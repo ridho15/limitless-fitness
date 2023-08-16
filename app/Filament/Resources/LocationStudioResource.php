@@ -6,6 +6,7 @@ use App\Filament\Resources\LocationStudioResource\Pages;
 use App\Filament\Resources\LocationStudioResource\RelationManagers;
 use App\Models\LocationStudio;
 use Filament\Forms;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -40,19 +41,27 @@ class LocationStudioResource extends Resource
     {
         return $form
             ->schema([
-                Fieldset::make('Form Studio')
+                Card::make()
                     ->schema([
-                        TextInput::make('nama')
-                            ->label('Nama Studio')
-                            ->string()
-                            ->required(),
-                        TextInput::make('equipment')
-                            ->helperText('Pisahkan setiap equipment dengan tanda koma ","')
-                            ->nullable(),
-                        FileUpload::make('image')
-                            ->image()
-                            ->maxSize(2048)
-                            ->required()
+                        Fieldset::make('Form Studio')
+                            ->schema([
+                                TextInput::make('nama')
+                                    ->label('Nama Studio')
+                                    ->string()
+                                    ->required(),
+                                Select::make('id_location')
+                                    ->preload()
+                                    ->searchable()
+                                    ->relationship('location', 'nama')
+                                    ->required(),
+                                TextInput::make('equipment')
+                                    ->helperText('Pisahkan setiap equipment dengan tanda koma ","')
+                                    ->nullable(),
+                                FileUpload::make('image')
+                                    ->image()
+                                    ->maxSize(2048)
+                                    ->required()
+                            ])
                     ])
             ]);
     }

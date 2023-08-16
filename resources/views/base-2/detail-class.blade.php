@@ -43,8 +43,8 @@
                                     <select name="location" class="form-control" data-control="select2"
                                         data-placeholder="Pilih" id="location">
                                         <option value="">Pilih</option>
-                                        @foreach ($listPaket as $item)
-                                            <option value="{{ $item->paket->id }}">{{ $item->paket->nama }}</option>
+                                        @foreach ($kelas->paket as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>

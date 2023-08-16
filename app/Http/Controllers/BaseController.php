@@ -60,18 +60,7 @@ class BaseController extends Controller
         if (!$kelas) {
             return redirect()->back()->with('fail', 'Data kelas tidak ditemukan !');
         }
-
-        $id_kelas = $kelas->id;
-        $jumlahReview = 0;
-        foreach ($kelas->kelasActivity as $kelasActivity) {
-            $jumlahReview += $kelasActivity->kelasRating->count();
-        }
-
         $data['kelas'] = $kelas;
-        $data['jumlahReview'] = $jumlahReview;
-        $data['listPaket'] = KelasPaket::where('id_kelas', $id)->get();
-
-        $data['relatedClass'] = Kelas::where('id', '!=', $kelas->id)->take(3)->get();
         return view('base-2.detail-class', $data);
     }
 
