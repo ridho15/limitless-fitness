@@ -13,7 +13,7 @@
                         <th class="border px-4 py-2">Total Session</th>
                         <th class="border px-4 py-2">Digunakan</th>
                         <th class="border px-4 py-2">Sisa Paket</th>
-                        <th class="border px-4 py-2" colspan="{{ $jumlahDigunakanTerbanyak ?? 1 }}">Tanggal</th>
+                        <th class="border px-4 py-2" colspan="{{ $jumlahDigunakanTerbanyak != 0 ?? 1 }}">Tanggal</th>
                         <th class="border px-4 py-2">Action</th>
                     </tr>
                 </thead>
@@ -26,15 +26,19 @@
                                 <td class="border px-5 py-2 bg-white text-end">{{ $item->jumlah_kredit }}</td>
                                 <td class="border px-4 py-2 bg-white text-end">{{ $item->jumlah_digunakan }}</td>
                                 <td class="border px-4 py-2 bg-white text-end">{{ $item->sisa }}</td>
-                                @for ($i = 0; $i < $jumlahDigunakanTerbanyak; $i++)
-                                    <td class="border px-4 bg-white py-2 text-end">
-                                        @php
-                                            if (array_key_exists($i, $item->listBookingKelas->toArray())) {
-                                                echo date('d-m-Y', strtotime($item->listBookingKelas[$i]->kelasActivity->tanggal)) . ' ' . date('H:i', strtotime($item->listBookingKelas[$i]->kelasActivity->jam_mulai));
-                                            }
-                                        @endphp
-                                    </td>
-                                @endfor
+                                @if ($jumlahDigunakanTerbanyak > 0)
+                                    @for ($i = 0; $i < $jumlahDigunakanTerbanyak; $i++)
+                                        <td class="border px-4 bg-white py-2 text-end">
+                                            @php
+                                                if (array_key_exists($i, $item->listBookingKelas->toArray())) {
+                                                    echo date('d-m-Y', strtotime($item->listBookingKelas[$i]->kelasActivity->tanggal)) . ' ' . date('H:i', strtotime($item->listBookingKelas[$i]->kelasActivity->jam_mulai));
+                                                }
+                                            @endphp
+                                        </td>
+                                    @endfor
+                                @else
+                                    <td class="border px-4 bg-white py-2 text-end"></td>
+                                @endif
                                 @if (Auth::user()->hasRole('Super Admin'))
                                     <td class="border px-4 py-2 bg-white text-end"><button type="button"
                                             wire:click="clickEditSession({{ $item->id }})"
