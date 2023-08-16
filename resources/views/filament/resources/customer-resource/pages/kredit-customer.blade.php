@@ -50,7 +50,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5" class="border px-4 py-2 text-center">Tidak ada kelas</td>
+                            <td colspan="6" class="border px-4 py-2 text-center">Tidak ada kelas</td>
                         </tr>
                     @endif
                 </tbody>

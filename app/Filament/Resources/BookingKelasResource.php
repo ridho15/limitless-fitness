@@ -106,9 +106,9 @@ class BookingKelasResource extends Resource
                 TextColumn::make('kelasActivity.nama_latihan')
                     ->label('Kelas')
                     ->url(function ($record) {
-                        if($record->kelasActivity->id){
+                        if ($record->kelasActivity->id) {
                             return InstrukturJadwalResource::getUrl('view', ['record' => $record->kelasActivity]);
-                        }else{
+                        } else {
                             return null;
                         }
                     }),
