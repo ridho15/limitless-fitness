@@ -190,7 +190,7 @@ class OrderPaketResource extends Resource
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
-                            'data' => $record->jumlah_pertemuan
+                            'data' => $record->expired_date
                         ]);
                     })->sortable(),
                 ViewColumn::make('tanggal_pembayaran')

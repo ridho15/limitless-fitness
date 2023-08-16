@@ -46,6 +46,8 @@ class ProfileController extends Controller
             $listOrderPaket = OrderPaket::whereHas('paket', function ($query) use ($item) {
                 $query->where('id_kelas', $item->id);
             })->where('is_active', 1)
+                ->where('status', 1)
+                ->whereDate('expired_date', '>=', now())
                 ->get();
             foreach ($listOrderPaket as $orderPaket) {
                 if ($orderPaket->expired_date >= now()) {
