@@ -68,10 +68,10 @@ class BookingKelasResource extends Resource
                                         '1' => 'Hadir',
                                         '2' => 'Izin',
                                         '0' => 'Tidak hadir'
-                                    ])->hidden(function($state){
-                                        if(Auth::user()->hasRole('Super Admin')){
+                                    ])->hidden(function ($state) {
+                                        if (Auth::user()->hasRole('Super Admin')) {
                                             return false;
-                                        }else{
+                                        } else {
                                             return true;
                                         }
                                     }),
@@ -106,7 +106,11 @@ class BookingKelasResource extends Resource
                 TextColumn::make('kelasActivity.nama_latihan')
                     ->label('Kelas')
                     ->url(function ($record) {
-                        return InstrukturJadwalResource::getUrl('view', ['record' => $record->kelasActivity]);
+                        if($record->kelasActivity){
+                            return InstrukturJadwalResource::getUrl('view', ['record' => $record->kelasActivity]);
+                        }else{
+                            return null;
+                        }
                     }),
                 TextColumn::make('kelasActivity.tanggal')
                     ->formatStateUsing(function ($state) {
