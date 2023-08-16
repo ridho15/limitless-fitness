@@ -109,7 +109,7 @@ class PaketResource extends Resource
                         return 'Rp.' . number_format($state, 0, ',', '.');
                     })
                     ->sortable(),
-                TextColumn::make('honor')
+                TextColumn::make('kelas.honor')
                     ->label('Pembayaran Instruktur')
                     ->formatStateUsing(function ($state) {
                         return 'Rp.' . number_format($state, 0, ',', '.');
