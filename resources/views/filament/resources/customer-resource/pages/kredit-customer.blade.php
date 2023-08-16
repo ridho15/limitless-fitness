@@ -13,7 +13,7 @@
                         <th class="border px-4 py-2">Total Session</th>
                         <th class="border px-4 py-2">Digunakan</th>
                         <th class="border px-4 py-2">Sisa Paket</th>
-                        <th class="border px-4 py-2" colspan="{{ $jumlahDigunakanTerbanyak != 0 ?? 1 }}">Tanggal</th>
+                        <th class="border px-4 py-2" colspan="{{ $jumlahDigunakanTerbanyak }}">Tanggal</th>
                         <th class="border px-4 py-2">Action</th>
                     </tr>
                 </thead>
