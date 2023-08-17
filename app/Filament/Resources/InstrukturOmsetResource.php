@@ -60,7 +60,11 @@ class InstrukturOmsetResource extends Resource
                                     ->formatStateUsing(function ($record) {
                                         $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($record) {
                                             $query->where('id_kelas', $record->id)
-                                                ->where('id_user', Auth::id())
+                                                ->where(function ($query) {
+                                                    if (Auth::user()->hasRole('Instruktur')) {
+                                                        $query->where('id_user', Auth::id());
+                                                    }
+                                                })
                                                 ->whereDate('tanggal', '<=', now())->where(function ($query) {
                                                     if (static::$tanggal_awal != null && static::$tanggal_akhir != null) {
                                                         $query->whereDate('tanggal', '>=', static::$tanggal_awal)
@@ -76,7 +80,11 @@ class InstrukturOmsetResource extends Resource
                                     ->formatStateUsing(function ($record) {
                                         $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($record) {
                                             $query->where('id_kelas', $record->id)
-                                                ->where('id_user', Auth::id())
+                                                ->where(function ($query) {
+                                                    if (Auth::user()->hasRole('Instruktur')) {
+                                                        $query->where('id_user', Auth::id());
+                                                    }
+                                                })
                                                 ->whereDate('tanggal', '<=', now())
                                                 ->where(function ($query) {
                                                     if (static::$tanggal_awal != null && static::$tanggal_akhir != null) {
