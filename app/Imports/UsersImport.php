@@ -34,8 +34,9 @@ class UsersImport implements ToModel, SkipsEmptyRows, WithValidation, SkipsOnFai
             'password' => Hash::make('12345678'),
             'email' => $email,
             'no_hp' => $no_hp,
-            'alamat' => '-'
-        ]);
+            'alamat' => '-',
+            'status' => 1
+        ])->assignRole('Customer');
     }
 
     public function rules(): array
