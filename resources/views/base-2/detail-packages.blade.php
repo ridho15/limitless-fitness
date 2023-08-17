@@ -127,7 +127,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
                             <label class="form-check-label" for="flexCheckDefault">
-                                Apakah kamu menerima sayarat dan ketentuan yang berlaku
+                                Apakah kamu menerima syarat dan ketentuan yang berlaku
                             </label>
                         </div>
                     </div>

@@ -43,7 +43,7 @@ class TotalJamInstruktur extends BaseWidget
 
         if (Auth::user()->hasRole('Super Admin')) {
             array_push($listCard, Card::make('Gross Profit', 'Rp.' . number_format($omset - $pengeluaran, 0, ',', '.'))
-                ->description('Omeset di kurangi dengan fee instruktur')
+                ->description('Omset di kurangi dengan fee instruktur')
                 ->color('primary'));
 
             array_push($listCard,  Card::make('Jumlah Customer', $jumlahCustomer)
@@ -56,7 +56,7 @@ class TotalJamInstruktur extends BaseWidget
             $jumlahAssing = KelasActivity::where('id_user', $item->id)
                 ->where('id_location_studio', '!=', null)
                 ->where('id_kelas', '!=', null)
-                ->whereDate('tanggal', '!=', null)
+                ->where('tanggal', '!=', null)
                 ->where('jam_mulai', '!=', null)->count();
 
             array_push($listCard, Card::make($item->name, $jumlahAssing . '/' . $jumlahJadwal)

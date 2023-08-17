@@ -161,4 +161,13 @@ class KelasResource extends Resource
             'edit' => Pages\EditKelas::route('/{record}/edit'),
         ];
     }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::user()->hasRole('Super Admin')){
+            return true;
+        }
+
+        return false;
+    }
 }

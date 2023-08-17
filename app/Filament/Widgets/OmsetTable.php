@@ -1,0 +1,104 @@
+<?php
+
+namespace App\Filament\Widgets;
+
+use App\Models\BookingKelas;
+use App\Models\Kelas;
+use Closure;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+
+class OmsetTable extends BaseWidget
+{
+    public $tanggal_awal = null;
+    public $tanggal_akhir = null;
+
+    public function mount()
+    {
+    }
+    protected function getTableQuery(): Builder
+    {
+        return Kelas::orderBy('id', 'ASC');
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            TextColumn::make('nama_kelas')
+                ->label("Kelas")
+                ->searchable(),
+            TextColumn::make('jumlah_pertemuan')
+                ->alignCenter()
+                ->formatStateUsing(function ($record) {
+                    $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($record) {
+                        $query->where('id_kelas', $record->id)
+                            ->where('id_user', Auth::id())
+                            ->whereDate('tanggal', '<=', now())
+                            ->where(function ($query) {
+                                if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
+                                    $query->whereDate('tanggal', '>=', $this->tanggal_awal)
+                                        ->whereDate('tanggal', '<=', $this->tanggal_akhir);
+                                }
+                            });
+                    })->count();
+
+                    return $listBookingKelas;
+                }),
+            TextColumn::make('omset')
+                ->formatStateUsing(function ($record) {
+                    $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($record) {
+                        $query->where('id_kelas', $record->id)
+                            ->where('id_user', Auth::id())
+                            ->whereDate('tanggal', '<=', now())
+                            ->where(function ($query) {
+                                if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
+                                    $query->whereDate('tanggal', '>=', $this->tanggal_awal)
+                                        ->whereDate('tanggal', '<=', $this->tanggal_akhir);
+                                }
+                            });
+                    })->get();
+
+                    $omset = 0;
+                    foreach ($listBookingKelas as $item) {
+                        $omset += $item->kelasActivity->kelas->honor;
+                    }
+
+                    return 'Rp.' . number_format($omset, 0, ',', '.');
+                })
+                ->label('Omset')
+        ];
+    }
+
+    protected function getTableFilters(): array
+    {
+        return [
+            Filter::make('tanggal')
+                ->form([
+                    DatePicker::make('created_from'),
+                    DatePicker::make('created_until')->default(now())
+                ])->indicateUsing(function ($data) {
+                    if ($data['created_from'] != null) {
+                        $this->tanggal_awal = $data['created_from'];
+                    } else {
+                        $this->tanggal_awal = null;
+                    }
+
+                    if ($data['created_until'] != null) {
+                        $this->tanggal_akhir = $data['created_until'];
+                    } else {
+                        $this->tanggal_akhir = null;
+                    }
+                })
+        ];
+    }
+
+    public function getColumnSpan(): int|string|array
+    {
+        return 2;
+    }
+}

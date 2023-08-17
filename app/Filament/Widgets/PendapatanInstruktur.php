@@ -46,7 +46,7 @@ class PendapatanInstruktur extends ApexChartWidget
             })->whereDate('created_at', $item)->get();
             $jumlahFee = 0;
             foreach ($listBookingKelas as $bookingKelas) {
-                $jumlahFee += $bookingKelas->honor;
+                $jumlahFee += $bookingKelas->kelasActivity->kelas->honor;
             }
 
             array_push($listFee, $jumlahFee);

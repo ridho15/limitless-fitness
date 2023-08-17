@@ -7,7 +7,9 @@ use App\Filament\Widgets\CustomerOrderExpired;
 use App\Filament\Widgets\ListAturJadwal;
 use App\Filament\Widgets\ListTimetable;
 use App\Filament\Widgets\OmsetChart;
+use App\Filament\Widgets\OmsetTable;
 use App\Filament\Widgets\PendapatanInstruktur;
+use App\Filament\Widgets\PendatapanInstrukturOverview;
 use App\Filament\Widgets\PengeluaranChart;
 use App\Filament\Widgets\TotalJamInstruktur;
 use App\Models\Kelas;
@@ -48,6 +50,7 @@ class Dashbaord extends BasePage
         // return Filament::getWidgets();
         if (Auth::user()->hasRole(['Super Admin'])) {
             $listWidget = [
+                PendatapanInstrukturOverview::class,
                 TotalJamInstruktur::class,
                 ListTimetable::class,
                 ListAturJadwal::class,
@@ -65,6 +68,8 @@ class Dashbaord extends BasePage
             ];
         } elseif (Auth::user()->hasRole('Instruktur')) {
             $listWidget = [
+                PendatapanInstrukturOverview::class,
+                OmsetTable::class,
                 PendapatanInstruktur::class
             ];
         } else {
