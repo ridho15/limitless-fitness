@@ -80,15 +80,19 @@ class KelasActivityRelationManager extends RelationManager
             ->headerActions([])
             ->actions([
                 ViewAction::make()
-                ->url(function($record){
-                    return InstrukturOmsetResource::getUrl('view-detail-omset', ['record' => $record]);
-                })
+                    ->url(function ($record) {
+                        return InstrukturOmsetResource::getUrl('view-detail-omset', ['record' => $record]);
+                    })
             ])
             ->bulkActions([]);
     }
 
     protected function getTableQuery(): Builder|Relation
     {
-        return parent::getTableQuery()->where('id_user', Auth::id());
+        return parent::getTableQuery()->where(function ($query) {
+            if (Auth::user()->hasRole('Instruktur')) {
+                $query->where('id_user', Auth::id());
+            }
+        });
     }
 }
