@@ -34,7 +34,7 @@ class User extends Authenticatable implements FilamentUser
         'tanggal_lahir',
         'jenis_kelamin',
         'negara',
-        'ip_address'
+        'ip_address',
     ];
 
     /**
@@ -69,15 +69,17 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasRole(['Super Admin', 'Admin', 'Instruktur']);
     }
 
-    public function getJenisKelaminFormattedAttribute(){
-        if($this->jenis_kelamin == 1){
+    public function getJenisKelaminFormattedAttribute()
+    {
+        if ($this->jenis_kelamin == 1) {
             return 'Pria';
-        }elseif($this->jenis_kelamin == 0){
+        } elseif ($this->jenis_kelamin == 0) {
             return 'Wanita';
         }
     }
 
-    public function getTanggalLahirFormattedAttribute(){
+    public function getTanggalLahirFormattedAttribute()
+    {
         return Carbon::parse($this->tanggal_lahir)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
     }
 
@@ -95,15 +97,18 @@ class User extends Authenticatable implements FilamentUser
         return Carbon::parse($this->created_at)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
     }
 
-    public function orderPaket(){
+    public function orderPaket()
+    {
         return $this->hasMany(OrderPaket::class, 'id_user');
     }
 
-    public function kelasActivity(){
+    public function kelasActivity()
+    {
         return $this->hasMany(KelasActivity::class, 'id_user');
     }
 
-    public function bookingKelas(){
+    public function bookingKelas()
+    {
         return $this->hasMany(BookingKelas::class, 'id_user');
     }
 }
