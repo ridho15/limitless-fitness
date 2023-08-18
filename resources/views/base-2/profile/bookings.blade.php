@@ -22,6 +22,10 @@
                             <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                                 href="#history">History</a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
+                                href="#buat_jadwal">Buat Jadwal</a>
+                        </li>
                         {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                                 href="#hadir">Hadir</a>

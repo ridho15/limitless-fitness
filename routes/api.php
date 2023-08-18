@@ -1,7 +1,11 @@
 <?php
 
+use App\Imports\ImportBookingKelas;
+use App\Imports\OrderPaketImport;
 use App\Imports\UsersImport;
 use App\Mail\RegistrasiKonfirmasiMail;
+use App\Models\OrderPaket;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -33,6 +37,7 @@ Route::get('/send-email', function () {
 });
 
 Route::post('/import-user', function (Request $request) {
+
     $dataImport = $request->file('data');
     if ($request->hasFile('data')) {
         try {
@@ -42,8 +47,48 @@ Route::post('/import-user', function (Request $request) {
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
+                'message' => "Test" . $th->getMessage()
+            ], 500);
+        }
+    } else {
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak terdeteksi',
+        ], 404);
+    }
+});
+
+Route::post('/import-user-paket', function (Request $request) {
+    $dataImport = $request->file('data');
+    if ($request->hasFile('data')) {
+        try {
+            Excel::import(new OrderPaketImport, $dataImport);
+            return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
                 'message' => $th->getMessage()
-            ]);
+            ], 500);
+        }
+    } else {
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak terdeteksi',
+        ], 404);
+    }
+});
+
+Route::post('/import-booking-kelas', function(Request $request){
+    $dataImport = $request->file('data');
+    if ($request->hasFile('data')) {
+        try {
+            Excel::import(new ImportBookingKelas, $dataImport);
+            return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
     } else {
         return response()->json([
