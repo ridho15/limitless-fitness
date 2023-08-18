@@ -532,6 +532,12 @@
                                 </div>
                             @endif
                         </div>
+                        <div class="tab-pane fade py-4" id="buat_jadwal">
+                            <h3 class="fw-bold">Buat Jadwal</h3>
+                            <div class="row">
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

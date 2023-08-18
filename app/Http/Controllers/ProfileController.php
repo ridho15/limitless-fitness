@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
+use App\Models\CustomerJadwalStatic;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
 use App\Models\OrderPaket;
@@ -124,6 +125,9 @@ class ProfileController extends Controller
             ->get();
         $sisaKredit = $jumlahKredit - $jumlahDigunakan;
 
+        $jadwalCustomerStatis = CustomerJadwalStatic::where('id_user', Auth::id())
+        ->get();
+
         $data['listBookingKelas'] = $listBookingKelas;
         $data['jumlahKredit'] = $jumlahKredit;
         $data['jumlahDigunakan'] = $jumlahDigunakan;
@@ -135,6 +139,7 @@ class ProfileController extends Controller
         $data['listKelas'] = $listKelas;
         $data['listData'] = $listData;
         $data['listKelasConfirmed'] = $listKelasConfirmed;
+        $data['jadwalCustomerStatis'] = $jadwalCustomerStatis;
         return view('base-2.profile.bookings', $data);
     }
 
