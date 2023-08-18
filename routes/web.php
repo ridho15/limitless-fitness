@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/billing', [ProfileController::class, 'billing'])->name('profile.billing');
         Route::get('/notification-settings', [ProfileController::class, 'notificationSettings'])->name('profile.notification-settings');
         Route::get('/waiver-form', [ProfileController::class, 'waiverForm'])->name('profile.waiver-form');
+        Route::post('/post-customer-jadwal', [ProfileController::class, 'postCustomerJadwal'])->name('profile.post-customer-jadwal');
     });
     Route::post('upload-bukti-pembayaran/{id}', [BaseController::class, 'uploadBuktiPembayaran'])->name('upload-bukti-pembayaran');
     Route::get('resend-verifikasi-email/{id}', [ProfileController::class, 'resendVerifikasiEmail'])->name('profile.resend-verifikasi-email');

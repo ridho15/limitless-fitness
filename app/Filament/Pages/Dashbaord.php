@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Filament\Widgets\BelumBayarChart;
 use App\Filament\Widgets\CustomerOrderExpired;
+use App\Filament\Widgets\JadwalInstrukturAssign;
 use App\Filament\Widgets\ListAturJadwal;
 use App\Filament\Widgets\ListTimetable;
 use App\Filament\Widgets\OmsetChart;
@@ -51,7 +52,8 @@ class Dashbaord extends BasePage
         if (Auth::user()->hasRole(['Super Admin'])) {
             $listWidget = [
                 PendatapanInstrukturOverview::class,
-                TotalJamInstruktur::class,
+                // TotalJamInstruktur::class,
+                JadwalInstrukturAssign::class,
                 ListTimetable::class,
                 ListAturJadwal::class,
                 CustomerOrderExpired::class,
@@ -61,7 +63,8 @@ class Dashbaord extends BasePage
             ];
         } elseif (Auth::user()->hasRole('Admin')) {
             $listWidget = [
-                TotalJamInstruktur::class,
+                // TotalJamInstruktur::class,
+                JadwalInstrukturAssign::class,
                 ListTimetable::class,
                 ListAturJadwal::class,
                 CustomerOrderExpired::class,

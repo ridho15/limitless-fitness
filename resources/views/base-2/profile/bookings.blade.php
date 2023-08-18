@@ -533,10 +533,57 @@
                             @endif
                         </div>
                         <div class="tab-pane fade py-4" id="buat_jadwal">
-                            <h3 class="fw-bold">Buat Jadwal</h3>
-                            <div class="row">
+                            <h5 class="fw-bold mb-3">Buat Jadwal</h5>
+                            @foreach ($listCustomerJadwalStatis as $item)
+                                <div class="row mb-3">
+                                    <div class="col-md-6 col-6">
+                                        Hari : {{ $item->hari_formatted }}
+                                    </div>
+                                    <div class="col-md-6 col-6">
+                                        Jam : {{ $item->jam }}
+                                    </div>
+                                </div>
+                                <hr>
+                            @endforeach
+                            <form action="{{ route('profile.post-customer-jadwal') }}" method="POST">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="" class="form-label">Hari</label>
+                                        <select class="form-control" data-placeholder="Pilih Hari" name="hari"
+                                            id="" required>
+                                            <option value="">Pilih Hari</option>
+                                            <option value="0">Senin</option>
+                                            <option value="1">Selasa</option>
+                                            <option value="2">Rabu</option>
+                                            <option value="3">Kamis</option>
+                                            <option value="4">Jumat</option>
+                                            <option value="5">Sabtu</option>
+                                            <option value="6">Minggu</option>
+                                        </select>
+                                    </div>
 
-                            </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="" class="form-label">Jam</label>
+                                        <select name="jam" class="form-control" data-placeholder="Pilih Jam"
+                                            id="jam">
+                                            <option value="">Pilih Jam</option>
+                                            @for ($i = 1; $i <= 24; $i++)
+                                                {
+                                                <option value="{{ sprintf('%02d', $i) }}:00:00">
+                                                    {{ sprintf('%02d', $i) }}:00:00
+                                                </option>
+                                                }
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-12 text-end">
+                                        <button type="submit" class="btn custom-btn">Simpan</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -597,7 +644,10 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $('select[name="status_kehadiran"]').select2({
+            $('select[name="hari"]').select2({
+                theme: 'bootstrap-5'
+            })
+            $('select[name="jam"]').select2({
                 theme: 'bootstrap-5'
             })
         });

@@ -14,6 +14,9 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -157,8 +160,23 @@ class KelasActivityRelationManager extends RelationManager
                     ->icon('heroicon-o-plus-circle'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ViewAction::make(),
+                EditAction::make()
+                    ->hidden(function () {
+                        if (Auth::user()->hasRole('Super Admin')) {
+                            return false;
+                        }
+
+                        return true;
+                    }),
+                DeleteAction::make()
+                    ->hidden(function () {
+                        if (Auth::user()->hasRole('Super Admin')) {
+                            return false;
+                        }
+
+                        return true;
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

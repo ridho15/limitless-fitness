@@ -17,6 +17,40 @@ class CustomerJadwalStatic extends Model
         'jam'
     ];
 
+    protected $appends = [
+        'hari_formatted'
+    ];
+
+    public function getHariFormattedAttribute()
+    {
+        switch ($this->hari) {
+            case '0':
+                return "Senin";
+                break;
+            case '1':
+                return "Selasa";
+                break;
+            case '2':
+                return "Rabu";
+                break;
+            case '3':
+                return "Kamis";
+                break;
+            case '4':
+                return "Jumat";
+                break;
+            case '5':
+                return "Sabtu";
+                break;
+            case '6':
+                return "Minggu";
+                break;
+            default:
+                return "Tidak diketahui";
+                break;
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');

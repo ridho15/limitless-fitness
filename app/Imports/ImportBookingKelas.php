@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\BookingKelas;
+use App\Models\Kelas;
 use App\Models\KelasActivity;
 use App\Models\LocationStudio;
 use App\Models\User;
@@ -32,6 +33,7 @@ class ImportBookingKelas implements ToModel, WithValidation, WithHeadingRow, Ski
     {
         $email = Str::slug($row['nama']) . '@gmail.com';
         $user = User::where('email', $email)->first();
+        $kelas = Kelas::where('nama_kelas', $row['kelas'])->first();
         $instruktur = User::where('name', '-')->first();
         $locationStudio = LocationStudio::first();
         for ($i = 1; $i <= 24; $i++) {
@@ -39,10 +41,12 @@ class ImportBookingKelas implements ToModel, WithValidation, WithHeadingRow, Ski
                 $tanggal = Date::excelToDateTimeObject($row[$i])->format('Y-m-d H:i:s');
                 $kelasActivity = KelasActivity::updateOrCreate([
                     'tanggal' => $tanggal,
+                    'id_kelas' => $kelas->id,
                     'id_user' => $instruktur->id
                 ], [
                     'tanggal' => $tanggal,
                     'id_user', $instruktur->id,
+                    'id_kelas' => $kelas->id,
                     'id_location_studio' => $locationStudio->id,
                     'jam_mulai' => '08:00:00',
                     'status' => 3,

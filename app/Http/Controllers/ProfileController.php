@@ -125,8 +125,8 @@ class ProfileController extends Controller
             ->get();
         $sisaKredit = $jumlahKredit - $jumlahDigunakan;
 
-        $jadwalCustomerStatis = CustomerJadwalStatic::where('id_user', Auth::id())
-        ->get();
+        $listCustomerJadwalStatis = CustomerJadwalStatic::where('id_user', Auth::id())
+            ->get();
 
         $data['listBookingKelas'] = $listBookingKelas;
         $data['jumlahKredit'] = $jumlahKredit;
@@ -139,7 +139,7 @@ class ProfileController extends Controller
         $data['listKelas'] = $listKelas;
         $data['listData'] = $listData;
         $data['listKelasConfirmed'] = $listKelasConfirmed;
-        $data['jadwalCustomerStatis'] = $jadwalCustomerStatis;
+        $data['listCustomerJadwalStatis'] = $listCustomerJadwalStatis;
         return view('base-2.profile.bookings', $data);
     }
 
@@ -307,5 +307,38 @@ class ProfileController extends Controller
         return $pdf->stream();
 
         // return view('pdf.invoice', $data);
+    }
+
+    public function postCustomerJadwal(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'hari' => 'required|numeric',
+            'jam' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+        }
+
+        $customerJadwalStatic = CustomerJadwalStatic::where('hari', $request->hari)
+            ->where('jam', $request->jam)
+            ->where('id_user', Auth::id())
+            ->first();
+
+        if ($customerJadwalStatic) {
+            return redirect()->back()->with('fail', 'Jadwal sudah di ada');
+        }
+
+        CustomerJadwalStatic::create([
+            'id_user' => Auth::id(),
+            'jam' => $request->jam,
+            'hari' => $request->hari
+        ]);
+
+        activity()
+            ->causedBy(Auth::user())
+            ->log("Membuat jadwal statis pada customer");
+
+        return redirect()->back()->with('success', 'Data waktu berhasil di simpan');
     }
 }
