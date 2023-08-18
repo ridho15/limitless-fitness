@@ -24,9 +24,6 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/php-info', function(){
-    return phpinfo();
-});
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
 Route::get('/detail-class/{id}', [BaseController::class, 'detailClass'])->name('detail-class');
