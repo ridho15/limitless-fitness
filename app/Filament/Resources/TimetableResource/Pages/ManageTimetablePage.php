@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TimetableResource\Pages;
 use App\Filament\Resources\TimetableResource;
 use App\Models\KelasActivity;
 use App\Models\LocationStudio;
+use Carbon\Carbon;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\Page;
 use Illuminate\Contracts\View\View;
@@ -45,7 +46,7 @@ class ManageTimetablePage extends Page
     public function mount()
     {
         $this->startDate = date('Y-m-d');
-        $this->endDate = date('Y-m-d');
+        $this->endDate = Carbon::now()->addDays(7)->isoFormat('YYYY-MM-DD');
         $this->getData();
     }
 

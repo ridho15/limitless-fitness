@@ -99,8 +99,7 @@
                             <h2 class="modal-title fw-bold" id="modalFilter">Filters</h2>
                         </div>
                         <div class="col-2">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     </div>
                     <h5 class="fw-bold my-3">All Class Types</h5>
@@ -174,7 +173,7 @@
         $(document).ready(function() {});
 
         $('#btn-filter').on('click', function() {
-            $('#modal_filter').modal('show')
+            // $('#modal_filter').modal('show')
         })
 
         function changeClassType(type) {

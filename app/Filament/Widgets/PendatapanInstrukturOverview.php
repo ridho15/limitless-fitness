@@ -60,7 +60,7 @@ class PendatapanInstrukturOverview extends BaseWidget
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan secara keseluruhan dari kelas yang sudah lewat')
+        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan secara keseluruhan dari kelas yang sudah lewat')
             ->color('success'));
 
         $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
@@ -83,7 +83,7 @@ class PendatapanInstrukturOverview extends BaseWidget
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
+        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
             ->color('success'));
 
         $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
@@ -106,7 +106,7 @@ class PendatapanInstrukturOverview extends BaseWidget
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 minggu')
+        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 minggu')
             ->color('success'));
 
         $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
@@ -128,7 +128,7 @@ class PendatapanInstrukturOverview extends BaseWidget
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan hari ini')
+        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan hari ini')
             ->color('success'));
         return $listCard;
     }

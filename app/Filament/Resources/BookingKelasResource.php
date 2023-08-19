@@ -9,6 +9,7 @@ use App\Models\KelasActivity;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
@@ -23,6 +24,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -141,7 +143,26 @@ class BookingKelasResource extends Resource
                     }),
             ])
             ->filters([
-                //
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from'),
+                        DatePicker::make('created_until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereHas('kelasActivity', function ($query) use ($date) {
+                                    $query->whereDate('tanggal', '>=', $date);
+                                }),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereHas('kelasActivity', function ($query) use ($date) {
+                                    $query->whereDate('tanggal', '<=', $date);
+                                }),
+                            );
+                    })
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
