@@ -14,7 +14,7 @@ class PendatapanInstrukturOverview extends BaseWidget
 {
     protected function getCards(): array
     {
-        $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
+        $listOmset = BookingKelas::with(['kelasActivity' => function ($query) {
             $query->where(function ($query) {
                 if (Auth::user()->hasRole('Instruktur')) {
                     $query->where('id_user', Auth::id());
@@ -23,14 +23,15 @@ class PendatapanInstrukturOverview extends BaseWidget
                 ->where('id_kelas', '!=', null)
                 ->where('id_location_studio', '!=', null)
                 ->whereDate('tanggal', '<=', now());
-        })->where(function ($query) {
-            $query->where('status_kehadiran', '1')
-                ->orWhere('status_kehadiran', '0');
-        })->get();
+        }, 'kelasActivity.kelas'])
+            ->where(function ($query) {
+                $query->where('status_kehadiran', '1')
+                    ->orWhere('status_kehadiran', '0');
+            })->get();
 
         $listCard = [];
 
-        $jurnal = Jurnal::where('id_order_paket', '!=', null)
+        $jurnal = Jurnal::select('jumlah_uang', 'tipe')->where('id_order_paket', '!=', null)
             ->get();
 
         $omset = 0;
@@ -42,9 +43,11 @@ class PendatapanInstrukturOverview extends BaseWidget
                 $pengeluaran += $item->jumlah_uang;
             }
         }
+
         $jumlahCustomer = User::whereHas('roles', function ($query) {
             $query->where('name', 'Customer');
         })->whereMonth('created_at', now())->count();
+
         if (Auth::user()->hasRole('Super Admin')) {
             array_push($listCard, Card::make('Gross Profit', 'Rp.' . number_format($omset - $pengeluaran, 0, ',', '.'))
                 ->description('Omset di kurangi dengan fee instruktur')
@@ -55,6 +58,7 @@ class PendatapanInstrukturOverview extends BaseWidget
                 ->color('primary'));
         }
 
+
         $omset = 0;
         foreach ($listOmset as $item) {
             $omset += $item->kelasActivity->kelas->honor;
@@ -63,20 +67,21 @@ class PendatapanInstrukturOverview extends BaseWidget
         array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan secara keseluruhan dari kelas yang sudah lewat')
             ->color('success'));
 
-        $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
-            $query->where(function ($query) {
-                if (Auth::user()->hasRole('Instruktur')) {
-                    $query->where('id_user', Auth::id());
-                }
-            })
-                ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null)
-                ->whereDate('tanggal', '<=', now())
-                ->whereDate('tanggal', '>=', Carbon::now()->subMonths(1)->isoFormat('YYYY-MM-DD'));
-        })->where(function ($query) {
-            $query->where('status_kehadiran', '1')
-                ->orWhere('status_kehadiran', '0');
-        })->get();
+        $listOmset = BookingKelas::with(['kelasActivity.kelas'])
+            ->whereHas('kelasActivity', function ($query) {
+                $query->where(function ($query) {
+                    if (Auth::user()->hasRole('Instruktur')) {
+                        $query->where('id_user', Auth::id());
+                    }
+                })
+                    ->where('id_kelas', '!=', null)
+                    ->where('id_location_studio', '!=', null)
+                    ->whereDate('tanggal', '<=', now())
+                    ->whereDate('tanggal', '>=', Carbon::now()->subMonths(1)->isoFormat('YYYY-MM-DD'));
+            })->where(function ($query) {
+                $query->where('status_kehadiran', '1')
+                    ->orWhere('status_kehadiran', '0');
+            })->get();
 
         $omset = 0;
         foreach ($listOmset as $item) {
@@ -86,50 +91,50 @@ class PendatapanInstrukturOverview extends BaseWidget
         array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
             ->color('success'));
 
-        $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
-            $query->where(function ($query) {
-                if (Auth::user()->hasRole('Instruktur')) {
-                    $query->where('id_user', Auth::id());
-                }
-            })
-                ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null)
-                ->whereDate('tanggal', '<=', now())
-                ->whereDate('tanggal', '>=', Carbon::now()->subWeeks(1)->isoFormat('YYYY-MM-DD'));
-        })->where(function ($query) {
-            $query->where('status_kehadiran', '1')
-                ->orWhere('status_kehadiran', '0');
-        })->get();
+        // $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
+        //     $query->where(function ($query) {
+        //         if (Auth::user()->hasRole('Instruktur')) {
+        //             $query->where('id_user', Auth::id());
+        //         }
+        //     })
+        //         ->where('id_kelas', '!=', null)
+        //         ->where('id_location_studio', '!=', null)
+        //         ->whereDate('tanggal', '<=', now())
+        //         ->whereDate('tanggal', '>=', Carbon::now()->subWeeks(1)->isoFormat('YYYY-MM-DD'));
+        // })->where(function ($query) {
+        //     $query->where('status_kehadiran', '1')
+        //         ->orWhere('status_kehadiran', '0');
+        // })->get();
 
-        $omset = 0;
-        foreach ($listOmset as $item) {
-            $omset += $item->kelasActivity->kelas->honor;
-        }
+        // $omset = 0;
+        // foreach ($listOmset as $item) {
+        //     $omset += $item->kelasActivity->kelas->honor;
+        // }
 
-        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 minggu')
-            ->color('success'));
+        // array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 minggu')
+        //     ->color('success'));
 
-        $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
-            $query->where(function ($query) {
-                if (Auth::user()->hasRole('Instruktur')) {
-                    $query->where('id_user', Auth::id());
-                }
-            })
-                ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null)
-                ->whereDate('tanggal', now());
-        })->where(function ($query) {
-            $query->where('status_kehadiran', '1')
-                ->orWhere('status_kehadiran', '0');
-        })->get();
+        // $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
+        //     $query->where(function ($query) {
+        //         if (Auth::user()->hasRole('Instruktur')) {
+        //             $query->where('id_user', Auth::id());
+        //         }
+        //     })
+        //         ->where('id_kelas', '!=', null)
+        //         ->where('id_location_studio', '!=', null)
+        //         ->whereDate('tanggal', now());
+        // })->where(function ($query) {
+        //     $query->where('status_kehadiran', '1')
+        //         ->orWhere('status_kehadiran', '0');
+        // })->get();
 
-        $omset = 0;
-        foreach ($listOmset as $item) {
-            $omset += $item->kelasActivity->kelas->honor;
-        }
+        // $omset = 0;
+        // foreach ($listOmset as $item) {
+        //     $omset += $item->kelasActivity->kelas->honor;
+        // }
 
-        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan hari ini')
-            ->color('success'));
+        // array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan hari ini')
+        //     ->color('success'));
         return $listCard;
     }
 }

@@ -57,21 +57,22 @@ class OmsetTable extends BaseWidget
                 }),
             TextColumn::make('omset')
                 ->formatStateUsing(function ($record) {
-                    $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($record) {
-                        $query->where('id_kelas', $record->id)
-                            ->where(function ($query) {
-                                if (Auth::user()->hasRole('Instruktur')) {
-                                    $query->where('id_user', Auth::id());
-                                }
-                            })
-                            ->whereDate('tanggal', '<=', now())
-                            ->where(function ($query) {
-                                if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
-                                    $query->whereDate('tanggal', '>=', $this->tanggal_awal)
-                                        ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                                }
-                            });
-                    })->get();
+                    $listBookingKelas = BookingKelas::with(['kelasActivity.kelas'])
+                        ->whereHas('kelasActivity', function ($query) use ($record) {
+                            $query->where('id_kelas', $record->id)
+                                ->where(function ($query) {
+                                    if (Auth::user()->hasRole('Instruktur')) {
+                                        $query->where('id_user', Auth::id());
+                                    }
+                                })
+                                ->whereDate('tanggal', '<=', now())
+                                ->where(function ($query) {
+                                    if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
+                                        $query->whereDate('tanggal', '>=', $this->tanggal_awal)
+                                            ->whereDate('tanggal', '<=', $this->tanggal_akhir);
+                                    }
+                                });
+                        })->get();
 
                     $omset = 0;
                     foreach ($listBookingKelas as $item) {
@@ -111,9 +112,9 @@ class OmsetTable extends BaseWidget
     {
         return [
             ViewAction::make()
-            ->url(function($record){
-                return InstrukturOmsetResource::getUrl('view', ['record' => $record]);
-            }),
+                ->url(function ($record) {
+                    return InstrukturOmsetResource::getUrl('view', ['record' => $record]);
+                }),
         ];
     }
 

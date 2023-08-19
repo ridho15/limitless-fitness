@@ -40,20 +40,15 @@ class ListData extends Component
         $this->listData = [];
         if ($this->id_kelas) {
             foreach ($this->listTanggal as $item) {
-                $kelasActivity = KelasActivity::with('kelas')
-                    ->whereHas('kelas', function ($query) {
-                        $query->whereHas('paket', function ($query) {
-                            $query->whereHas('orderPaket', function ($query) {
-                                $query->where('id_user', Auth::id());
-                            });
+                $kelasActivity = KelasActivity::whereHas('kelas', function ($query) {
+                    $query->whereHas('paket', function ($query) {
+                        $query->whereHas('orderPaket', function ($query) {
+                            $query->where('id_user', Auth::id());
                         });
-                    })
+                    });
+                })
                     ->whereHas('locationStudio')
-                    ->where(function ($query) {
-                        if ($this->id_kelas != 0) {
-                            $query->where('id_kelas', $this->id_kelas);
-                        }
-                    })
+                    ->where('id_kelas', $this->id_kelas)
                     ->where(function ($query) {
                         if ($this->id_user) {
                             $query->where('id_user', $this->id_user);
