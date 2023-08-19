@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CronJob extends Command
 {
@@ -73,6 +74,8 @@ class CronJob extends Command
                 }
             }
         }
+
+        Log::info("checkSlotKelasActivity");
     }
 
     public function autoBookingRepetitifCustomer()
@@ -134,5 +137,7 @@ class CronJob extends Command
                 }
             }
         }
+
+        Log::info("autoBookingRepetitifCustomer berhasil di jalankan");
     }
 }

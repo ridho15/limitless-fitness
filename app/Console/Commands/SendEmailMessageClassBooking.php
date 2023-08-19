@@ -8,6 +8,7 @@ use App\Models\KelasActivity;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendEmailMessageClassBooking extends Command
@@ -94,5 +95,7 @@ class SendEmailMessageClassBooking extends Command
         foreach ($listBookingKelas as $item) {
             Mail::to($item->user->email)->send(new SendKonfirmasiKehadiranMail($item));
         }
+
+        Log::info("sendNotifToEmailAboutJadwalKelas berhasil di jalankan");
     }
 }
