@@ -34,7 +34,7 @@ class CronJob extends Command
      */
     public function handle()
     {
-        Log::info("Ujicoba cron job");
+        Log::info("Ujicoba cron job " . now());
         // $this->autoBookingRepetitifCustomer();
         // $this->checkSlotKelasActivity();
     }
