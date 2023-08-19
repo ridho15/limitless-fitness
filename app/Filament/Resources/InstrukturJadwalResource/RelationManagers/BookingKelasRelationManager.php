@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\InstrukturJadwalResource\RelationManagers;
 
+use App\Models\OrderPaket;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
@@ -9,6 +10,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -53,7 +55,7 @@ class BookingKelasRelationManager extends RelationManager
                         'secondary' => 0
                     ]),
                 BadgeColumn::make('status_kehadiran_formatted')
-                ->label('Status Kehadiran'),
+                    ->label('Status Kehadiran'),
                 TextColumn::make('keterangan')
                     ->searchable(),
             ])
@@ -72,7 +74,22 @@ class BookingKelasRelationManager extends RelationManager
 
                         return false;
                     }),
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make()
+                    ->after(function ($record) {
+                        $bookingKelas = $record;
+                        $orderPaket = OrderPaket::whereHas('paket', function ($query) use ($bookingKelas) {
+                            $query->where('id_kelas', $bookingKelas->kelasActivity->id_kelas);
+                        })->whereDate('expired_date', '>=', now())
+                            ->where('status', 1)
+                            ->where('is_active', 1)
+                            ->where('id_user', $bookingKelas->id_user)
+                            ->first();
+                        if ($orderPaket) {
+                            $orderPaket->update([
+                                'sisa' => $orderPaket->sisa + 1
+                            ]);
+                        }
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

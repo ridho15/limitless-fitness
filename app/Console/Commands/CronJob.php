@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Filament\Resources\BookingKelasResource;
 use App\Filament\Resources\TimetableResource;
 use App\Models\BookingKelas;
 use App\Models\KelasActivity;
@@ -85,6 +86,13 @@ class CronJob extends Command
             }])->whereHas('orderPaket')
             ->get();
 
+        $listAdmin = User::whereHas('roles', function ($query) {
+            $query->where(function ($query) {
+                $query->where('name', 'Admin')
+                    ->orWhere('name', 'Super Admin');
+            });
+        })->get();
+
         foreach ($user as $item) {
             foreach ($item->customerJadwalStatic as $jadwal) {
                 $tanggalNextWeek = Carbon::now()->addWeeks(1)
@@ -110,6 +118,18 @@ class CronJob extends Command
                             'is_send_email' => 1,
                             'status_kehadiran' => 1
                         ]);
+
+                        foreach ($listAdmin as $admin) {
+                            Notification::make()
+                                ->title("Booking kelas")
+                                ->body($kelasActivity->kelas->nama_kelas . " baru saja di booking oleh " . $item->name . " secara automatis melalui sistem")
+                                ->actions([
+                                    Action::make('view')
+                                        ->button()
+                                        ->icon('heroicon-o-eye')
+                                        ->url(BookingKelasResource::getUrl('view', ['record' => $bookingKelas]))
+                                ])->sendToDatabase($admin);
+                        }
                     }
                 }
             }

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class DemoCron extends Command
 {
@@ -26,5 +27,6 @@ class DemoCron extends Command
     public function handle()
     {
         info("Cron Job running at ". now());
+        Log::info("Cron Berhasil di jalankan");
     }
 }

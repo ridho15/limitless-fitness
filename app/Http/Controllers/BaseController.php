@@ -507,8 +507,22 @@ class BaseController extends Controller
                 'status_kehadiran' => 2
             ]);
 
+            $orderPaket = OrderPaket::where('id_user', $bookingKelas->id_user)
+                ->whereHas('paket', function ($query) use ($bookingKelas) {
+                    $query->where('id_kelas', $bookingKelas->kelasActivity->id_kelas);
+                })->whereDate('expired_date', '>=', now())
+                ->where('is_active', 1)
+                ->where('status', 1)
+                ->first();
+
+            if ($orderPaket) {
+                $orderPaket->update([
+                    'sisa' => $orderPaket->sisa + 1
+                ]);
+            }
+
             activity()->causedBy(Auth::user())
-                ->log('Menyimpan keterangan kehadiran');
+                ->log('Menyimpan keterangan kehadiran / Customer tidak dapat hadir dengan keterangan');
 
             return redirect()->route('profile.bookings')->with('success', 'Berhasil menghkonfirmasi kehadiran');
         } else {

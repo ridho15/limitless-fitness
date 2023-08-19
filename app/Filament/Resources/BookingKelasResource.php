@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BookingKelasResource\Pages;
+use App\Filament\Resources\BookingKelasResource\Pages\ViewBookingKelas;
 use App\Models\BookingKelas;
 use App\Models\KelasActivity;
 use App\Models\User;
@@ -159,6 +160,7 @@ class BookingKelasResource extends Resource
         return [
             'index' => Pages\ListBookingKelas::route('/'),
             'create' => Pages\CreateBookingKelas::route('/create'),
+            'view' => ViewBookingKelas::route('/{record}'),
             'edit' => Pages\EditBookingKelas::route('/{record}/edit'),
         ];
     }
