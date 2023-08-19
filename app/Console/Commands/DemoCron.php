@@ -27,6 +27,6 @@ class DemoCron extends Command
     public function handle()
     {
         info("Cron Job running at ". now());
-        Log::info("Cron Berhasil di jalankan");
+        // Log::info("Cron Berhasil di jalankan");
     }
 }
