@@ -53,6 +53,7 @@ class CustomerOrderExpired extends BaseWidget
                 ->label('Paket')
                 ->searchable(),
             TextColumn::make('jumlah_pertemuan')
+                ->alignCenter()
                 ->sortable(),
             TextColumn::make('status_formatted')
                 ->label('Status'),

@@ -111,4 +111,8 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(BookingKelas::class, 'id_user');
     }
+
+    public function customerJadwalStatic(){
+        return $this->hasMany(CustomerJadwalStatic::class, 'id_user');
+    }
 }

@@ -64,7 +64,7 @@
                 <div class="grid grid-cols-4 gap-4 mt-10"
                     style="margin-bottom: 20px; margin-top: 20px; align-items: center">
                     <div class="mb-4">
-                        Kelas : <strong>Reformer Flow</strong>
+                        Kelas : <strong>{{ $kelas ? $kelas->nama_kelas : null }}</strong>
                     </div>
                     <div class="mb-4">
                         <input

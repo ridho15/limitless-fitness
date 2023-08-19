@@ -39,7 +39,7 @@
                                                 <div class="fw-bold text-start">
                                                     <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->paket->nama }} {{ $item->id }}
+                                                        {{ $item->paket->nama }}
                                                     </a>
                                                 </div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
@@ -56,7 +56,8 @@
                                                         <span class="fs-2 text-success mx-1"><i
                                                                 class="fa-regular fa-circle-check"></i></span>
                                                         <span class="badge text-bg-success mx-1">Lunas</span>
-                                                        <span class="badge text-bg-danger mx-1">{{ \Carbon\Carbon::parse($item->expired_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</span>
+                                                        <span
+                                                            class="badge text-bg-danger mx-1">{{ \Carbon\Carbon::parse($item->expired_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</span>
                                                     </div>
                                                 @elseif($item->status == 2)
                                                     <div class="text-center">

@@ -143,6 +143,15 @@ class OrderPaketResource extends Resource
                     })
                     ->view('custom-column.order-paket')
                     ->sortable(),
+                ViewColumn::make('sisa')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->sisa
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
+                    ->sortable(),
                 ViewColumn::make('harga_formatted')
                     ->view('custom-column.order-paket')
                     ->getStateUsing(function ($record) {
@@ -282,7 +291,8 @@ class OrderPaketResource extends Resource
                                 $record->update([
                                     'status' => 1,
                                     'is_active' => 1,
-                                    'expired_date' => $tanggalExpired
+                                    'expired_date' => $tanggalExpired,
+                                    'sisa' => $record->jumlah_pertemuan
                                 ]);
                             }
                         })->requiresConfirmation(),

@@ -90,6 +90,8 @@ class OrderPaketRelationManager extends RelationManager
                     ->searchable(),
                 TextColumn::make('jumlah_pertemuan')
                     ->sortable(),
+                TextColumn::make('sisa')
+                    ->sortable(),
                 TextColumn::make('harga_formatted')
                     ->label('Harga')
                     ->sortable(),

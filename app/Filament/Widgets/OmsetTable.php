@@ -2,11 +2,13 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\InstrukturOmsetResource;
 use App\Models\BookingKelas;
 use App\Models\Kelas;
 use Closure;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -37,7 +39,11 @@ class OmsetTable extends BaseWidget
                 ->formatStateUsing(function ($record) {
                     $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($record) {
                         $query->where('id_kelas', $record->id)
-                            ->where('id_user', Auth::id())
+                            ->where(function ($query) {
+                                if (Auth::user()->hasRole('Instruktur')) {
+                                    $query->where('id_user', Auth::id());
+                                }
+                            })
                             ->whereDate('tanggal', '<=', now())
                             ->where(function ($query) {
                                 if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
@@ -53,7 +59,11 @@ class OmsetTable extends BaseWidget
                 ->formatStateUsing(function ($record) {
                     $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($record) {
                         $query->where('id_kelas', $record->id)
-                            ->where('id_user', Auth::id())
+                            ->where(function ($query) {
+                                if (Auth::user()->hasRole('Instruktur')) {
+                                    $query->where('id_user', Auth::id());
+                                }
+                            })
                             ->whereDate('tanggal', '<=', now())
                             ->where(function ($query) {
                                 if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
@@ -94,6 +104,16 @@ class OmsetTable extends BaseWidget
                         $this->tanggal_akhir = null;
                     }
                 })
+        ];
+    }
+
+    protected function getTableActions(): array
+    {
+        return [
+            ViewAction::make()
+            ->url(function($record){
+                return InstrukturOmsetResource::getUrl('view', ['record' => $record]);
+            }),
         ];
     }
 

@@ -57,6 +57,7 @@ class Dashbaord extends BasePage
                 ListTimetable::class,
                 ListAturJadwal::class,
                 CustomerOrderExpired::class,
+                OmsetTable::class,
                 OmsetChart::class,
                 PengeluaranChart::class,
                 BelumBayarChart::class

@@ -16,7 +16,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('demo:cron')
         // ->everyFiveSeconds();
         $schedule->command('send-email:class-booking')
-        ->dailyAt('18:00');
+            ->dailyAt('19:00');
+        $schedule->command('cron:job')
+            ->dailyAt('19:00');
     }
 
     /**
@@ -24,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

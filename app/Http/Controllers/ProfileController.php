@@ -30,30 +30,39 @@ class ProfileController extends Controller
 
     public function bookings()
     {
+        // return Carbon::now()->addWeeks()->startOfWeek(Carbon::TUESDAY)->isoFormat('DD-MM-YYYY');
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'bookings';
 
         $listData = [];
-        $listKelas = Kelas::whereHas('paket', function ($query) {
-            $query->whereHas('orderPaket', function ($query) {
-                $query->where('id_user', Auth::id())
-                    ->where('is_active', 1);
-            });
-        })->get();
+        $listKelas = Kelas::with(['paket.orderPaket' => function ($query) {
+            $query->where('id_user', Auth::id())
+                ->whereDate('expired_date', '>=', now())
+                ->where('status', 1)
+                ->where('is_active', 1)
+                ->where('sisa', '>', 0);
+        }])
+            ->whereHas('paket', function ($query) {
+                $query->whereHas('orderPaket', function ($query) {
+                    $query->where('id_user', Auth::id())
+                        ->where('is_active', 1);
+                });
+            })->get();
 
         foreach ($listKelas as $index => $item) {
             $jumlahKredit = 0;
+            $sisa = 0;
             $listOrderPaket = OrderPaket::whereHas('paket', function ($query) use ($item) {
                 $query->where('id_kelas', $item->id);
             })->where('is_active', 1)
                 ->where('status', 1)
+                ->where('id_user', Auth::id())
                 ->whereDate('expired_date', '>=', now())
                 ->get();
             foreach ($listOrderPaket as $orderPaket) {
-                if ($orderPaket->expired_date >= now()) {
-                    $jumlahKredit += $orderPaket->jumlah_pertemuan;
-                }
+                $jumlahKredit += $orderPaket->jumlah_pertemuan;
+                $sisa += $orderPaket->sisa;
             }
 
             $digunakan = BookingKelas::where('id_user', Auth::id())
@@ -66,8 +75,6 @@ class ProfileController extends Controller
             if ($jumlahKredit == 0) {
                 $sisa = 0;
                 $digunakan = 0;
-            } else {
-                $sisa = $jumlahKredit - $digunakan;
             }
 
             $digunakan = $jumlahKredit -

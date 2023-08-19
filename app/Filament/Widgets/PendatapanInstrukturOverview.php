@@ -3,6 +3,8 @@
 namespace App\Filament\Widgets;
 
 use App\Models\BookingKelas;
+use App\Models\Jurnal;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
@@ -28,12 +30,37 @@ class PendatapanInstrukturOverview extends BaseWidget
 
         $listCard = [];
 
+        $jurnal = Jurnal::where('id_order_paket', '!=', null)
+            ->get();
+
+        $omset = 0;
+        $pengeluaran = 0;
+        foreach ($jurnal as $item) {
+            if ($item->tipe == 1) {
+                $omset += $item->jumlah_uang;
+            } elseif ($item->tipe == '0') {
+                $pengeluaran += $item->jumlah_uang;
+            }
+        }
+        $jumlahCustomer = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Customer');
+        })->whereMonth('created_at', now())->count();
+        if (Auth::user()->hasRole('Super Admin')) {
+            array_push($listCard, Card::make('Gross Profit', 'Rp.' . number_format($omset - $pengeluaran, 0, ',', '.'))
+                ->description('Omset di kurangi dengan fee instruktur')
+                ->color('primary'));
+
+            array_push($listCard,  Card::make('Jumlah Customer', $jumlahCustomer)
+                ->description('Jumlah Customer Dalam Bulan Ini')
+                ->color('primary'));
+        }
+
         $omset = 0;
         foreach ($listOmset as $item) {
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan secara keseluruhan dari kelas yang sudah lewat')
+        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan secara keseluruhan dari kelas yang sudah lewat')
             ->color('success'));
 
         $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
@@ -56,7 +83,7 @@ class PendatapanInstrukturOverview extends BaseWidget
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
+        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
             ->color('success'));
 
         $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
@@ -79,7 +106,7 @@ class PendatapanInstrukturOverview extends BaseWidget
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 minggu')
+        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 minggu')
             ->color('success'));
 
         $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
@@ -101,7 +128,7 @@ class PendatapanInstrukturOverview extends BaseWidget
             $omset += $item->kelasActivity->kelas->honor;
         }
 
-        array_push($listCard, Card::make('Omset', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan hari ini')
+        array_push($listCard, Card::make('Omset Instruktur', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan hari ini')
             ->color('success'));
         return $listCard;
     }
