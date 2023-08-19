@@ -18,9 +18,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('demo:cron')
             ->everyMinute();
         $schedule->command('send-email:class-booking')
-            ->dailyAt('13:00');
+            ->dailyAt('13:10');
         $schedule->command('cron:job')
-            ->dailyAt('13:00');
+            ->dailyAt('13:10');
     }
 
     /**
