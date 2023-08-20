@@ -21,7 +21,6 @@ class ListData extends Component
         'setCari',
         'changeTanggal'
     ];
-    public $listData;
     public $indexTanggal;
     public $category;
     public $id_location;
@@ -37,7 +36,7 @@ class ListData extends Component
         $startDate = Carbon::parse($this->tanggal)->isoFormat('YYYY-MM-DD');
         $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('YYYY-MM-DD');
         $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
-        $this->listData = [];
+        $listData = [];
         if ($this->id_kelas) {
             foreach ($this->listTanggal as $item) {
                 $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket' => function ($query) {
@@ -59,15 +58,17 @@ class ListData extends Component
                     ->whereDate('tanggal', $item)
                     ->orderBy('jam_mulai', 'ASC')
                     ->get();
-                    array_push($this->listData, [
-                        'tanggal' => $item,
-                        'data' => $kelasActivity
-                    ]);
-                }
+                array_push($listData, [
+                    'tanggal' => $item,
+                    'data' => $kelasActivity
+                ]);
+            }
         } else {
             $this->listTanggal = [];
         }
-        return view('livewire.timetable.list-data');
+        return view('livewire.timetable.list-data',[
+            'listData' => $listData
+        ]);
     }
 
     public function mount()
