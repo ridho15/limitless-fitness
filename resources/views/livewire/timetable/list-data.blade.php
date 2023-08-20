@@ -1,4 +1,11 @@
 <div class="container mt-3 mb-5">
+    <div class="text-center">
+        <div class="mt-3" wire:loading>
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
     @if (count($listData) > 0)
         @foreach ($listData as $index => $item)
             <div class="mb-5" id="{{ $index }}">
