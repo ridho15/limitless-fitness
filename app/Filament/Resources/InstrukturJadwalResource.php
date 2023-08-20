@@ -27,6 +27,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
@@ -131,7 +132,21 @@ class InstrukturJadwalResource extends Resource
                     ->label('Status Jadwal')
             ])
             ->filters([
-                //
+                Filter::make('tanggal')
+                    ->form([
+                        DatePicker::make('created_from'),
+                        DatePicker::make('created_until')->default(now())
+                    ])->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal', '<=', $date),
+                            );
+                    }),
             ])
             ->actions([
                 EditAction::make(),
@@ -165,8 +180,8 @@ class InstrukturJadwalResource extends Resource
     public static function getPages(): array
     {
         return [
-            // 'index' => Pages\ListInstrukturJadwals::route('/'),
-            'index' => ManageTimetablePage::route('/'),
+            'index' => Pages\ListInstrukturJadwals::route('/'),
+            // 'index' => ManageTimetablePage::route('/'),
             'create' => Pages\CreateInstrukturJadwal::route('/create'),
             'view' => ViewInstrukturJadwal::route('/{record}'),
             'edit' => Pages\EditInstrukturJadwal::route('/{record}/edit'),
