@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'asset_url' => env('ASSET_URL'),
+    'asset_url' => env('ASSET_URL', 'https://yoga.medialatihan.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'app_url' => env('APP_URL'),
+    'app_url' => env('APP_URL', 'https://yoga.medialatihan.com'),
 
     /*
     |--------------------------------------------------------------------------
