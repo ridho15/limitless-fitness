@@ -118,9 +118,10 @@
                 Class
             </button>
             <ul class="dropdown-menu w-100">
-                <li><a class="dropdown-item" href="#"  wire:click="$emit('onChangeClass',0 )">Close Class</a></li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass',0 )">Close Class</a></li>
                 @foreach ($listKelas as $item)
-                    <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass', {{ $item->id }})">{{ $item->nama_kelas }}</a></li>
+                    <li><a class="dropdown-item" href="#"
+                            wire:click="$emit('onChangeClass', {{ $item->id }})">{{ $item->nama_kelas }}</a></li>
                 @endforeach
             </ul>
         </div>
@@ -131,7 +132,7 @@
         </div>
     </div>
     <div class="text-center">
-        <div class="mt-3" wire:loading wire:target='onClickCari'>
+        <div class="mt-3" wire:loading wire:target='changeClass'>
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>

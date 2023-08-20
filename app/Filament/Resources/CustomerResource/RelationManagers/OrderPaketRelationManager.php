@@ -100,8 +100,8 @@ class OrderPaketRelationManager extends RelationManager
                 BadgeColumn::make('is_active')
                     ->label('Status Aktif')
                     ->enum([
-                        0 => 'Tidak aktif',
-                        1 => 'Aktif'
+                        '0' => 'Tidak aktif',
+                        '1' => 'Aktif'
                     ])
                     ->colors([
                         'danger' => 0,

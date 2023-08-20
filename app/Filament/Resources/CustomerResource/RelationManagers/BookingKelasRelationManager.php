@@ -55,8 +55,8 @@ class BookingKelasRelationManager extends RelationManager
                 BadgeColumn::make('is_send_email')
                     ->label('Send Email')
                     ->enum([
-                        1 => 'Ya',
-                        0 => 'Tidak'
+                        '1' => 'Ya',
+                        '0' => 'Tidak'
                     ])->colors([
                         'primary' => 1,
                         'secondary' => 0

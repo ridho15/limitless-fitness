@@ -20,11 +20,13 @@ class Location extends Model
         'image'
     ];
 
-    public function locationOpening(){
+    public function locationOpening()
+    {
         return $this->hasMany(LocationOpening::class, 'id_location');
     }
 
-    public function locationStudio(){
+    public function locationStudio()
+    {
         return $this->hasMany(LocationStudio::class, 'id_location');
     }
 }

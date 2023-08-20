@@ -54,18 +54,9 @@ class KreditCustomer extends Page
             $query->where('id_user', $this->id_user)
                 ->whereDate('expired_date', '>=', now())
                 ->where('status', 1)
-                ->where('is_active', 1)
-                ->where('sisa', '>', 0);
+                ->where('is_active', 1);
         }])
-            ->whereHas('paket', function ($query) {
-                $query->whereHas('orderPaket', function ($query) {
-                    $query->where('id_user', $this->id_user)
-                        ->where('expired_date', '>=', now())
-                        ->where('sisa', '>', 0)
-                        ->where('status', 1)
-                        ->where('is_active', 1);
-                });
-            })->get();
+            ->get();
 
         foreach ($this->listKelas as $index => $item) {
             $jumlahKredit = 0;
