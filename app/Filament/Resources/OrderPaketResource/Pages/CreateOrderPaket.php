@@ -22,6 +22,8 @@ class CreateOrderPaket extends CreateRecord
         } else {
             $data['is_active'] = 0;
         }
+
+        $data['sisa'] = $data['jumlah_pertemuan'];
         return $data;
     }
 

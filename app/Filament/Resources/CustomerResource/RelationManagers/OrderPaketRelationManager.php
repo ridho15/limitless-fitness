@@ -15,6 +15,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -53,12 +54,6 @@ class OrderPaketRelationManager extends RelationManager
                     ->default(0),
                 TextInput::make('harga')
                     ->numeric()
-                    ->required(),
-                TextInput::make('honor')
-                    ->label('Pembayaran Instruktur')
-                    ->helperText('Pembayaran instruktur per order paket')
-                    ->numeric()
-                    ->default(0)
                     ->required(),
                 Radio::make('status')
                     ->options([
@@ -109,12 +104,6 @@ class OrderPaketRelationManager extends RelationManager
                     ]),
                 ImageColumn::make('bukti_pembayaran')
                     ->size(100),
-                TextColumn::make('honor')
-                    ->label('Pembayaran Instruktur')
-                    ->sortable()
-                    ->formatStateUsing(function ($state) {
-                        return 'Rp.' . number_format($state, 0, ',', '.');
-                    }),
                 TextColumn::make('tanda_tangan'),
                 TextColumn::make('expired_date')->sortable(),
                 TextColumn::make('tanggal_pembayaran')->sortable(),
@@ -123,7 +112,18 @@ class OrderPaketRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make()
+                    ->mutateFormDataUsing(function ($data) {
+                        if ($data['status'] == 1) {
+                            $data['is_active'] = 1;
+                        } else {
+                            $data['is_active'] = 0;
+                        }
+
+                        $data['sisa'] = $data['jumlah_pertemuan'];
+
+                        return $data;
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

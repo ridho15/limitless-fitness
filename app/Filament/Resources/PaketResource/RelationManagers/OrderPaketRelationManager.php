@@ -16,6 +16,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -125,7 +126,11 @@ class OrderPaketRelationManager extends RelationManager
                 ]),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make()
+                ->mutateFormDataUsing(function($data){
+                    $data['sisa'] = $data['jumlah_pertemuan'];
+                    return $data;
+                })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
