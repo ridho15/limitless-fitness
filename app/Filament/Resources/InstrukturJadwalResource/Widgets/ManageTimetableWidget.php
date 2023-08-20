@@ -80,6 +80,7 @@ class ManageTimetableWidget extends Widget
                 ->whereTime('jam_mulai', $item->jam_mulai)
                 ->where(function ($query) {
                     if (Auth::user()->hasRole('Instruktur')) {
+                        dd(Auth::id());
                         $query->where('id_user', Auth::id());
                     }
                 })
