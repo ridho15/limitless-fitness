@@ -63,6 +63,8 @@ class ListData extends Component
                     'data' => $kelasActivity
                 ]);
             }
+            
+            
         } else {
             $this->listTanggal = [];
         }
