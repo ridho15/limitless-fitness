@@ -136,4 +136,5 @@ Route::middleware('auth')->group(function () {
     });
     Route::post('upload-bukti-pembayaran/{id}', [BaseController::class, 'uploadBuktiPembayaran'])->name('upload-bukti-pembayaran');
     Route::get('resend-verifikasi-email/{id}', [ProfileController::class, 'resendVerifikasiEmail'])->name('profile.resend-verifikasi-email');
+    Route::delete('/hapus-repetitif-time/{id}', [ProfileController::class, 'hapusRepetitifTime'])->name('profile.hapus-repetitif-time');
 });

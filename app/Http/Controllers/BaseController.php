@@ -6,6 +6,7 @@ use App\Http\Livewire\Base\Instruktur;
 use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
 use App\Models\BookingOrder;
+use App\Models\CustomerJadwalStatic;
 use App\Models\CustomerKelas;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
@@ -92,7 +93,10 @@ class BaseController extends Controller
             $query->where('name', 'Instruktur');
         })->where('status', 1)->get();
         $data['listInstruktur'] = $listInstruktur;
+        $listRepetitifTime = CustomerJadwalStatic::where('id_user', Auth::id())
+        ->get();
         $data['active'] = 'timetable';
+        $data['listRepetitifTime'] = $listRepetitifTime;
         return view('base-2.timetable', $data);
     }
 

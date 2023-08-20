@@ -57,6 +57,108 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal_repetitif_time" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Set Repetitif Time</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-end">
+                        <button class="btn custom-btn my-3" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse_repetitif_time" aria-expanded="false" aria-controls="collapseExample">
+                            Create Data
+                        </button>
+                    </div>
+                    <div class="collapse" id="collapse_repetitif_time">
+                        <div class="card card-body">
+                            <form action="{{ route('profile.post-customer-jadwal') }}" method="POST">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="" class="form-label">Hari</label>
+                                        <select class="form-control" data-placeholder="Pilih Hari" name="hari"
+                                            id="" required>
+                                            <option value="">Pilih Hari</option>
+                                            <option value="0">Senin</option>
+                                            <option value="1">Selasa</option>
+                                            <option value="2">Rabu</option>
+                                            <option value="3">Kamis</option>
+                                            <option value="4">Jumat</option>
+                                            <option value="5">Sabtu</option>
+                                            <option value="6">Minggu</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="" class="form-label">Jam</label>
+                                        <select name="jam" class="form-control" data-placeholder="Pilih Jam"
+                                            id="jam">
+                                            <option value="">Pilih Jam</option>
+                                            @for ($i = 1; $i <= 24; $i++)
+                                                {
+                                                <option value="{{ sprintf('%02d', $i) }}:00:00">
+                                                    {{ sprintf('%02d', $i) }}:00:00
+                                                </option>
+                                                }
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-12 text-end">
+                                        <button type="submit" class="btn custom-btn">Simpan</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Hari</th>
+                                <th scope="col">Jam</th>
+                                <th scope="col" class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (count($listRepetitifTime) > 0)
+                                @foreach ($listRepetitifTime as $index => $item)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $item->hari_formatted }}</td>
+                                        <td>{{ $item->jam }}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-danger btn-hapus"
+                                                    data-id="{{ $item->id }}">Hapus</button>
+                                            </div>
+
+                                            <form action="{{ route('profile.hapus-repetitif-time', ['id' => $item->id]) }}" method="POST"
+                                                id="form_hapus_{{ $item->id }}">
+                                                @method('DELETE')
+                                                @csrf
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="4" class="text-center">Belum set jadwal</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -80,5 +182,15 @@
                 });
             }
         });
+
+        $('.btn-hapus').on('click', async function() {
+            const id = $(this).data('id')
+            const response = await sweetAlert('warning', 'Peringatan',
+                'Apakah kamu ingin menghapus repetitif time ?', 'Ya, Hapus');
+
+            if (response.isConfirmed == true) {
+              $('#form_hapus_' + id).submit();
+            }
+        })
     </script>
 @endsection

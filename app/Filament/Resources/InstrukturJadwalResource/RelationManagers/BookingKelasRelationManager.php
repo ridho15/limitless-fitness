@@ -5,7 +5,9 @@ namespace App\Filament\Resources\InstrukturJadwalResource\RelationManagers;
 use App\Models\OrderPaket;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
@@ -34,7 +36,23 @@ class BookingKelasRelationManager extends RelationManager
                     ->searchable()
                     ->options(User::whereHas('roles', function ($query) {
                         $query->where('name', 'Customer');
-                    })->pluck('name', 'id'))
+                    })->pluck('name', 'id')),
+                Radio::make('status_kehadiran')
+                    ->options([
+                        '' => 'Belum di ketahui',
+                        '1' => 'Hadir',
+                        '2' => 'Izin',
+                        '0' => 'Tidak hadir'
+                    ])->hidden(function ($state) {
+                        if (Auth::user()->hasRole('Super Admin')) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }),
+                Toggle::make('is_send_email')
+                    ->label('Send Email')
+                    ->nullable()
             ]);
     }
 
