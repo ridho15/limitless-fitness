@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\BookingKelas;
 use App\Models\Jurnal;
+use App\Models\KelasActivity;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -58,34 +59,60 @@ class PendatapanInstrukturOverview extends BaseWidget
                 ->color('primary'));
         }
 
-
+        $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
+            $query->where(function ($query) {
+                $query->where('status_kehadiran', '1')
+                    ->orWhere('status_kehadiran', '0');
+            });
+        }])
+            ->where(function ($query) {
+                if (Auth::user()->hasRole('Instruktur')) {
+                    $query->where('id_user', Auth::id());
+                }
+            })->whereDate('tanggal', '<=', now())->where('id_kelas', '!=', null)
+            ->where('id_location_studio', '!=', null)->get();
         $omset = 0;
-        foreach ($listOmset as $item) {
-            $omset += $item->kelasActivity->kelas->honor;
+        foreach ($listKelasActivity as $item) {
+            $jumlahPeserta = 0;
+            foreach ($item->bookingKelas as $bookingKelas) {
+                if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
+                    $jumlahPeserta++;
+                }
+            }
+            if ($item->kelas->min_anggota <= $jumlahPeserta) {
+                $omset += $item->kelas->fee;
+            }
         }
 
         array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan secara keseluruhan dari kelas yang sudah lewat')
             ->color('success'));
 
-        $listOmset = BookingKelas::with(['kelasActivity.kelas'])
-            ->whereHas('kelasActivity', function ($query) {
-                $query->where(function ($query) {
-                    if (Auth::user()->hasRole('Instruktur')) {
-                        $query->where('id_user', Auth::id());
-                    }
-                })
-                    ->where('id_kelas', '!=', null)
-                    ->where('id_location_studio', '!=', null)
-                    ->whereDate('tanggal', '<=', now())
-                    ->whereDate('tanggal', '>=', Carbon::now()->subMonths(1)->isoFormat('YYYY-MM-DD'));
-            })->where(function ($query) {
+        $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
+            $query->where(function ($query) {
                 $query->where('status_kehadiran', '1')
                     ->orWhere('status_kehadiran', '0');
-            })->get();
+            });
+        }])
+            ->where(function ($query) {
+                if (Auth::user()->hasRole('Instruktur')) {
+                    $query->where('id_user', Auth::id());
+                }
+            })->whereDate('tanggal', '<=', now())
+            ->whereDate('tanggal', '>=', Carbon::now()->subMonths(1)->isoFormat('YYYY-MM-DD'))
+            ->where('id_kelas', '!=', null)
+            ->where('id_location_studio', '!=', null)->get();
 
         $omset = 0;
-        foreach ($listOmset as $item) {
-            $omset += $item->kelasActivity->kelas->honor;
+        foreach ($listKelasActivity as $item) {
+            $jumlahPeserta = 0;
+            foreach ($item->bookingKelas as $bookingKelas) {
+                if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
+                    $jumlahPeserta++;
+                }
+            }
+            if ($item->kelas->min_anggota <= $jumlahPeserta) {
+                $omset += $item->kelas->fee;
+            }
         }
 
         array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')

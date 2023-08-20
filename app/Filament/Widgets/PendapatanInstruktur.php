@@ -34,22 +34,34 @@ class PendapatanInstruktur extends ApexChartWidget
         $listFee = [];
         $listTanggal = [];
         foreach ($periode as $item) {
-            $listBookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) {
-                $query->where('id_user', Auth::id())
-                    ->where('id_kelas', $this->filterFormData['id_kelas'])
-                    ->whereDate('tanggal', '<=', now())
-                    ->whereNotNull('id_location_studio')
-                    ->whereHas('kelas');
-            })->where(function ($query) {
-                $query->where('status_kehadiran', 1)
-                    ->orWhere('status_kehadiran', '0');
-            })->whereDate('created_at', $item)->get();
-            $jumlahFee = 0;
-            foreach ($listBookingKelas as $bookingKelas) {
-                $jumlahFee += $bookingKelas->kelasActivity->kelas->honor;
+            $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
+                $query->where(function ($query) {
+                    $query->where('status_kehadiran', '1')
+                        ->orWhere('status_kehadiran', '0');
+                });
+            }])->where('id_kelas', $this->filterFormData['id_kelas'])
+                ->where('id_location_studio', '!=', null)
+                ->where(function ($query) {
+                    if (Auth::user()->hasRole('Instruktur')) {
+                        $query->where('id_user', Auth::id());
+                    }
+                })->whereDate('tanggal', $item)->get();
+
+            $omset = 0;
+            foreach ($listKelasActivity as $item) {
+                $jumlahPeserta = 0;
+                foreach ($item->bookingKelas as $bookingKelas) {
+                    if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
+                        $jumlahPeserta++;
+                    }
+                }
+
+                if ($item->kelas->min_anggota <= $jumlahPeserta) {
+                    $omset += $item->kelas->fee;
+                }
             }
 
-            array_push($listFee, $jumlahFee);
+            array_push($listFee, $omset);
             array_push($listTanggal, date('Y-m-d', strtotime($item)));
         }
 
@@ -99,7 +111,7 @@ class PendapatanInstruktur extends ApexChartWidget
                 ->preload()
                 ->options(Kelas::get()->pluck('nama_kelas', 'id')),
             DatePicker::make('date_start')
-                ->default(now()),
+                ->default(Carbon::now()->subDays(7)->isoFormat('YYYY-MM-DD')),
             DatePicker::make('date_end')
                 ->default(now()),
         ];

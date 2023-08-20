@@ -348,4 +348,16 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Data waktu berhasil di simpan');
     }
+
+    public function hapusRepetitifTime($id)
+    {
+        $customerJadwalStatic = CustomerJadwalStatic::find($id);
+        if (!$customerJadwalStatic) {
+            return redirect()->back()->with('fail', 'Data tidak ditemukan !');
+        }
+
+        $customerJadwalStatic->delete();
+
+        return redirect()->back()->with('success', 'Repetitif time berhasil di hapus');
+    }
 }

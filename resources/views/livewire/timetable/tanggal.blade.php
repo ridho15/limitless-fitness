@@ -110,6 +110,9 @@
                     aria-describedby="basic-addon2" style="padding-top: 10px; padding-bottom: 10px">
             </div>
         </div>
+        <div class="col-md-3">
+           <button type="button" id="btn_repetitif_time" wire:click="$emit('onClickBtnRepetitifTime')" class="btn custom-btn w-100">Set Repetitif Time</button>
+        </div>
     </div>
     <div class="row d-sm-none my-3 align-items-center justify-content-center">
         <div class="dropdown col-10">
@@ -129,13 +132,6 @@
             <a href="#" id="btn-filter">
                 <i class="fa-solid fa-sliders fs-4 text-dark"></i>
             </a>
-        </div>
-    </div>
-    <div class="text-center">
-        <div class="mt-3" wire:loading wire:target='changeClass'>
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
         </div>
     </div>
 </div>
@@ -164,6 +160,10 @@
 
         Livewire.on('onChangeLevel', (level) => {
             Livewire.emit('changeLevel', level);
+        })
+
+        Livewire.on('onClickBtnRepetitifTime', () => {
+            $('#modal_repetitif_time').modal('show')
         })
     </script>
 @endpush
