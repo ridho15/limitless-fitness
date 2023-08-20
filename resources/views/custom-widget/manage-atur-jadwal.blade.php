@@ -58,6 +58,11 @@
                             @foreach ($listStudio as $studio)
                                 @php
                                     $listKelasActivity = \App\Models\KelasActivity::whereTime('jam_mulai', $jam->jam_mulai)
+                                        ->where(function ($query) {
+                                            if (Auth::user()->hasRole('Instruktur')) {
+                                                $query->where('id_user', Auth::id());
+                                            }
+                                        })
                                         ->where('id_location_studio', $studio->id)
                                         ->whereDate('tanggal', $tanggal->tanggal)
                                         ->get();
