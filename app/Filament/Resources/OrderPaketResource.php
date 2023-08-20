@@ -103,7 +103,6 @@ class OrderPaketResource extends Resource
     {
         return $table
             ->columns([
-
                 ViewColumn::make('created_at')
                     ->label('Tanggal Order')
                     ->getStateUsing(function ($record) {

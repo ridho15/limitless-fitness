@@ -9,6 +9,7 @@ use App\Models\Kelas;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use HtmlSanitizer\Extension\Table\NodeVisitor\ThNodeVisitor;
 use Illuminate\Contracts\View\View as ViewView;
@@ -95,7 +96,6 @@ class KreditCustomer extends Page
     {
         if (Auth::user()->hasRole('Super Admin')) {
             $kelas = Kelas::find($this->id_kelas);
-
             $jumlahKredit = 0;
             foreach ($kelas->paket as $paket) {
                 foreach ($paket->orderPaket as $orderPaket) {
@@ -105,20 +105,26 @@ class KreditCustomer extends Page
                 }
             }
 
-            $penambahan = $this->jumlahSession - $jumlahKredit;
-
             $orderPaket = OrderPaket::where('id_user', $this->id_user)
                 ->whereHas('paket', function ($query) {
                     $query->where('id_kelas', $this->id_kelas);
-                })->where('is_active', 1)
+                })
+                ->where('is_active', 1)
                 ->where('expired_date', '>=', now())
                 ->orderBy('created_at', 'DESC')
                 ->first();
-
             if ($orderPaket) {
                 $orderPaket->update([
-                    'sisa' => $orderPaket->sisa + $penambahan
+                    'sisa' => $this->jumlahSession
                 ]);
+            } else {
+                Notification::make()
+                    ->warning()
+                    ->body('Paket yang di order sudah expired')
+                    ->title('Peringatan')
+                    ->send();
+
+                    return $this->getData();
             }
 
             $this->jumlahSession = 0;
@@ -149,7 +155,7 @@ class KreditCustomer extends Page
 
         $this->jumlahSession = 0;
         foreach ($orderPaket as $item) {
-            $this->jumlahSession += $item->jumlah_pertemuan;
+            $this->jumlahSession += $item->sisa;
         }
 
         $this->getData();

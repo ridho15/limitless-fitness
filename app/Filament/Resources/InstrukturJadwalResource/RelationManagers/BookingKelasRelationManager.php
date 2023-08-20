@@ -8,10 +8,12 @@ use Filament\Forms;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BadgeColumn;
@@ -81,7 +83,35 @@ class BookingKelasRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make()
+                    ->label('Tambah User Ke Kelas')
+                    ->icon('heroicon-o-plus-circle')
+                    ->mutateFormDataUsing(function ($data, RelationManager $livewire, CreateAction $action) {
+                        $orderPaket = OrderPaket::where('id_user', $data['id_user'])
+                            ->whereHas('paket', function ($query) use ($livewire) {
+                                $query->where('id_kelas', $livewire->getOwnerRecord()->id_kelas);
+                            })
+                            ->whereDate('expired_date', '>=', now())
+                            ->where('sisa', '>', 0)
+                            ->first();
+                        if (!$orderPaket) {
+                            Notification::make()
+                                ->warning()
+                                ->title('Peringatan')
+                                ->persistent()
+                                ->body("Customer tidak bisa di masukkan ke kelas, karna belum order paket, paket expired atau sisa session sudah habis")
+                                ->send();
+
+                            $action->halt();
+                        } else {
+                            $orderPaket->update([
+                                'sisa' => $orderPaket->sisa - 1
+                            ]);
+
+                            $data['is_send_email'] = 0;
+                            return $data;
+                        }
+                    })
             ])
             ->actions([
                 EditAction::make()
