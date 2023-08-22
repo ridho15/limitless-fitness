@@ -70,20 +70,29 @@
                                                     ->get();
                                             @endphp
                                             <td class="border bg-white" style="vertical-align: top !important">
-                                                @foreach ($listKelasActivity as $kelasActivity)
-                                                    <div class="border px-4 py-2 text-center"
-                                                        style="background-color: #22543d; color: white">
-                                                        <a
-                                                            href="{{ app\Filament\Resources\TimetableResource::getUrl('view', ['record' => $kelasActivity]) }}">
-                                                            {{ $kelasActivity->user->name }}</a>
-                                                    </div>
-                                                    @foreach ($kelasActivity->bookingKelas as $bookingKelas)
-                                                        <div class="border px-4 py-2 text-center">
-                                                            <a href="{{ app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) }}"
-                                                                class="text-dark">{{ $bookingKelas->user->name }}</a>
+                                                @if (count($listKelasActivity) > 0)
+                                                    @foreach ($listKelasActivity as $kelasActivity)
+                                                        <div class="border px-4 py-2 text-center"
+                                                            style="background-color: #22543d; color: white">
+                                                            <a
+                                                                href="{{ app\Filament\Resources\TimetableResource::getUrl('view', ['record' => $kelasActivity]) }}">
+                                                                {{ $kelasActivity->user->name }}</a>
                                                         </div>
+                                                        @foreach ($kelasActivity->bookingKelas as $bookingKelas)
+                                                            <div class="border px-4 py-2 text-center">
+                                                                <a href="{{ app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) }}"
+                                                                    class="text-dark">{{ $bookingKelas->user->name }}</a>
+                                                            </div>
+                                                        @endforeach
+                                                        @for ($i = 1; $i <= 5 - count($kelasActivity->bookingKelas); $i++)
+                                                            <div class="border px-4 py-2 text-center text-white">-</div>
+                                                        @endfor
                                                     @endforeach
-                                                @endforeach
+                                                @else
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <div class="border px-4 py-2 text-center text-white">-</div>
+                                                    @endfor
+                                                @endif
                                             </td>
                                         @endforeach
                                     @endforeach
