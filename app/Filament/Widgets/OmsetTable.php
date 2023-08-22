@@ -145,8 +145,8 @@ class OmsetTable extends BaseWidget
         ];
     }
 
-    public function getColumnSpan(): int|string|array
-    {
-        return 2;
-    }
+    // public function getColumnSpan(): int|string|array
+    // {
+    //     return 2;
+    // }
 }
