@@ -55,9 +55,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://dailydosepilates.hasseedply.com'),
+    'url' => env('APP_URL', 'https://dailydosepilates.com'),
 
-    'asset_url' => env('ASSET_URL', 'https://dailydosepilates.hasseedply.com'),
+    'asset_url' => env('ASSET_URL', 'https://dailydosepilates.com'),
 
     /*
     |--------------------------------------------------------------------------
