@@ -6,9 +6,12 @@ use App\Filament\Resources\TimetableResource;
 use App\Models\KelasActivity;
 use App\Models\LocationStudio;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use Filament\Pages\Actions\Action;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\Page;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class ManageTimetablePage extends Page
 {
@@ -40,6 +43,43 @@ class ManageTimetablePage extends Page
                 ->url(function () {
                     return TimetableResource::getUrl('create');
                 }),
+            Action::make('clone_activity')
+                ->label('Clone Data Minggu ini')
+                ->icon('heroicon-o-duplicate')
+                ->requiresConfirmation()
+                ->action(function () {
+                    $periode = CarbonPeriod::create($this->startDate, $this->endDate);
+                    $starDateNow = Carbon::parse($this->startDate)->addDays(7)->locale('id')->format('Y-m-d H:i:s');
+                    $endDateNow = Carbon::parse($this->endDate)->locale('id')->addDays(7)->format('Y-m-d H:i:s');
+                    $periodeNow = CarbonPeriod::create($starDateNow, $endDateNow)->toArray();
+                    foreach ($periode as $index => $item) {
+                        $listKelasActivity = KelasActivity::whereDate('tanggal', $item->format('Y-m-d'))
+                            ->where('id_kelas', '!=', null)
+                            ->where('id_location_studio', '!=', null)
+                            ->where('id_user', '!=', null)
+                            ->get();
+                        // $data = [];
+                        foreach ($listKelasActivity as $kelasActivity) {
+                            KelasActivity::updateOrCreate([
+                                'tanggal' => $periodeNow[$index]->format('Y-m-d'),
+                                'id_user' => $kelasActivity->id_user,
+                                'jam_mulai' => $kelasActivity->jam_mulai,
+                                'id_kelas' => $kelasActivity->id_kelas,
+                                'id_location_studio' => $kelasActivity->id_location_studio
+                            ], [
+                                'id_kelas' => $kelasActivity->id_kelas,
+                                'nama_latihan' => $kelasActivity->nama_latihan,
+                                'id_location_studio' => $kelasActivity->id_location_studio,
+                                'jam_mulai' => $kelasActivity->jam_mulai,
+                                'id_user' => $kelasActivity->id_user,
+                                'status' => 1,
+                                'level' => $kelasActivity->level,
+                                'tanggal' => $periodeNow[$index]->format('Y-m-d'),
+                                'user_update' => Auth::id(),
+                            ]);
+                        }
+                    }
+                })
         ];
     }
 
@@ -57,6 +97,7 @@ class ManageTimetablePage extends Page
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
             ->where('id_location_studio', '!=', null)
+            ->orderBy('tanggal', 'ASC')
             ->groupBy('tanggal')
             ->get();
         $this->listStudio = LocationStudio::whereHas('kelasActivity', function ($query) {
