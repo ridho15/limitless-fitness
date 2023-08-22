@@ -24,16 +24,18 @@ class KreditCustomer extends Page
 
     public $listeners = [
         'updateSession',
-        'clickEditSession'
+        'clickEditSession',
+        'closeListOrderPaket'
     ];
 
     public $listKelas = [];
     public $id_user;
     public $user;
     public $id_kelas;
-    public $jumlahSession = 0;
+    public $jumlahSession = [];
     public $kelas;
     public $jumlahDigunakanTerbanyak;
+    public $listOrderPaket = [];
 
     public function mount($record)
     {
@@ -92,31 +94,29 @@ class KreditCustomer extends Page
         }
     }
 
-    public function updateSession()
+    public function updateSession($id, $index)
     {
         if (Auth::user()->hasRole('Super Admin')) {
-            $kelas = Kelas::find($this->id_kelas);
-            $jumlahKredit = 0;
-            foreach ($kelas->paket as $paket) {
-                foreach ($paket->orderPaket as $orderPaket) {
-                    if ($orderPaket->is_active == 1 && $orderPaket->id_user == $this->id_user && $orderPaket->expired_date >= now()) {
-                        $jumlahKredit += $orderPaket->jumlah_pertemuan;
-                    }
-                }
-            }
+            // $orderPaket = OrderPaket::where('id_user', $this->id_user)
+            //     ->whereHas('paket', function ($query) {
+            //         $query->where('id_kelas', $this->id_kelas);
+            //     })
+            //     ->where('is_active', 1)
+            //     ->where('expired_date', '>=', now())
+            //     ->orderBy('created_at', 'DESC')
+            //     ->first();
 
-            $orderPaket = OrderPaket::where('id_user', $this->id_user)
-                ->whereHas('paket', function ($query) {
-                    $query->where('id_kelas', $this->id_kelas);
-                })
-                ->where('is_active', 1)
-                ->where('expired_date', '>=', now())
-                ->orderBy('created_at', 'DESC')
-                ->first();
+            $orderPaket = OrderPaket::find($id);
             if ($orderPaket) {
                 $orderPaket->update([
-                    'sisa' => $this->jumlahSession
+                    'sisa' => $this->jumlahSession[$index]
                 ]);
+
+                Notification::make()
+                    ->success()
+                    ->body('Berhasil update sisa session')
+                    ->title('Berhasil')
+                    ->send();
             } else {
                 Notification::make()
                     ->warning()
@@ -124,11 +124,8 @@ class KreditCustomer extends Page
                     ->title('Peringatan')
                     ->send();
 
-                    return $this->getData();
+                return $this->getData();
             }
-
-            $this->jumlahSession = 0;
-            $this->id_kelas = 0;
 
             activity()
                 ->causedBy(Auth::user())
@@ -144,7 +141,7 @@ class KreditCustomer extends Page
     {
         $this->id_kelas = $id_kelas;
         $this->kelas = Kelas::find($this->id_kelas);
-        $orderPaket = OrderPaket::whereHas('paket', function ($query) {
+        $this->listOrderPaket = OrderPaket::whereHas('paket', function ($query) {
             $query->whereHas('kelas', function ($query) {
                 $query->where('id_kelas', $this->id_kelas);
             });
@@ -153,11 +150,17 @@ class KreditCustomer extends Page
             ->where('expired_date', '>=', now())
             ->get();
 
-        $this->jumlahSession = 0;
-        foreach ($orderPaket as $item) {
-            $this->jumlahSession += $item->sisa;
+        $this->jumlahSession = [];
+        foreach ($this->listOrderPaket as $item) {
+            array_push($this->jumlahSession, $item->sisa);
         }
 
         $this->getData();
+    }
+
+    public function closeListOrderPaket()
+    {
+        $this->jumlahSession = [];
+        $this->listOrderPaket = [];
     }
 }
