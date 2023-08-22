@@ -80,6 +80,9 @@
                             Kelas : <strong>{{ $item->paket->kelas->nama_kelas }}</strong>
                         </div>
                         <div class="mb-4">
+                            Tanggal Order : <strong>{{ date('d-m-Y H:i', strtotime($item->created_at)) }}</strong>
+                        </div>
+                        <div class="mb-4">
                             <input
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 wire:model="jumlahSession.{{ $index }}" id="jumlahSession" type="numeric"
