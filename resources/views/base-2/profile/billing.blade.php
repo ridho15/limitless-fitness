@@ -39,7 +39,7 @@
                                                 <div class="fw-bold text-start"> <a
                                                         href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
                                                         style="text-decoration: none; color: black">
-                                                        {{ $item->paket->nama }} {{ $item->id }}
+                                                        {{ $item->paket->nama }}
                                                     </a></div>
                                                 <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
                                                     Pertemuan</small>

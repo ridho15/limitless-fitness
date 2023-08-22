@@ -94,7 +94,7 @@ class BaseController extends Controller
         })->where('status', 1)->get();
         $data['listInstruktur'] = $listInstruktur;
         $listRepetitifTime = CustomerJadwalStatic::where('id_user', Auth::id())
-        ->get();
+            ->get();
         $data['active'] = 'timetable';
         $data['listRepetitifTime'] = $listRepetitifTime;
         return view('base-2.timetable', $data);
@@ -263,6 +263,21 @@ class BaseController extends Controller
         $data['honor'] = $paket->honor;
         $data['jumlah_pertemuan'] = $paket->jumlah_pertemuan;
         $data['expired_date'] = Carbon::now()->addDays($paket->valid_day);
+
+        // Check time order
+        $startTime = Carbon::now()->locale('id')->subMinutes(5)->isoFormat('YYYY-MM-DD H:m');
+        $endTime = Carbon::now()->isoFormat('YYYY-MM-DD H:m');
+
+        $orderPaket = OrderPaket::where('id_paket', $paket->id)
+            ->where('id_user', Auth::id())
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->whereTime('created_at', '>=', $startTime)
+                    ->whereTime('created_at', '<=', $endTime);
+            })->first();
+
+        if ($orderPaket) {
+            return redirect()->back()->with('fail', 'Paket baru saja berhasil di order. tunggu setelah 5 menit lagi untuk order paket selanjutnya');
+        }
 
         OrderPaket::create($data);
 
