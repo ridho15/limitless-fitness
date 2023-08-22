@@ -59,24 +59,39 @@
                     @endif
                 </tbody>
             </table>
-            <form action="#" wire:submit.prevent="updateSession" method="POST"
-                class="@if ($id_kelas == null) hidden @endif">
-                <div class="grid grid-cols-4 gap-4 mt-10"
-                    style="margin-bottom: 20px; margin-top: 20px; align-items: center">
-                    <div class="mb-4">
-                        Kelas : <strong>{{ $kelas ? $kelas->nama_kelas : null }}</strong>
-                    </div>
-                    <div class="mb-4">
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            wire:model="jumlahSession" id="jumlahSession" type="numeric" placeholder="Session">
-                    </div>
-                    <div class="mb-4">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                            style="background-color: rgb(0, 183, 255)">Simpan</button>
+            <div class="text-center">
+                <div class="mt-3" wire:loading>
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-            </form>
+            </div>
+            @if (count($listOrderPaket) > 0)
+                <div class="text-start mt-10">
+                    <button type="button" wire:click='closeListOrderPaket' class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                    style="background-color: rgb(255, 0, 0)">Close</button>
+                </div>
+            @endif
+            @foreach ($listOrderPaket as $index => $item)
+                <form action="#" wire:submit.prevent="updateSession({{ $item->id }}, {{ $index }})" method="POST">
+                    <div class="grid grid-cols-4 gap-4 mt-5"
+                        style="margin-bottom: 20px; margin-top: 20px; align-items: center">
+                        <div class="mb-4">
+                            Kelas : <strong>{{ $item->paket->kelas->nama_kelas }}</strong>
+                        </div>
+                        <div class="mb-4">
+                            <input
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                wire:model="jumlahSession.{{ $index }}" id="jumlahSession" type="numeric"
+                                placeholder="Session">
+                        </div>
+                        <div class="mb-4">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                                style="background-color: rgb(0, 183, 255)">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            @endforeach
         </div>
     </div>
 </x-filament::page>
