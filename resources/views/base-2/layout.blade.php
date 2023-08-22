@@ -141,7 +141,7 @@
             <hr> --}}
             <div class="row">
                 <div class="col-md-6 fw-light text-white">
-                    Copyright © 2023 <strong>Dokgo</strong>
+                    Copyright © 2023 <strong>MyHassee.com</strong>
                 </div>
                 <div class="col-md-6 text-end fw-light">
                     <div class="country-timezone">

@@ -54,10 +54,10 @@ class Dashbaord extends BasePage
                 PendatapanInstrukturOverview::class,
                 JadwalInstrukturAssign::class,
                 CustomerOrderExpired::class,
-                OmsetTable::class,
                 OmsetChart::class,
                 PengeluaranChart::class,
-                BelumBayarChart::class
+                BelumBayarChart::class,
+                OmsetTable::class,
             ];
         } elseif (Auth::user()->hasRole('Admin')) {
             $listWidget = [
