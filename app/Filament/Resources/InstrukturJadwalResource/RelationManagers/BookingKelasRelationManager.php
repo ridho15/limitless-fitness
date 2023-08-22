@@ -39,22 +39,6 @@ class BookingKelasRelationManager extends RelationManager
                     ->options(User::whereHas('roles', function ($query) {
                         $query->where('name', 'Customer');
                     })->pluck('name', 'id')),
-                Radio::make('status_kehadiran')
-                    ->options([
-                        '' => 'Belum di ketahui',
-                        '1' => 'Hadir',
-                        '2' => 'Izin',
-                        '0' => 'Tidak hadir'
-                    ])->hidden(function ($state) {
-                        if (Auth::user()->hasRole('Super Admin')) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }),
-                Toggle::make('is_send_email')
-                    ->label('Send Email')
-                    ->nullable()
             ]);
     }
 

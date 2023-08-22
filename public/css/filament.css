@@ -7638,7 +7638,6 @@ thead {
 	border-spacing:0;
 }
 .table-scroll th, .table-scroll td {
-	padding:5px 10px;
 	background:#fff;
 	white-space:nowrap;
 	vertical-align:top;
