@@ -50,10 +50,10 @@
                             href="{{ route('packages') }}">Packages</a>
                     </li>
                     @if (Auth::user())
-                    <li class="nav-item ">
-                        <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
-                            href="{{ route('timetable') }}">Timetable</a>
-                    </li>
+                        <li class="nav-item ">
+                            <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
+                                href="{{ route('timetable') }}">Timetable</a>
+                        </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'location') active nav-link-fs @endif"
@@ -81,10 +81,12 @@
                                         class="fa-regular fa-circle-user"></i> <span class="mx-2">My
                                         Profile</span></a>
                             </li>
-                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.bookings') }}"><i
-                                        class="fa-regular fa-credit-card"></i> <span class="mx-2">My
+                            <li class="my-2"><a class="dropdown-item text-white"
+                                    href="{{ route('profile.bookings') }}"><i class="fa-regular fa-credit-card"></i>
+                                    <span class="mx-2">My
                                         Bookings</span></a></li>
-                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.packages') }}"><i
+                            <li class="my-2"><a class="dropdown-item text-white"
+                                    href="{{ route('profile.packages') }}"><i
                                         class="fa-solid fa-hand-holding-heart"></i>
                                     <span class="mx-2">My Packages</span></a>
                             </li>
@@ -95,8 +97,8 @@
                             <li class="my-2" class="px-2">
                                 <hr>
                             </li>
-                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.billing') }}"><i
-                                        class="fa-solid fa-comments-dollar"></i>
+                            <li class="my-2"><a class="dropdown-item text-white"
+                                    href="{{ route('profile.billing') }}"><i class="fa-solid fa-comments-dollar"></i>
                                     <span class="mx-2">Billing</span></a></li>
                             {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
                                         class="fa-solid fa-bullhorn"></i> <span class="mx-2">Notification
@@ -116,7 +118,8 @@
                     </div>
                 @else
                     <a href="{{ route('login') }}"
-                        class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline" style="border-color: white; color: white">Login / Registrasi</a>
+                        class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline"
+                        style="border-color: white; color: white">Login / Registrasi</a>
                 @endif
             </div>
         </div>
@@ -194,6 +197,22 @@
             }).showToast();
         }
     </script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {},
+            Tawk_LoadStart = new Date();
+        (function() {
+            var s1 = document.createElement("script"),
+                s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/64e56452cc26a871b030cca3/1h8g0vphm';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 </body>
 
 </html>
