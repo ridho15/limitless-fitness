@@ -7,6 +7,7 @@ use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Pages\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Facades\Auth;
 
 class ViewTimetable extends ViewRecord
 {
@@ -21,6 +22,11 @@ class ViewTimetable extends ViewRecord
             DeleteAction::make()
                 ->label('Hapus Timetable')
                 ->icon('heroicon-o-trash')
+                ->after(function () {
+                    activity()
+                        ->causedBy(Auth::user())
+                        ->log('Menghapus data timetable');
+                })
         ];
     }
 }
