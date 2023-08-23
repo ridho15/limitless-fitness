@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
 use Filament\Pages\Actions;
+use Filament\Pages\Actions\DeleteAction;
 use Filament\Pages\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -16,7 +17,10 @@ class ViewTimetable extends ViewRecord
         return [
             EditAction::make()
                 ->label('Edit Timetable')
-                ->icon('heroicon-o-pencil-alt')
+                ->icon('heroicon-o-pencil-alt'),
+            DeleteAction::make()
+                ->label('Hapus Timetable')
+                ->icon('heroicon-o-trash')
         ];
     }
 }
