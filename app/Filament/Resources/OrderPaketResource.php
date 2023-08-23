@@ -305,7 +305,7 @@ class OrderPaketResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->orderBy('status', 'DESC');
+        return parent::getEloquentQuery()->orderBy('status', 'DESC')->orderBy('created_at', 'DESC');
     }
 
     public static function getRelations(): array
