@@ -53,7 +53,6 @@ class ActivityLogResource extends Resource
             ])
             ->actions([])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
@@ -68,8 +67,8 @@ class ActivityLogResource extends Resource
     {
         return [
             'index' => Pages\ListActivityLogs::route('/'),
-            'create' => Pages\CreateActivityLog::route('/create'),
-            'edit' => Pages\EditActivityLog::route('/{record}/edit'),
+            // 'create' => Pages\CreateActivityLog::route('/create'),
+            // 'edit' => Pages\EditActivityLog::route('/{record}/edit'),
         ];
     }
 
