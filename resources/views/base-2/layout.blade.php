@@ -155,6 +155,9 @@
             </div>
         </div>
     </footer>
+    <a href="https://wa.me/+6281212327038" target="_blank" class="rounded-circle" style="position: fixed; bottom: 15px; right: 15px; background-color: #396552; padding: 15px;">
+        <img src="{{ asset('assets/images/icon-whatsapp.png') }}" width="40" height="40" alt="" style="object-fit: contain">
+    </a>
     {{-- End Footer --}}
 
     <script src="/js/app.js"></script>
@@ -197,22 +200,6 @@
             }).showToast();
         }
     </script>
-
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API = Tawk_API || {},
-            Tawk_LoadStart = new Date();
-        (function() {
-            var s1 = document.createElement("script"),
-                s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/64e56452cc26a871b030cca3/1h8g0vphm';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
-    </script>
-    <!--End of Tawk.to Script-->
 </body>
 
 </html>
