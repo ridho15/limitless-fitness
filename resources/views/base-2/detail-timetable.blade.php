@@ -32,6 +32,11 @@
                                     oleh
                                     admin. silahkan cek pembayaran.</small>
                             </div>
+                        @elseif($orderPaket->sisa <= 0)
+                            <div class="custom-bg-danger w-100 py-3 mb-4 text-center mb-3" style="border-radius: 20px">
+                                <small class="text-danger text-center">Sisa sesi pelatihan kamu sudah 0. Silahkan order
+                                    ulang paket pelatihan</small>
+                            </div>
                         @endif
                         @if (!$orderPaket || $orderPaket->status != 1)
                             <div class="p-4 border card-buy-package" style="border-radius: 20px">
@@ -137,8 +142,7 @@
                                         </span>
                                     </div>
                                     <div class="col-md">
-                                        <small
-                                            class="d-block">{{ $kelasActivity->locationStudio->location->nama }}</small>
+                                        <small class="d-block">{{ $kelasActivity->locationStudio->location->nama }}</small>
                                         <small class="d-block">{{ $kelasActivity->locationStudio->nama }}
                                     </div>
                                 </div>
@@ -161,7 +165,7 @@
                                                 <Strong>Profile -> My Bookings</Strong></a></small>
                                     @endif
                                     <button type="button" class="btn custom-btn w-100 mb-1" id="btn_book_now"
-                                        @if ($isActive == false || $isBooking == true) disabled @endif>
+                                        @if ($isActive == false || $isBooking == true || $orderPaket->sisa <= 0) disabled @endif>
                                         Book Now
                                     </button>
                                     <div class="" style="font-size: 8pt">
