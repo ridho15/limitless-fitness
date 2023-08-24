@@ -44,7 +44,6 @@ class ListData extends Component
                         $query->whereHas('paket', function ($query) {
                             $query->whereHas('orderPaket', function ($query) {
                                 $query->where('id_user', Auth::id())
-                                    ->where('sisa', '>', 0)
                                     ->where('is_active', 1)
                                     ->whereDate('expired_date', '>=', now());
                             });
