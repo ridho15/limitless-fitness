@@ -29,69 +29,8 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/testing', function () {
-    $user = User::whereHas('customerJadwalStatic')
-        ->with(['orderPaket' => function ($query) {
-            $query->whereDate('expired_date', '>=', now())
-                ->where('status', 1)
-                ->where('is_active', 1)
-                ->where('sisa', '>', 0);
-        }])->whereHas('orderPaket')
-        ->get();
-
-    $listAdmin = User::whereHas('roles', function ($query) {
-        $query->where(function ($query) {
-            $query->where('name', 'Admin')
-                ->orWhere('name', 'Super Admin');
-        });
-    })->get();
-
-    foreach ($user as $item) {
-        foreach ($item->customerJadwalStatic as $jadwal) {
-            $tanggalNextWeek = Carbon::now()->addWeeks(1)
-                ->startOfWeek($jadwal->hari + 1)->isoFormat('YYYY-MM-DD');
-            $kelasActivity = KelasActivity::whereDate('tanggal', $tanggalNextWeek)
-                ->where('jam_mulai', $jadwal->jam)->where('status', 1)->first();
-            $jumlahPeserta = 0;
-
-            if ($kelasActivity) {
-                foreach ($kelasActivity->bookingKelas as $bookingKelas) {
-                    if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
-                        $jumlahPeserta++;
-                    }
-                }
-
-                if ($kelasActivity->kelas->max_anggota > $jumlahPeserta) {
-                    $bookingKelas = BookingKelas::updateOrCreate([
-                        'id_user' => $item->id,
-                        'id_kelas_activity' => $kelasActivity->id,
-                    ], [
-                        'id_user' => $item->id,
-                        'id_kelas_activity' => $kelasActivity->id,
-                        'is_send_email' => 1,
-                        'status_kehadiran' => 1
-                    ]);
-
-                    foreach ($listAdmin as $admin) {
-                        Notification::make()
-                            ->title("Booking kelas")
-                            ->body($kelasActivity->kelas->nama_kelas . " baru saja di booking oleh " . $item->name . " secara automatis melalui sistem")
-                            ->actions([
-                                Action::make('view')
-                                    ->button()
-                                    ->icon('heroicon-o-eye')
-                                    ->url(BookingKelasResource::getUrl('view', ['record' => $bookingKelas]))
-                            ])->sendToDatabase($admin);
-                    }
-                }
-            }
-        }
-    }
-
-    return response()->json([
-        'status' => true,
-        'message' => 'Berhasil'
-    ]);
+Route::get('/phpinfo', function(){
+    return phpinfo();
 });
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
