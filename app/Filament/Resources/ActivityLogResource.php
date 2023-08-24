@@ -52,8 +52,7 @@ class ActivityLogResource extends Resource
                 //
             ])
             ->actions([])
-            ->bulkActions([
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
@@ -74,10 +73,15 @@ class ActivityLogResource extends Resource
 
     protected static function shouldRegisterNavigation(): bool
     {
-        if(Auth::user()->hasRole('Super Admin')){
+        if (Auth::user()->hasRole('Super Admin')) {
             return true;
         }
 
         return false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return static::getModel()::query()->orderBy('created_at', 'DESC');
     }
 }

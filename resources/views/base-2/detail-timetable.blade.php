@@ -157,7 +157,6 @@
                                     </div>
                                 </div>
                                 <div class="text-center">
-
                                     @if ($isBooking)
                                         <small class="d-block my-4">Anda sudah memesan kelas ini silahkan lihat pada bagian
                                             <a class="text-decoration-none text-dark"
