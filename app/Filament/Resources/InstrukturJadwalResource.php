@@ -55,18 +55,34 @@ class InstrukturJadwalResource extends Resource
                         Fieldset::make('Form Jadwal')
                             ->schema([
                                 TextInput::make('instruktur')
-                                ->formatStateUsing(function($record){
-                                    return $record->user->name;
-                                })->disabled(),
+                                    ->formatStateUsing(function ($record) {
+                                        if ($record) {
+                                            return $record->user->name;
+                                        } else {
+                                            return null;
+                                        }
+                                    })->hidden(function () {
+                                        if (Auth::user()->hasRole('Instruktur')) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    })->disabled(),
                                 TextInput::make('kelas')
-                                ->formatStateUsing(function($record){
-                                    if($record->kelas){
-                                        return $record->kelas->nama_kelas;
-                                    }else{
-                                        return null;
-                                    }
-                                })
-                                ->disabled(),
+                                    ->formatStateUsing(function ($record) {
+                                        if ($record) {
+                                            return $record->kelas->nama_kelas;
+                                        } else {
+                                            return null;
+                                        }
+                                    })->hidden(function () {
+                                        if (Auth::user()->hasRole('Instruktur')) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                    ->disabled(),
                                 DatePicker::make('tanggal')
                                     ->label('Tanggal Available')
                                     ->required(),
