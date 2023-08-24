@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Livewire\Base\Instruktur;
 use App\Mail\RegistrasiKonfirmasiMail;
+use App\Mail\SendForgotPasswordMail;
 use App\Models\BookingKelas;
 use App\Models\BookingOrder;
 use App\Models\CustomerJadwalStatic;
@@ -47,6 +48,76 @@ class BaseController extends Controller
         // return $instruktur;
         $data['active'] = 'home';
         return view('base-2.index', $data);
+    }
+
+    public function forgotPassword()
+    {
+        $data['active'] = 'forgot-password';
+        return view('base-2.forgot-password', $data);
+    }
+
+    public function postForgotPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+        }
+
+        // Check email
+        $user = User::where('email', $request->email)
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'Customer');
+            })->first();
+
+        if ($user) {
+            Mail::to($user->email)->send(new SendForgotPasswordMail($user));
+            return redirect()->back()->with('success', 'Link untuk update password sudah di kirimkan ke email anda. silahkan check kotak masuk email anda');
+        } else {
+            return redirect()->back()->with('fail', 'Email kamu tidak terdaftar');
+        }
+    }
+
+    public function checkToken(Request $request)
+    {
+        $token = Crypt::decryptString($request->token);
+        $data = json_decode($token);
+        if (date('Y-m-d H:i', strtotime($data->waktu)) >= date('Y-m-d H:i')) {
+            return view('base-2.update-password', [
+                'id_user' => $data->id_user
+            ]);
+        } else {
+            return view('403');
+        }
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_user' => 'required|numeric',
+            'password' => 'required|string|min:8'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+        }
+
+        $user = User::find($request->id_user);
+        if (!$user) {
+            return redirect()->back()->with('fail', 'Data customer tidak ditemukan !');
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        activity()
+            ->causedBy($user)
+            ->log('Melakukan update password akun');
+
+        return redirect()->route('login')->with('success', 'Berhasil melakukan update password akun');
     }
 
     public function class()

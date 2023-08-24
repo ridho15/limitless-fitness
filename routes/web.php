@@ -12,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -29,8 +30,16 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/phpinfo', function(){
-    return phpinfo();
+Route::get('/forgot-password-mail', function () {
+    $user = User::where('email', 'kukertadesabetung@gmail.com')->first();
+    $carbon = Carbon::now()->addHours(1)->isoFormat('YYYY-MM-DD H:m');
+    $jsonEncode = json_encode([
+        'id_user' => $user->id,
+        'waktu' => $carbon
+    ]);
+    $token = Crypt::encryptString($jsonEncode);
+    $data['token'] = $token;
+    return view('mail.forgot-password', $data);
 });
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
@@ -42,9 +51,13 @@ Route::get('/location', [BaseController::class, 'location'])->name('location');
 Route::get('/detail-location/{id}', [BaseController::class, 'detailLocation'])->name('detail-location');
 Route::get('/contactus', [BaseController::class, 'contactus'])->name('contactus');
 Route::get('/login', [BaseController::class, 'login'])->name('login');
+Route::get('/forgot-password', [BaseController::class, 'forgotPassword'])->name('forgotPassword');
 Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogin');
+Route::post('post-forgot-password', [BaseController::class, 'postForgotPassword'])->name('postForgotPassword');
 Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');
 Route::post('/post-registrasi', [BaseController::class, 'postRegistrasi'])->name('postRegistrasi');
+Route::get('/check-token', [BaseController::class, 'checkToken'])->name('checkToken');
+Route::post('/update-password', [BaseController::class, 'updatePassword'])->name('update-password');
 Route::get('/term-and-condition', [BaseController::class, 'termCondition'])->name('term-condition');
 Route::get('/konfirm-akun/{id_user}', [BaseController::class, 'konfirmasiAkun'])->name('konfirm-akun');
 Route::get('/konfirmasi-kehadiran', [BaseController::class, 'konfirmasiKehadiran'])->name('konfirmasi-kehadiran');

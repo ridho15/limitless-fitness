@@ -26,7 +26,8 @@
                 <div class="bg-white shadow min-vh-100 d-flex align-items-center justify-content-center">
                     <div class="w-100 px-md-5 px-3">
                         <div class="text-center mb-3">
-                            <img src="{{ asset('assets/images/logo.png') }}" alt="" class="img-fluid" style="object-fit: contain">
+                            <img src="{{ asset('assets/images/logo.png') }}" alt="" class="img-fluid"
+                                style="object-fit: contain">
                         </div>
                         <div class="text-center fw-bold mb-5">
                             Login into your account
@@ -62,7 +63,7 @@
                                         class="fa-solid fa-key px-2"></i></span>
                             </div>
                             <div class="text-end mb-3">
-                                <a href="" class="fw-light text-decoration-none text-dark">
+                                <a href="{{ route('forgotPassword') }}" class="fw-light text-decoration-none text-dark">
                                     <small>Forgot Password</small>
                                 </a>
                             </div>
