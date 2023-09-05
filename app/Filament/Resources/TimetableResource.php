@@ -116,12 +116,16 @@ class TimetableResource extends Resource
                                             } else {
                                                 $jam = $get('jam_mulai');
                                             }
-                                            $instruktur = User::whereHas('kelasActivity', function ($query) use ($jam, $get) {
-                                                $query->where('tanggal', date('Y-m-d', strtotime($get('tanggal'))))
-                                                    ->where('id_kelas', null)
-                                                    ->where('id_location_studio', null)
-                                                    ->whereJamMulai($jam);
-                                            })->get()->pluck('name', 'id');
+                                            $instruktur = User::whereHas('roles', function($query){
+                                                $query->where('name', 'Instruktur');
+                                            })
+                                            // whereHas('kelasActivity', function ($query) use ($jam, $get) {
+                                                // $query->where('tanggal', date('Y-m-d', strtotime($get('tanggal'))))
+                                                    // ->where('id_kelas', null)
+                                                    // ->where('id_location_studio', null)
+                                                    // ->whereJamMulai($jam);
+                                            // })
+                                            ->get()->pluck('name', 'id');
 
                                             return $instruktur;
                                         })
