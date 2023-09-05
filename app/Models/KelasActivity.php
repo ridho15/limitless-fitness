@@ -47,7 +47,10 @@ class KelasActivity extends Model
 
     public function getJamMulaiFormattedAttribute()
     {
-        return Carbon::parse($this->jam_mulai)->locale('id')->isoFormat('DD MMMM YYYY HH:mm');
+
+        $jamMulai =  Carbon::parse($this->jam_mulai)->locale('id')->isoFormat('HH:mm');
+        $tanggal = Carbon::parse($this->tanggal)->locale('id')->isoFormat('DD MMMM YYYY');
+        return $tanggal . ' ' . $jamMulai;
     }
 
     public function getStatusAktivitasKelasAttribute()

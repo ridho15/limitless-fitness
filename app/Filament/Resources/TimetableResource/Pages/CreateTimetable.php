@@ -45,15 +45,27 @@ class CreateTimetable extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         foreach ($data['jam_mulai'] as $item) {
-            $kelasActivity = KelasActivity::whereTanggal($data['tanggal'])
+            $kelasActivity = KelasActivity::where('id_location_studio', $data['id_location_studio'])
+            ->where('id_kelas', $data['id_kelas'])
+            ->whereTanggal($data['tanggal'])
                 ->whereJamMulai(sprintf("%02d", $item) . ":00:00")
-                ->where('id_user', $data['id_user'])
+                // ->where('id_user', $data['id_user'])
                 ->first();
 
             if ($kelasActivity) {
                 $kelasActivity->update([
                     'id_location_studio' => $data['id_location_studio'],
-                    'id_kelas' => $data['id_kelas']
+                    'id_kelas' => $data['id_kelas'],
+                    'id_user' => $data['id_user']
+                ]);
+            }else{
+                KelasActivity::create([
+                    'id_location_studio' => $data['id_location_studio'],
+                    'id_kelas' => $data['id_kelas'],
+                    'tanggal' => $data['tanggal'],
+                    'id_user' => $data['id_user'],
+                    'jam_mulai' => sprintf("%02d", $item) . ":00:00",
+                    'status' => 1
                 ]);
             }
         }
