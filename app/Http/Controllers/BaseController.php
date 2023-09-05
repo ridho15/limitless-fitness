@@ -197,6 +197,7 @@ class BaseController extends Controller
             ->whereHas('paket', function ($query) use ($kelasActivity) {
                 $query->where('id_kelas', $kelasActivity->id_kelas);
             })->where('is_active', 1)
+            ->whereDate('expired_date', '>=', now())
             ->where('sisa', '>=', 0)
             ->orderBy('sisa', 'DESC')
             ->first();
