@@ -39,7 +39,7 @@
                                 @else
                                     <td class="border px-4 bg-white py-2 text-end"></td>
                                 @endif
-                                @if (Auth::user()->hasRole('Super Admin'))
+                                @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
                                     <td class="border px-4 py-2 bg-white text-end"><button type="button"
                                             wire:click="clickEditSession({{ $item->id }})"
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"

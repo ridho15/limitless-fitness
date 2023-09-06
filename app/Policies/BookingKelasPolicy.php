@@ -37,6 +37,11 @@ class BookingKelasPolicy
      */
     public function create(User $user)
     {
+        if ($user->hasRole(['Admin'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -44,7 +49,7 @@ class BookingKelasPolicy
      */
     public function update(User $user, BookingKelas $bookingKelas)
     {
-        if($user->hasRole(['Admin', 'Instruktur'])){
+        if ($user->hasRole(['Admin', 'Instruktur'])) {
             return true;
         }
 
@@ -56,6 +61,11 @@ class BookingKelasPolicy
      */
     public function delete(User $user, BookingKelas $bookingKelas)
     {
+        if ($user->hasRole(['Admin'])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

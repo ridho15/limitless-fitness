@@ -96,7 +96,7 @@ class KreditCustomer extends Page
 
     public function updateSession($id, $index)
     {
-        if (Auth::user()->hasRole('Super Admin')) {
+        if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
             // $orderPaket = OrderPaket::where('id_user', $this->id_user)
             //     ->whereHas('paket', function ($query) {
             //         $query->where('id_kelas', $this->id_kelas);
@@ -133,7 +133,11 @@ class KreditCustomer extends Page
 
             $this->getData();
         } else {
-            return session()->flash('fail', 'Anda tidak dizinkan !');
+            Notification::make()
+                ->warning()
+                ->body('Anda tidak dizinkan !')
+                ->title('Peringatan')
+                ->send();
         }
     }
 
