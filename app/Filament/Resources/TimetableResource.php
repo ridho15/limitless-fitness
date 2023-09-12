@@ -65,13 +65,6 @@ class TimetableResource extends Resource
                                         ->options(LocationStudio::get()->pluck('nama', 'id')),
                                     DatePicker::make('tanggal')
                                         ->label('Tanggal')
-                                        ->disabled(function ($state) {
-                                            if (Auth::user()->hasRole('Super Admin')) {
-                                                return false;
-                                            }
-
-                                            return true;
-                                        })
                                         ->required(),
                                     Select::make('jam_mulai')
                                         ->label('Waktu Mulai')
@@ -81,13 +74,6 @@ class TimetableResource extends Resource
                                             } else {
                                                 return true;
                                             }
-                                        })
-                                        ->disabled(function ($state) {
-                                            if (Auth::user()->hasRole('Super Admin')) {
-                                                return false;
-                                            }
-
-                                            return true;
                                         })
                                         ->reactive()
                                         ->searchable()
@@ -105,7 +91,6 @@ class TimetableResource extends Resource
                                         ->label('Instruktur')
                                         ->preload()
                                         ->searchable()
-                                        ->disabledOn('edit')
                                         ->options(function (Closure $get) {
                                             if ($get('jam_mulai') != null && !is_string($get('jam_mulai'))) {
                                                 $jam = [];
