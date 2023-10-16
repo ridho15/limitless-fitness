@@ -1,0 +1,4 @@
+[19-Sep-2023 23:46:01 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Migrations\Migration" not found in /home/hasa3862/public_html/dailydosepilates.com/database/migrations/2023_08_07_233400_modify_column_jam_mulai_in_kelas_activities.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/hasa3862/public_html/dailydosepilates.com/database/migrations/2023_08_07_233400_modify_column_jam_mulai_in_kelas_activities.php on line 7

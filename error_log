@@ -23,3 +23,9 @@ Stack trace:
 #1 [internal function]: Laravel\Prompts\Prompt->Laravel\Prompts\{closure}()
 #2 {main}
   thrown in /home/hasa3862/public_html/dailydosepilates.com/vendor/laravel/prompts/src/Terminal.php on line 49
+[25-Aug-2023 00:27:45 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Typed property Laravel\Prompts\Terminal::$initialTtyMode must not be accessed before initialization in /home/hasa3862/public_html/dailydosepilates.com/vendor/laravel/prompts/src/Terminal.php:49
+Stack trace:
+#0 /home/hasa3862/public_html/dailydosepilates.com/vendor/laravel/prompts/src/Prompt.php(85): Laravel\Prompts\Terminal->restoreTty()
+#1 [internal function]: Laravel\Prompts\Prompt->Laravel\Prompts\{closure}()
+#2 {main}
+  thrown in /home/hasa3862/public_html/dailydosepilates.com/vendor/laravel/prompts/src/Terminal.php on line 49
