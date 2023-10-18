@@ -38,7 +38,26 @@ class ListData extends Component
         $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
         $listData = [];
         if ($this->id_kelas) {
-            foreach ($this->listTanggal as $item) {
+            if ($this->tanggal == null) {
+                foreach ($this->listTanggal as $item) {
+                    $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
+                        ->whereHas('kelas')
+                        ->where('id_kelas', $this->id_kelas)
+                        ->where(function ($query) {
+                            if ($this->id_user) {
+                                $query->where('id_user', $this->id_user);
+                            }
+                        })
+                        ->whereDate('tanggal', $item)
+                        ->orderBy('jam_mulai', 'ASC')
+                        ->get();
+
+                    array_push($listData, [
+                        'tanggal' => $item,
+                        'data' => $kelasActivity
+                    ]);
+                }
+            } else {
                 $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
                     ->whereHas('kelas')
                     ->where('id_kelas', $this->id_kelas)
@@ -47,17 +66,15 @@ class ListData extends Component
                             $query->where('id_user', $this->id_user);
                         }
                     })
-                    ->whereDate('tanggal', $item)
+                    ->whereDate('tanggal', $this->tanggal)
                     ->orderBy('jam_mulai', 'ASC')
                     ->get();
 
                 array_push($listData, [
-                    'tanggal' => $item,
+                    'tanggal' => $this->tanggal,
                     'data' => $kelasActivity
                 ]);
             }
-            
-            
         } else {
             $this->listTanggal = [];
         }

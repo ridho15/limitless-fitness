@@ -29,7 +29,9 @@
                                     @if (count($listTanggal) > 0) rowspan="4" @endif>Date
                                     Time</th>
                                 @foreach ($listTanggal as $index => $item)
-                                    <th class="border px-4 py-2" colspan="{{ count($listStudio) }}">
+                                    <th class="border px-4 py-2"
+                                        style="border-right-color: black; border-left-color: black"
+                                        colspan="{{ count($listStudio) }}">
                                         {{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd') }}
                                     </th>
                                 @endforeach
@@ -41,15 +43,20 @@
                             @endif
                             <tr>
                                 @foreach ($listTanggal as $item)
-                                    <th class="border px-4 py-2" colspan="{{ count($listStudio) }}">
+                                    <th class="border px-4 py-2"
+                                        style="border-right-color: black; border-left-color: black"
+                                        colspan="{{ count($listStudio) }}">
                                         {{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('DD MMMM YYYY') }}
                                     </th>
                                 @endforeach
                             </tr>
                             <tr>
                                 @foreach ($listTanggal as $tanggal)
-                                    @foreach ($listStudio as $item)
-                                        <th class="border px-4 py-2">{{ $item->nama }}</th>
+                                    @foreach ($listStudio as $nomor => $item)
+                                        <th class="border px-4 py-2"
+                                            @if ($nomor == 0 || $nomor == count($listStudio) - 1) style="@if ($nomor == 0) border-left-color: black; @endif
+                                            @if ($nomor == count($listStudio) - 1) border-right-color: black; @endif"
+                                            @endif>{{ $item->nama }}</th>
                                     @endforeach
                                 @endforeach
                             </tr>
@@ -62,7 +69,7 @@
                                         {{ \Carbon\Carbon::parse($jam->jam_mulai)->locale('id')->isoFormat('HH:mm') }}
                                     </td>
                                     @foreach ($listTanggal as $tanggal)
-                                        @foreach ($listStudio as $studio)
+                                        @foreach ($listStudio as $nomor => $studio)
                                             @php
                                                 $listKelasActivity = \App\Models\KelasActivity::whereTime('jam_mulai', $jam->jam_mulai)
                                                     ->where('id_location_studio', $studio->id)
@@ -73,24 +80,34 @@
                                                 @if (count($listKelasActivity) > 0)
                                                     @foreach ($listKelasActivity as $kelasActivity)
                                                         <div class="border px-4 py-2 text-center"
-                                                            style="background-color: #22543d; color: white">
+                                                            style="background-color: #22543d; color: white; @if ($nomor == 0) border-left-color: black; border-left-width: 2px !important; @endif
+                                                            @if ($nomor == count($listStudio) - 1) border-right-color: black; border-right-width: 2px !important;@endif">
                                                             <a
                                                                 href="{{ app\Filament\Resources\TimetableResource::getUrl('view', ['record' => $kelasActivity]) }}">
                                                                 {{ $kelasActivity->user->name }}</a>
                                                         </div>
                                                         @foreach ($kelasActivity->bookingKelas as $bookingKelas)
-                                                            <div class="border px-4 py-2 text-center">
+                                                            <div class="border px-4 py-2 text-center"
+                                                                @if ($nomor == 0 || $nomor == count($listStudio) - 1) style="@if ($nomor == 0) border-left-color: black; border-left-width: 2px; @endif
+                                                                @if ($nomor == count($listStudio) - 1) border-right-color: black; border-right-width: 2px; @endif"
+                                                                @endif>
                                                                 <a href="{{ app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) }}"
                                                                     class="text-dark">{{ $bookingKelas->user->name }}</a>
                                                             </div>
                                                         @endforeach
                                                         @for ($i = 1; $i <= 5 - count($kelasActivity->bookingKelas); $i++)
-                                                            <div class="border px-4 py-2 text-center text-white">-</div>
+                                                            <div class="border px-4 py-2 text-center text-white"
+                                                                @if ($nomor == 0) style="border-left-color: black; border-left-width: 2px;" @endif
+                                                                @if ($nomor == count($listStudio) - 1) style="border-right-color: black; border-right-width: 2px;" @endif>
+                                                                -</div>
                                                         @endfor
                                                     @endforeach
                                                 @else
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <div class="border px-4 py-2 text-center text-white">-</div>
+                                                    @for ($i = 1; $i <= 6; $i++)
+                                                        <div class="border px-4 py-2 text-center text-white"
+                                                            @if ($nomor == 0) style="border-left-color: black; border-left-width: 2px;" @endif
+                                                            @if ($nomor == count($listStudio) - 1) style="border-right-color: black; border-right-width: 2px;" @endif>
+                                                            -</div>
                                                     @endfor
                                                 @endif
                                             </td>

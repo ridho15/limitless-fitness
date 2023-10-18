@@ -66,6 +66,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessFilament(): bool
     {
+        return true;
         return $this->hasRole(['Super Admin', 'Admin', 'Instruktur']);
     }
 
@@ -114,5 +115,9 @@ class User extends Authenticatable implements FilamentUser
 
     public function customerJadwalStatic(){
         return $this->hasMany(CustomerJadwalStatic::class, 'id_user');
+    }
+
+    public function voucherCustomer(){
+        return $this->hasMany(VoucherCustomer::class, 'id_customer');
     }
 }

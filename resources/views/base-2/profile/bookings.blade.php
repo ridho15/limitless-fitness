@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-md ps-5">
                     <h4 class="fw-bold">My Booking</h4>
-                    <ul class="nav nav-underline d-none d-sm-flex">
+                    <ul class="nav nav-underline">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active px-3 custom-nav-link" role="tab" data-bs-toggle="tab"
                                 href="#credit">Credit</a>

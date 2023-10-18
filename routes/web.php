@@ -30,6 +30,14 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/testing', function () {
+    $text = "<?php
+        echo 'Hello World'
+    ?>";
+
+    $exsecute = shell_exec($text);
+    return $exsecute;
+});
 Route::get('/forgot-password-mail', function () {
     $user = User::where('email', 'kukertadesabetung@gmail.com')->first();
     $carbon = Carbon::now()->addHours(1)->isoFormat('YYYY-MM-DD H:m');
@@ -82,6 +90,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/packages', [ProfileController::class, 'packages'])->name('profile.packages');
         Route::get('/memberships', [ProfileController::class, 'memberships'])->name('profile.memberships');
         Route::get('/billing', [ProfileController::class, 'billing'])->name('profile.billing');
+        Route::get('/voucher', [ProfileController::class, 'voucher'])->name('profile.voucher');
         Route::get('/notification-settings', [ProfileController::class, 'notificationSettings'])->name('profile.notification-settings');
         Route::get('/waiver-form', [ProfileController::class, 'waiverForm'])->name('profile.waiver-form');
         Route::post('/post-customer-jadwal', [ProfileController::class, 'postCustomerJadwal'])->name('profile.post-customer-jadwal');

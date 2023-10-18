@@ -15,23 +15,54 @@ class PendatapanInstrukturOverview extends BaseWidget
 {
     protected function getCards(): array
     {
-        $listOmset = BookingKelas::with(['kelasActivity' => function ($query) {
-            $query->where(function ($query) {
-                if (Auth::user()->hasRole('Instruktur')) {
-                    $query->where('id_user', Auth::id());
-                }
-            })
-                ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null)
-                ->whereDate('tanggal', '<=', now());
-        }, 'kelasActivity.kelas'])
-            ->where(function ($query) {
-                $query->where('status_kehadiran', '1')
-                    ->orWhere('status_kehadiran', '0');
-            })->get();
-
         $listCard = [];
 
+        $omsetDalamSatuBulan = Jurnal::whereMonth('created_at', now())
+            ->where('tipe', 1)->get();
+        $omset = 0;
+        foreach ($omsetDalamSatuBulan as $item) {
+            $omset += $item->jumlah_uang;
+        }
+
+        array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omset, 0, ',', '.'))
+            ->description('Omset dalam bulan ini')->color('primary'));
+
+        $instrukturFee = 0;
+        $listInstrukturFee = Jurnal::where('id_order_paket', '!=', null)
+            ->where('tipe', 0)
+            ->whereMonth('created_at', now())
+            ->get();
+        foreach ($listInstrukturFee as $item) {
+            $instrukturFee += $item->jumlah_uang;
+        }
+
+        array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format($instrukturFee, 0, ',', '.'))->description('Pembayaran instruktur 1 bulan')->color('primary'));
+
+        $jumlahCustomer = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Customer');
+        })->whereMonth('created_at', now())->count();
+
+        array_push($listCard, Card::make('Customer Bulan ini', number_format($jumlahCustomer, 0, ',', '.'))->description('Jumlah customer dalam 1 bulan ini')->color('primary'));
+
+        $profit = 0;
+        $listJurnal = Jurnal::whereMonth('created_at', now())
+            ->get();
+        foreach ($listJurnal as $item) {
+            if ($item->tipe == 1) {
+                $profit += $item->jumlah_uang;
+            } else {
+                $profit -= $item->jumlah_uang;
+            }
+        }
+
+        array_push($listCard, Card::make('Profit Bulan ini', number_format($profit, 0, ',', '.'))->description('Total profit dalam 1 bulan ini')->color('primary'));
+
+        return $listCard;
+    }
+
+    public function temporary()
+    {
+        $listCard = [];
         $jurnal = Jurnal::select('jumlah_uang', 'tipe')->where('id_order_paket', '!=', null)
             ->get();
 
@@ -117,51 +148,5 @@ class PendatapanInstrukturOverview extends BaseWidget
 
         array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
             ->color('success'));
-
-        // $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
-        //     $query->where(function ($query) {
-        //         if (Auth::user()->hasRole('Instruktur')) {
-        //             $query->where('id_user', Auth::id());
-        //         }
-        //     })
-        //         ->where('id_kelas', '!=', null)
-        //         ->where('id_location_studio', '!=', null)
-        //         ->whereDate('tanggal', '<=', now())
-        //         ->whereDate('tanggal', '>=', Carbon::now()->subWeeks(1)->isoFormat('YYYY-MM-DD'));
-        // })->where(function ($query) {
-        //     $query->where('status_kehadiran', '1')
-        //         ->orWhere('status_kehadiran', '0');
-        // })->get();
-
-        // $omset = 0;
-        // foreach ($listOmset as $item) {
-        //     $omset += $item->kelasActivity->kelas->honor;
-        // }
-
-        // array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 minggu')
-        //     ->color('success'));
-
-        // $listOmset = BookingKelas::whereHas('kelasActivity', function ($query) {
-        //     $query->where(function ($query) {
-        //         if (Auth::user()->hasRole('Instruktur')) {
-        //             $query->where('id_user', Auth::id());
-        //         }
-        //     })
-        //         ->where('id_kelas', '!=', null)
-        //         ->where('id_location_studio', '!=', null)
-        //         ->whereDate('tanggal', now());
-        // })->where(function ($query) {
-        //     $query->where('status_kehadiran', '1')
-        //         ->orWhere('status_kehadiran', '0');
-        // })->get();
-
-        // $omset = 0;
-        // foreach ($listOmset as $item) {
-        //     $omset += $item->kelasActivity->kelas->honor;
-        // }
-
-        // array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan hari ini')
-        //     ->color('success'));
-        return $listCard;
     }
 }

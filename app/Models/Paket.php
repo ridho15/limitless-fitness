@@ -19,11 +19,20 @@ class Paket extends Model
         'location',
         'diskon',
         'id_kelas',
+        'is_many_times'
     ];
 
     protected $appends = [
-        'harga_formatted', 'harga_diskon', 'location_formatted',
+        'harga_formatted', 'harga_diskon', 'location_formatted', 'is_many_times_formatted'
     ];
+
+    public function getIsManyTimesFormattedAttribute(){
+        if($this->is_many_times == 1){
+            return 'Paket di order berkali kali';
+        }else{
+            return 'Paket di order hanya sekali';
+        }
+    }
 
     public function getTypeKelasFormattedAttribute()
     {

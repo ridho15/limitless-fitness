@@ -7,6 +7,7 @@ use Filament\Pages\Actions;
 use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Position;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListJurnals extends ListRecords
 {
@@ -24,5 +25,10 @@ class ListJurnals extends ListRecords
     protected function getTableActionsPosition(): ?string
     {
         return Position::BeforeCells;
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        return parent::getTableQuery()->whereMonth('created_at', now())->orderBy('created_at', 'DESC');
     }
 }

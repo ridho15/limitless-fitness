@@ -10,6 +10,7 @@ use App\Models\Location;
 use App\Models\Paket;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextInput\Mask;
@@ -20,6 +21,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,6 +77,12 @@ class PaketResource extends Resource
                                     ->numeric()
                                     ->default(0)
                                     ->required(),
+                                Radio::make('is_many_times')
+                                    ->label('Many TImes')
+                                    ->options([
+                                        '1' => 'Yes',
+                                        '0' => 'No'
+                                    ]),
                             ])
                     ])
             ]);
@@ -127,7 +135,16 @@ class PaketResource extends Resource
                             $location = Location::find($state);
                             return $location->nama;
                         }
-                    })
+                    }),
+                    BadgeColumn::make('is_many_times')
+                    ->label('Many Times')
+                    ->colors([
+                        'secondary' => 0,
+                        'success' => 1
+                    ])->enum([
+                        0 => 'Hanya sekali',
+                        1 => 'Digunakan berkali kali'
+                    ])
             ])
             ->filters([
                 //

@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Filament\Resources\InstrukturResource;
 use App\Models\KelasActivity;
 use App\Models\User;
+use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables;
@@ -18,6 +19,8 @@ class JadwalInstrukturAssign extends BaseWidget
 {
     public $tanggal_awal = null;
     public $tanggal_akhir = null;
+    protected static ?string $heading = "Slot Instruktur";
+
     protected function getTableQuery(): Builder
     {
         return User::whereHas('roles', function ($query) {
@@ -85,8 +88,8 @@ class JadwalInstrukturAssign extends BaseWidget
         return [
             Filter::make('tanggal')
                 ->form([
-                    DatePicker::make('created_from'),
-                    DatePicker::make('created_until')->default(now())
+                    DatePicker::make('created_from')->default(Carbon::now()->startOfMonth()),
+                    DatePicker::make('created_until')->default(Carbon::now()->endOfMonth())
                 ])->indicateUsing(function ($data) {
                     if ($data['created_from'] != null) {
                         $this->tanggal_awal = $data['created_from'];

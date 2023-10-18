@@ -10,7 +10,6 @@ use App\Filament\Resources\TimetableResource\Widgets\ManageTimetableWidget;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
 use App\Models\LocationStudio;
-use App\Models\Ruangan;
 use App\Models\User;
 use Carbon\Carbon;
 use Closure;
@@ -27,7 +26,6 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class TimetableResource extends Resource
@@ -101,16 +99,16 @@ class TimetableResource extends Resource
                                             } else {
                                                 $jam = $get('jam_mulai');
                                             }
-                                            $instruktur = User::whereHas('roles', function($query){
+                                            $instruktur = User::whereHas('roles', function ($query) {
                                                 $query->where('name', 'Instruktur');
                                             })
-                                            // whereHas('kelasActivity', function ($query) use ($jam, $get) {
+                                                // whereHas('kelasActivity', function ($query) use ($jam, $get) {
                                                 // $query->where('tanggal', date('Y-m-d', strtotime($get('tanggal'))))
-                                                    // ->where('id_kelas', null)
-                                                    // ->where('id_location_studio', null)
-                                                    // ->whereJamMulai($jam);
-                                            // })
-                                            ->get()->pluck('name', 'id');
+                                                // ->where('id_kelas', null)
+                                                // ->where('id_location_studio', null)
+                                                // ->whereJamMulai($jam);
+                                                // })
+                                                ->get()->pluck('name', 'id');
 
                                             return $instruktur;
                                         })

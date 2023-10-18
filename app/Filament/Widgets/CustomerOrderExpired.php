@@ -6,6 +6,7 @@ use App\Filament\Resources\CustomerResource;
 use App\Models\OrderPaket;
 use Carbon\Carbon;
 use Closure;
+use DateTime;
 use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
@@ -26,7 +27,7 @@ class CustomerOrderExpired extends BaseWidget
         $query = OrderPaket::where(function ($query) use ($duaMinggu) {
             $query->whereDate('expired_date', '>=', date('Y-m-d'))
                 ->whereDate('expired_date', "<=", $duaMinggu);
-        })
+        })->where('sisa', '>', 0)
             ->where('is_active', 1)
             ->orderBy('expired_date', 'DESC');
         return $query;
@@ -45,7 +46,6 @@ class CustomerOrderExpired extends BaseWidget
     protected function getTableColumns(): array
     {
         return [
-            TextColumn::make('expired_date')->sortable(),
             TextColumn::make('user.name')
                 ->label('Customer')
                 ->searchable(),
@@ -55,23 +55,16 @@ class CustomerOrderExpired extends BaseWidget
             TextColumn::make('jumlah_pertemuan')
                 ->alignCenter()
                 ->sortable(),
-            TextColumn::make('status_formatted')
-                ->label('Status'),
-            BadgeColumn::make('is_active')
-                ->toggleable()
-                ->label('Status Aktif')
-                ->enum([
-                    0 => 'Tidak aktif',
-                    1 => 'Aktif'
-                ])
-                ->colors([
-                    'danger' => 0,
-                    'primary' => 1
-                ]),
-            TextColumn::make('created_at')
-                ->label('Tanggal Order')
-                ->sortable(),
-            TextColumn::make('tanggal_pembayaran')->toggleable()->sortable()
+            TextColumn::make('sisa')
+                ->label('Sisa Paket')
+                ->searchable(),
+            TextColumn::make('expired_date')
+                ->label('Hari Akan Habis')
+                ->formatStateUsing(function ($state) {
+                    $jarak = Carbon::now()->diff($state);
+                    return $jarak->days . ' Days';
+                })
+                ->sortable()
         ];
     }
 }
