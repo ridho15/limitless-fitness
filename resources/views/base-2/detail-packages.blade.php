@@ -33,6 +33,12 @@
                             <span class="me-2"><i class="fa-regular fa-circle-check"></i></span>
                             <small>{{ $paket->type_kelas_formatted }} classes only</small>
                         </div>
+                        @if ($paket->is_many_times == 0)
+                            <div class="mb-2">
+                                <span class="me-2"><i class="fa-solid fa-1"></i></span>
+                                <small>{{ $paket->type_kelas_formatted }} Package only ordered once</small>
+                            </div>
+                        @endif
                     </div>
                     <h4 class="fw-bold mb-3">What you’re eligible</h4>
                     <ul class="row">
@@ -103,6 +109,41 @@
                 <form action="{{ route('konfirm-pembayaran-paket', ['paket' => $paket->id]) }}" method="POST">
                     @csrf
                     <div class="modal-body">
+                        <div class="" style="max-height: 200px !important; overflow: auto">
+                            <div class="px-2 py-2" style="border: 1px solid gray; border-radius: 20px;">
+                                @if (count($listVoucher) > 0)
+                                    @foreach ($listVoucher as $index => $item)
+                                        <div class="row justify-content-center align-items-center">
+                                            <div class="col-md col mb-2">
+                                                <img src="{{ asset('assets/images/no_image.png') }}" alt=""
+                                                    height="75" width="75" style="object-fit: cover">
+                                            </div>
+                                            <div class="col-md col mb-2">
+                                                <small class="text-sm"><strong>{{ $item->voucher->nama }} </strong><br>
+                                                    {{ $item->voucher->deskripsi }}
+                                                </small>
+                                            </div>
+                                            <div class="col-md col mb-2">
+                                                <small class="text-sm">{{ $item->expired }}</small>
+                                            </div>
+                                            <div class="col-md col mb-2">
+                                                <small class="text-sm">
+                                                    {{ $item->voucher->avaiable_voucher }}
+                                                </small>
+                                            </div>
+                                            <div class="col-md col mb-2 text-center">
+                                                <button type="button" class="btn custom-btn">Gunakan</button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    @endforeach
+                                @else
+                                    <div class="text-sm text-center">
+                                        <small>Tidak ada voucher</small>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                         <div class="mb-3">
                             Kamu akan melakukan pembayaran pada:</div>
                         paket : <strong>{{ $paket->nama }}</strong> <br>
@@ -123,9 +164,9 @@
                             Setelah melakukan pembayaran, diharapkan untuk melakukan confirmasi dan mengirimkan bukti
                             pembayaran pada admin.
                         </div>
-
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                required>
                             <label class="form-check-label" for="flexCheckDefault">
                                 Apakah kamu menerima syarat dan ketentuan yang berlaku
                             </label>

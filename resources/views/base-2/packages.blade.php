@@ -61,6 +61,14 @@
                                                     of first booking
                                                 </span>
                                             </small>
+                                            @if ($item->is_many_times == 0)
+                                                <small class="d-block mb-2 fw-light">
+                                                    <span class="me-2">
+                                                        <i class="fa-solid fa-clock-rotate-left" style="color: grey"></i>
+                                                    </span>
+                                                    <span>Paket hanyak sekali order</span>
+                                                </small>
+                                            @endif
                                         </div>
                                         <div class="text-center d-grid gap-2">
                                             <a href="{{ route('detail-packages', ['id' => $item->id]) }}"

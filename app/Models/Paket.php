@@ -26,10 +26,11 @@ class Paket extends Model
         'harga_formatted', 'harga_diskon', 'location_formatted', 'is_many_times_formatted'
     ];
 
-    public function getIsManyTimesFormattedAttribute(){
-        if($this->is_many_times == 1){
+    public function getIsManyTimesFormattedAttribute()
+    {
+        if ($this->is_many_times == 1) {
             return 'Paket di order berkali kali';
-        }else{
+        } else {
             return 'Paket di order hanya sekali';
         }
     }

@@ -203,7 +203,7 @@
 
 <body>
     <div class="logo-container">
-        <img style="height: 50px" src="{{ asset('assets/images/logo.png') }}">
+        {{-- <img style="height: 50px" src="{{ asset('assets/images/logo.png') }}"> --}}
     </div>
 
     <table class="invoice-info-container">

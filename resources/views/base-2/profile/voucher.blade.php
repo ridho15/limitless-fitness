@@ -36,7 +36,9 @@
                     <div class="tab-content">
                         <div class="tab-pane fade py-4 show active" id="semua">
                             <h4 class="fw-bold">Semua</h4>
-                            <div class="row"></div>
+                            <div class="row">
+
+                            </div>
                         </div>
                         <div class="tab-pane fade py-4" id="belum_digunakan">
                             <h4 class="fw-bold">Belum Digunakan</h4>

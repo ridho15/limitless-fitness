@@ -51,18 +51,15 @@ class VoucherCustomerRelationManager extends RelationManager
                         Radio::make('status')
                             ->label('Status Aktif')
                             ->options([
-                                '0' => 'Tidak Digunakan',
-                                '1' => 'Digunakan'
+                                0 => 'Tidak Digunakan',
+                                1 => 'Digunakan'
                             ]),
                         Radio::make('status_digunakan')
                             ->label('Status Digunakan')
                             ->options([
-                                '0' => 'Belum digunakan',
-                                '1' => 'Sudah Digunakan'
+                                0 => 'Belum digunakan',
+                                1 => 'Sudah Digunakan'
                             ]),
-                        Textarea::make('deskripsi')
-                            ->nullable()
-                            ->string()
                     ])
             ]);
     }
@@ -80,25 +77,23 @@ class VoucherCustomerRelationManager extends RelationManager
                     ->label('Status Aktif')
                     ->colors([
                         'secondary',
-                        'success' => '1'
+                        'success' => 1
                     ])
                     ->enum([
-                        '0' => 'Tidak aktif',
-                        '1' => 'Aktif'
+                        0 => 'Tidak aktif',
+                        1 => 'Aktif'
                     ]),
                 BadgeColumn::make('status_digunakan')
                     ->label('Status Digunakan')
                     ->colors([
-                        'secondary',
-                        'success' => 1
+                        'success' => 0,
+                        'secondary' => 1,
                     ])->enum([
                         0 => 'Belum digunakan',
                         1 => 'Sudah digunakan'
                     ]),
                 TextColumn::make('tanggal_digunakan')
                     ->label('Tanggal Digunakan'),
-                TextColumn::make('deskripsi')
-                    ->searchable()
             ])
             ->filters([
                 //

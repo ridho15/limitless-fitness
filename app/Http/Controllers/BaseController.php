@@ -16,6 +16,7 @@ use App\Models\Location;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
+use App\Models\VoucherCustomer;
 use Carbon\Carbon;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
@@ -155,6 +156,12 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Paket tidak ditemukan !');
         }
         $data['paket'] = $paket;
+        $listVoucher = VoucherCustomer::where('id_customer', Auth::id())
+            ->where('status', 1)
+            ->where('status_digunakan', 0)
+            ->whereDate('expired', '>', now())
+            ->get();
+        $data['listVoucher'] = $listVoucher;
         return view('base-2.detail-packages', $data);
     }
 

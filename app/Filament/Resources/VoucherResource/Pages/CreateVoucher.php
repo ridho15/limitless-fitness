@@ -19,4 +19,10 @@ class CreateVoucher extends CreateRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['id_paket'] = json_encode($data['id_paket']);
+        return $data;
+    }
 }

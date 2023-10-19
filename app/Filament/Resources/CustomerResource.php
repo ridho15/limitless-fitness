@@ -8,6 +8,7 @@ use App\Filament\Resources\CustomerResource\Pages\ViewCustomer;
 use App\Filament\Resources\CustomerResource\RelationManagers\BookingKelasRelationManager;
 use App\Filament\Resources\CustomerResource\RelationManagers\KreditKelasRelationManager;
 use App\Filament\Resources\CustomerResource\RelationManagers\OrderPaketRelationManager;
+use App\Filament\Resources\CustomerResource\RelationManagers\VoucherCustomerRelationManager;
 use App\Models\OrderPaket;
 use App\Models\Role;
 use App\Models\User;
@@ -155,6 +156,7 @@ class CustomerResource extends Resource
         return [
             BookingKelasRelationManager::class,
             OrderPaketRelationManager::class,
+            VoucherCustomerRelationManager::class,
             // KreditKelasRelationManager::class,
         ];
     }

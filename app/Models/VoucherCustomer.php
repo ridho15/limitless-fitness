@@ -10,7 +10,7 @@ class VoucherCustomer extends Model
     use HasFactory;
     protected $table = 'voucher_customers';
     protected $fillable = [
-        'id_voucher', 'id_customer', 'status', 'expired', 'deskripsi', 'status_digunakan', 'tanggal_digunakan'
+        'id_voucher', 'id_customer', 'status', 'expired', 'status_digunakan', 'tanggal_digunakan'
     ];
 
     protected $appends = [
@@ -34,10 +34,10 @@ class VoucherCustomer extends Model
     }
 
     public function voucher(){
-        return $this->belongsTo(Voucher::class, 'id_voucher');
+        return $this->belongsTo(Voucher::class, 'id_voucher')->withDefault();
     }
 
     public function customer(){
-        return $this->belongsTo(User::class, 'id_customer');
+        return $this->belongsTo(User::class, 'id_customer')->withDefault();
     }
 }

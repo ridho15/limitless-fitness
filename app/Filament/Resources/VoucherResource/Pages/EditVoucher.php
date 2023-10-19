@@ -16,4 +16,10 @@ class EditVoucher extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['id_paket'] = json_decode($data['id_paket']);
+        return $data;
+    }
 }

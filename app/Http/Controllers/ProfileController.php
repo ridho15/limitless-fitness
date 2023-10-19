@@ -316,7 +316,6 @@ class ProfileController extends Controller
         }
 
         $data['orderPaket'] = $orderPaket;
-
         $pdf = FacadePdf::loadView('pdf.invoice', $data);
         return $pdf->stream();
 
