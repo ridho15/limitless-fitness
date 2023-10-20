@@ -58,6 +58,6 @@ class Tanggal extends Component
 
     public function changeTanggal()
     {
-        $this->emit('changeTanggalData', $this->tanggal);
+        $this->emit('changeTanggal', $this->tanggal);
     }
 }
