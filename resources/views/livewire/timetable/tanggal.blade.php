@@ -138,8 +138,9 @@
 
 @push('js')
     <script>
-        Livewire.on('onClickTanggal', (tanggal) => {
-            Livewire.emit('setTanggal', tanggal)
+        Livewire.on('onClickTanggal', (index) => {
+            Livewire.emit('setTanggal', index)
+            Livewire.emit('changeTanggalData', index)
         })
 
         Livewire.on('onChangeCategory', (category) => {
