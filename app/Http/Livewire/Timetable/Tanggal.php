@@ -16,7 +16,7 @@ class Tanggal extends Component
         'onClickCari',
         'changetanggal'
     ];
-    private $listTanggal;
+    protected $listTanggal;
     public $indexTanggal;
     public $listKelas = [];
     public $listLocation = [];
@@ -44,14 +44,20 @@ class Tanggal extends Component
 
     public function setTanggal($index)
     {
+        $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
+        $endDate = Carbon::parse($this->tanggal)->addDays(8)->isoFormat('DD MMMM YYYY');
+        $listTanggal = CarbonPeriod::create($startDate, $endDate)->toArray();
         $this->indexTanggal = $index;
+        $this->emit('changeTanggal', $listTanggal[$index + 1]);
     }
 
-    public function onClickCari(){
+    public function onClickCari()
+    {
         $this->emit('setCari', $this->cari);
     }
 
-    public function changeTanggal(){
+    public function changeTanggal()
+    {
         $this->emit('changeTanggal', $this->tanggal);
     }
 }
