@@ -1,7 +1,7 @@
 <div>
     <div class="d-flex mb-2 justify-content-evenly" style="overflow-x: auto">
         @foreach ($listTanggal as $index => $item)
-            <a href="#{{ $index }}" wire:click="$emit('onClickTanggal', {{ $index }})"
+            <a href="#{{ $index }}" wire:click="$emit('onClickTanggal', {{ $index }}, {{ json_encode(date('Y-m-d', strtotime($item))) }})"
                 class="card-date @if ($index == $indexTanggal) active @endif shadow-sm mx-1"
                 style="text-decoration: none;">
                 <div class="text-center">
@@ -138,8 +138,9 @@
 
 @push('js')
     <script>
-        Livewire.on('onClickTanggal', (index) => {
+        Livewire.on('onClickTanggal', (index, tanggal) => {
             Livewire.emit('setTanggal', index)
+            Livewire.emit('changeTanggal', tanggal)
         })
 
         Livewire.on('onChangeCategory', (category) => {
