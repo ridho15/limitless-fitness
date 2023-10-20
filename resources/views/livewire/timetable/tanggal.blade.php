@@ -140,7 +140,6 @@
     <script>
         Livewire.on('onClickTanggal', (index) => {
             Livewire.emit('setTanggal', index)
-            Livewire.emit('changeTanggalData', index)
         })
 
         Livewire.on('onChangeCategory', (category) => {

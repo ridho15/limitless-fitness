@@ -134,11 +134,4 @@ class ListData extends Component
     {
         $this->tanggal = $tanggal;
     }
-
-    public function changeTanggalData($index){
-        $startDate = Carbon::parse($this->tanggal)->isoFormat('YYYY-MM-DD');
-        $endDate = Carbon::parse($this->tanggal)->addDays(8)->isoFormat('YYYY-MM-DD');
-        $listTanggal = CarbonPeriod::create($startDate, $endDate)->toArray();
-        $this->tanggal = $listTanggal[$index + 1];
-    }
 }
