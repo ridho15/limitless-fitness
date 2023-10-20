@@ -45,9 +45,9 @@ class Tanggal extends Component
     public function setTanggal($index)
     {
         $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
-        $endDate = Carbon::parse($this->tanggal)->addDays(8)->isoFormat('DD MMMM YYYY');
+        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
         $listTanggal = CarbonPeriod::create($startDate, $endDate)->toArray();
-        $this->emit('changeTanggal', $listTanggal[$index + 1]);
+        $this->emit('changeTanggal', $listTanggal[$index]);
         $this->indexTanggal = $index;
     }
 

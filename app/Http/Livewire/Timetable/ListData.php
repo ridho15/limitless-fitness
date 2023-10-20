@@ -79,6 +79,7 @@ class ListData extends Component
         } else {
             $this->listTanggal = [];
         }
+
         return view('livewire.timetable.list-data', [
             'listData' => $listData
         ]);
@@ -132,6 +133,6 @@ class ListData extends Component
 
     public function changeTanggal($tanggal)
     {
-        $this->tanggal = $tanggal;
+        $this->tanggal = date('Y-m-d', strtotime($tanggal));
     }
 }
