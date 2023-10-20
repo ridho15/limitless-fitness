@@ -48,7 +48,7 @@ class Tanggal extends Component
         $endDate = Carbon::parse($this->tanggal)->addDays(8)->isoFormat('DD MMMM YYYY');
         $listTanggal = CarbonPeriod::create($startDate, $endDate)->toArray();
         $this->indexTanggal = $index;
-        $this->emit('changeTanggal', $listTanggal[$index + 1]);
+        $this->emit('changeTanggalData', $listTanggal[$index + 1]);
     }
 
     public function onClickCari()
@@ -58,6 +58,6 @@ class Tanggal extends Component
 
     public function changeTanggal()
     {
-        $this->emit('changeTanggal', $this->tanggal);
+        $this->emit('changeTanggalData', $this->tanggal);
     }
 }

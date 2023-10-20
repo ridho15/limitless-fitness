@@ -19,7 +19,7 @@ class ListData extends Component
         'changeInstruktur',
         'changeLevel',
         'setCari',
-        'changeTanggal'
+        'changeTanggalData'
     ];
     public $indexTanggal;
     public $category;
@@ -129,7 +129,7 @@ class ListData extends Component
         $this->cari = $cari;
     }
 
-    public function changeTanggal($tanggal)
+    public function changeTanggalData($tanggal)
     {
         $this->tanggal = $tanggal;
     }
