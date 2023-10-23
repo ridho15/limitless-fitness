@@ -239,7 +239,8 @@ class ProfileController extends Controller
         return view('base-2.profile.packages', $data);
     }
 
-    public function voucher(){
+    public function voucher()
+    {
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'voucher';

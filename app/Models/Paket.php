@@ -73,4 +73,9 @@ class Paket extends Model
     {
         return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
     }
+
+    public function locationRelation()
+    {
+        return $this->belongsTo(Location::class, 'location');
+    }
 }

@@ -24,7 +24,7 @@ class LocationStudio extends Model
     public function getNamaLocationAttribute()
     {
         $location = Location::find($this->id_location);
-        if($location){
+        if ($location) {
             return $this->nama . ' ' . $location->nama;
         }
 

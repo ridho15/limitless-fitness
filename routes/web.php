@@ -80,8 +80,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/konfirm-pembayaran-paket/{paket}', [BaseController::class, 'confirmPembayaranPaket'])->name('konfirm-pembayaran-paket');
     Route::get('/detail-timetable/{id}', [BaseController::class, 'detailTimetable'])->name('detail-timetable');
     Route::prefix('profile')->group(function () {
-        Route::get('/invoice/{id}', [ProfileController::class, 'invoice'])->name('profile.invoice');
         Route::get('/', [ProfileController::class, 'index'])->name('profile');
+        Route::get('/invoice/{id}', [ProfileController::class, 'invoice'])->name('profile.invoice');
         Route::prefix('booking')->group(function () {
             Route::get('/', [ProfileController::class, 'bookings'])->name('profile.bookings');
             Route::post('/update-kehadiran/{id_booking_kelas}', [ProfileController::class, 'updateKehadiran'])->name('profile.bookings.update-kehadiran');

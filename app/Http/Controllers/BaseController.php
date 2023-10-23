@@ -140,9 +140,19 @@ class BaseController extends Controller
 
     public function packages()
     {
+        $user = User::find(Auth::id());
         $data['active'] = 'packages';
-        $allPaket = Paket::get();
-        $listKelas = Kelas::with('paket')->get();
+        $allPaket = Paket::where(function ($query) use ($user) {
+            if ($user->studio) {
+                $query->where('location', $user->studio->id_location);
+            }
+        })
+            ->get();
+        $listKelas = Kelas::with('paket')->whereHas('paket', function ($query) use ($user) {
+            if ($user->studio) {
+                $query->where('location', $user->studio->id_location);
+            }
+        })->get();
         $data['allPaket'] = $allPaket;
         $data['listKelas'] = $listKelas;
         return view('base-2.packages', $data);
@@ -155,13 +165,21 @@ class BaseController extends Controller
         if (!$paket) {
             return redirect()->back()->with('fail', 'Paket tidak ditemukan !');
         }
+        $isDisable = false;
+        if ($paket->is_many_times == 0) {
+            $orderPaket = OrderPaket::where('id_user', Auth::id())
+                ->whereHas('paket', function ($query) use ($paket) {
+                    $query->where('id', $paket->id)
+                        ->where('is_many_times', 0);
+                })
+                ->where('status', 1)
+                ->first();
+            if ($orderPaket) {
+                $isDisable = true;
+            }
+        }
         $data['paket'] = $paket;
-        $listVoucher = VoucherCustomer::where('id_customer', Auth::id())
-            ->where('status', 1)
-            ->where('status_digunakan', 0)
-            ->whereDate('expired', '>', now())
-            ->get();
-        $data['listVoucher'] = $listVoucher;
+        $data['isDisable'] = $isDisable;
         return view('base-2.detail-packages', $data);
     }
 
@@ -269,6 +287,7 @@ class BaseController extends Controller
     public function registrasi()
     {
         $data['active'] = 'registrasi';
+        $data['listLocation'] = Location::get();
         return view('base-2.registrasi', $data);
     }
 
@@ -379,6 +398,7 @@ class BaseController extends Controller
             'name' => 'required|string|max:225',
             'password' => 'required|min:8|max:20',
             'alamat' => 'required',
+            'id_location_studio' => 'required|numeric'
             // 'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max size as per your requirement
         ]);
 
@@ -401,6 +421,7 @@ class BaseController extends Controller
         $data['alamat'] = $request->alamat;
         $data['status'] = 0;
         $data['no_hp'] = $request->no_hp;
+        $data['id_studio'] = $request->id_location_studio;
 
         $user = User::create($data);
 
@@ -450,6 +471,7 @@ class BaseController extends Controller
             'alamat' => 'required',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'nullable|min:8|max:20',
+            'id_studio' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -474,6 +496,7 @@ class BaseController extends Controller
         $data['no_hp'] = $request->no_hp;
         $data['negara'] = $request->negara;
         $data['tanggal_lahir'] = $request->tanggal_lahir;
+        $data['id_studio'] = $request->id_studio;
 
         $id_user = Auth::id();
         $user = User::find($id_user);

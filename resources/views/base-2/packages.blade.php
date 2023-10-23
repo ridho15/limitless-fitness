@@ -41,14 +41,13 @@
                                         </div>
                                         <div class="p-3 mb-4 card-child" style="">
                                             <small class="d-block mb-2 fw-light">
-                                                <span class="me-2"><i class="fa-solid fa-clock-rotate-left"
-                                                        style="color: grey"></i>
+                                                <span class="me-2"><i class="fa-solid fa-check" style="color: grey"></i>
                                                 </span>
                                                 <span>{{ $item->jumlah_pertemuan }}
                                                     Credits</span>
                                             </small>
                                             <small class="d-block mb-2 fw-light">
-                                                <span class="me-2"><i class="fa-solid fa-clock-rotate-left"
+                                                <span class="me-2"><i class="fa-solid fa-location-dot"
                                                         style="color: grey"></i>
                                                 </span>
                                                 <span>{{ $item->location_formatted }}</span>
@@ -64,7 +63,7 @@
                                             @if ($item->is_many_times == 0)
                                                 <small class="d-block mb-2 fw-light">
                                                     <span class="me-2">
-                                                        <i class="fa-solid fa-clock-rotate-left" style="color: grey"></i>
+                                                        <i class="fa-solid fa-1" style="color: grey"></i>
                                                     </span>
                                                     <span>Paket hanyak sekali order</span>
                                                 </small>
@@ -109,14 +108,14 @@
                                             </div>
                                             <div class="p-3 mb-4 card-child" style="">
                                                 <small class="d-block mb-2 fw-light">
-                                                    <span class="me-2"><i class="fa-solid fa-clock-rotate-left"
+                                                    <span class="me-2"><i class="fa-solid fa-check"
                                                             style="color: grey"></i>
                                                     </span>
                                                     <span>{{ $paket->jumlah_pertemuan }}
                                                         Credits</span>
                                                 </small>
                                                 <small class="d-block mb-2 fw-light">
-                                                    <span class="me-2"><i class="fa-solid fa-clock-rotate-left"
+                                                    <span class="me-2"><i class="fa-solid fa-location-dot"
                                                             style="color: grey"></i>
                                                     </span>
                                                     <span>{{ $paket->location_formatted }}</span>

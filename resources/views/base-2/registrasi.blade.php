@@ -14,6 +14,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     @yield('css')
     @livewireStyles
     @stack('css')
@@ -23,88 +26,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 px-0">
-                <div class="bg-white shadow min-vh-100 d-flex align-items-center justify-content-center py-5">
-                    <div class="w-100 px-md-5 px-3">
-                        <div class="text-center mb-3">
-                            <img src="{{ asset('assets/images/logo.png') }}" alt="" class="img-fluid"
-                                style="object-fit: cover">
-                        </div>
-                        <div class="text-center fw-bold mb-5">
-                            Enter Your Data Account
-                        </div>
-                        <form method="POST" action="{{ route('postRegistrasi') }}">
-                            @csrf
-                            @if (session()->has('fail'))
-                                <div class="text-center">
-                                    <div class="alert alert-danger text-danger" role="alert">
-                                        {{ session('fail') }}
-                                    </div>
-                                </div>
-                            @elseif(session()->has('success'))
-                                <div class="text-center">
-                                    <div class="alert alert-success" role="alert">
-                                        {{ session('success') }}
-                                    </div>
-                                </div>
-                            @endif
-                            <label for="" class="form-label">Nama</label>
-                            <div class="input-group mb-3">
-                                <input type="text" name="name" class="form-control padding-vertical-12"
-                                    placeholder="Masukkan nama" aria-label="Masukkan nama"
-                                    value="{{ session()->get('name') }}" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2"><i
-                                        class="fa-solid fa-file-signature px-2"></i></span>
-                            </div>
-                            <label for="" class="form-label">Email</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control padding-vertical-12" name="email"
-                                    value="{{ session()->get('email') }}" placeholder="Masukkan email"
-                                    aria-label="Masukkan email" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2"><i
-                                        class="fa-regular fa-envelope px-2"></i></span>
-                            </div>
-                            <label for="" class="form-label">Phone Number</label>
-                            <div class="input-group mb-3">
-                                <input type="number" class="form-control padding-vertical-12" name="no_hp"
-                                    value="{{ session()->get('no_hp') }}" placeholder="Phone number"
-                                    aria-label="Phone number" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2"><i
-                                        class="fa-solid fa-phone px-2"></i></span>
-                            </div>
-                            <label for="exampleInputPassword1" class="form-label">Password</label>
-                            <div class="mb-3 input-group">
-                                <input type="password" class="form-control padding-vertical-12" name="password"
-                                    value="{{ session()->get('password') }}" placeholder="Masukkan password"
-                                    id="exampleInputPassword1">
-                                <span class="input-group-text" id="basic-addon2"><i
-                                        class="fa-solid fa-key px-2"></i></span>
-                            </div>
-                            <label for="exampleInputPassword1" class="form-label">Address</label>
-                            <div class="mb-3 input-group">
-                                <textarea name="alamat" class="form-control padding-vertical-12" placeholder="Masukkan alamat">{{ session()->get('alamat') }}</textarea>
-                                <span class="input-group-text" id="basic-addon2"><i
-                                        class="fa-solid fa-map-location-dot px-2"></i></span>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn custom-btn w-100">Submit</button>
-                            </div>
-                            <div class="row justify-content-center align-items-center my-4">
-                                <div class="col-md-5 col-5">
-                                    <hr>
-                                </div>
-                                <div class="col-md-1 col-1 text-center">
-                                    Or
-                                </div>
-                                <div class="col-md-5 col-5">
-                                    <hr>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <a href="{{ route('login') }}" class="btn custom-btn-outline w-100">Login</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                @livewire('form-registrasi')
             </div>
             <div class="col-md-8 px-0">
                 @livewire('caraousel')
@@ -120,6 +42,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     @yield('js')
     @livewireScripts
     @stack('js')
