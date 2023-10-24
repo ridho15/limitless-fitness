@@ -22,7 +22,7 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        <div class="form-group mb-3">
+                        {{-- <div class="form-group mb-3">
                             <label for="" class="form-label">Studio</label>
                             <select name="id_studio" wire:model="id_studio" class="form-control" required>
                                 <option value="">Pilih</option>
@@ -33,7 +33,7 @@
                             @error('id_studio')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn custom-btn-outline" data-bs-dismiss="modal">Close</button>

@@ -35,7 +35,7 @@ class User extends Authenticatable implements FilamentUser
         'jenis_kelamin',
         'negara',
         'ip_address',
-        'id_studio'
+        'id_location'
     ];
 
     /**
@@ -124,8 +124,8 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(VoucherCustomer::class, 'id_customer');
     }
 
-    public function studio()
+    public function location()
     {
-        return $this->belongsTo(LocationStudio::class, 'id_studio');
+        return $this->belongsTo(Location::class, 'id_location');
     }
 }

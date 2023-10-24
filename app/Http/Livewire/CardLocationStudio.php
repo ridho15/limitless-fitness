@@ -49,16 +49,18 @@ class CardLocationStudio extends Component
     public function updateStudioUser()
     {
         $user = User::find(Auth::id());
+        if ($user) {
+            $user->update([
+                'id_location' => $this->id_location
+            ]);
+        }
 
-        $user->update([
-            'id_studio' => $this->id_studio
-        ]);
-
-        $locationStudio = LocationStudio::find($this->id_studio);
-        session()->put('phone_number', $locationStudio->no_hp);
+        $location = Location::find($this->id_location);
+        session()->put('phone_number', $location->no_hp);
         session()->put('isStudioChecked', true);
 
         $this->emit('refreshListData');
+        $this->emit('refreshFloatingWhatsApp');
         $this->emit('finishUpdate');
     }
 }

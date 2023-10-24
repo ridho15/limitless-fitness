@@ -47,6 +47,8 @@ class BaseController extends Controller
         //         ]);
         // })->get();
         // return $instruktur;
+        session()->forget('phone_number');
+        session()->forget('isStudioChecked');
         $data['active'] = 'home';
         return view('base-2.index', $data);
     }
@@ -476,7 +478,7 @@ class BaseController extends Controller
             'alamat' => 'required',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'nullable|min:8|max:20',
-            'id_studio' => 'required|numeric'
+            'id_location' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -501,7 +503,7 @@ class BaseController extends Controller
         $data['no_hp'] = $request->no_hp;
         $data['negara'] = $request->negara;
         $data['tanggal_lahir'] = $request->tanggal_lahir;
-        $data['id_studio'] = $request->id_studio;
+        $data['id_location'] = $request->id_location;
 
         $id_user = Auth::id();
         $user = User::find($id_user);

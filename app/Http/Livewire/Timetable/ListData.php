@@ -46,8 +46,10 @@ class ListData extends Component
                 foreach ($this->listTanggal as $item) {
                     $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
                         ->where(function ($query) {
-                            if (Auth::user()->id_studio != null) {
-                                $query->where('id_location_studio', $this->user->id_studio);
+                            if (Auth::user()->id_location != null) {
+                                $query->whereHas('locationStudio', function ($query) {
+                                    $query->where('id_location', $this->user->id_location);
+                                });
                             }
                         })
                         ->whereHas('kelas')
@@ -70,8 +72,10 @@ class ListData extends Component
                 $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
                     ->whereHas('kelas')
                     ->where(function ($query) {
-                        if (Auth::user()->id_studio != null) {
-                            $query->where('id_location_studio', $this->user->id_studio);
+                        if (Auth::user()->id_location != null) {
+                            $query->whereHas('locationStudio', function ($query) {
+                                $query->where('id_location', $this->user->id_location);
+                            });
                         }
                     })
                     ->where('id_kelas', $this->id_kelas)
