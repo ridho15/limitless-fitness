@@ -47,8 +47,13 @@ class BaseController extends Controller
         //         ]);
         // })->get();
         // return $instruktur;
-        session()->forget('phone_number');
-        session()->forget('isStudioChecked');
+        if(Auth::user()){
+            session()->put('phone_number', Auth::user()->location->no_hp);
+            session()->put('isLocationChecked', true);
+        }else{
+            session()->forget('phone_number');
+            session()->forget('isLocationChecked');
+        }
         $data['active'] = 'home';
         return view('base-2.index', $data);
     }
@@ -405,7 +410,7 @@ class BaseController extends Controller
             'name' => 'required|string|max:225',
             'password' => 'required|min:8|max:20',
             'alamat' => 'required',
-            'id_location_studio' => 'required|numeric'
+            'id_location' => 'required|numeric'
             // 'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max size as per your requirement
         ]);
 
@@ -428,7 +433,7 @@ class BaseController extends Controller
         $data['alamat'] = $request->alamat;
         $data['status'] = 0;
         $data['no_hp'] = $request->no_hp;
-        $data['id_studio'] = $request->id_location_studio;
+        $data['id_location'] = $request->id_location;
 
         $user = User::create($data);
 

@@ -178,7 +178,7 @@
     @stack('js')
     <script>
         $(document).ready(function() {
-            if ("{{ !session()->get('isStudioChecked') }}") {
+            if ("{{ !session()->get('isLocationChecked') }}") {
                 $('#modal_location_studio').modal('show')
             }
         });

@@ -28,10 +28,8 @@ class CardLocationStudio extends Component
     public function mount()
     {
         $this->listLocation = Location::get();
-        if (Auth::user() && Auth::user()->id_studio != null) {
-            $this->id_studio = Auth::user()->id_studio;
-            $this->id_location = Auth::user()->studio->id_location;
-            $this->listLocationStudio = LocationStudio::where('id_location', $this->id_location)->get();
+        if (Auth::user() && Auth::user()->id_location != null) {
+            $this->id_location = Auth::user()->id_location;
         }
     }
 

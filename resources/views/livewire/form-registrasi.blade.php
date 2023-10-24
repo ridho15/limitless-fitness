@@ -52,21 +52,10 @@
                     @endforeach
                 </select>
             </div>
-            <label for="" class="form-label">Studio</label>
-            <div class="input-group mb-3">
-                <select name="id_location_studio" class="form-control" wire:model="id_location_studio"
-                    data-placeholder="Pilih Studio" required>
-                    <option value="">Pilih</option>
-                    @foreach ($listLocationStudio as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
             <label for="exampleInputPassword1" class="form-label">Password</label>
             <div class="mb-3 input-group">
                 <input type="password" class="form-control padding-vertical-12" wire:model="password" name="password"
-                    value="{{ session()->get('password') }}" placeholder="Masukkan password"
-                    id="exampleInputPassword1">
+                    value="{{ session()->get('password') }}" placeholder="Masukkan password" id="exampleInputPassword1">
                 <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-key px-2"></i></span>
             </div>
             <label for="exampleInputPassword1" class="form-label">Alamat</label>
