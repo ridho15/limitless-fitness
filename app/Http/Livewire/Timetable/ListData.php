@@ -64,7 +64,7 @@ class ListData extends Component
             } else {
                 $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
                     ->whereHas('kelas')
-                    ->where('id_location_studio', $this->user->id_studio)
+                    // ->where('id_location_studio', $this->user->id_studio)
                     ->where('id_kelas', $this->id_kelas)
                     // ->where(function ($query) {
                     //     if ($this->id_user) {
