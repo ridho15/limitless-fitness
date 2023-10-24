@@ -34,15 +34,6 @@
                 </select>
             </div>
             <div class="col-md-6 mb-3">
-                <label for="id_studio" class="form-label">Studio</label>
-                <select name="id_studio" class="form-control" wire:model="id_studio" data-placeholder="Pilih" required>
-                    <option value="">Pilih</option>
-                    @foreach ($listLocationStudio as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-6 mb-3">
                 <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
                 <input type="date" name="tanggal_lahir" class="form-control" wire:model="tanggal_lahir"
                     id="tanggal_lahir" style="border-radius: 10px">

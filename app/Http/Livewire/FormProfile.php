@@ -41,7 +41,7 @@ class FormProfile extends Component
         $this->nama = $user->name;
         $this->email = $user->email;
         $this->no_hp = $user->no_hp;
-        $this->id_studio = $user->id_studio;
+        $this->id_location = $user->id_location;
         $this->tanggal_lahir = $user->tanggal_lahir;
         $this->jenis_kelamin = $user->jenis_kelamin;
         $this->negara = $user->negara;
