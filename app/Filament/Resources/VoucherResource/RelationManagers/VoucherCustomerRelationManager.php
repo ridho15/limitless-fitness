@@ -51,8 +51,8 @@ class VoucherCustomerRelationManager extends RelationManager
                         Radio::make('status')
                             ->label('Status Aktif')
                             ->options([
-                                0 => 'Tidak Digunakan',
-                                1 => 'Digunakan'
+                                0 => 'Tidak Aktif',
+                                1 => 'Aktif'
                             ]),
                         Radio::make('status_digunakan')
                             ->label('Status Digunakan')

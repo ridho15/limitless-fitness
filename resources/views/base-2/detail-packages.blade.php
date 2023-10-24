@@ -56,9 +56,11 @@
                         </a>
                     </small>
                     <div class="text-center">
-                        <button type="button" @if ($isDisable == true) disabled @endif
+                        <button type="button" @if ($isDisable == true||!Auth::user() ) disabled @endif
                             class="btn custom-btn w-100" id="btn_confirm_pembayaran">
-                            @if ($isDisable == false)
+                            @if(!Auth::user())
+                                Silahkan login terlebih dahulu
+                            @elseif ($isDisable == false)
                                 Confirm and Pay
                             @else
                                 Paket sudah pernah di order

@@ -15,6 +15,7 @@ class LocationStudio extends Model
         'nama',
         'equipment',
         'image',
+        'no_hp'
     ];
 
     protected $appends = [

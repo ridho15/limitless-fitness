@@ -44,14 +44,14 @@ class ListData extends Component
             if ($this->tanggal == null) {
                 foreach ($this->listTanggal as $item) {
                     $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
-                        ->where('id_location_studio', $this->user->id_studio)
+                        // ->where('id_location_studio', $this->user->id_studio)
                         ->whereHas('kelas')
                         ->where('id_kelas', $this->id_kelas)
-                        ->where(function ($query) {
-                            if ($this->id_user) {
-                                $query->where('id_user', $this->id_user);
-                            }
-                        })
+                        // ->where(function ($query) {
+                        //     if ($this->id_user) {
+                        //         $query->where('id_user', $this->id_user);
+                        //     }
+                        // })
                         ->whereDate('tanggal', $item)
                         ->orderBy('jam_mulai', 'ASC')
                         ->get();
@@ -66,11 +66,11 @@ class ListData extends Component
                     ->whereHas('kelas')
                     ->where('id_location_studio', $this->user->id_studio)
                     ->where('id_kelas', $this->id_kelas)
-                    ->where(function ($query) {
-                        if ($this->id_user) {
-                            $query->where('id_user', $this->id_user);
-                        }
-                    })
+                    // ->where(function ($query) {
+                    //     if ($this->id_user) {
+                    //         $query->where('id_user', $this->id_user);
+                    //     }
+                    // })
                     ->whereDate('tanggal', $this->tanggal)
                     ->orderBy('jam_mulai', 'ASC')
                     ->get();

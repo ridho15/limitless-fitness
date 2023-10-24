@@ -72,14 +72,14 @@ class ConfirmPembayaran extends Component
         }
 
         // check paket hanya sekali order
-        $orderPaket = OrderPaket::whereHas('paket', function($query){
+        $orderPaket = OrderPaket::whereHas('paket', function ($query) {
             $query->where('id', $this->id_paket)
-            ->where('is_many_times', 0);
+                ->where('is_many_times', 0);
         })
-        ->where('id_user', Auth::id())
-        ->where('status', 1)
-        ->first();
-        if($orderPaket){
+            ->where('id_user', Auth::id())
+            ->where('status', 1)
+            ->first();
+        if ($orderPaket) {
             return session()->flash('fail', 'Paket sudah pernah di order. Silahkan order paket lain');
         }
 
@@ -94,7 +94,7 @@ class ConfirmPembayaran extends Component
 
         $voucherCustomer = VoucherCustomer::find($this->id_voucher_customer);
 
-        OrderPaket::create($data);
+        $orderPaket = OrderPaket::create($data);
         activity()->causedBy(Auth::user())
             ->log('Melakukan konfirmasi pembayaran paket');
 
@@ -109,7 +109,8 @@ class ConfirmPembayaran extends Component
             }
             $voucherCustomer->update([
                 'status_digunakan' => 1,
-                'tanggal_digunakan' => now()
+                'tanggal_digunakan' => now(),
+                'id_order_paket' => $orderPaket->id,
             ]);
             activity()->causedBy(Auth::user())
                 ->log('Melakukan order paket menggunakan voucher');

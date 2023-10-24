@@ -143,13 +143,13 @@ class BaseController extends Controller
         $user = User::find(Auth::id());
         $data['active'] = 'packages';
         $allPaket = Paket::where(function ($query) use ($user) {
-            if ($user->studio) {
+            if (isset($user->studio)) {
                 $query->where('location', $user->studio->id_location);
             }
         })
             ->get();
         $listKelas = Kelas::with('paket')->whereHas('paket', function ($query) use ($user) {
-            if ($user->studio) {
+            if (isset($user->studio)) {
                 $query->where('location', $user->studio->id_location);
             }
         })->get();
@@ -178,6 +178,7 @@ class BaseController extends Controller
                 $isDisable = true;
             }
         }
+
         $data['paket'] = $paket;
         $data['isDisable'] = $isDisable;
         return view('base-2.detail-packages', $data);

@@ -54,6 +54,10 @@ class LocationStudioResource extends Resource
                                     ->searchable()
                                     ->relationship('location', 'nama')
                                     ->required(),
+                                TextInput::make('no_hp')
+                                    ->label('Phone number')
+                                    ->required()
+                                    ->numeric(),
                                 TextInput::make('equipment')
                                     ->helperText('Pisahkan setiap equipment dengan tanda koma ","')
                                     ->nullable(),
@@ -79,6 +83,9 @@ class LocationStudioResource extends Resource
                     ->searchable(),
                 TextColumn::make('nama')
                     ->label('Nama')
+                    ->searchable(),
+                TextColumn::make('no_hp')
+                    ->label('Phone Number')
                     ->searchable(),
                 TextColumn::make('equipment'),
             ])

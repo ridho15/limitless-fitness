@@ -127,6 +127,7 @@
 
     @yield('content')
     {{-- Start Footer --}}
+    @livewire('card-location-studio')
     <footer class="bg-color-custom pb-3 pt-5 mt-auto" id="footer">
         <div class="container">
             {{-- <div class="row">
@@ -155,8 +156,10 @@
             </div>
         </div>
     </footer>
-    <a href="https://wa.me/+6281212327038" target="_blank" class="rounded-circle" style="position: fixed; bottom: 15px; right: 15px; background-color: #396552; padding: 15px; z-index: 1000;">
-        <img src="{{ asset('assets/images/icon-whatsapp.png') }}" width="40" height="40" alt="" style="object-fit: contain">
+    <a href="https://wa.me/+6281212327038" target="_blank" class="rounded-circle"
+        style="position: fixed; bottom: 15px; right: 15px; background-color: #396552; padding: 15px; z-index: 1000;">
+        <img src="{{ asset('assets/images/icon-whatsapp.png') }}" width="40" height="40" alt=""
+            style="object-fit: contain">
     </a>
     {{-- End Footer --}}
 
@@ -179,7 +182,6 @@
     @stack('js')
     <script>
         $(document).ready(function() {});
-
         if ("{{ session()->has('fail') }}") {
             Toastify({
                 text: "{{ session('fail') }}",
