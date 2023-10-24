@@ -10,12 +10,21 @@ class Voucher extends Model
     use HasFactory;
     protected $table = 'vouchers';
     protected $fillable = [
-        'nama', 'deskripsi', 'expired', 'image', 'status', 'disc_harga', 'disc_percent', 'tanggal_aktif', 'lama_aktif', 'id_paket'
+        'nama', 'deskripsi', 'expired', 'image', 'status', 'disc_harga', 'disc_percent', 'tanggal_aktif', 'lama_aktif', 'id_paket',
+        'kode_voucher', 'sekali_gunakan'
     ];
 
     protected $appends = [
-        'status_formatted', 'avaiable_voucher'
+        'status_formatted', 'avaiable_voucher', 'sekali_gunakan_formatted'
     ];
+
+    public function getSekaliGunakanFormattedAttribute(){
+        if($this->sekali_gunakan == 1){
+            return 'Sekali Gunakan';
+        }else{
+            return 'Bisa Berkali Kali';
+        }
+    }
 
     public function getAvaiableVoucherAttribute()
     {

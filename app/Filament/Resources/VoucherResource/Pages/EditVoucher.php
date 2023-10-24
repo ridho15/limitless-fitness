@@ -22,4 +22,10 @@ class EditVoucher extends EditRecord
         $data['id_paket'] = json_decode($data['id_paket']);
         return $data;
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['id_paket'] = json_encode($data['id_paket']);
+        return $data;
+    }
 }

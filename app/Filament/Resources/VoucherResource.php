@@ -68,6 +68,10 @@ class VoucherResource extends Resource
                             ->numeric()
                             ->maxValue(100)
                             ->nullable(),
+                        TextInput::make('kode_voucher')
+                            ->label('Kode Voucher')
+                            ->maxLength(255)
+                            ->required(),
                         DateTimePicker::make('tanggal_aktif')
                             ->label('Tanggal Aktif')
                             ->nullable(),
@@ -83,6 +87,12 @@ class VoucherResource extends Resource
                             ->nullable()
                             ->image()
                             ->maxSize(1024),
+                        Radio::make('sekali_gunakan')
+                            ->label('Tipe Voucher')
+                            ->options([
+                                0 => 'Bisa Berkali Kali',
+                                1 => 'Sekali Gunakan'
+                            ])->required(),
                         Radio::make('status')
                             ->options([
                                 '1' => 'Aktif',
@@ -135,6 +145,19 @@ class VoucherResource extends Resource
                         return $record->disc_percent ?? '0' . '%';
                     })
                     ->label('Discount Percent'),
+                TextColumn::make('kode_voucher')
+                    ->label('Kode Voucher')
+                    ->searchable(),
+                BadgeColumn::make('sekali_gunakan')
+                    ->label('Tipe Voucher')
+                    ->colors([
+                        'primary' => 1,
+                        'secondary' => 0
+                    ])
+                    ->enum([
+                        1 => 'Sekali Gunakan',
+                        0 => 'Bisa Berkali kali'
+                    ]),
                 TextColumn::make('tanggal_aktif')
                     ->label('Tanggal Aktif'),
                 TextColumn::make('lama_aktif')

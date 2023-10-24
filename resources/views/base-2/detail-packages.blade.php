@@ -56,9 +56,9 @@
                         </a>
                     </small>
                     <div class="text-center">
-                        <button type="button" @if ($isDisable == true||!Auth::user() ) disabled @endif
+                        <button type="button" @if ($isDisable == true || !Auth::user()) disabled @endif
                             class="btn custom-btn w-100" id="btn_confirm_pembayaran">
-                            @if(!Auth::user())
+                            @if (!Auth::user())
                                 Silahkan login terlebih dahulu
                             @elseif ($isDisable == false)
                                 Confirm and Pay
@@ -69,37 +69,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="px-4 py-5 bg-white shadow sticky-top"
-                        style="border-radius: 15px; top: 80px; z-index: 2 !important;">
-                        <small
-                            class="d-block mb-2 fw-semibold text-uppercase text-secondary">{{ $paket->kategori_formatted }}</small>
-                        <h5 class="fw-semibold mb-3">{{ $paket->nama }}</h5>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <small class="fw-light">{{ $paket->location_formatted }} access</small>
-                            <small class="fw-light">{{ $paket->jumlah_pertemuan }} credits</small>
-                        </div>
-                        <hr class="my-4" style="opacity: 0.1">
-                        <div class="fw-semibold mb-3">Price detail</div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <small class="fw-light">Standard</small>
-                            <small class="fw-light">Rp.{{ number_format($paket->harga, 0, ',', '.') }}</small>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="fw-light">Diskon ({{ $paket->diskon }}%)</small>
-                            <small
-                                class="fw-light">Rp.{{ number_format(($paket->harga * $paket->diskon) / 100, 0, ',', '.') }}</small>
-                        </div>
-                        <hr class="my-4" style="opacity: 0.1">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="fw-light">Subtotal</small>
-                            <small class="fw-light">Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</small>
-                        </div>
-                        <hr class="my-4" style="opacity: 0.1">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="fw-bold">Grand Total</small>
-                            <small class="fw-bold">Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</small>
-                        </div>
-                    </div>
+                   @livewire('packages.detail-pembayaran', ['id_paket' => $paket->id])
                 </div>
             </div>
         </div>

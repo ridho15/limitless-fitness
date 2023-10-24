@@ -80,6 +80,12 @@ class CustomerResource extends Resource
                                     ->password()
                                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                                     ->dehydrated(fn ($state) => filled($state)),
+                                Select::make('id_studio')
+                                    ->label('Studio')
+                                    ->preload()
+                                    ->searchable()
+                                    ->relationship('studio', 'nama')
+                                    ->nullable(),
                                 FileUpload::make('foto')
                                     ->image()
                                     ->maxSize(2048)
@@ -115,6 +121,9 @@ class CustomerResource extends Resource
                 TextColumn::make('no_hp')
                     ->searchable(),
                 TextColumn::make('alamat')
+                    ->searchable(),
+                TextColumn::make('studio.nama')
+                    ->label('Studio')
                     ->searchable(),
                 TextColumn::make('email_verified_at')
                     ->sortable()

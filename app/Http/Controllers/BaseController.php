@@ -339,6 +339,10 @@ class BaseController extends Controller
 
         Auth::logoutOtherDevices($data['password']);
         session()->regenerate();
+        if (Auth::user()->id_studio != null) {
+            session()->put('isStudioChecked', true);
+            session()->put('phone_number', Auth::user()->studio->no_hp);
+        }
         activity()->causedBy(Auth::user())
             ->log('Melakukan login');
         if (Auth::user()->hasRole(['Super Admin', 'Instruktur', 'Admin'])) {

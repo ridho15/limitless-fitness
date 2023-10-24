@@ -14,7 +14,8 @@ class ConfirmPembayaran extends Component
 {
     public $listeners = [
         'gunakanVoucher',
-        'konfirmasiPembayaran'
+        'konfirmasiPembayaran',
+        'setVoucher'
     ];
     public $id_paket;
     public $id_voucher_customer;
@@ -90,6 +91,7 @@ class ConfirmPembayaran extends Component
         $data['is_active'] = 0;
         $data['honor'] = $this->paket->honor;
         $data['jumlah_pertemuan'] = $this->paket->jumlah_pertemuan;
+        $data['sisa'] = $this->paket->jumlah_pertemuan;
         $data['expired_date'] = Carbon::now()->addDays($this->paket->valid_day);
 
         $voucherCustomer = VoucherCustomer::find($this->id_voucher_customer);
@@ -120,5 +122,30 @@ class ConfirmPembayaran extends Component
             'success' => 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih',
             'info' => 'Silahkan masuk ke tab tidak aktif dapat dilihat pada halaman ini untuk mengupload bukti pembayaran.',
         ]);
+    }
+
+    public function setVoucher($id_voucher)
+    {
+        $voucher = Voucher::find($id_voucher);
+        $voucherCustomer = VoucherCustomer::updateOrCreate([
+            'id_voucher' => $voucher->id,
+            'id_customer' => Auth::id(),
+            'status_digunakan' => 0,
+            'status' => 1,
+        ], [
+            'id_voucher' => $voucher->id,
+            'id_customer' => Auth::id(),
+            'status_digunakan' => 0,
+            'status' => 1,
+            'expired' => $voucher->expired,
+        ]);
+
+        $this->id_voucher_customer = $voucherCustomer->id;
+        $this->listVoucher = VoucherCustomer::where('id_customer', Auth::id())
+            ->where('status', 1)
+            ->where('status_digunakan', 0)
+            ->whereDate('expired', '>', now())
+            ->get();
+        $this->gunakanVoucher($this->id_voucher_customer);
     }
 }
