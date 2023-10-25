@@ -46,8 +46,8 @@
                                             </div>
                                             <div class="col-md-4 text-center">
                                                 <div class="fw-bold text-center">{{ $item->harga_formatted }}</div>
-                                                <small class="d-block text-center">Diskon / Potongan <br>
-                                                    {{ $item->paket->diskon }}% / Rp.{{ number_format($item->paket->harga - $item->harga,0,',','.') }}</small>
+                                                <small class="d-block text-center">Harga sudah di potonga diskon <br>
+                                                </small>
                                             </div>
                                             <div class="col-md-4 text-end">
                                                 @if ($item->status == 1)

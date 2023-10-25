@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Packages;
 
+use App\Models\Location;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\Voucher;
@@ -22,6 +23,9 @@ class ConfirmPembayaran extends Component
     public $paket;
     public $listVoucher = [];
     public $potongan = 0;
+    public $bank;
+    public $no_rekening;
+    public $atas_nama;
     public function render()
     {
         return view('livewire.packages.confirm-pembayaran');
@@ -36,6 +40,12 @@ class ConfirmPembayaran extends Component
             ->where('status_digunakan', 0)
             ->whereDate('expired', '>', now())
             ->get();
+        $location = Location::find(session()->get('id_location'));
+        if ($location) {
+            $this->bank = $location->nama_bank;
+            $this->no_rekening = $location->no_rekening;
+            $this->atas_nama = $location->atas_nama;
+        }
     }
 
     public function gunakanVoucher($id_voucher_customer)
@@ -52,6 +62,8 @@ class ConfirmPembayaran extends Component
         } else {
             $this->potongan = $this->paket * $voucherCustomer->voucher->disc_percent / 100;
         }
+
+        $this->emit('setIdVoucher', $voucherCustomer->id_voucher);
     }
 
     public function konfirmasiPembayaran()

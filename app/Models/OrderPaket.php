@@ -55,6 +55,8 @@ class OrderPaket extends Model
             case 2:
                 return 'Belum Lunas';
                 break;
+            case 3:
+                return 'Aktif';
             default:
                 return 'Not Know';
                 break;
@@ -100,5 +102,10 @@ class OrderPaket extends Model
     public function jurnal()
     {
         return $this->hasOne(Jurnal::class, 'id_order_paket');
+    }
+
+    public function voucherCustomer()
+    {
+        return $this->hasOne(VoucherCustomer::class, 'id_order_paket');
     }
 }

@@ -17,7 +17,10 @@ class Location extends Model
         'alamat',
         'email',
         'url_location',
-        'image'
+        'image',
+        'nama_bank',
+        'no_rekening',
+        'atas_nama'
     ];
 
     public function locationOpening()

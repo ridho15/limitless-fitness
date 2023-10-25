@@ -60,6 +60,7 @@ class CardLocationStudio extends Component
 
         $this->emit('refreshListData');
         $this->emit('refreshFloatingWhatsApp');
+        $this->emit('refreshCaraousel');
         $this->emit('refreshFooter');
         $this->emit('finishUpdate');
     }

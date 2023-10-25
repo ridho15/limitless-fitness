@@ -227,7 +227,7 @@ class BaseController extends Controller
         $orderPaket = OrderPaket::where('id_user', Auth::id())
             ->whereHas('paket', function ($query) use ($kelasActivity) {
                 $query->where('id_kelas', $kelasActivity->id_kelas);
-            })->where('is_active', 1)
+            })->where('status', 1)
             ->whereDate('expired_date', '>=', now())
             ->where('sisa', '>=', 0)
             ->orderBy('sisa', 'DESC')
@@ -513,6 +513,12 @@ class BaseController extends Controller
         $user = User::find($id_user);
         $user->update($data);
 
+        $location = Location::find($request->id_location);
+        if ($location) {
+            session()->put('phone_number', $location->no_hp);
+            session()->put('id_location', $location->id);
+            session()->put('isLocationChecked', true);
+        }
         activity()->causedBy(Auth::user())
             ->log('Melakukan update profile');
 
@@ -557,7 +563,6 @@ class BaseController extends Controller
             })->where('sisa', '>', 0)
             ->whereDate('expired_date', '>=', now())
             ->where('status', 1)
-            ->where('is_active', 1)
             ->first();
 
         if (!$orderPaket) {
@@ -591,7 +596,8 @@ class BaseController extends Controller
         BookingKelas::create($data);
 
         $orderPaket->update([
-            'sisa' => $orderPaket->sisa - 1
+            'sisa' => $orderPaket->sisa - 1,
+            'is_active' => 1,
         ]);
 
         activity()->causedBy(Auth::user())

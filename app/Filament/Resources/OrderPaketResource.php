@@ -289,7 +289,6 @@ class OrderPaketResource extends Resource
                                 $tanggalExpired = Carbon::now()->addDays($record->paket->valid_day);
                                 $record->update([
                                     'status' => 1,
-                                    'is_active' => 1,
                                     'expired_date' => $tanggalExpired,
                                     'sisa' => $record->jumlah_pertemuan
                                 ]);

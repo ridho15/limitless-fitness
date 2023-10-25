@@ -15,6 +15,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
@@ -51,6 +52,15 @@ class LocationResource extends Resource
                                     ->tel()
                                     ->telRegex('/^(\+62|0)(\d{8,12})$/')
                                     ->required(),
+                                TextInput::make('nama_bank')
+                                    ->required()
+                                    ->label('Nama Bank'),
+                                TextInput::make('no_rekening')
+                                    ->required()
+                                    ->label('Nomor Rekening'),
+                                TextInput::make('atas_nama')
+                                    ->label('Atas Nama Rekening')
+                                    ->required(),
                                 Textarea::make('deskripsi')
                                     ->nullable(),
                                 Textarea::make('alamat')
@@ -79,6 +89,15 @@ class LocationResource extends Resource
                     ->searchable(),
                 TextColumn::make('email')
                     ->searchable(),
+                TextColumn::make('nama_bank')
+                    ->label('Nama Bank')
+                    ->searchable(),
+                TextColumn::make('no_rekening')
+                    ->label('Nomor Rekening')
+                    ->searchable(),
+                TextColumn::make('atas_nama')
+                    ->label('Atas Nama Rekening')
+                    ->searchable(),
                 TextColumn::make('deskripsi')
                     ->searchable(),
                 TextColumn::make('alamat')
@@ -90,14 +109,16 @@ class LocationResource extends Resource
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make()
-                    ->after(function () {
-                        activity()
-                            ->causedBy(Auth::user())
-                            ->log('Menghapus data location');
-                    }),
-                ViewAction::make()
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make()
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Menghapus data location');
+                        }),
+                    ViewAction::make()
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

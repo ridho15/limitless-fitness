@@ -35,7 +35,8 @@
                                                 </small>
                                             </div>
                                             <div class="col-md col mb-2">
-                                                <small class="text-sm">{{ $item->expired }}</small>
+                                                <small class="text-sm text-danger fw-bold">Expired Date
+                                                    <br>{{ date('d-m-Y', strtotime($item->expired)) }}</small>
                                             </div>
                                             <div class="col-md col mb-2">
                                                 <small class="text-sm">
@@ -59,19 +60,73 @@
                         </div>
                         <div class="mb-3">
                             Kamu akan melakukan pembayaran pada:</div>
-                        Paket : <strong>{{ $paket->nama }}</strong> <br>
-                        Harga : <strong>Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</strong> <br>
-                        Potongan : <strong>Rp.{{ number_format($potongan, 0, ',', '.') }}</strong> <br>
-                        Total : <strong>Rp.{{ number_format($paket->harga_diskon - $potongan, 0, ',', '.') }}</strong>
-
+                        <div class="row">
+                            <div class="col-md-3 col-3">
+                                Paket
+                            </div>
+                            <div class="col-md col">
+                                : <strong>{{ $paket->nama }}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-3">
+                                Paket
+                            </div>
+                            <div class="col-md col">
+                                : <strong>{{ $paket->nama }}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-3">
+                                Harga
+                            </div>
+                            <div class="col-md col">
+                                : <strong>Rp.{{ number_format($paket->harga_diskon, 0, ',', '.') }}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-3">
+                                Potongan
+                            </div>
+                            <div class="col-md col">
+                                : <strong>Rp.{{ number_format($potongan, 0, ',', '.') }}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-3">
+                                Total
+                            </div>
+                            <div class="col-md col">
+                                :
+                                <strong
+                                    class="text-danger">Rp.{{ number_format($paket->harga_diskon - $potongan, 0, ',', '.') }}</strong>
+                            </div>
+                        </div>
                         <div class="my-3">
                             <span class="d-block mb-2">Silahkan Kirim Pembayaran Ke Rekening : </span>
-                            <div>Bank : <strong>Bank Central Asia</strong></div>
-                            <div>
-                                Nomor Rekening : <strong>6600-4829-11</strong>
+                            <div class="row">
+                                <div class="col-md-3 col-3">
+                                    Bank
+                                </div>
+                                <div class="col-md col">
+                                    : <strong>{{ $bank ?? 'Bank Central Asia' }}</strong>
+                                </div>
                             </div>
-                            <div>
-                                Atas Nama : <strong>Gerald Reyner Liando</strong>
+                            <div class="row">
+                                <div class="col-md-3 col-3">
+                                    Nomor Rekening
+                                </div>
+                                <div class="col-md col">
+                                    : <strong>{{ $no_rekening ?? '6600-4829-11' }}</strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 col-3">
+                                    Atas Nama
+                                </div>
+                                <div class="col-md col">
+                                    : <strong>{{ $atas_nama ?? 'Gerald Reyner Liando' }}</strong>
+                                </div>
                             </div>
                         </div>
 

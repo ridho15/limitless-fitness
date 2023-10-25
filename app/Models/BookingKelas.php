@@ -23,27 +23,30 @@ class BookingKelas extends Model
         'status_kehadiran_formatted', 'tanggal_booking', 'honor'
     ];
 
-    public function getHonorAttribute(){
+    public function getHonorAttribute()
+    {
         $kelasActivity = KelasActivity::find($this->id_kelas_activity);
-        if($kelasActivity){
+        if ($kelasActivity) {
             return $kelasActivity->kelas->honor;
-        }else{
+        } else {
             return 0;
         }
     }
 
-    public function getTanggalBookingAttribute(){
+    public function getTanggalBookingAttribute()
+    {
         return Carbon::parse($this->created_at)->locale('id')->isoFormat('dddd, DD MMMM YYYY, HH:mm');
     }
 
-    public function getStatusKehadiranFormattedAttribute(){
-        if($this->status_kehadiran == null){
+    public function getStatusKehadiranFormattedAttribute()
+    {
+        if ($this->status_kehadiran == null) {
             return 'Belum dikonfirmasi';
-        }elseif($this->status_kehadiran == 0){
+        } elseif ($this->status_kehadiran == 0) {
             return 'Tidak Hadir';
-        }elseif($this->status_kehadiran == 1){
+        } elseif ($this->status_kehadiran == 1) {
             return 'Hadir';
-        }elseif($this->status_kehadiran == 2){
+        } elseif ($this->status_kehadiran == 2) {
             return 'Izin';
         }
     }

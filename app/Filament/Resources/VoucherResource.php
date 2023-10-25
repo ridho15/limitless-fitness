@@ -21,6 +21,9 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
@@ -170,8 +173,11 @@ class VoucherResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                ViewAction::make()
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    ViewAction::make()
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
