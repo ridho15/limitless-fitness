@@ -146,7 +146,11 @@ class VoucherResource extends Resource
                     ->label('Discount Harga'),
                 TextColumn::make('disc_percent')
                     ->formatStateUsing(function ($record) {
-                        return $record->disc_percent ?? '0' . '%';
+                        if ($record->disc_percent) {
+                            return $record->disc_percent . '%';
+                        } else {
+                            return '0%';
+                        }
                     })
                     ->label('Discount Percent'),
                 TextColumn::make('kode_voucher')
