@@ -125,6 +125,8 @@ class CustomerResource extends Resource
                 TextColumn::make('location.nama')
                     ->label('Location')
                     ->searchable(),
+                TextColumn::make('tanggal_lahir')
+                    ->label('Tanggal Lahir'),
                 TextColumn::make('email_verified_at')
                     ->sortable()
                     ->dateTime(),

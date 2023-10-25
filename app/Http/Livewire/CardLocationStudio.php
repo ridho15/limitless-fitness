@@ -55,10 +55,12 @@ class CardLocationStudio extends Component
 
         $location = Location::find($this->id_location);
         session()->put('phone_number', $location->no_hp);
-        session()->put('isStudioChecked', true);
+        session()->put('isLocationChecked', true);
+        session()->put('id_location', $location->id);
 
         $this->emit('refreshListData');
         $this->emit('refreshFloatingWhatsApp');
+        $this->emit('refreshFooter');
         $this->emit('finishUpdate');
     }
 }

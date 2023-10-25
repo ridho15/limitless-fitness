@@ -50,9 +50,6 @@ class BaseController extends Controller
         if (Auth::user() && Auth::user()->id_location != null) {
             session()->put('phone_number', Auth::user()->location->no_hp);
             session()->put('isLocationChecked', true);
-        } else {
-            session()->forget('phone_number');
-            session()->forget('isLocationChecked');
         }
         $data['active'] = 'home';
         return view('base-2.index', $data);
