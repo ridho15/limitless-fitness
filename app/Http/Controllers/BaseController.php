@@ -47,10 +47,10 @@ class BaseController extends Controller
         //         ]);
         // })->get();
         // return $instruktur;
-        if(Auth::user()){
+        if (Auth::user() && Auth::user()->id_location != null) {
             session()->put('phone_number', Auth::user()->location->no_hp);
             session()->put('isLocationChecked', true);
-        }else{
+        } else {
             session()->forget('phone_number');
             session()->forget('isLocationChecked');
         }
