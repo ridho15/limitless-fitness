@@ -343,8 +343,9 @@ class BaseController extends Controller
 
         Auth::logoutOtherDevices($data['password']);
         session()->regenerate();
-        if (Auth::user()->id_studio != null) {
+        if (Auth::user()->id_location != null) {
             session()->put('isStudioChecked', true);
+            session()->put('id_location', Auth::user()->id_location);
             session()->put('phone_number', Auth::user()->studio->no_hp);
         }
         activity()->causedBy(Auth::user())
