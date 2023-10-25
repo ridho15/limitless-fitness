@@ -49,6 +49,7 @@ class BaseController extends Controller
         // return $instruktur;
         if (Auth::user() && Auth::user()->id_location != null) {
             session()->put('phone_number', Auth::user()->location->no_hp);
+            session()->put('id_location', Auth::user()->id_location);
             session()->put('isLocationChecked', true);
         }
         $data['active'] = 'home';
