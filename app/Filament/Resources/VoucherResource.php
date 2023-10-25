@@ -83,6 +83,7 @@ class VoucherResource extends Resource
                             ->required(),
                         TextInput::make('lama_aktif')
                             ->label('Lama Aktif')
+                            ->required()
                             ->helperText("Masukkan jumlah hari aktif"),
                         Textarea::make('deskripsi')
                             ->nullable(),
