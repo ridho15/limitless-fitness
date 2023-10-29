@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LocationStudioResource\Pages;
 use App\Filament\Resources\LocationStudioResource\RelationManagers;
+use App\Models\Location;
 use App\Models\LocationStudio;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
@@ -21,6 +22,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
@@ -90,7 +92,10 @@ class LocationStudioResource extends Resource
                 TextColumn::make('equipment'),
             ])
             ->filters([
-                //
+                SelectFilter::make('id_location')
+                    ->label('Location')
+                    ->searchable()
+                    ->options(Location::get()->pluck('nama', 'id'))
             ])
             ->actions([
                 EditAction::make(),

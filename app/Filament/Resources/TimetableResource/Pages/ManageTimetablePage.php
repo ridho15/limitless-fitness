@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
 use App\Models\KelasActivity;
+use App\Models\Location;
 use App\Models\LocationStudio;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -25,6 +26,8 @@ class ManageTimetablePage extends Page
     public $listStudio = [];
     public $listKelasActivity = [];
     public $listJam = [];
+    public $listLocation = [];
+    public $id_location;
     public $pesertaTerbanyak = 0;
 
     public function render(): View
@@ -87,6 +90,10 @@ class ManageTimetablePage extends Page
     {
         $this->startDate = date('Y-m-d');
         $this->endDate = Carbon::now()->addDays(7)->isoFormat('YYYY-MM-DD');
+        $this->listLocation = Location::get();
+        if(Auth::user()->hasRole('Admin')){
+            $this->id_location = Auth::user()->id_location;
+        }
         $this->getData();
     }
 
@@ -96,16 +103,19 @@ class ManageTimetablePage extends Page
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)
+            ->whereHas('locationStudio', function ($query) {
+                $query->where('id_location', $this->id_location);
+            })
             ->orderBy('tanggal', 'ASC')
             ->groupBy('tanggal')
             ->get();
-        $this->listStudio = LocationStudio::whereHas('kelasActivity', function ($query) {
-            $query->whereDate('tanggal', '>=', $this->startDate)
-                ->whereDate('tanggal', '<=', $this->endDate)
-                ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null);
-        })->get();
+        $this->listStudio = LocationStudio::where('id_location', $this->id_location)
+            ->whereHas('kelasActivity', function ($query) {
+                $query->whereDate('tanggal', '>=', $this->startDate)
+                    ->whereDate('tanggal', '<=', $this->endDate)
+                    ->where('id_kelas', '!=', null)
+                    ->where('id_location_studio', '!=', null);
+            })->get();
 
         $this->listJam = KelasActivity::select('tanggal')
             ->select('jam_mulai')
@@ -113,15 +123,19 @@ class ManageTimetablePage extends Page
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
             ->where('id_location_studio', '!=', null)
+            ->orderBy('jam_mulai', 'ASC')
             ->groupBy('jam_mulai')
             ->get();
+
         $this->pesertaTerbanyak = 0;
         foreach ($this->listJam as $item) {
             $listKelasActivity = KelasActivity::whereDate('tanggal', '>=', $this->startDate)
                 ->whereDate('tanggal', '<=', $this->endDate)
                 ->whereTime('jam_mulai', $item->jam_mulai)
                 ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null)
+                ->whereHas('locationStudio', function ($query) {
+                    $query->where('id_location', $this->id_location);
+                })
                 ->get();
             foreach ($listKelasActivity as $kelasActivity) {
                 if (count($kelasActivity->bookingKelas) >= $this->pesertaTerbanyak) {

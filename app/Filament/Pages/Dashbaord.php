@@ -14,6 +14,7 @@ use App\Filament\Widgets\PendatapanInstrukturOverview;
 use App\Filament\Widgets\PengeluaranChart;
 use App\Filament\Widgets\TotalJamInstruktur;
 use App\Models\Kelas;
+use App\Models\Location;
 use Closure;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
@@ -28,6 +29,9 @@ class Dashbaord extends BasePage
 
     protected static string $view = 'filament.pages.dashbaord';
 
+    public $id_location;
+    public $listLocation = [];
+
     protected static function getNavigationLabel(): string
     {
         return static::$navigationLabel ?? static::$title ?? __('filament::pages/dashboard.title');
@@ -37,6 +41,10 @@ class Dashbaord extends BasePage
     {
         return view(static::$view, $this->getViewData())
             ->layout(static::$layout, $this->getLayoutData());
+    }
+
+    public function mount(){
+        $this->listLocation = Location::get();
     }
 
     public static function getRoutes(): Closure

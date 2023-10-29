@@ -46,8 +46,8 @@ class CreateTimetable extends CreateRecord
     {
         foreach ($data['jam_mulai'] as $item) {
             $kelasActivity = KelasActivity::where('id_location_studio', $data['id_location_studio'])
-            ->where('id_kelas', $data['id_kelas'])
-            ->whereTanggal($data['tanggal'])
+                ->where('id_kelas', $data['id_kelas'])
+                ->whereTanggal($data['tanggal'])
                 ->whereJamMulai(sprintf("%02d", $item) . ":00:00")
                 // ->where('id_user', $data['id_user'])
                 ->first();
@@ -58,7 +58,7 @@ class CreateTimetable extends CreateRecord
                     'id_kelas' => $data['id_kelas'],
                     'id_user' => $data['id_user']
                 ]);
-            }else{
+            } else {
                 KelasActivity::create([
                     'id_location_studio' => $data['id_location_studio'],
                     'id_kelas' => $data['id_kelas'],
@@ -72,45 +72,6 @@ class CreateTimetable extends CreateRecord
         $this->getResource()::getUrl('index');
         return [];
     }
-
-    // protected function mutateFormDataBeforeCreate(array $data): array
-    // {
-    //     $start = $data['jam_mulai'];
-    //     $end = $data['jam_selesai'];
-    //     $carbonPeriod = CarbonPeriod::since($start)->hours(1)->until($end)->toArray();
-    //     $jam = [];
-    //     foreach ($carbonPeriod as $item) {
-    //         array_push($jam, date('Y-m-d', strtotime($data['jam_mulai'])) . date(' H:i', strtotime($item)));
-    //     }
-    //     foreach ($jam as $index => $item) {
-    //         // Check jadwal studio
-    //         $kelasActivity = KelasActivity::where('jam_mulai', $item)->where('id_location_studio', $data['id_location_studio'])
-    //             ->first();
-    //         if ($kelasActivity) {
-    //             Notification::make()
-    //                 ->title('Jadwal sudah ada di dalam ruangan studio')
-    //                 ->danger()
-    //                 ->send();
-    //             $this->halt();
-    //         }
-    //         if ($index + 1 == count($jam)) {
-    //             $data['jam_mulai'] = $item;
-    //             $data['status'] = 1;
-    //             return $data;
-    //         } else {
-    //             KelasActivity::create([
-    //                 'id_kelas' => $data['id_kelas'],
-    //                 'id_location_studio' => $data['id_location_studio'],
-    //                 'nama_latihan' => $data['nama_latihan'],
-    //                 'level' => $data['level'],
-    //                 'jam_mulai' => $item,
-    //                 'tanggal' => $data['tanggal'],
-    //                 'id_user' => Auth::user()->hasRole('Intruktur') ? Auth::id() : $data['id_user'],
-    //                 'status' => 1,
-    //             ]);
-    //         }
-    //     }
-    // }
 
     protected function getHeaderWidgets(): array
     {

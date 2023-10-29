@@ -9,17 +9,27 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ListTimetable extends BaseWidget
 {
     protected static ?int $sort = 2;
 
+    public $id_location;
+
     protected function getTableQuery(): Builder
     {
         return KelasActivity::where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)
+            ->whereHas('locationStudio', function ($query) {
+                $query->where('id_location', $this->id_location);
+            })
             ->where('tanggal', '!=', null)
             ->where('jam_mulai', '!=', null);
+    }
+
+    public function mount()
+    {
+        $this->id_location = Auth::user()->id_location;
     }
 
     protected function getTableColumns(): array

@@ -60,6 +60,11 @@ class UserResource extends Resource
                             ->password()
                             ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                             ->dehydrated(fn ($state) => filled($state)),
+                        Select::make('id_location')
+                            ->searchable()
+                            ->preload()
+                            ->relationship('location', 'nama')
+                            ->required(),
                         FileUpload::make('foto')
                             ->image()
                             ->maxSize(2048)

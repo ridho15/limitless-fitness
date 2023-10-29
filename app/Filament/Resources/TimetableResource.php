@@ -9,6 +9,7 @@ use App\Filament\Resources\TimetableResource\RelationManagers\BookingKelasRelati
 use App\Filament\Resources\TimetableResource\Widgets\ManageTimetableWidget;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\Location;
 use App\Models\LocationStudio;
 use App\Models\User;
 use Carbon\Carbon;
@@ -55,12 +56,23 @@ class TimetableResource extends Resource
                                         ->searchable()
                                         ->options(Kelas::get()->pluck('nama_kelas', 'id'))
                                         ->required(),
+                                    Select::make('id_location')
+                                        ->label('Location')
+                                        ->preload()
+                                        ->searchable()
+                                        ->options(Location::get()->pluck('nama', 'id'))
+                                        ->required(),
                                     Select::make('id_location_studio')
                                         ->label('Studio')
                                         ->searchable()
                                         ->preload()
-                                        ->required()
-                                        ->options(LocationStudio::get()->pluck('nama', 'id')),
+                                        ->options(function(Closure $get){
+                                            $locationStudio = LocationStudio::where('id_location', $get('id_location'))
+                                            ->get()
+                                            ->pluck('nama', 'id');
+                                            return $locationStudio;
+                                        })
+                                        ->required(),
                                     DatePicker::make('tanggal')
                                         ->label('Tanggal')
                                         ->required(),
@@ -102,12 +114,6 @@ class TimetableResource extends Resource
                                             $instruktur = User::whereHas('roles', function ($query) {
                                                 $query->where('name', 'Instruktur');
                                             })
-                                                // whereHas('kelasActivity', function ($query) use ($jam, $get) {
-                                                // $query->where('tanggal', date('Y-m-d', strtotime($get('tanggal'))))
-                                                // ->where('id_kelas', null)
-                                                // ->where('id_location_studio', null)
-                                                // ->whereJamMulai($jam);
-                                                // })
                                                 ->get()->pluck('name', 'id');
 
                                             return $instruktur;

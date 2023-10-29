@@ -14,11 +14,13 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class JadwalInstrukturAssign extends BaseWidget
 {
     public $tanggal_awal = null;
     public $tanggal_akhir = null;
+    public $id_location;
     protected static ?string $heading = "Slot Instruktur";
 
     protected function getTableQuery(): Builder
@@ -26,6 +28,10 @@ class JadwalInstrukturAssign extends BaseWidget
         return User::whereHas('roles', function ($query) {
             $query->where('name', 'Instruktur');
         })->orderBy('created_at', 'DESC');
+    }
+
+    public function mount(){
+        $this->id_location = Auth::user()->id_location;
     }
 
     protected function getTableColumns(): array
@@ -38,7 +44,9 @@ class JadwalInstrukturAssign extends BaseWidget
                 ->label('Assign Time')
                 ->formatStateUsing(function ($record) {
                     $jumlahAssing = KelasActivity::where('id_user', $record->id)
-                        ->where('id_location_studio', '!=', null)
+                    ->whereHas('locationStudio', function($query){
+                        $query->where('id_location', $this->id_location);
+                    })
                         ->where('id_kelas', '!=', null)
                         ->where(function ($query) {
                             if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
