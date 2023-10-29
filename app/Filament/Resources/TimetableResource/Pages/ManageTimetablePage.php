@@ -91,7 +91,7 @@ class ManageTimetablePage extends Page
         $this->startDate = date('Y-m-d');
         $this->endDate = Carbon::now()->addDays(7)->isoFormat('YYYY-MM-DD');
         $this->listLocation = Location::get();
-        if(Auth::user()->hasRole('Admin')){
+        if (Auth::user()->hasRole('Admin')) {
             $this->id_location = Auth::user()->id_location;
         }
         $this->getData();
@@ -114,7 +114,9 @@ class ManageTimetablePage extends Page
                 $query->whereDate('tanggal', '>=', $this->startDate)
                     ->whereDate('tanggal', '<=', $this->endDate)
                     ->where('id_kelas', '!=', null)
-                    ->where('id_location_studio', '!=', null);
+                    ->whereHas('locationStudio', function ($query) {
+                        $query->where('id_location', $this->id_location);
+                    });
             })->get();
 
         $this->listJam = KelasActivity::select('tanggal')
@@ -122,7 +124,9 @@ class ManageTimetablePage extends Page
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)
+            ->whereHas('locationStudio', function ($query) {
+                $query->where('id_location', $this->id_location);
+            })
             ->orderBy('jam_mulai', 'ASC')
             ->groupBy('jam_mulai')
             ->get();

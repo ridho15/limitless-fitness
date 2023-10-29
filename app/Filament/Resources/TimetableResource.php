@@ -66,10 +66,10 @@ class TimetableResource extends Resource
                                         ->label('Studio')
                                         ->searchable()
                                         ->preload()
-                                        ->options(function(Closure $get){
+                                        ->options(function (Closure $get) {
                                             $locationStudio = LocationStudio::where('id_location', $get('id_location'))
-                                            ->get()
-                                            ->pluck('nama', 'id');
+                                                ->get()
+                                                ->pluck('nama', 'id');
                                             return $locationStudio;
                                         })
                                         ->required(),

@@ -63,8 +63,6 @@ class ManageTimetableWidget extends Widget
 
     public function mount()
     {
-        // $this->startDate = '2023-08-11';
-        // $this->endDate = '2023-08-11';
         $this->startDate = date('Y-m-d');
         $this->endDate = date('Y-m-d');
     }

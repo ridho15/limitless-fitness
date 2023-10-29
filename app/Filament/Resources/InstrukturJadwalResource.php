@@ -124,9 +124,9 @@ class InstrukturJadwalResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         if (Auth::user()->hasRole('Instruktur')) {
-            return parent::getEloquentQuery()->where('id_user', Auth::id());
+            return parent::getEloquentQuery()->where('id_user', Auth::id())->orderBy('tanggal','DESC')->orderBy('jam_mulai','ASC');
         } else {
-            return parent::getEloquentQuery();
+            return parent::getEloquentQuery()->orderBy('tanggal', 'DESC')->orderBy('jam_mulai','ASC');
         }
     }
 

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\InstrukturJadwalResource\Widgets;
 
 use App\Models\KelasActivity;
+use App\Models\Location;
 use App\Models\LocationStudio;
 use Carbon\Carbon;
 use Filament\Widgets\Widget;
@@ -20,6 +21,8 @@ class ManageTimetableWidget extends Widget
     public $listKelasActivity = [];
     public $listJam = [];
     public $pesertaTerbanyak = 0;
+    public $id_location;
+    public $listLocation = [];
     public function render(): View
     {
         $this->getData();
@@ -28,10 +31,12 @@ class ManageTimetableWidget extends Widget
 
     public function mount()
     {
-        // $this->startDate = '2023-08-11';
-        // $this->endDate = '2023-08-11';
         $this->startDate = date('Y-m-d');
         $this->endDate = Carbon::now()->addDays(7)->isoFormat('YYYY-MM-DD');
+        $this->listLocation = Location::get();
+        if (Auth::user()->hasRole('Admin')) {
+            $this->id_location = Auth::user()->id_location;
+        }
     }
 
     public function getData()
@@ -45,7 +50,9 @@ class ManageTimetableWidget extends Widget
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)
+            ->whereHas('locationStudio', function ($query) {
+                $query->where('id_location', $this->id_location);
+            })
             ->groupBy('tanggal')
             ->get();
         $this->listStudio = LocationStudio::whereHas('kelasActivity', function ($query) {
@@ -57,7 +64,9 @@ class ManageTimetableWidget extends Widget
                 })
                 ->whereDate('tanggal', '<=', $this->endDate)
                 ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null);
+                ->whereHas('locationStudio', function ($query) {
+                    $query->where('id_location', $this->id_location);
+                });
         })->get();
 
         $this->listJam = KelasActivity::select('tanggal')
@@ -70,7 +79,9 @@ class ManageTimetableWidget extends Widget
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)
+            ->whereHas('locationStudio', function ($query) {
+                $query->where('id_location', $this->id_location);
+            })
             ->groupBy('jam_mulai')
             ->get();
         $this->pesertaTerbanyak = 0;
@@ -84,7 +95,9 @@ class ManageTimetableWidget extends Widget
                     }
                 })
                 ->where('id_kelas', '!=', null)
-                ->where('id_location_studio', '!=', null)
+                ->whereHas('locationStudio', function ($query) {
+                    $query->where('id_location', $this->id_location);
+                })
                 ->get();
             foreach ($listKelasActivity as $kelasActivity) {
                 if (count($kelasActivity->bookingKelas) >= $this->pesertaTerbanyak) {
