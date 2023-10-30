@@ -46,9 +46,9 @@ class ListData extends Component
                 foreach ($this->listTanggal as $item) {
                     $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
                         ->where(function ($query) {
-                            if (Auth::user()->id_location != null) {
+                            if ($this->id_location != null) {
                                 $query->whereHas('locationStudio', function ($query) {
-                                    $query->where('id_location', $this->user->id_location);
+                                    $query->where('id_location', $this->id_location);
                                 });
                             }
                         })
@@ -72,9 +72,9 @@ class ListData extends Component
                 $kelasActivity = KelasActivity::with(['locationStudio.location', 'kelas.paket.orderPaket'])
                     ->whereHas('kelas')
                     ->where(function ($query) {
-                        if (Auth::user()->id_location != null) {
+                        if ($this->id_location != null) {
                             $query->whereHas('locationStudio', function ($query) {
-                                $query->where('id_location', $this->user->id_location);
+                                $query->where('id_location', $this->id_location);
                             });
                         }
                     })
@@ -107,6 +107,9 @@ class ListData extends Component
         $this->category = 0;
         $this->tanggal = now();
         $this->user = User::find(Auth::id());
+        if ($this->user) {
+            $this->id_location = $this->user->id_location;
+        }
     }
 
     public function setListTanggal($listTanggal)
