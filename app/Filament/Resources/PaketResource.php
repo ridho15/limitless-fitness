@@ -136,7 +136,7 @@ class PaketResource extends Resource
                             return $location->nama;
                         }
                     }),
-                    BadgeColumn::make('is_many_times')
+                BadgeColumn::make('is_many_times')
                     ->label('Many Times')
                     ->colors([
                         'secondary' => 0,
