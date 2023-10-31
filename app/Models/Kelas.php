@@ -21,7 +21,8 @@ class Kelas extends Model
         'bawaan',
         'type',
         'honor',
-        'fee'
+        'fee',
+        'id_location'
     ];
 
     protected $appends = [
@@ -91,7 +92,13 @@ class Kelas extends Model
         return $this->hasMany(KelasActivity::class, 'id_kelas');
     }
 
-    public function paket(){
+    public function paket()
+    {
         return $this->hasMany(Paket::class, 'id_kelas');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'id_location');
     }
 }

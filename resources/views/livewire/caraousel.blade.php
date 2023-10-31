@@ -11,7 +11,7 @@
                 <div class="position-absolute position-absolute d-flex flex-column justify-content-start align-items-start h-100 w-100"
                     style="z-index: 1; margin-top: 270px">
                     <div class="container px-5">
-                        <h1 class="text-white my-3">Welcome to (enter)
+                        <h1 class="text-white my-3">Welcome to
                             Daily Dose Pilates</h1>
                         <p class="text-white"> {{ $location ? 'Location - ' . $location->nama : 'Your Location' }}</p>
                         <div class="d-flex align-items-center justify-content-right">

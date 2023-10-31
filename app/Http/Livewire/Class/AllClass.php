@@ -7,17 +7,21 @@ use Livewire\Component;
 
 class AllClass extends Component
 {
-    public $listeners = ['changeTypes', 'changeLevel'];
+    public $listeners = ['changeTypes', 'changeLevel', 'refreshClass' => '$refresh'];
     public $listKelas;
     public $type;
     public $level;
     public function render()
     {
         $this->listKelas = Kelas::where(function ($query) {
-            if ($this->type != 0) {
-                $query->where('type', $this->type);
-            }
+            $query->where('id_location', session()->get('id_location'))
+                ->orWhere('id_location', 0);
         })
+            ->where(function ($query) {
+                if ($this->type != 0) {
+                    $query->where('type', $this->type);
+                }
+            })
             ->get();
         return view('livewire.class.all-class');
     }

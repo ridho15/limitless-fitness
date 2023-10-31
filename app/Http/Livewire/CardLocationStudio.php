@@ -59,6 +59,7 @@ class CardLocationStudio extends Component
         session()->put('id_location', $location->id);
 
         $this->emit('refreshListData');
+        $this->emit('refreshClass');
         $this->emit('refreshFloatingWhatsApp');
         $this->emit('refreshCaraousel');
         $this->emit('refreshFooter');

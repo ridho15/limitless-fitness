@@ -4,6 +4,7 @@ namespace App\Filament\Resources\VoucherResource\Pages;
 
 use App\Filament\Resources\VoucherResource;
 use Filament\Pages\Actions;
+use Filament\Pages\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditVoucher extends EditRecord
@@ -13,7 +14,8 @@ class EditVoucher extends EditRecord
     protected function getActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make()
+                ->icon('heroicon-o-trash')
         ];
     }
 

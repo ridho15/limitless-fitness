@@ -7,6 +7,7 @@ use App\Models\Paket;
 use App\Models\Voucher;
 use App\Models\VoucherCustomer;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class DetailPembayaran extends Component
@@ -36,14 +37,18 @@ class DetailPembayaran extends Component
         $this->id_paket = $id_paket;
         $this->paket = Paket::find($this->id_paket);
         $this->subtotal = $this->paket->harga_diskon;
-
     }
 
     public function checkKodeVoucher()
     {
-        $voucher = Voucher::where('kode_voucher', $this->kode_voucher)->first();
+        $voucher = Voucher::where(DB::raw('BINARY `kode_voucher`'), $this->kode_voucher)->first();
         if (!$voucher) {
             return session()->flash('fail', 'Kode Voucher tidak valid !');
+        }
+
+        // Check tanggal aktif
+        if ($voucher->tanggal_aktif > now()) {
+            return session()->flash('fail', 'Voucher belum memasuki tanggal aktif');
         }
 
         // Check Tanggal Kadaluarsa

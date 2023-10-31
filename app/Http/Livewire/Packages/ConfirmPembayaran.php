@@ -60,7 +60,7 @@ class ConfirmPembayaran extends Component
         if ($voucherCustomer->voucher->disc_percent == 0) {
             $this->potongan = $voucherCustomer->voucher->disc_harga;
         } else {
-            $this->potongan = $this->paket * $voucherCustomer->voucher->disc_percent / 100;
+            $this->potongan = $this->paket->harga_diskon * $voucherCustomer->voucher->disc_percent / 100;
         }
 
         $this->emit('setIdVoucher', $voucherCustomer->id_voucher);

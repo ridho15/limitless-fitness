@@ -9,6 +9,7 @@ use App\Filament\Resources\KelasResource\RelationManagers\KelasPaketRelationMana
 use App\Filament\Resources\KelasResource\RelationManagers\PaketRelationManager;
 use App\Filament\Resources\KelasResource\RelationManagers\PaketRelationManagerRelationManager;
 use App\Models\Kelas;
+use App\Models\Location;
 use App\Models\User;
 use Closure;
 use Filament\Forms\Components\Card;
@@ -26,6 +27,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -44,6 +46,8 @@ class KelasResource extends Resource
         $instruktur = User::whereHas('roles', function ($query) {
             $query->where('name', 'Instruktur');
         })->get()->pluck('name', 'id');
+        $location = Location::get()->pluck('nama', 'id')->toArray();
+        $location[0] = 'All location';
         return $form
             ->schema([
                 Card::make()
@@ -54,6 +58,11 @@ class KelasResource extends Resource
                                     ->string()
                                     ->maxLength(255)
                                     ->required(),
+                                Select::make('id_location')
+                                    ->label('Location')
+                                    ->searchable()
+                                    ->preload()
+                                    ->options($location),
                                 TextInput::make('min_anggota')
                                     ->label('Minimal Peserta')
                                     ->numeric()
@@ -111,6 +120,23 @@ class KelasResource extends Resource
             ->columns([
                 TextColumn::make('nama_kelas')
                     ->searchable(),
+                TextColumn::make('location')
+                    ->formatStateUsing(function ($record) {
+                        if ($record->id_location == 0 || $record->id_location == null) {
+                            return 'All Location';
+                        } else {
+                            return $record->location->nama;
+                        }
+                    }),
+                BadgeColumn::make('is_many_times')
+                    ->label('Many Times')
+                    ->colors([
+                        'secondary' => 0,
+                        'success' => 1
+                    ])->enum([
+                        0 => 'Hanya sekali',
+                        1 => 'Digunakan berkali kali'
+                    ]),
                 TextColumn::make('min_anggota')
                     ->formatStateUsing(fn ($state) => $state . ' Orang')
                     ->label('Minimal Peserta')

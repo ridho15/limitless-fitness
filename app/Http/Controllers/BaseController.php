@@ -145,19 +145,17 @@ class BaseController extends Controller
 
     public function packages()
     {
-        $user = User::find(Auth::id());
         $data['active'] = 'packages';
-        $allPaket = Paket::where(function ($query) use ($user) {
-            if (isset($user->studio)) {
-                $query->where('location', $user->studio->id_location);
-            }
+        $allPaket = Paket::where(function ($query) {
+            $query->where('location', session()->get('id_location'))
+                ->orWhere('location', 0);
         })
             ->get();
-        $listKelas = Kelas::with('paket')->whereHas('paket', function ($query) use ($user) {
-            if (isset($user->studio)) {
-                $query->where('location', $user->studio->id_location);
-            }
-        })->get();
+        $listKelas = Kelas::where(function ($query) {
+            $query->where('id_location', session()->get('id_location'))
+                ->orWhere('id_location', 0);
+        })
+            ->get();
         $data['allPaket'] = $allPaket;
         $data['listKelas'] = $listKelas;
         return view('base-2.packages', $data);
