@@ -1,19 +1,10 @@
 <?php
 
-use App\Filament\Resources\BookingKelasResource;
-use App\Filament\Resources\TimetableResource;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\ProfileController;
-use App\Mail\RegistrasiKonfirmasiMail;
-use App\Mail\SendKonfirmasiKehadiranMail;
-use App\Models\BookingKelas;
-use App\Models\KelasActivity;
 use App\Models\User;
 use Carbon\Carbon;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
