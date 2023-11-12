@@ -93,6 +93,11 @@
                                             @php
                                                 $listKelasActivity = \App\Models\KelasActivity::whereTime('jam_mulai', $jam->jam_mulai)
                                                     ->where('id_location_studio', $studio->id)
+                                                    ->where(function($query){
+                                                        if(Auth::user()->hasRole(['Instruktur'])){
+                                                            $query->where('id_user', Auth::id());
+                                                        }
+                                                    })
                                                     ->whereDate('tanggal', $tanggal->tanggal)
                                                     ->get();
                                             @endphp
