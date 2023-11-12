@@ -7,7 +7,7 @@ use App\Filament\Resources\InstrukturOmsetResource\Pages;
 use App\Filament\Resources\InstrukturOmsetResource\Pages\ViewInstrukturOmset;
 use App\Filament\Resources\InstrukturOmsetResource\RelationManagers;
 use App\Filament\Resources\InstrukturOmsetResource\RelationManagers\KelasActivityRelationManager;
-use App\Filament\Widgets\PendatapanInstrukturOverview;
+use App\Filament\Widgets\PendapatanOverView;
 use App\Models\BookingKelas;
 use App\Models\InstrukturOmset;
 use App\Models\Kelas;
@@ -223,7 +223,7 @@ class InstrukturOmsetResource extends Resource
     public static function getWidgets(): array
     {
         return [
-            PendatapanInstrukturOverview::class,
+            PendapatanOverView::class,
         ];
     }
 

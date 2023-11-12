@@ -88,17 +88,22 @@ class ManageTimetablePage extends Page
 
     public function mount()
     {
-        $this->startDate = date('Y-m-d');
-        $this->endDate = Carbon::now()->addDays(7)->isoFormat('YYYY-MM-DD');
+        $this->startDate = session()->get('startDate') ?? date('Y-m-d');
+        $this->endDate = session()->get('endDate') ?? Carbon::now()->addDays(7)->isoFormat('YYYY-MM-DD');
         $this->listLocation = Location::get();
         if (Auth::user()->hasRole('Admin')) {
             $this->id_location = Auth::user()->id_location;
+        }else{
+            $this->id_location = session()->get('id_location');
         }
         $this->getData();
     }
 
     public function getData()
     {
+        session()->put('startDate', $this->startDate);
+        session()->put('endDate', $this->endDate);
+        session()->put('id_location', $this->id_location);
         $this->listTanggal = KelasActivity::select('tanggal')
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)

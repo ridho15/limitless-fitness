@@ -10,7 +10,8 @@ use App\Filament\Widgets\ListTimetable;
 use App\Filament\Widgets\OmsetChart;
 use App\Filament\Widgets\OmsetTable;
 use App\Filament\Widgets\PendapatanInstruktur;
-use App\Filament\Widgets\PendatapanInstrukturOverview;
+use App\Filament\Widgets\PendapatanInstrukturOverview;
+use App\Filament\Widgets\PendapatanOverView;
 use App\Filament\Widgets\PengeluaranChart;
 use App\Models\Location;
 use Closure;
@@ -56,7 +57,7 @@ class Dashbaord extends BasePage
         // return Filament::getWidgets();
         if (Auth::user()->hasRole(['Super Admin'])) {
             $listWidget = [
-                PendatapanInstrukturOverview::class,
+                PendapatanOverView::class,
                 JadwalInstrukturAssign::class,
                 CustomerOrderExpired::class,
                 OmsetChart::class,
@@ -74,7 +75,7 @@ class Dashbaord extends BasePage
             ];
         } elseif (Auth::user()->hasRole('Instruktur')) {
             $listWidget = [
-                // PendatapanInstrukturOverview::class,
+                PendapatanInstrukturOverview::class,
                 // OmsetTable::class,
                 PendapatanInstruktur::class
             ];

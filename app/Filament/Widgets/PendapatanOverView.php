@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\BookingKelas;
 use App\Models\Jurnal;
 use App\Models\KelasActivity;
 use App\Models\User;
@@ -11,7 +10,7 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Illuminate\Support\Facades\Auth;
 
-class PendatapanInstrukturOverview extends BaseWidget
+class PendapatanOverView extends BaseWidget
 {
     protected function getCards(): array
     {
