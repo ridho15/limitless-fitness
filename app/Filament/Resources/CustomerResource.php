@@ -187,6 +187,6 @@ class CustomerResource extends Resource
     {
         return parent::getEloquentQuery()->whereHas('roles', function ($query) {
             $query->where('name', 'Customer');
-        });
+        })->orderBy('created_at', 'DESC');
     }
 }

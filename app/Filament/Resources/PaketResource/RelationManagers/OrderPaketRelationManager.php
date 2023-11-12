@@ -23,6 +23,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderPaketRelationManager extends RelationManager
@@ -98,7 +99,6 @@ class OrderPaketRelationManager extends RelationManager
                     ]),
                 ImageColumn::make('bukti_pembayaran')
                     ->size(100),
-                TextColumn::make('tanda_tangan'),
                 TextColumn::make('expired_date')->sortable(),
                 TextColumn::make('tanggal_pembayaran')->sortable(),
             ])
@@ -139,5 +139,10 @@ class OrderPaketRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    protected function getTableQuery(): Builder|Relation
+    {
+        return parent::getTableQuery()->orderBy('created_at', 'DESC');
     }
 }

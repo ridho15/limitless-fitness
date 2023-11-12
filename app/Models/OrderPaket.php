@@ -16,7 +16,6 @@ class OrderPaket extends Model
         'id_paket',
         'harga',
         'status',
-        'tanda_tangan',
         'is_active',
         'expired_date',
         'tanggal_pembayaran',

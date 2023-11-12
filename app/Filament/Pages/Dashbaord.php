@@ -77,8 +77,8 @@ class Dashbaord extends BasePage
             ];
         } elseif (Auth::user()->hasRole('Instruktur')) {
             $listWidget = [
-                PendatapanInstrukturOverview::class,
-                OmsetTable::class,
+                // PendatapanInstrukturOverview::class,
+                // OmsetTable::class,
                 PendapatanInstruktur::class
             ];
         } else {

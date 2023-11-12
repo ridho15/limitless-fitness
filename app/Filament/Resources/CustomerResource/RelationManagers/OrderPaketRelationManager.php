@@ -104,7 +104,6 @@ class OrderPaketRelationManager extends RelationManager
                     ]),
                 ImageColumn::make('bukti_pembayaran')
                     ->size(100),
-                TextColumn::make('tanda_tangan'),
                 TextColumn::make('expired_date')->sortable(),
                 TextColumn::make('tanggal_pembayaran')->sortable(),
             ])
@@ -132,5 +131,10 @@ class OrderPaketRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    protected function getTableQuery(): Builder|Relation
+    {
+        return parent::getTableQuery()->orderBy('created_at', 'DESC');
     }
 }

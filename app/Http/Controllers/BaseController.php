@@ -553,7 +553,6 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
         }
 
-
         // Check Order paket
         $orderPaket = OrderPaket::where('id_user', Auth::id())
             ->whereHas('paket', function ($query) use ($kelasActivity) {
@@ -565,6 +564,10 @@ class BaseController extends Controller
 
         if (!$orderPaket) {
             return redirect()->back()->with('fail', 'Silahkan order paket terlebih dahulu');
+        }
+
+        if($orderPaket->paket->location != $kelasActivity->locationStudio->id_location){
+            return redirect()->back()->with('fail', 'Location tidak valid dengan paket yang sudah di beli');
         }
 
         //Check slot kelas
