@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\TimetableResource\Pages;
 
 use App\Filament\Resources\TimetableResource;
+use App\Models\LocationStudio;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
 use Filament\Pages\Actions\EditAction;
@@ -28,5 +29,14 @@ class ViewTimetable extends ViewRecord
                         ->log('Menghapus data timetable');
                 })
         ];
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $locationStudio = LocationStudio::find($data['id_location_studio']);
+        if($locationStudio){
+            $data['id_location'] = $locationStudio->id_location;
+        }
+        return $data;
     }
 }

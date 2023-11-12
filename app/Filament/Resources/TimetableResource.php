@@ -209,8 +209,8 @@ class TimetableResource extends Resource
         ];
     }
 
-    protected static function shouldRegisterNavigation(): bool
-    {
-        return Auth::user()->hasRole('Instruktur') ? false : true;
-    }
+    // protected static function shouldRegisterNavigation(): bool
+    // {
+    //     return Auth::user()->hasRole('Instruktur') ? false : true;
+    // }
 }

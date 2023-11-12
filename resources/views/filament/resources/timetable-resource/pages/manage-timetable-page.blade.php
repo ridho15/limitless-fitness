@@ -2,7 +2,7 @@
     <div class="rounded overflow-hidden shadow-lg">
         <div class="px-6 pt-4 pb-2"
             style="padding-top: 2.5rem; padding-bottom: 2.5rem; background-color: white; overflow: auto !important; max-height: 1200px;">
-            <div class="grid @if(Auth::user()->hasRole('Super Admin')) grid-cols-3 @else grid-cols-2 @endif gap-4" style="margin-bottom: 20px">
+            <div class="grid @if(Auth::user()->hasRole(['Super Admin', 'Instruktur'])) grid-cols-3 @else grid-cols-2 @endif gap-4" style="margin-bottom: 20px">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="start_date">
                         Start Date
@@ -19,7 +19,7 @@
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         wire:model='endDate' id="end_date" type="date" placeholder="Tanggal">
                 </div>
-                @if (Auth::user()->hasRole('Super Admin'))
+                @if (Auth::user()->hasRole(['Super Admin', 'Instruktur']))
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="end_date">
                             Location

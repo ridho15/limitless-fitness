@@ -12,12 +12,8 @@ use App\Filament\Widgets\OmsetTable;
 use App\Filament\Widgets\PendapatanInstruktur;
 use App\Filament\Widgets\PendatapanInstrukturOverview;
 use App\Filament\Widgets\PengeluaranChart;
-use App\Filament\Widgets\TotalJamInstruktur;
-use App\Models\Kelas;
 use App\Models\Location;
 use Closure;
-use Filament\Facades\Filament;
-use Filament\Pages\Page;
 use Filament\Pages\Dashboard as BasePage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +39,8 @@ class Dashbaord extends BasePage
             ->layout(static::$layout, $this->getLayoutData());
     }
 
-    public function mount(){
+    public function mount()
+    {
         $this->listLocation = Location::get();
     }
 

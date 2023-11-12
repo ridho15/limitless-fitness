@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TimetableResource\Pages;
 use App\Filament\Resources\TimetableResource;
 use App\Filament\Resources\TimetableResource\Widgets\CalendarWidget;
 use App\Models\KelasActivity;
+use App\Models\LocationStudio;
 use Filament\Notifications\Notification;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
@@ -30,6 +31,15 @@ class EditTimetable extends EditRecord
                         ->log('Menghapus data timetable');
                 })
         ];
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $locationStudio = LocationStudio::find($data['id_location_studio']);
+        if($locationStudio){
+            $data['id_location'] = $locationStudio->id_location;
+        }
+        return $data;
     }
 
     protected function mutateFormDataBeforeSave(array $data): array

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Ruangan;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class RuanganPolicy
 {

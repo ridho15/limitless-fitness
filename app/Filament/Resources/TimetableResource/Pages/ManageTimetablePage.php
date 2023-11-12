@@ -103,6 +103,11 @@ class ManageTimetablePage extends Page
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
+            ->where(function ($query) {
+                if (Auth::user()->hasRole(['Instruktur'])) {
+                    $query->where('id_user', Auth::id());
+                }
+            })
             ->whereHas('locationStudio', function ($query) {
                 $query->where('id_location', $this->id_location);
             })
@@ -116,6 +121,10 @@ class ManageTimetablePage extends Page
                     ->where('id_kelas', '!=', null)
                     ->whereHas('locationStudio', function ($query) {
                         $query->where('id_location', $this->id_location);
+                    })->where(function ($query) {
+                        if (Auth::user()->hasRole(['Instruktur'])) {
+                            $query->where('id_user', Auth::id());
+                        }
                     });
             })->get();
 
@@ -127,6 +136,11 @@ class ManageTimetablePage extends Page
             ->whereHas('locationStudio', function ($query) {
                 $query->where('id_location', $this->id_location);
             })
+            ->where(function ($query) {
+                if (Auth::user()->hasRole(['Instruktur'])) {
+                    $query->where('id_user', Auth::id());
+                }
+            })
             ->orderBy('jam_mulai', 'ASC')
             ->groupBy('jam_mulai')
             ->get();
@@ -137,6 +151,11 @@ class ManageTimetablePage extends Page
                 ->whereDate('tanggal', '<=', $this->endDate)
                 ->whereTime('jam_mulai', $item->jam_mulai)
                 ->where('id_kelas', '!=', null)
+                ->where(function ($query) {
+                    if (Auth::user()->hasRole(['Instruktur'])) {
+                        $query->where('id_user', Auth::id());
+                    }
+                })
                 ->whereHas('locationStudio', function ($query) {
                     $query->where('id_location', $this->id_location);
                 })
