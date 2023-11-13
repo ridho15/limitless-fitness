@@ -14,8 +14,11 @@ class PendapatanInstrukturOverview extends BaseWidget
     {
         $startDate = Carbon::now()->startOfMonth();
         $listCard = [];
-        $kelasActivity = KelasActivity::where('id_user', Auth::id())
-            ->whereHas('bookingKelas')
+        $kelasActivity = KelasActivity::where(function ($query) {
+            if (Auth::user()->hasRole(['Instruktur'])) {
+                $query->where('id_user', Auth::id());
+            }
+        })
             ->withCount('bookingKelas')
             ->whereDate('tanggal', '<=', now())
             ->having('booking_kelas_count', '>=', 2)

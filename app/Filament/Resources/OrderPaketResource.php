@@ -304,7 +304,13 @@ class OrderPaketResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->orderBy('status', 'DESC')->orderBy('created_at', 'DESC');
+        return parent::getEloquentQuery()->where(function ($query) {
+            if (Auth::user()->hasRole('Admin')) {
+                $query->whereHas('paket', function ($query) {
+                    $query->where('location', Auth::user()->id_location);
+                });
+            }
+        })->orderBy('status', 'DESC')->orderBy('created_at', 'DESC');
     }
 
     public static function getRelations(): array
