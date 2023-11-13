@@ -51,27 +51,17 @@ class KelasActivityRelationManager extends RelationManager
                     ->label('Jumlah Peserta')
                     ->alignCenter()
                     ->formatStateUsing(function ($record) {
-                        $jumlahPeserta = BookingKelas::where('id_kelas_activity', $record->id)
-                            ->where(function ($query) {
-                                $query->where('status_kehadiran', '0')
-                                    ->orWhere('status_kehadiran', '1');
-                            })->count();
-
-                        return $jumlahPeserta;
+                        return $record->bookingKelas->count() . ' Peserta';
                     }),
                 TextColumn::make('omset')
                     ->label('Omset')
                     ->formatStateUsing(function ($record) {
-                        $listBookingKelas = BookingKelas::where('id_kelas_activity', $record->id)
-                            ->where(function ($query) {
-                                $query->where('status_kehadiran', '0')
-                                    ->orWhere('status_kehadiran', '1');
-                            })->get();
-                        $omset = 0;
-                        foreach ($listBookingKelas as $item) {
-                            $omset += $record->kelas->honor;
+                        if($record->bookingKelas->count() >= 2){
+                            return 'Rp.' . number_format($record->kelas->fee,0,',','.');
+                        }else{
+                            return 'Rp.' . number_format(0,0,',','.');
                         }
-                        return 'Rp.' . number_format($omset, 0, ',', '.');
+                        return 0;
                     })
             ])
             ->filters([
@@ -93,6 +83,6 @@ class KelasActivityRelationManager extends RelationManager
             if (Auth::user()->hasRole('Instruktur')) {
                 $query->where('id_user', Auth::id());
             }
-        });
+        })->orderBy('tanggal', 'DESC');
     }
 }

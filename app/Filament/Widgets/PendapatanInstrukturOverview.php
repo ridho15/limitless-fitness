@@ -17,6 +17,7 @@ class PendapatanInstrukturOverview extends BaseWidget
         $kelasActivity = KelasActivity::where('id_user', Auth::id())
             ->whereHas('bookingKelas')
             ->withCount('bookingKelas')
+            ->whereDate('tanggal', '<=', now())
             ->having('booking_kelas_count', '>=', 2)
             ->get();
 
