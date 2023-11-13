@@ -566,9 +566,9 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Silahkan order paket terlebih dahulu');
         }
 
-        if ($orderPaket->paket->location != $kelasActivity->locationStudio->id_location && $orderPaket->paket->location != 0) {
-            return redirect()->back()->with('fail', 'Location tidak valid dengan paket yang sudah di beli');
-        }
+        // if ($orderPaket->paket->location != $kelasActivity->locationStudio->id_location && $orderPaket->paket->location != 0) {
+        //     return redirect()->back()->with('fail', 'Location tidak valid dengan paket yang sudah di beli');
+        // }
 
         //Check slot kelas
         $jumlahBookingKelas = BookingKelas::where('id_kelas_activity', $kelasActivity->id)

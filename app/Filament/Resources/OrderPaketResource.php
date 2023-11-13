@@ -225,16 +225,16 @@ class OrderPaketResource extends Resource
 
                         return $location;
                     })
-                    ->query(function(Builder $query, $data){
-                        return $query->when($data['value'], function(Builder $query, $location){
-                            return $query->whereHas('paket', function($query)use($location){
+                    ->query(function (Builder $query, $data) {
+                        return $query->when($data['value'], function (Builder $query, $location) {
+                            return $query->whereHas('paket', function ($query) use ($location) {
                                 $query->where('location', $location);
                             });
                         });
                     })
                     ->searchable()
-                    ->hidden(function(){
-                        if(Auth::user()->hasRole(['Admin'])){
+                    ->hidden(function () {
+                        if (Auth::user()->hasRole(['Admin'])) {
                             return true;
                         }
                         return false;
