@@ -13,24 +13,31 @@ class PendapatanInstrukturOverview extends BaseWidget
     protected function getCards(): array
     {
         $startDate = Carbon::now()->startOfMonth();
-        $endDate = Carbon::now()->endOfMonth();
         $listCard = [];
         $kelasActivity = KelasActivity::where('id_user', Auth::id())
             ->whereHas('bookingKelas')
             ->withCount('bookingKelas')
-            // ->whereDate('tanggal', '>=', $startDate)
-            // ->whereDate('tanggal', '<=', $endDate)
             ->having('booking_kelas_count', '>=', 2)
             ->get();
 
         $totalOmset = 0;
         $omsetSatuBulan = 0;
+        $jumlahPertemuanSatuBulan = 0;
+        $jumlahPertemuan = 0;
         foreach ($kelasActivity as $item) {
-            if(date("Y-m-d", strtotime($item->tanggal)) >= date("Y-m-d", strtotime($startDate)) && date("Y-m-d", strtotime($item->tanggal)) <= date("Y-m-d", strtotime($endDate))){
+            if (date("Y-m-d", strtotime($item->tanggal)) >= date("Y-m-d", strtotime($startDate)) && date('Y-m-d', strtotime($item->tanggal)) < now()) {
                 $omsetSatuBulan += $item->kelas->fee;
+                $jumlahPertemuanSatuBulan++;
             }
             $totalOmset += $item->kelas->fee;
+            $jumlahPertemuan++;
         }
+
+        array_push($listCard, Card::make('Jumlah Pertamuan 1 Bulan', $jumlahPertemuanSatuBulan)
+            ->description('Jumlah Pertamuan dalam bulan ini')->color('primary'));
+
+        array_push($listCard, Card::make('Jumlah Pertamuan', $jumlahPertemuan)
+            ->description('Jumlah pertemuan seluruh nya')->color('primary'));
 
         array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omsetSatuBulan, 0, ',', '.'))
             ->description('Omset dalam bulan ini')->color('primary'));
