@@ -75,7 +75,7 @@ class Dashbaord extends BasePage
             ];
         } elseif (Auth::user()->hasRole('Instruktur')) {
             $listWidget = [
-                // PendapatanInstrukturOverview::class,
+                PendapatanInstrukturOverview::class,
                 // OmsetTable::class,
                 PendapatanInstruktur::class
             ];
