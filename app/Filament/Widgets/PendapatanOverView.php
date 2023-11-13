@@ -25,7 +25,6 @@ class PendapatanOverView extends BaseWidget
 
         array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omset, 0, ',', '.'))
             ->description('Omset dalam bulan ini')->color('primary'));
-
         $instrukturFee = 0;
         $listInstrukturFee = Jurnal::where('id_order_paket', '!=', null)
             ->where('tipe', 0)
