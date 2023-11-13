@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderPaketResource\Pages;
 use App\Models\Jurnal;
+use App\Models\Location;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
@@ -188,6 +189,18 @@ class OrderPaketResource extends Resource
                     })
                     ->view('custom-column.order-paket')
                     ->sortable(),
+                ViewColumn::make('paket.location')
+                    ->label('Location')
+                    ->getStateUsing(function ($record) {
+                        $locationNama = 'All Location';
+                        if ($record->paket->location != 0) {
+                            $locationNama = $record->paket->locationRelation->nama;
+                        }
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $locationNama
+                        ]);
+                    })->view('custom-column.order-paket'),
                 ViewColumn::make('expired_date')->view('custom-column.order-paket')
                     ->getStateUsing(function ($record) {
                         return json_encode([
@@ -204,6 +217,28 @@ class OrderPaketResource extends Resource
                     })->view('custom-column.order-paket')->sortable(),
             ])
             ->filters([
+                SelectFilter::make('location')
+                    ->label('Location')
+                    ->options(function () {
+                        $location = Location::get()->pluck('nama', 'id')->toArray();
+                        $location[0] = 'All location';
+
+                        return $location;
+                    })
+                    ->query(function(Builder $query, $data){
+                        return $query->when($data['value'], function(Builder $query, $location){
+                            return $query->whereHas('paket', function($query)use($location){
+                                $query->where('location', $location);
+                            });
+                        });
+                    })
+                    ->searchable()
+                    ->hidden(function(){
+                        if(Auth::user()->hasRole(['Admin'])){
+                            return true;
+                        }
+                        return false;
+                    }),
                 SelectFilter::make('id_user')
                     ->label('Customer')
                     ->options(User::whereHas('roles', function ($query) {
