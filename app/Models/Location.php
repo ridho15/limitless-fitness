@@ -32,4 +32,14 @@ class Location extends Model
     {
         return $this->hasMany(LocationStudio::class, 'id_location');
     }
+
+    public function orderPaket()
+    {
+        return $this->hasMany(OrderPaket::class, 'id_location');
+    }
+
+    public function paket()
+    {
+        return $this->hasMany(PaketLocation::class, 'id_location');
+    }
 }

@@ -36,7 +36,6 @@ class PaketResource extends Resource
     public static function form(Form $form): Form
     {
         $location = Location::get()->pluck('nama', 'id')->toArray();
-        $location[0] = 'All location';
         return $form
             ->schema([
                 Card::make()
@@ -63,6 +62,7 @@ class PaketResource extends Resource
                                 Select::make('location')
                                     ->preload()
                                     ->searchable()
+                                    ->multiple()
                                     ->options($location),
                                 TextInput::make('harga')
                                     ->numeric()
@@ -126,15 +126,15 @@ class PaketResource extends Resource
                     ->formatStateUsing(function ($state) {
                         return $state . ' Hari';
                     })->sortable(),
-                TextColumn::make('promote_code'),
-                TextColumn::make('location')
-                    ->formatStateUsing(function ($state) {
-                        if ($state == 0) {
-                            return 'All Location';
-                        } else {
-                            $location = Location::find($state);
-                            return $location->nama;
+                TextColumn::make('paketLocation')
+                    ->label('Location')
+                    ->formatStateUsing(function ($record) {
+                        $text = "";
+                        foreach ($record->paketLocation as $item) {
+                            $text .= $item->location->nama . ", <br>";
                         }
+
+                        echo $text;
                     }),
                 BadgeColumn::make('is_many_times')
                     ->label('Many Times')

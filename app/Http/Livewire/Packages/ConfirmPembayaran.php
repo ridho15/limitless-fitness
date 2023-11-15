@@ -84,6 +84,10 @@ class ConfirmPembayaran extends Component
             return session()->flash('fail', 'Paket baru saja berhasil di order. tunggu setelah 5 menit lagi untuk order paket selanjutnya');
         }
 
+        if (!session()->has('id_location')) {
+            return session()->flash('fail', 'Lokasi belum di set. Silahkan set lokasi terlebih dahulu');
+        }
+
         // check paket hanya sekali order
         $orderPaket = OrderPaket::whereHas('paket', function ($query) {
             $query->where('id', $this->id_paket)
@@ -101,6 +105,7 @@ class ConfirmPembayaran extends Component
         $data['harga'] = $this->paket->harga_diskon - $this->potongan;
         $data['status'] = 2;
         $data['is_active'] = 0;
+        $data['id_location'] = session()->get('id_location');
         $data['honor'] = $this->paket->honor;
         $data['jumlah_pertemuan'] = $this->paket->jumlah_pertemuan;
         $data['sisa'] = $this->paket->jumlah_pertemuan;

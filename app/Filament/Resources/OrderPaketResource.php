@@ -45,6 +45,8 @@ class OrderPaketResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $listLocation = Location::get()->pluck('nama', 'id')->toArray();
+        $listLocation[0] = 'Lokasi belum tersedia';
         return $form
             ->schema([
                 Card::make()
@@ -72,6 +74,12 @@ class OrderPaketResource extends Resource
                                         }
                                     })
                                     ->relationship('paket', 'nama')
+                                    ->required(),
+                                Select::make('id_location')
+                                    ->searchable()
+                                    ->preload()
+                                    ->label("Pilih Location")
+                                    ->options($listLocation)
                                     ->required(),
                                 TextInput::make('jumlah_pertemuan')
                                     ->label('Jumlah Pertemuan')
@@ -192,9 +200,10 @@ class OrderPaketResource extends Resource
                 ViewColumn::make('paket.location')
                     ->label('Location')
                     ->getStateUsing(function ($record) {
-                        $locationNama = 'All Location';
-                        if ($record->paket->location != 0) {
-                            $locationNama = $record->paket->locationRelation->nama;
+                        if ($record->location) {
+                            $locationNama = $record->location->nama;
+                        } else {
+                            $locationNama = 'Lokasi belum tersedia';
                         }
                         return json_encode([
                             'status' => $record->status,
@@ -217,28 +226,17 @@ class OrderPaketResource extends Resource
                     })->view('custom-column.order-paket')->sortable(),
             ])
             ->filters([
-                SelectFilter::make('location')
+                SelectFilter::make('id_location')
                     ->label('Location')
-                    ->options(function () {
-                        $location = Location::get()->pluck('nama', 'id')->toArray();
-                        $location[0] = 'All location';
-
-                        return $location;
-                    })
-                    ->query(function (Builder $query, $data) {
-                        return $query->when($data['value'], function (Builder $query, $location) {
-                            return $query->whereHas('paket', function ($query) use ($location) {
-                                $query->where('location', $location);
-                            });
-                        });
-                    })
                     ->searchable()
                     ->hidden(function () {
-                        if (Auth::user()->hasRole(['Admin'])) {
+                        if (Auth::user()->hasRole('Super Admin')) {
+                            return false;
+                        } else {
                             return true;
                         }
-                        return false;
-                    }),
+                    })
+                    ->options(Location::get()->pluck('nama', 'id')),
                 SelectFilter::make('id_user')
                     ->label('Customer')
                     ->options(User::whereHas('roles', function ($query) {
@@ -341,9 +339,7 @@ class OrderPaketResource extends Resource
     {
         return parent::getEloquentQuery()->where(function ($query) {
             if (Auth::user()->hasRole('Admin')) {
-                $query->whereHas('paket', function ($query) {
-                    $query->where('location', Auth::user()->id_location);
-                });
+                $query->where('id_location', Auth::user()->id_location);
             }
         })->orderBy('status', 'DESC')->orderBy('created_at', 'DESC');
     }

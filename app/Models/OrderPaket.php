@@ -21,7 +21,8 @@ class OrderPaket extends Model
         'tanggal_pembayaran',
         'bukti_pembayaran',
         'jumlah_pertemuan',
-        'sisa'
+        'sisa',
+        'id_location',
     ];
 
     protected $appends = [
@@ -106,5 +107,10 @@ class OrderPaket extends Model
     public function voucherCustomer()
     {
         return $this->hasOne(VoucherCustomer::class, 'id_order_paket');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'id_location');
     }
 }

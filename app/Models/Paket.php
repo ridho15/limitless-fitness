@@ -16,14 +16,13 @@ class Paket extends Model
         'harga',
         'valid_day',
         'promote_code',
-        'location',
         'diskon',
         'id_kelas',
         'is_many_times'
     ];
 
     protected $appends = [
-        'harga_formatted', 'harga_diskon', 'location_formatted', 'is_many_times_formatted'
+        'harga_formatted', 'harga_diskon', 'is_many_times_formatted'
     ];
 
     public function getIsManyTimesFormattedAttribute()
@@ -41,16 +40,6 @@ class Paket extends Model
             return 'Online';
         } elseif ($this->type_kelas == 2) {
             return 'Onsite';
-        }
-    }
-
-    public function getLocationFormattedAttribute()
-    {
-        if ($this->location == 0) {
-            return 'All Location';
-        } else {
-            $location = Location::find($this->location);
-            return $location->nama;
         }
     }
 
@@ -74,8 +63,8 @@ class Paket extends Model
         return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
     }
 
-    public function locationRelation()
+    public function paketLocation()
     {
-        return $this->belongsTo(Location::class, 'location');
+        return $this->hasMany(PaketLocation::class, 'id_paket');
     }
 }

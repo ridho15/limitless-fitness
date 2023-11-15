@@ -146,11 +146,9 @@ class BaseController extends Controller
     public function packages()
     {
         $data['active'] = 'packages';
-        $allPaket = Paket::where(function ($query) {
-            $query->where('location', session()->get('id_location'))
-                ->orWhere('location', 0);
-        })
-            ->get();
+        $allPaket = Paket::whereHas('paketLocation', function ($query) {
+            $query->where('id_location', session()->get('id_location'));
+        })->get();
         $listKelas = Kelas::where(function ($query) {
             $query->where('id_location', session()->get('id_location'))
                 ->orWhere('id_location', 0);
