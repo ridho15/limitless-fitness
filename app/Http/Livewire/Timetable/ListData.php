@@ -83,8 +83,9 @@ class ListData extends Component
                         if ($this->id_user) {
                             $query->where('id_user', $this->id_user);
                         }
+                    })->when($this->tanggal, function ($query) {
+                        $query->whereDate('tanggal', $this->tanggal);
                     })
-                    ->whereDate('tanggal', $this->tanggal)
                     ->orderBy('jam_mulai', 'ASC')
                     ->get();
 

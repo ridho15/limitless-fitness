@@ -1,62 +1,17 @@
 <div>
-    <div class="d-flex mb-2 justify-content-evenly" style="overflow-x: auto">
+    <div class="d-flex mb-2 justify-content-md-evenly" style="overflow-x: auto">
         @foreach ($listTanggal as $index => $item)
-            <a href="#{{ $index }}"
-                wire:click="$emit('onClickTanggal', {{ $index }}, {{ json_encode(date('Y-m-d', strtotime($item))) }})"
-                class="card-date @if ($index == $indexTanggal) active @endif shadow-sm mx-1"
-                style="text-decoration: none;">
-                <div class="text-center">
-                    <small class="fw-light">{{ date('M', strtotime($item)) }}</small>
-                </div>
-                <div class="fw-bold text-center fs-4">{{ date('d', strtotime($item)) }}</div>
-            </a>
+        <a href="#{{ $index }}"
+            wire:click="$emit('onClickTanggal', {{ $index }}, {{ json_encode(date('Y-m-d', strtotime($item))) }})"
+            class="card-date @if ($index == $indexTanggal) active @endif shadow-sm mx-1" style="text-decoration: none;">
+            <div class="text-center">
+                <small class="fw-light">{{ date('M', strtotime($item)) }}</small>
+            </div>
+            <div class="fw-bold text-center fs-4">{{ date('d', strtotime($item)) }}</div>
+        </a>
         @endforeach
     </div>
     <div class="row d-none d-sm-flex justify-content-center align-items-center">
-        {{-- <div class="dropdown col-md-2">
-            <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                All Categories
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 0)">All Categories</a>
-                </li>
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 1)">Private Class</a>
-                </li>
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 2)">Group Class</a>
-                </li>
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 3)">Private Duet</a>
-                </li>
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeCategory', 4)">Private Group</a>
-                </li>
-            </ul>
-        </div> --}}
-        {{-- <div class="dropdown col-md-2">
-            <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                Location
-            </button>
-            <ul class="w-100 dropdown-menu px-2">
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLocation',0 )">All Location</a>
-                </li>
-                @foreach ($listLocation as $item)
-                    <li><a class="dropdown-item" href="#"
-                            wire:click="$emit('onChangeLocation', {{ $item->id }})">{{ $item->nama }}</a>
-                    </li>
-                @endforeach
-            </ul>
-        </div> --}}
-        {{-- <div class="col-md-3">
-            <div class="input-group">
-                <input type="text" class="form-control" name="cari" wire:model='cari' placeholder="Cari Kelas ..."
-                    aria-label="Tulis Kelas" aria-describedby="basic-addon2"
-                    style="padding-top: 10px; padding-bottom: 10px">
-                <span wire:click="onClickCari" class="input-group-text" id="basic-addon2" style="cursor: pointer">
-                    <i class="fa-solid fa-magnifying-glass"></i> Cari
-                </span>
-            </div>
-        </div> --}}
-
         <div class="dropdown col-md-3">
             <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,9 +21,9 @@
                 <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass',0 )">Close Class</a>
                 </li>
                 @foreach ($listKelas as $item)
-                    <li><a class="dropdown-item" href="#"
-                            wire:click="$emit('onChangeClass', {{ $item->id }})">{{ $item->nama_kelas }}</a>
-                    </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass', {{ $item->id }})">{{
+                        $item->nama_kelas }}</a>
+                </li>
                 @endforeach
             </ul>
         </div>
@@ -82,9 +37,9 @@
                         Instruktur</a>
                 </li>
                 @foreach ($listInstruktur as $item)
-                    <li><a class="dropdown-item" href="#"
-                            wire:click="$emit('onChangeInstruktur', {{ $item->id }})">{{ $item->name }}</a>
-                    </li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeInstruktur', {{ $item->id }})">{{
+                        $item->name }}</a>
+                </li>
                 @endforeach
             </ul>
         </div>
@@ -106,13 +61,14 @@
         </div> --}}
         <div class="col-md-3">
             <div class="input-group">
-                <input type="date" class="form-control" name="tanggal" wire:model='tanggal'
-                    wire:change='changeTanggal' placeholder="Cari Kelas ..." aria-label="Tulis Kelas"
-                    aria-describedby="basic-addon2" style="padding-top: 10px; padding-bottom: 10px">
+                <input type="date" class="form-control" name="tanggal" wire:model='tanggal' wire:change='changeTanggal'
+                    placeholder="Cari Kelas ..." aria-label="Tulis Kelas" aria-describedby="basic-addon2"
+                    style="padding-top: 10px; padding-bottom: 10px">
             </div>
         </div>
         <div class="col-md-3">
-            {{-- <button type="button" id="btn_repetitif_time" wire:click="$emit('onClickBtnRepetitifTime')" class="btn custom-btn w-100">Set Repetitif Time</button> --}}
+            {{-- <button type="button" id="btn_repetitif_time" wire:click="$emit('onClickBtnRepetitifTime')"
+                class="btn custom-btn w-100">Set Repetitif Time</button> --}}
             <button type="button" id="btn_repetitif_time" wire:click="$emit('onClickGantiLokasi')"
                 class="btn custom-btn w-100">Ganti Lokasi</button>
         </div>
@@ -126,8 +82,8 @@
             <ul class="dropdown-menu w-100">
                 <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass',0 )">Close Class</a></li>
                 @foreach ($listKelas as $item)
-                    <li><a class="dropdown-item" href="#"
-                            wire:click="$emit('onChangeClass', {{ $item->id }})">{{ $item->nama_kelas }}</a></li>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass', {{ $item->id }})">{{
+                        $item->nama_kelas }}</a></li>
                 @endforeach
             </ul>
         </div>
@@ -140,8 +96,8 @@
 </div>
 
 @push('js')
-    <script>
-        Livewire.on('onClickTanggal', (index, tanggal) => {
+<script>
+    Livewire.on('onClickTanggal', (index, tanggal) => {
             Livewire.emit('setTanggal', index)
             Livewire.emit('changeTanggal', tanggal)
         })
@@ -173,5 +129,5 @@
         Livewire.on('onClickGantiLokasi', () => {
             $('#modal_location_studio').modal('show')
         })
-    </script>
+</script>
 @endpush
