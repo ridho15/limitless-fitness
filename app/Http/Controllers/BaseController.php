@@ -195,6 +195,7 @@ class BaseController extends Controller
             ->get();
         $data['active'] = 'timetable';
         $data['listRepetitifTime'] = $listRepetitifTime;
+        $data['listLocation'] = Location::get();
         return view('base-2.timetable', $data);
     }
 

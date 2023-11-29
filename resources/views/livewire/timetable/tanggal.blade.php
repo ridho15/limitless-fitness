@@ -33,8 +33,7 @@
                 Instructor
             </button>
             <ul class="w-100 dropdown-menu px-2">
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeInstruktur', 0)">All
-                        Instruktur</a>
+                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeInstruktur', 0)">All Instruktur</a>
                 </li>
                 @foreach ($listInstruktur as $item)
                 <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeInstruktur', {{ $item->id }})">{{
@@ -43,22 +42,6 @@
                 @endforeach
             </ul>
         </div>
-        {{-- <div class="dropdown col-md-3">
-            <button class="btn btn-custom-filter dropdown-toggle shadow-sm border w-100" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                Level of difficulty
-            </button>
-            <ul class="w-100 dropdown-menu px-2">
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 0)">All Level</a>
-                </li>
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 1)">Intermediated</a>
-                </li>
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 2)">Beginer</a>
-                </li>
-                <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeLevel', 3)">Advanced</a>
-                </li>
-            </ul>
-        </div> --}}
         <div class="col-md-3">
             <div class="input-group">
                 <input type="date" class="form-control" name="tanggal" wire:model='tanggal' wire:change='changeTanggal'
@@ -67,8 +50,6 @@
             </div>
         </div>
         <div class="col-md-3">
-            {{-- <button type="button" id="btn_repetitif_time" wire:click="$emit('onClickBtnRepetitifTime')"
-                class="btn custom-btn w-100">Set Repetitif Time</button> --}}
             <button type="button" id="btn_repetitif_time" wire:click="$emit('onClickGantiLokasi')"
                 class="btn custom-btn w-100">Ganti Lokasi</button>
         </div>
