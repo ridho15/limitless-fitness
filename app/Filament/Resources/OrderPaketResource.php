@@ -18,6 +18,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -327,6 +328,39 @@ class OrderPaketResource extends Resource
                                 ]);
                             }
                         })->requiresConfirmation(),
+                    Action::make('status')
+                        ->color(function ($record) {
+                            if ($record->is_active == 1) {
+                                return 'danger';
+                            } else {
+                                return 'success';
+                            }
+                        })
+                        ->label(function ($record) {
+                            if ($record->is_active == 1) {
+                                return 'Non Aktifkan';
+                            } else {
+                                return 'Aktifkan';
+                            }
+                        })->after(function () {
+                            Notification::make()
+                                ->title('Update order berhasil')
+                                ->success()
+                                ->send();
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Melakukan update status aktif / non aktif order paket customer');
+                        })->action(function ($record) {
+                            if ($record->is_active == 1) {
+                                $record->update([
+                                    'is_active' => 0
+                                ]);
+                            } else {
+                                $record->update([
+                                    'is_active' => 1
+                                ]);
+                            }
+                        })->icon('heroicon-o-lightning-bolt'),
                     ViewAction::make(),
                 ])
             ])
