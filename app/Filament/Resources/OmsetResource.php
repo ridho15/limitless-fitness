@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\OmsetResource\Pages;
+use App\Filament\Resources\OmsetResource\RelationManagers;
+use App\Models\Jurnal;
+use App\Models\OrderPaket;
+use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Resources\Form;
+use Filament\Resources\Resource;
+use Filament\Resources\Table;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
+
+class OmsetResource extends Resource
+{
+    protected static ?string $model = Jurnal::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-cash';
+
+    protected static ?string $modelLabel = 'Omset';
+
+    protected static ?string $pluralModelLabel = 'Omset';
+
+    protected static ?string $navigationLabel = 'Omset';
+
+    protected static ?string $slug = 'Omset';
+
+    protected static ?string $title = 'Omset';
+
+    protected static int $omset = 0;
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                //
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('nama')
+                    ->label('Nama')
+                    ->searchable(),
+                TextColumn::make('orderPaket.paket.nama')
+                    ->label('Paket')
+                    ->searchable(),
+                TextColumn::make('tanggal')
+                    ->searchable()
+                    ->label('Tanggal'),
+                TextColumn::make('jumlah_uang')
+                    ->searchable()
+                    ->label('Jumlah Uang')
+                    ->formatStateUsing(function ($state) {
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    }),
+                TextColumn::make('omset')
+                    ->searchable()
+                    ->label('Omset')
+                    ->formatStateUsing(function ($record) {
+                        static::$omset += $record->jumlah_uang;
+                        return 'Rp.' . number_format(static::$omset, 0, ',', '.');
+                    }),
+
+            ])
+            ->filters([
+                Filter::make('tanggal')
+                    ->label('Tanggal')
+                    ->form([
+                        DatePicker::make('tanggal_pembayaran_from')
+                            ->label('Tanggal Dari'),
+                        DatePicker::make('tanggal_pembayaran_to')
+                            ->label('Tanggal ke'),
+                    ])->query(function (Builder $query, array $data) {
+                        return $query->when($data['tanggal_pembayaran_from'], function (Builder $query, $date) {
+                            return $query->where('tanggal', '>=', $date);
+                        })->when($data['tanggal_pembayaran_to'], function (Builder $query, $date) {
+                            return $query->where('tanggal', '<=', $date);
+                        });
+                    })
+            ])
+            ->actions([
+                // Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                // Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListOmsets::route('/'),
+            // 'create' => Pages\CreateOmset::route('/create'),
+            // 'edit' => Pages\EditOmset::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('tipe', 1)->orderBy('tanggal', 'ASC');
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()->hasRole('Super Admin');
+    }
+}

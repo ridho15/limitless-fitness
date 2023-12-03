@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\OmsetResource;
+use App\Filament\Resources\OmsetResource\Pages\ListOmsets;
 use App\Models\Jurnal;
 use App\Models\KelasActivity;
 use App\Models\User;
@@ -12,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 
 class PendapatanOverView extends BaseWidget
 {
+    public $listeners = [
+        'onClickOmset'
+    ];
     protected function getCards(): array
     {
         $listCard = [];
@@ -24,7 +29,10 @@ class PendapatanOverView extends BaseWidget
         }
 
         array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omset, 0, ',', '.'))
-            ->description('Omset dalam bulan ini')->color('primary'));
+            ->description('Omset dalam bulan ini')->color('primary')
+        ->extraAttributes([
+            'wire:click' => '$emit("onClickOmset")'
+        ]));
         $instrukturFee = 0;
         $listInstrukturFee = Jurnal::where('id_order_paket', '!=', null)
             ->where('tipe', 0)
@@ -146,5 +154,9 @@ class PendapatanOverView extends BaseWidget
 
         array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
             ->color('success'));
+    }
+
+    public function onClickOmset(){
+        return redirect()->to(OmsetResource::getUrl('index'));
     }
 }

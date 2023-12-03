@@ -7,12 +7,9 @@ use App\Filament\Resources\CustomerResource;
 use App\Models\BookingKelas;
 use App\Models\Kelas;
 use App\Models\OrderPaket;
-use App\Models\Paket;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
-use HtmlSanitizer\Extension\Table\NodeVisitor\ThNodeVisitor;
-use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -144,7 +141,7 @@ class KreditCustomer extends Page
             ->where('is_active', 1)
             ->where('expired_date', '>=', now())
             ->get();
-            
+
         $this->jumlahSession = [];
         foreach ($this->listOrderPaket as $item) {
             array_push($this->jumlahSession, $item->sisa);
