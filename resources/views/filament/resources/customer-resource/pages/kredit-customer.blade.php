@@ -45,7 +45,8 @@
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                                             style="background-color: rgb(0, 183, 255)">
                                             Edit Session
-                                        </button></td>
+                                        </button>
+                                    </td>
                                 @else
                                     <td class="border px-4 py-2 bg-white text-end">
                                     </td>

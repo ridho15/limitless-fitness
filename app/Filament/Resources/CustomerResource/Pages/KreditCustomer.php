@@ -97,15 +97,6 @@ class KreditCustomer extends Page
     public function updateSession($id, $index)
     {
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
-            // $orderPaket = OrderPaket::where('id_user', $this->id_user)
-            //     ->whereHas('paket', function ($query) {
-            //         $query->where('id_kelas', $this->id_kelas);
-            //     })
-            //     ->where('is_active', 1)
-            //     ->where('expired_date', '>=', now())
-            //     ->orderBy('created_at', 'DESC')
-            //     ->first();
-
             $orderPaket = OrderPaket::find($id);
             if ($orderPaket) {
                 $orderPaket->update([
@@ -153,7 +144,7 @@ class KreditCustomer extends Page
             ->where('is_active', 1)
             ->where('expired_date', '>=', now())
             ->get();
-
+            
         $this->jumlahSession = [];
         foreach ($this->listOrderPaket as $item) {
             array_push($this->jumlahSession, $item->sisa);
