@@ -12,7 +12,9 @@ use App\Filament\Resources\CustomerResource\RelationManagers\VoucherCustomerRela
 use App\Models\OrderPaket;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
@@ -30,6 +32,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -119,27 +122,52 @@ class CustomerResource extends Resource
                 TextColumn::make('email')
                     ->searchable(),
                 TextColumn::make('no_hp')
+                    ->label('Nomor Hp')
                     ->searchable(),
                 TextColumn::make('alamat')
+                    ->label('Alamat')
                     ->searchable(),
                 TextColumn::make('location.nama')
                     ->label('Location')
+                    ->toggleable()
                     ->searchable(),
                 TextColumn::make('tanggal_lahir')
                     ->label('Tanggal Lahir'),
                 TextColumn::make('email_verified_at')
+                    ->label('Tanggal Verifikasi Email')
                     ->sortable()
+                    ->toggleable()
                     ->dateTime(),
-                TextColumn::make('status_formatted'),
+                TextColumn::make('status_formatted')
+                    ->toggleable()
+                    ->label('Status User'),
                 TextColumn::make('created_at')
+                    ->label('Tanggal Buat')
                     ->sortable()
+                    ->toggleable()
                     ->dateTime(),
                 TextColumn::make('updated_at')
+                    ->label('Tanggal Pembaharuan')
                     ->sortable()
+                    ->toggleable()
                     ->dateTime()
             ])
             ->filters([
-                //
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('start_date')
+                            ->label('Dari Tanggal')
+                            ->nullable(),
+                        DatePicker::make('end_date')
+                            ->label('Sampai Tanggal')
+                            ->nullable()
+                    ])->query(function (Builder $query, $data) {
+                        return $query->when($data['start_date'], function (Builder $query, $date) {
+                            return $query->whereDate('created_at', '>=', $date);
+                        })->when($data['end_date'], function (Builder $query, $date) {
+                            return $query->where('created_at', '<=', $date);
+                        });
+                    })
             ])
             ->actions([
                 ActionGroup::make([

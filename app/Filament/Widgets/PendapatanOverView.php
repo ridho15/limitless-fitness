@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\CustomerResource;
+use App\Filament\Resources\JurnalResource;
 use App\Filament\Resources\OmsetResource;
 use App\Filament\Resources\OmsetResource\Pages\ListOmsets;
 use App\Models\Jurnal;
@@ -15,7 +17,10 @@ use Illuminate\Support\Facades\Auth;
 class PendapatanOverView extends BaseWidget
 {
     public $listeners = [
-        'onClickOmset'
+        'onClickOmset',
+        'onClickFeeInstruktur',
+        'onClickCustomer',
+        'onClickProfit'
     ];
     protected function getCards(): array
     {
@@ -42,13 +47,17 @@ class PendapatanOverView extends BaseWidget
             $instrukturFee += $item->jumlah_uang;
         }
 
-        array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format($instrukturFee, 0, ',', '.'))->description('Pembayaran instruktur 1 bulan')->color('primary'));
+        array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format($instrukturFee, 0, ',', '.'))->description('Pembayaran instruktur bulan ini')->color('primary')->extraAttributes([
+            'wire:click' => '$emit("onClickFeeInstruktur")'
+        ]));
 
         $jumlahCustomer = User::whereHas('roles', function ($query) {
             $query->where('name', 'Customer');
         })->whereMonth('created_at', now())->count();
 
-        array_push($listCard, Card::make('Customer Bulan ini', number_format($jumlahCustomer, 0, ',', '.'))->description('Jumlah customer dalam 1 bulan ini')->color('primary'));
+        array_push($listCard, Card::make('Customer Bulan ini', number_format($jumlahCustomer, 0, ',', '.'))->description('Jumlah customer tambahan bulan ini')->color('primary')->extraAttributes([
+            'wire:click' => '$emit("onClickCustomer")'
+        ]));
 
         $profit = 0;
         $listJurnal = Jurnal::whereMonth('created_at', now())
@@ -61,102 +70,26 @@ class PendapatanOverView extends BaseWidget
             }
         }
 
-        array_push($listCard, Card::make('Profit Bulan ini', number_format($profit, 0, ',', '.'))->description('Total profit dalam 1 bulan ini')->color('primary'));
+        array_push($listCard, Card::make('Profit Bulan ini', number_format($profit, 0, ',', '.'))->description('Total profit dalam 1 bulan ini')->color('primary')->extraAttributes([
+            'wire:click' => '$emit("onClickProfit")'
+        ]));
 
         return $listCard;
     }
 
-    public function temporary()
-    {
-        $listCard = [];
-        $jurnal = Jurnal::select('jumlah_uang', 'tipe')->where('id_order_paket', '!=', null)
-            ->get();
-
-        $omset = 0;
-        $pengeluaran = 0;
-        foreach ($jurnal as $item) {
-            if ($item->tipe == 1) {
-                $omset += $item->jumlah_uang;
-            } elseif ($item->tipe == '0') {
-                $pengeluaran += $item->jumlah_uang;
-            }
-        }
-
-        $jumlahCustomer = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Customer');
-        })->whereMonth('created_at', now())->count();
-
-        if (Auth::user()->hasRole('Super Admin')) {
-            array_push($listCard, Card::make('Gross Profit', 'Rp.' . number_format($omset - $pengeluaran, 0, ',', '.'))
-                ->description('Omset di kurangi dengan fee instruktur')
-                ->color('primary'));
-
-            array_push($listCard,  Card::make('Jumlah Customer', $jumlahCustomer)
-                ->description('Jumlah Customer Dalam Bulan Ini')
-                ->color('primary'));
-        }
-
-        $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-            $query->where(function ($query) {
-                $query->where('status_kehadiran', '1')
-                    ->orWhere('status_kehadiran', '0');
-            });
-        }])
-            ->where(function ($query) {
-                if (Auth::user()->hasRole('Instruktur')) {
-                    $query->where('id_user', Auth::id());
-                }
-            })->whereDate('tanggal', '<=', now())->where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)->get();
-        $omset = 0;
-        foreach ($listKelasActivity as $item) {
-            $jumlahPeserta = 0;
-            foreach ($item->bookingKelas as $bookingKelas) {
-                if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
-                    $jumlahPeserta++;
-                }
-            }
-            if ($item->kelas->min_anggota <= $jumlahPeserta) {
-                $omset += $item->kelas->fee;
-            }
-        }
-
-        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan secara keseluruhan dari kelas yang sudah lewat')
-            ->color('success'));
-
-        $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-            $query->where(function ($query) {
-                $query->where('status_kehadiran', '1')
-                    ->orWhere('status_kehadiran', '0');
-            });
-        }])
-            ->where(function ($query) {
-                if (Auth::user()->hasRole('Instruktur')) {
-                    $query->where('id_user', Auth::id());
-                }
-            })->whereDate('tanggal', '<=', now())
-            ->whereDate('tanggal', '>=', Carbon::now()->subMonths(1)->isoFormat('YYYY-MM-DD'))
-            ->where('id_kelas', '!=', null)
-            ->where('id_location_studio', '!=', null)->get();
-
-        $omset = 0;
-        foreach ($listKelasActivity as $item) {
-            $jumlahPeserta = 0;
-            foreach ($item->bookingKelas as $bookingKelas) {
-                if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
-                    $jumlahPeserta++;
-                }
-            }
-            if ($item->kelas->min_anggota <= $jumlahPeserta) {
-                $omset += $item->kelas->fee;
-            }
-        }
-
-        array_push($listCard, Card::make('Instruktur Payroll', 'Rp.' . number_format($omset, 0, ',', '.'))->description('Pendapatan dalam 1 bulan')
-            ->color('success'));
-    }
-
     public function onClickOmset(){
         return redirect()->to(OmsetResource::getUrl('index'));
+    }
+
+    public function onClickFeeInstruktur(){
+        // return redirect()->to()
+    }
+
+    public function onClickCustomer(){
+        return redirect()->to(CustomerResource::getUrl('index'));
+    }
+
+    public function onClickProfit(){
+        return redirect()->to(JurnalResource::getUrl('index'));
     }
 }

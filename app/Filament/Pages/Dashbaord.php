@@ -12,6 +12,7 @@ use App\Filament\Widgets\OmsetTable;
 use App\Filament\Widgets\PendapatanInstruktur;
 use App\Filament\Widgets\PendapatanInstrukturOverview;
 use App\Filament\Widgets\PendapatanOverView;
+use App\Filament\Widgets\PendapatanPerLocationOverview;
 use App\Filament\Widgets\PengeluaranChart;
 use App\Models\Location;
 use Closure;

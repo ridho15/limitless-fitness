@@ -80,7 +80,7 @@ class KelasActivity extends Model
                 } elseif ($bookingKelas < $kelas->max_anggota) {
                     $this->status = 1;
                     $this->save();
-                    return $bookingKelas . ' / ' . $kelas->max_anggota . ' Slots Available';
+                    return $bookingKelas . ' / ' . $kelas->max_anggota . ' Slots filled';
                 }
             } else {
                 $this->status == 1;

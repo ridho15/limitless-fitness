@@ -6,8 +6,10 @@ use App\Filament\Resources\InstrukturOmsetResource;
 use App\Models\BookingKelas;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\Location;
 use Closure;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -20,10 +22,8 @@ class OmsetTable extends BaseWidget
 {
     public $tanggal_awal = null;
     public $tanggal_akhir = null;
+    public $id_location = null;
 
-    public function mount()
-    {
-    }
     protected function getTableQuery(): Builder
     {
         return Kelas::orderBy('id', 'ASC');
@@ -39,21 +39,18 @@ class OmsetTable extends BaseWidget
                 ->alignCenter()
                 ->formatStateUsing(function ($record) {
                     $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-                        $query->where(function ($query) {
-                            $query->where('status_kehadiran', '1')
-                                ->orWhere('status_kehadiran', '0');
+                        $query->whereIn('status_kehadiran', [0, 1]);
+                    }])->when(Auth::user()->hasRole('Instruktur'), function ($query, $data) {
+                        $query->where('id_user', Auth::id());
+                    })->when($this->id_location, function ($query, $data) {
+                        return $query->whereHas('locationStudio', function ($query) {
+                            return $query->where('id_location', $this->id_location);
                         });
-                    }])->where(function ($query) {
-                        if (Auth::user()->hasRole('Instruktur')) {
-                            $query->where('id_user', Auth::id());
-                        }
                     })
                         ->where('id_kelas', $record->id)
-                        ->where(function ($query) {
-                            if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
-                                $query->whereDate('tanggal', '>=', $this->tanggal_awal)
-                                    ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                            }
+                        ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function ($query, $data) {
+                            return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
+                                ->whereDate('tanggal', '<=', $this->tanggal_akhir);
                         })->get();
 
                     $jumlahPertemuan = 0;
@@ -75,21 +72,19 @@ class OmsetTable extends BaseWidget
             TextColumn::make('omset')
                 ->formatStateUsing(function ($record) {
                     $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-                        $query->where(function ($query) {
-                            $query->where('status_kehadiran', '1')
-                                ->orWhere('status_kehadiran', '0');
-                        });
-                    }])->where(function ($query) {
-                        if (Auth::user()->hasRole('Instruktur')) {
-                            $query->where('id_user', Auth::id());
-                        }
+                        return $query->whereIn('status_kehadiran', [0, 1]);
+                    }])->when(Auth::user()->hasRole('Instruktur'), function ($query, $data) {
+                        $query->where('id_user', Auth::id());
                     })
                         ->where('id_kelas', $record->id)
-                        ->where(function ($query) {
-                            if ($this->tanggal_awal != null && $this->tanggal_akhir != null) {
-                                $query->whereDate('tanggal', '>=', $this->tanggal_awal)
-                                    ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                            }
+                        ->when($this->id_location, function ($query, $data) {
+                            return $query->whereHas('locationStudio', function ($query) {
+                                return $query->where('id_location', $this->id_location);
+                            });
+                        })
+                        ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function ($query, $data) {
+                            return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
+                                ->whereDate('tanggal', '<=', $this->tanggal_akhir);
                         })->get();
 
                     $omset = 0;
@@ -102,7 +97,7 @@ class OmsetTable extends BaseWidget
                         }
 
                         if ($item->kelas->min_anggota <= $jumlahPeserta) {
-                          $omset += $item->kelas->fee;
+                            $omset += $item->kelas->fee;
                         }
                     }
 
@@ -131,6 +126,15 @@ class OmsetTable extends BaseWidget
                     } else {
                         $this->tanggal_akhir = null;
                     }
+                }),
+            Filter::make('lokasi')
+                ->form([
+                    Select::make('id_location')
+                        ->label('Lokasi')
+                        ->searchable()
+                        ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
+                ])->indicateUsing(function ($data) {
+                    $this->id_location = $data['id_location'];
                 })
         ];
     }
@@ -144,9 +148,4 @@ class OmsetTable extends BaseWidget
                 }),
         ];
     }
-
-    // public function getColumnSpan(): int|string|array
-    // {
-    //     return 2;
-    // }
 }

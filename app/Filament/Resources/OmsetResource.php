@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OmsetResource\Pages;
 use App\Filament\Resources\OmsetResource\RelationManagers;
 use App\Models\Jurnal;
+use App\Models\Location;
 use App\Models\OrderPaket;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -14,6 +15,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
@@ -23,10 +25,6 @@ class OmsetResource extends Resource
     protected static ?string $model = Jurnal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cash';
-
-    protected static ?string $modelLabel = 'Omset';
-
-    protected static ?string $pluralModelLabel = 'Omset';
 
     protected static ?string $navigationLabel = 'Omset';
 
@@ -56,6 +54,10 @@ class OmsetResource extends Resource
                 TextColumn::make('tanggal')
                     ->searchable()
                     ->label('Tanggal'),
+                TextColumn::make('orderPaket.location.nama')
+                    ->label('Location')
+                    ->toggleable()
+                    ->searchable(),
                 TextColumn::make('jumlah_uang')
                     ->searchable()
                     ->label('Jumlah Uang')
@@ -63,7 +65,6 @@ class OmsetResource extends Resource
                         return 'Rp.' . number_format($state, 0, ',', '.');
                     }),
                 TextColumn::make('omset')
-                    ->searchable()
                     ->label('Omset')
                     ->formatStateUsing(function ($record) {
                         static::$omset += $record->jumlah_uang;
@@ -84,6 +85,17 @@ class OmsetResource extends Resource
                             return $query->where('tanggal', '>=', $date);
                         })->when($data['tanggal_pembayaran_to'], function (Builder $query, $date) {
                             return $query->where('tanggal', '<=', $date);
+                        });
+                    }),
+                SelectFilter::make('id_location')
+                    ->label('Location')
+                    ->searchable()
+                    ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
+                    ->query(function (Builder $query, $data) {
+                        return $query->when($data['value'], function (Builder $query, $id_location) {
+                            return $query->whereHas('orderPaket', function (Builder $query) use ($id_location) {
+                                return $query->where('id_location', $id_location);
+                            });
                         });
                     })
             ])

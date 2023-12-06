@@ -5,8 +5,11 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\JurnalResource\Pages;
 use App\Filament\Resources\JurnalResource\RelationManagers;
 use App\Models\Jurnal;
+use App\Models\Location;
+use App\Models\User;
 use Closure;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
@@ -23,6 +26,8 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +96,12 @@ class JurnalResource extends Resource
                     })
                     ->searchable(),
                 TextColumn::make('parent.nama')
+                    ->searchable()
+                    ->label('Parent')
+                    ->toggleable(),
+                TextColumn::make('orderPaket.location.nama')
+                    ->label('Location')
+                    ->toggleable()
                     ->searchable(),
                 TextColumn::make('debit')
                     ->label('Debit')
@@ -125,7 +136,35 @@ class JurnalResource extends Resource
                     ->hidden(),
             ])
             ->filters([
-                //
+                Filter::make('tanggal')
+                    ->form([
+                        DatePicker::make('tanggal_from')
+                            ->label('Dari Tanggal'),
+                        DatePicker::make('tanggal_to')
+                            ->label('Ke Tanggal'),
+                    ])->query(function (Builder $query, $data) {
+                        return $query->when($data['tanggal_from'], function (Builder $query, $tanggal) {
+                            return $query->whereDate('tanggal', '>=', $tanggal);
+                        })->when($data['tanggal_to'], function (Builder $query, $tanggal) {
+                            return $query->whereDate('tanggal', '<=', $tanggal);
+                        });
+                    }),
+                SelectFilter::make('id_location')
+                    ->label('Location')
+                    ->searchable()
+                    ->options(function () {
+                        $listLocation = Location::select(['nama', 'id'])->get()->pluck('nama', 'id');
+                        return $listLocation;
+                    })
+                    ->query(function (Builder $query, $data) {
+                        return $query->when($data['value'], function (Builder $query, $id_location) {
+                            $query->whereHas('orderPaket', function (Builder $query) use ($id_location) {
+                                $query->where('id_location', $id_location);
+                            });
+                        });
+                    })->hidden(function () {
+                        return Auth::user()->hasRole(['Admin']);
+                    })
             ])
             ->actions([
                 EditAction::make(),
@@ -140,6 +179,15 @@ class JurnalResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Admin']), function (Builder $query) {
+            return $query->whereHas('orderPaket', function (Builder $query) {
+                $query->where('id_location', Auth::user()->id_location);
+            });
+        });
     }
 
     public static function getRelations(): array

@@ -9,6 +9,8 @@ use App\Filament\Resources\InstrukturOmsetResource\RelationManagers\KelasActivit
 use App\Filament\Widgets\PendapatanInstrukturOverview;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use Carbon\Carbon;
+use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
@@ -70,11 +72,10 @@ class InstrukturOmsetResource extends Resource
                 TextColumn::make('jumlah_pertemuan')
                     ->alignCenter()
                     ->formatStateUsing(function ($record) {
-                        $kelasActivity = KelasActivity::where(function ($query) {
-                            if (Auth::user()->hasRole(['Instruktur'])) {
-                                $query->where('id_user', Auth::id());
-                            }
-                        })->withCount('bookingKelas')
+                        $listKelasActivity = KelasActivity::when(Auth::user()->hasRole(['Instruktur']), function ($query) {
+                            return $query->where('id_user', Auth::id());
+                        })
+                            ->withCount('bookingKelas')
                             ->having('booking_kelas_count', '>=', 2)
                             ->whereDate('tanggal', '<=', now())
                             ->where('id_kelas', $record->id)
@@ -83,39 +84,25 @@ class InstrukturOmsetResource extends Resource
                                     ->whereDate('tanggal', '<=', date('Y-m-d', strtotime(static::$tanggal_akhir)));
                             })
                             ->count();
-
-                        return $kelasActivity;
+                        $omset = 0;
+                        for ($i = 0; $i < $listKelasActivity; $i++) {
+                            $omset += $record->fee;
+                        }
+                        $record->omset = $omset;
+                        return $listKelasActivity;
                     }),
                 TextColumn::make('omset')
                     ->formatStateUsing(function ($record) {
-                        $kelasActivity = KelasActivity::where(function ($query) {
-                            if (Auth::user()->hasRole(['Instruktur'])) {
-                                $query->where('id_user', Auth::id());
-                            }
-                        })->withCount('bookingKelas')
-                            ->having('booking_kelas_count', '>=', 2)
-                            ->whereDate('tanggal', '<=', now())
-                            ->where('id_kelas', $record->id)
-                            ->where(function ($query) {
-                                $query->whereDate('tanggal', '>=', date('Y-m-d', strtotime(static::$tanggal_awal)))
-                                    ->whereDate('tanggal', '<=', date('Y-m-d', strtotime(static::$tanggal_akhir)));
-                            })
-                            ->get();
-
-                        $omset = 0;
-                        foreach ($kelasActivity as $item) {
-                            $omset += $item->kelas->fee;
-                        }
-
-                        return 'Rp.' . number_format($omset, 0, ',', '.');
+                        return "Rp." . number_format($record->omset, 0, ',', '.');
                     })
                     ->label('Omset')
             ])
             ->filters([
                 Filter::make('tanggal')
                     ->form([
-                        DatePicker::make('created_from'),
-                        DatePicker::make('created_until')->default(now())
+                        DatePicker::make('created_from')
+                            ->default(Carbon::now()->startOfMonth()->isoFormat('YYYY-MM-DD')),
+                        DatePicker::make('created_until')->default(Carbon::now()->endOfMonth()->isoFormat('YYYY-MM-DD'))
                     ])->indicateUsing(function ($data) {
                         if ($data['created_from'] != null) {
                             static::$tanggal_awal = $data['created_from'];

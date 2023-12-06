@@ -20,44 +20,6 @@
                             {{ session()->get('fail') }}
                         </div>
                         @endif
-                        {{-- <div class="" style="max-height: 200px !important; overflow: auto">
-                            <div class="px-2 py-2" style="border: 1px solid gray; border-radius: 20px;">
-                                @if (count($listVoucher) > 0)
-                                @foreach ($listVoucher as $index => $item)
-                                <div class="row justify-content-center align-items-center">
-                                    <div class="col-md col mb-2">
-                                        <img src="{{ asset('assets/images/no_image.png') }}" alt="" height="75"
-                                            width="75" style="object-fit: cover">
-                                    </div>
-                                    <div class="col-md col mb-2">
-                                        <small class="text-sm"><strong>{{ $item->voucher->nama }} </strong><br>
-                                            {{ $item->voucher->deskripsi }}
-                                        </small>
-                                    </div>
-                                    <div class="col-md col mb-2">
-                                        <small class="text-sm text-danger fw-bold">Expired Date
-                                            <br>{{ date('d-m-Y', strtotime($item->expired)) }}</small>
-                                    </div>
-                                    <div class="col-md col mb-2">
-                                        <small class="text-sm">
-                                            {{ $item->voucher->avaiable_voucher }}
-                                        </small>
-                                    </div>
-                                    <div class="col-md col mb-2 text-center">
-                                        <button type="button" wire:click="gunakanVoucher({{ $item->id }})"
-                                            class="btn custom-btn" @if ($id_voucher_customer==$item->id) disabled
-                                            @endif>Gunakan</button>
-                                    </div>
-                                </div>
-                                <hr>
-                                @endforeach
-                                @else
-                                <div class="text-sm text-center">
-                                    <small>Tidak ada voucher</small>
-                                </div>
-                                @endif
-                            </div>
-                        </div> --}}
                         <div class="mb-3">
                             Kamu akan melakukan pembayaran pada:</div>
                         <div class="row">

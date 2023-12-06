@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Kelas extends Model
 {
@@ -29,7 +30,7 @@ class Kelas extends Model
         'status_aktif',
         'rating',
         'jumlah_review',
-        'type_formatted'
+        'type_formatted',
     ];
 
     public function getTypeFormattedAttribute()

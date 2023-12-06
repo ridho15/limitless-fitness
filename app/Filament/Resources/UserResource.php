@@ -88,6 +88,7 @@ class UserResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('foto')
+                    ->label('Foto')
                     ->circular()
                     ->height(75)
                     ->width(75),
@@ -97,17 +98,29 @@ class UserResource extends Resource
                 TextColumn::make('email')
                     ->searchable(),
                 TextColumn::make('no_hp')
+                    ->label('Nomor Hp')
                     ->searchable(),
                 TextColumn::make('alamat')
                     ->searchable(),
+                TextColumn::make('location.nama')
+                    ->toggleable()
+                    ->label('Lokasi Set')
+                    ->searchable(),
                 TextColumn::make('email_verified_at')
+                    ->label('Tanggal Verifikasi Email')
+                    ->toggleable()
                     ->sortable()
                     ->dateTime(),
-                TextColumn::make('status_formatted'),
+                TextColumn::make('status_formatted')
+                    ->label('Status User'),
                 TextColumn::make('created_at')
+                    ->label('Tanggal Buat')
+                    ->toggleable()
                     ->sortable()
                     ->dateTime(),
                 TextColumn::make('updated_at')
+                    ->toggleable()
+                    ->label('Tanggal Pembaharuan')
                     ->sortable()
                     ->dateTime()
             ])

@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Kelas;
+use App\Models\Location;
 use App\Models\OrderPaket;
 use Illuminate\Support\Carbon;
 use Carbon\CarbonPeriod;
@@ -27,14 +28,80 @@ class BelumBayarChart extends ApexChartWidget
 
     protected function getOptions(): array
     {
-        $data = Trend::query(OrderPaket::whereHas('paket', function ($query) {
-            $query->where('id_kelas', $this->filterFormData['id_kelas']);
-        })->where('status', 2))
-            ->between(
-                start: Carbon::parse($this->filterFormData['date_start']),
-                end: Carbon::parse($this->filterFormData['date_end']),
-            )->perDay()
-            ->sum('harga');
+        $listData = [];
+        $listWaktu = [];
+        $id_kelas = $this->filterFormData['id_kelas'];
+        $id_location = $this->filterFormData['id_location'];
+        $waktu = $this->filterFormData['waktu'];
+        if ($waktu == 'week') {
+            $periode = CarbonPeriod::create(Carbon::now()->subDays(7)->isoFormat('YYYY-MM-DD'), date('Y-m-d'));
+            foreach ($periode as $key => $value) {
+                $jumlah_uang = OrderPaket::when($id_location, function ($query, $id_location) {
+                    return $query->where('id_location', $id_location);
+                })->when($id_kelas, function ($query, $id_kelas) {
+                    return $query->whereHas('paket', function ($query) use ($id_kelas) {
+                        return $query->where('id_kelas', $id_kelas);
+                    });
+                })->whereIn('status', [0, 2])
+                    ->whereDate('created_at', $value)
+                    ->select(['harga'])
+                    ->sum('harga');
+
+                array_push($listData, $jumlah_uang);
+                array_push($listWaktu, date('Y-m-d', strtotime($value)));
+            }
+        } elseif ($waktu == 'month') {
+            $periode = CarbonPeriod::create(Carbon::now()->subMonths(1)->isoFormat('YYYY-MM-DD'), date('Y-m-d'))->toArray();
+            foreach ($periode as $key => $value) {
+                $jumlah_uang = OrderPaket::when($id_location, function ($query, $id_location) {
+                    return $query->where('id_location', $id_location);
+                })->when($id_kelas, function ($query, $id_kelas) {
+                    return $query->whereHas('paket', function ($query) use ($id_kelas) {
+                        return $query->where('id_kelas', $id_kelas);
+                    });
+                })->whereIn('status', [0, 2])
+                    ->whereDate('created_at', $value)
+                    ->select(['harga'])
+                    ->sum('harga');
+
+                array_push($listData, $jumlah_uang);
+                array_push($listWaktu, date('Y-m-d', strtotime($value)));
+            }
+        } elseif ($waktu == 'year') {
+            $periode = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            foreach ($periode as $key => $value) {
+                $jumlah_uang = OrderPaket::when($id_location, function ($query, $id_location) {
+                    return $query->where('id_location', $id_location);
+                })->when($id_kelas, function ($query, $id_kelas) {
+                    return $query->whereHas('paket', function ($query) use ($id_kelas) {
+                        return $query->where('id_kelas', $id_kelas);
+                    });
+                })->whereIn('status', [0, 2])
+                    ->whereMonth('created_at', $key + 1)
+                    ->select(['harga'])
+                    ->sum('harga');
+
+                array_push($listData, $jumlah_uang);
+            }
+            $listWaktu = $periode;
+        } else {
+            $listJumlahUang = OrderPaket::when($id_location, function ($query, $id_location) {
+                return $query->where('id_location', $id_location);
+            })->when($id_kelas, function ($query, $id_kelas) {
+                return $query->whereHas('paket', function ($query) use ($id_kelas) {
+                    return $query->where('id_kelas', $id_kelas);
+                });
+            })->whereIn('status', [0, 2])
+                ->whereDate('created_at', now())
+                ->orderBy('created_at', 'ASC')
+                ->select(['harga', 'created_at'])
+                ->get();
+
+            foreach ($listJumlahUang as $item) {
+                array_push($listData, $item->harga);
+                array_push($listWaktu, date('H:i', strtotime($item->created_at)));
+            }
+        }
 
         return [
             'chart' => [
@@ -45,12 +112,12 @@ class BelumBayarChart extends ApexChartWidget
                 [
                     'name' => 'Total',
                     // 'data' => [7, 4, 6, 10, 14, 7, 5, 9, 10, 15, 13, 18],
-                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                    'data' => $listData,
                 ],
             ],
             'xaxis' => [
                 // 'categories' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                'categories' => $data->map(fn (TrendValue $value) => $value->date),
+                'categories' => $listWaktu,
                 'labels' => [
                     'style' => [
                         'colors' => '#9ca3af',
@@ -79,12 +146,20 @@ class BelumBayarChart extends ApexChartWidget
             Select::make('id_kelas')
                 ->label('Kelas')
                 ->searchable()
-                ->preload()
                 ->options(Kelas::get()->pluck('nama_kelas', 'id')),
-            DatePicker::make('date_start')
-                ->default(now()),
-            DatePicker::make('date_end')
-                ->default(now()),
+            Select::make('id_location')
+                ->label('Lokasi')
+                ->searchable()
+                ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id')),
+            Select::make('waktu')
+                ->label('Waktu')
+                ->searchable()
+                ->options([
+                    'today' => 'Today',
+                    'week' => 'Last Week',
+                    'month' => 'Last Month',
+                    'year' => 'This Year'
+                ])->default('today')
         ];
     }
 }

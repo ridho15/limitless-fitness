@@ -37,10 +37,10 @@ class PendapatanInstrukturOverview extends BaseWidget
             $jumlahPertemuan++;
         }
 
-        array_push($listCard, Card::make('Jumlah Pertamuan 1 Bulan', $jumlahPertemuanSatuBulan)
+        array_push($listCard, Card::make('Jumlah Pertemuan 1 Bulan', $jumlahPertemuanSatuBulan)
             ->description('Jumlah Pertamuan dalam bulan ini')->color('primary'));
 
-        array_push($listCard, Card::make('Jumlah Pertamuan', $jumlahPertemuan)
+        array_push($listCard, Card::make('Jumlah Pertemuan', $jumlahPertemuan)
             ->description('Jumlah pertemuan seluruh nya')->color('primary'));
 
         array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omsetSatuBulan, 0, ',', '.'))
