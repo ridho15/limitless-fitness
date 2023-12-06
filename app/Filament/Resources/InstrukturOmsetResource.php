@@ -9,11 +9,13 @@ use App\Filament\Resources\InstrukturOmsetResource\RelationManagers\KelasActivit
 use App\Filament\Widgets\PendapatanInstrukturOverview;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\Location;
 use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -23,19 +25,21 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class InstrukturOmsetResource extends Resource
 {
-    protected static ?string $model = Kelas::class;
+    protected static ?string $model = KelasActivity::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cash';
 
-    protected static ?string $slug = 'instruktur_omset';
+    protected static ?string $slug = 'instruktur_report';
 
-    protected static ?string $pluralModelLabel = 'Instruktur Omset';
+    protected static ?string $pluralModelLabel = 'Instruktur Report';
 
-    protected static ?string $title = 'Instruktur Omset';
+    protected static ?string $title = 'Instruktur Report';
 
     protected static ?string $tanggal_awal = null;
 
@@ -48,16 +52,7 @@ class InstrukturOmsetResource extends Resource
                 Card::make()
                     ->schema([
                         Fieldset::make('View Omset')
-                            ->schema([
-                                TextInput::make('nama_kelas')
-                                    ->label('Nama Kelas')
-                                    ->disabled(),
-                                TextInput::make('jumlah_pertemuan')
-                                    ->label('Jumlah Pertemuan')
-                                    ->numeric(),
-                                TextInput::make('omset')
-                                    ->label('Omset'),
-                            ])
+                            ->schema([])
                     ])
             ]);
     }
@@ -66,31 +61,6 @@ class InstrukturOmsetResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_kelas')
-                    ->label("Kelas")
-                    ->searchable(),
-                TextColumn::make('jumlah_pertemuan')
-                    ->alignCenter()
-                    ->formatStateUsing(function ($record) {
-                        $listKelasActivity = KelasActivity::when(Auth::user()->hasRole(['Instruktur']), function ($query) {
-                            return $query->where('id_user', Auth::id());
-                        })
-                            ->withCount('bookingKelas')
-                            ->having('booking_kelas_count', '>=', 2)
-                            ->whereDate('tanggal', '<=', now())
-                            ->where('id_kelas', $record->id)
-                            ->where(function ($query) {
-                                $query->whereDate('tanggal', '>=', date('Y-m-d', strtotime(static::$tanggal_awal)))
-                                    ->whereDate('tanggal', '<=', date('Y-m-d', strtotime(static::$tanggal_akhir)));
-                            })
-                            ->count();
-                        $omset = 0;
-                        for ($i = 0; $i < $listKelasActivity; $i++) {
-                            $omset += $record->fee;
-                        }
-                        $record->omset = $omset;
-                        return $listKelasActivity;
-                    }),
                 TextColumn::make('omset')
                     ->formatStateUsing(function ($record) {
                         return "Rp." . number_format($record->omset, 0, ',', '.');
@@ -115,6 +85,16 @@ class InstrukturOmsetResource extends Resource
                         } else {
                             static::$tanggal_akhir = null;
                         }
+                    }),
+                Filter::make('lokasi')
+                    ->form([
+                        Select::make('id_location')
+                            ->label('Lokasi')
+                            ->searchable()
+                            ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
+                    ])->query(function ($query, $data) {
+                        $query->when($data['id_location'], function ($query, $id_location) {
+                        });
                     })
             ])
             ->actions([
@@ -148,5 +128,15 @@ class InstrukturOmsetResource extends Resource
         }
 
         return false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
+            $query->where('id_user', Auth::id());
+        })->withCount('bookingKelas', function ($query) {
+            $query->whereIn('status_kehadiran', [0, 1]);
+        })->having('booking_kelas_count', '>=', 2)
+            ->orderBy('tanggal', 'ASC');
     }
 }

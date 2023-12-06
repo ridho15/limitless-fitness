@@ -24,7 +24,6 @@ class PendapatanInstruktur extends ApexChartWidget
 
     protected function getHeading(): ?string
     {
-        // return "Order Paket " . "(" . $this->id_kelas . ")";
         return "Pendapatan";
     }
 
@@ -34,31 +33,22 @@ class PendapatanInstruktur extends ApexChartWidget
         $listFee = [];
         $listTanggal = [];
         foreach ($periode as $item) {
-            $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-                $query->where(function ($query) {
-                    $query->where('status_kehadiran', '1')
-                        ->orWhere('status_kehadiran', '0');
-                });
-            }])->where('id_kelas', $this->filterFormData['id_kelas'])
-                ->where('id_location_studio', '!=', null)
-                ->where(function ($query) {
-                    if (Auth::user()->hasRole('Instruktur')) {
-                        $query->where('id_user', Auth::id());
-                    }
-                })->whereDate('tanggal', $item)->get();
-
+            $listKelasActivity = KelasActivity::whereHas('bookingKelas', function ($query) {
+                return $query->whereIn('status_kehadiran', [0, 1])
+                    ->select(['status_kehadiran']);
+            })->withCount('bookingKelas')
+                ->having('booking_kelas_count', '>=', 2)->when($this->filterFormData['id_kelas'], function ($query) {
+                    return $query->where('id_kelas', $this->filterFormData['id_kelas']);
+                })
+                ->whereNotNull('id_location_studio')
+                ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
+                    return $query->where('id_user', Auth::id());
+                })
+                ->whereDate('tanggal', $item->format('Y-m-d'))->get();
             $omset = 0;
-            foreach ($listKelasActivity as $item) {
+            foreach ($listKelasActivity as $kelasActivity) {
                 $jumlahPeserta = 0;
-                foreach ($item->bookingKelas as $bookingKelas) {
-                    if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
-                        $jumlahPeserta++;
-                    }
-                }
-
-                if ($item->kelas->min_anggota <= $jumlahPeserta) {
-                    $omset += $item->kelas->fee;
-                }
+                $omset += $kelasActivity->kelas->fee;
             }
 
             array_push($listFee, $omset);
@@ -72,13 +62,11 @@ class PendapatanInstruktur extends ApexChartWidget
             ],
             'series' => [
                 [
-                    'name' => 'Total',
-                    // 'data' => [7, 4, 6, 10, 14, 7, 5, 9, 10, 15, 13, 18],
+                    'name' => 'Omset',
                     'data' => $listFee,
                 ],
             ],
             'xaxis' => [
-                // 'categories' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 'categories' => $listTanggal,
                 'labels' => [
                     'style' => [
@@ -111,9 +99,10 @@ class PendapatanInstruktur extends ApexChartWidget
                 ->preload()
                 ->options(Kelas::get()->pluck('nama_kelas', 'id')),
             DatePicker::make('date_start')
-                ->default(Carbon::now()->subDays(7)->isoFormat('YYYY-MM-DD')),
+                ->default(Carbon::now()->startOfMonth()->isoFormat('YYYY-MM-DD')),
             DatePicker::make('date_end')
-                ->default(now()),
+                ->disabled()
+                ->default(Carbon::now()->endOfMonth()->isoFormat('YYYY-MM-DD')),
         ];
     }
 }

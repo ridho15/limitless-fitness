@@ -16,7 +16,9 @@ class BookingKelas extends Model
         'id_kelas_activity',
         'is_send_email',
         'status_kehadiran',
-        'keterangan'
+        'keterangan',
+        'review',
+        'rating'
     ];
 
     protected $appends = [

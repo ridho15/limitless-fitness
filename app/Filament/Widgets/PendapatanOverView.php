@@ -35,9 +35,9 @@ class PendapatanOverView extends BaseWidget
 
         array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omset, 0, ',', '.'))
             ->description('Omset dalam bulan ini')->color('primary')
-        ->extraAttributes([
-            'wire:click' => '$emit("onClickOmset")'
-        ]));
+            ->extraAttributes([
+                'wire:click' => '$emit("onClickOmset")'
+            ]));
         $instrukturFee = 0;
         $listInstrukturFee = Jurnal::where('id_order_paket', '!=', null)
             ->where('tipe', 0)
@@ -77,19 +77,23 @@ class PendapatanOverView extends BaseWidget
         return $listCard;
     }
 
-    public function onClickOmset(){
+    public function onClickOmset()
+    {
         return redirect()->to(OmsetResource::getUrl('index'));
     }
 
-    public function onClickFeeInstruktur(){
+    public function onClickFeeInstruktur()
+    {
         return redirect()->to(InstrukturOmsetResource::getUrl('index'));
     }
 
-    public function onClickCustomer(){
+    public function onClickCustomer()
+    {
         return redirect()->to(CustomerResource::getUrl('index'));
     }
 
-    public function onClickProfit(){
+    public function onClickProfit()
+    {
         return redirect()->to(JurnalResource::getUrl('index'));
     }
 }

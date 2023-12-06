@@ -49,6 +49,13 @@ class BookingKelasResource extends Resource
                                 Select::make('id_user')
                                     ->label('Customer')
                                     ->preload()
+                                    ->disabled(function () {
+                                        if (Auth::user()->hasRole(['Instruktur'])) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    })
                                     ->searchable()
                                     ->options(User::whereHas('roles', function ($query) {
                                         $query->where('name', 'Customer');
@@ -57,6 +64,13 @@ class BookingKelasResource extends Resource
                                     ->label('Jadwal Kelas')
                                     ->preload()
                                     ->searchable()
+                                    ->hidden(function () {
+                                        if (Auth::user()->hasRole(['Instruktur'])) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    })
                                     ->options(KelasActivity::where(function ($query) {
                                         if (Auth::user()->hasRole('Instruktur')) {
                                             $query->where('id_user', Auth::id());
@@ -79,9 +93,17 @@ class BookingKelasResource extends Resource
                                         }
                                     }),
                                 Textarea::make('keterangan')
+                                    ->label("Notes")
                                     ->nullable(),
                                 Toggle::make('is_send_email')
                                     ->label('Send Email')
+                                    ->hidden(function () {
+                                        if (Auth::user()->hasRole(['Instruktur'])) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    })
                                     ->nullable()
                             ])
                     ])

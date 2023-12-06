@@ -105,18 +105,34 @@ class InstrukturResource extends Resource
                 TextColumn::make('email')
                     ->searchable(),
                 TextColumn::make('no_hp')
+                    ->label('Nomor Hp')
                     ->searchable(),
                 TextColumn::make('alamat')
+                    ->label('Alamat')
                     ->searchable(),
+                TextColumn::make('location.nama')
+                    ->label('Location')
+                    ->toggleable()
+                    ->searchable(),
+                TextColumn::make('tanggal_lahir')
+                    ->label('Tanggal Lahir'),
                 TextColumn::make('email_verified_at')
+                    ->label('Tanggal Verifikasi Email')
                     ->sortable()
+                    ->toggleable()
                     ->dateTime(),
-                TextColumn::make('status_formatted'),
+                TextColumn::make('status_formatted')
+                    ->toggleable()
+                    ->label('Status User'),
                 TextColumn::make('created_at')
+                    ->label('Tanggal Buat')
                     ->sortable()
+                    ->toggleable()
                     ->dateTime(),
                 TextColumn::make('updated_at')
+                    ->label('Tanggal Pembaharuan')
                     ->sortable()
+                    ->toggleable()
                     ->dateTime()
             ])
             ->filters([

@@ -14,10 +14,8 @@ class PendapatanInstrukturOverview extends BaseWidget
     {
         $startDate = Carbon::now()->startOfMonth();
         $listCard = [];
-        $kelasActivity = KelasActivity::where(function ($query) {
-            if (Auth::user()->hasRole(['Instruktur'])) {
-                $query->where('id_user', Auth::id());
-            }
+        $kelasActivity = KelasActivity::when(Auth::user()->hasRole(['Instruktur']), function ($query) {
+            return $query->where('id_user', Auth::id());
         })
             ->withCount('bookingKelas')
             ->whereDate('tanggal', '<=', now())
@@ -47,7 +45,7 @@ class PendapatanInstrukturOverview extends BaseWidget
             ->description('Omset dalam bulan ini')->color('primary'));
 
         array_push($listCard, Card::make('Total Omset', 'Rp.' . number_format($totalOmset, 0, ',', '.'))
-            ->description('Omset dalam bulan ini')->color('primary'));
+            ->description('Omset keseluruhan')->color('primary'));
 
         return $listCard;
     }

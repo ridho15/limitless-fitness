@@ -116,7 +116,7 @@
                                                                 @if ($nomor == 0 || $nomor == count($listStudio) - 1) style="@if ($nomor == 0) border-left-color: black; border-left-width: 2px; @endif
                                                                 @if ($nomor == count($listStudio) - 1) border-right-color: black; border-right-width: 2px; @endif"
                                                                 @endif>
-                                                                <a href="{{ Auth::user()->hasRole(['Admin', 'Super Admin']) ? app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) : '#' }}"
+                                                                <a href="{{ Auth::user()->hasRole(['Admin', 'Super Admin', 'Instruktur']) ? app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) : '#' }}"
                                                                     class="text-dark">{{ $bookingKelas->user->name }}</a>
                                                             </div>
                                                         @endforeach
