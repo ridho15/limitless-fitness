@@ -6,7 +6,6 @@ use App\Filament\Resources\CustomerResource;
 use App\Filament\Resources\InstrukturOmsetResource;
 use App\Filament\Resources\JurnalResource;
 use App\Filament\Resources\OmsetResource;
-use App\Filament\Resources\OmsetResource\Pages\ListOmsets;
 use App\Models\Jurnal;
 use App\Models\KelasActivity;
 use App\Models\User;
@@ -83,7 +82,7 @@ class PendapatanOverView extends BaseWidget
     }
 
     public function onClickFeeInstruktur(){
-        return redirect()->to(InstrukturOmsetResource::get('index'));
+        return redirect()->to(InstrukturOmsetResource::getUrl('index'));
     }
 
     public function onClickCustomer(){
