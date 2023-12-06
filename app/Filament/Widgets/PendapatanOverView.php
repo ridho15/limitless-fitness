@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\CustomerResource;
+use App\Filament\Resources\InstrukturOmsetResource;
 use App\Filament\Resources\JurnalResource;
 use App\Filament\Resources\OmsetResource;
 use App\Filament\Resources\OmsetResource\Pages\ListOmsets;
@@ -82,7 +83,7 @@ class PendapatanOverView extends BaseWidget
     }
 
     public function onClickFeeInstruktur(){
-        // return redirect()->to()
+        return redirect()->to(InstrukturOmsetResource::get('index'));
     }
 
     public function onClickCustomer(){
