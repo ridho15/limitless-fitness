@@ -45,15 +45,14 @@ class InstrukturOmsetResource extends Resource
 
     protected static ?string $tanggal_akhir = null;
 
+    protected static int $omset = 0;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Card::make()
-                    ->schema([
-                        Fieldset::make('View Omset')
-                            ->schema([])
-                    ])
+                    ->schema([])
             ]);
     }
 
@@ -61,11 +60,36 @@ class InstrukturOmsetResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('omset')
+                TextColumn::make('kelas.nama_kelas')
+                    ->searchable()
+                    ->toggleable()
+                    ->label('Kelas'),
+                TextColumn::make('tanggal')
+                    ->label('Tanggal')
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
+                    }),
+                TextColumn::make('jam_mulai')
+                    ->label('Jam Mulai'),
+                TextColumn::make('locationStudio.location.nama')
+                    ->label('Lokasi')
+                    ->toggleable()
+                    ->searchable(),
+                TextColumn::make('locationStudio.nama')
+                    ->toggleable()
+                    ->label('Studio')
+                    ->searchable(),
+                TextColumn::make('fee')
+                    ->label('Fee')
                     ->formatStateUsing(function ($record) {
-                        return "Rp." . number_format($record->omset, 0, ',', '.');
-                    })
+                        static::$omset += $record->kelas->fee;
+                        return 'Rp.' . number_format($record->kelas->fee);
+                    }),
+                TextColumn::make('omset')
                     ->label('Omset')
+                    ->formatStateUsing(function ($record) {
+                        return 'Rp.' . number_format(static::$omset, 0, ',', '.');
+                    })
             ])
             ->filters([
                 Filter::make('tanggal')
@@ -94,6 +118,9 @@ class InstrukturOmsetResource extends Resource
                             ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
                     ])->query(function ($query, $data) {
                         $query->when($data['id_location'], function ($query, $id_location) {
+                            $query->whereHas('locationStudio', function ($query) use ($id_location) {
+                                $query->where('id_location', $id_location);
+                            });
                         });
                     })
             ])
@@ -134,9 +161,8 @@ class InstrukturOmsetResource extends Resource
     {
         return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
             $query->where('id_user', Auth::id());
-        })->withCount('bookingKelas', function ($query) {
-            $query->whereIn('status_kehadiran', [0, 1]);
-        })->having('booking_kelas_count', '>=', 2)
+        })->withCount('bookingKelas')->having('booking_kelas_count', '>=', 2)
+            ->whereDate('tanggal', '<=', now())
             ->orderBy('tanggal', 'ASC');
     }
 }
