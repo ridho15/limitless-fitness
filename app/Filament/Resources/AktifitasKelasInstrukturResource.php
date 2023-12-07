@@ -33,9 +33,11 @@ class AktifitasKelasInstrukturResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    protected static ?string $slug = 'aktifitas-kelas-instruktur';
+    protected static ?string $pluralModelLabel = 'Review Your Class';
 
-    protected static ?string $title = 'Aktifitas Kelas Instruktur';
+    protected static ?string $slug = 'review-your-class';
+
+    protected static ?string $title = 'Review Your Class';
 
     public static function form(Form $form): Form
     {
@@ -142,6 +144,9 @@ class AktifitasKelasInstrukturResource extends Resource
     {
         return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
             return $query->where('id_user', Auth::id());
-        })->whereNotNull('id_location_studio');
+        })->whereNotNull('id_location_studio')
+            ->whereDate('tanggal', '<=', now())
+            ->orderBy('tanggal', 'DESC')
+            ->orderBy('jam_mulai', 'DESC');
     }
 }
