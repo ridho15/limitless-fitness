@@ -67,7 +67,8 @@ class InstrukturOmsetResource extends Resource
                 TextColumn::make('tanggal')
                     ->label('Tanggal')
                     ->formatStateUsing(function ($state) {
-                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
+                        return $state;
+                        // return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
                     }),
                 TextColumn::make('jam_mulai')
                     ->label('Jam Mulai'),
@@ -97,18 +98,12 @@ class InstrukturOmsetResource extends Resource
                         DatePicker::make('created_from')
                             ->default(Carbon::now()->startOfMonth()->isoFormat('YYYY-MM-DD')),
                         DatePicker::make('created_until')->default(Carbon::now()->endOfMonth()->isoFormat('YYYY-MM-DD'))
-                    ])->indicateUsing(function ($data) {
-                        if ($data['created_from'] != null) {
-                            static::$tanggal_awal = $data['created_from'];
-                        } else {
-                            static::$tanggal_awal = null;
-                        }
-
-                        if ($data['created_until'] != null) {
-                            static::$tanggal_akhir = $data['created_until'];
-                        } else {
-                            static::$tanggal_akhir = null;
-                        }
+                    ])->query(function (Builder $query, $data) {
+                        return $query->when($data['created_from'], function (Builder $query, $date) {
+                            return $query->whereDate('tanggal', '>=', $date);
+                        })->when($data['created_until'], function (Builder $query, $date) {
+                            return $query->whereDate('tanggal', '<=', $date);
+                        });
                     }),
                 Filter::make('lokasi')
                     ->form([

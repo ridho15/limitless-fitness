@@ -219,9 +219,9 @@ class InstrukturJadwalResource extends Resource
 
     protected static function shouldRegisterNavigation(): bool
     {
-        if (Auth::user()->hasRole(['Instruktur', 'Super Admin'])) {
-            return true;
-        }
+        // if (Auth::user()->hasRole(['Instruktur', 'Super Admin'])) {
+        //     return true;
+        // }
 
         return false;
     }

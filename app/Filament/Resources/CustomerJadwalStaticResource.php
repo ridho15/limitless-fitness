@@ -129,4 +129,9 @@ class CustomerJadwalStaticResource extends Resource
             'edit' => Pages\EditCustomerJadwalStatic::route('/{record}/edit'),
         ];
     }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 }
