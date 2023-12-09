@@ -72,6 +72,9 @@ class CustomerResource extends Resource
                                     ->tel()
                                     ->telRegex('/^(\+62|0)(\d{8,12})$/')
                                     ->required(),
+                                DatePicker::make('tanggal_lahir')
+                                    ->label('Tanggal Lahir')
+                                    ->nullable(),
                                 TextInput::make('alamat')
                                     ->required()
                                     ->string()
@@ -121,6 +124,13 @@ class CustomerResource extends Resource
                     ->searchable(),
                 TextColumn::make('email')
                     ->searchable(),
+                TextColumn::make('tanggal_lahir')
+                    ->toggleable()
+                    ->label('Tanggal Lahir')
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
+                    })->searchable()
+                    ->toggleable(),
                 TextColumn::make('no_hp')
                     ->label('Nomor Hp')
                     ->searchable(),

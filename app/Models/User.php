@@ -35,7 +35,8 @@ class User extends Authenticatable implements FilamentUser
         'jenis_kelamin',
         'negara',
         'ip_address',
-        'id_location'
+        'id_location',
+        'rating'
     ];
 
     /**
@@ -67,7 +68,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessFilament(): bool
     {
-        return true;
         return $this->hasRole(['Super Admin', 'Admin', 'Instruktur']);
     }
 

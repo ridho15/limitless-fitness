@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Carbon\Carbon;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
@@ -49,6 +51,9 @@ class UserResource extends Resource
                             ->tel()
                             ->telRegex('/^(\+62|0)(\d{8,12})$/')
                             ->required(),
+                        DatePicker::make('tanggal_lahir')
+                            ->label('Tanggal Lahir')
+                            ->nullable(),
                         TextInput::make('alamat')
                             ->required()
                             ->string()
@@ -97,6 +102,13 @@ class UserResource extends Resource
                     ->searchable(),
                 TextColumn::make('email')
                     ->searchable(),
+                TextColumn::make('tanggal_lahir')
+                    ->label('Tanggal Lahir')
+                    ->toggleable()
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
+                    })->searchable()
+                    ->toggleable(),
                 TextColumn::make('no_hp')
                     ->label('Nomor Hp')
                     ->searchable(),

@@ -27,3 +27,16 @@ async function sweetAlert(status, title, message, confirmButton) {
 
     return response;
 }
+
+function alert(status, message){
+    if(status == true){
+        icon = 'success';
+    }else if(status == false){
+        icon = 'error';
+    }
+    Swal.fire({
+        icon: icon,
+        title: "Notification",
+        text: message,
+      });
+}

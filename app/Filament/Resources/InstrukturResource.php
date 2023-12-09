@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InstrukturResource\Pages;
 use App\Filament\Resources\InstrukturResource\Pages\ViewInstruktur;
 use App\Filament\Resources\InstrukturResource\RelationManagers\KelasActivityRelationManager;
+use App\Models\BookingKelas;
 use App\Models\Role;
 use App\Models\User;
 use Filament\Forms\Components\Card;
@@ -23,9 +24,11 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Yepsua\Filament\Tables\Components\RatingColumn;
 
 class InstrukturResource extends Resource
 {
@@ -115,6 +118,7 @@ class InstrukturResource extends Resource
                     ->toggleable()
                     ->searchable(),
                 TextColumn::make('tanggal_lahir')
+                    ->toggleable()
                     ->label('Tanggal Lahir'),
                 TextColumn::make('email_verified_at')
                     ->label('Tanggal Verifikasi Email')
@@ -124,6 +128,13 @@ class InstrukturResource extends Resource
                 TextColumn::make('status_formatted')
                     ->toggleable()
                     ->label('Status User'),
+                TextColumn::make('rating')
+                    ->label('Rating')
+                    ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        return number_format($state, 2);
+                    })
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->label('Tanggal Buat')
                     ->sortable()
@@ -135,9 +146,7 @@ class InstrukturResource extends Resource
                     ->toggleable()
                     ->dateTime()
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 EditAction::make(),
                 DeleteAction::make()

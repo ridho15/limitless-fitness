@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\InstrukturResource\RelationManagers;
 
+use App\Filament\Resources\AktifitasKelasInstrukturResource;
 use App\Models\Kelas;
 use App\Models\LocationStudio;
 use App\Models\User;
@@ -14,11 +15,16 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
@@ -135,32 +141,87 @@ class KelasActivityRelationManager extends RelationManager
                         return Carbon::parse($state)->locale('id')->isoFormat('HH:mm');
                     })
                     ->sortable(),
-                TextColumn::make('user.name')
-                    ->label('Instruktur')
-                    ->searchable(),
                 TextColumn::make('nama_latihan')
+                    ->toggleable()
                     ->searchable(),
                 TextColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
+                    ->toggleable()
                     ->searchable(),
                 TextColumn::make('locationStudio.nama')
                     ->label('Studio')
+                    ->toggleable()
                     ->searchable(),
                 TextColumn::make('level_formatted')
-                    ->label('Level'),
+                    ->label('Level')
+                    ->toggleable(),
                 TextColumn::make('status_aktivitas_kelas')
-                    ->label('Status Jadwal')
+                    ->label('Status Jadwal'),
+                TextColumn::make('jumlah_peserta')
+                    ->label('Jumlah Peserta')
+                    ->formatStateUsing(function ($record) {
+                        $record->jumlah_peserta = $record->bookingKelas->whereIn('status_kehadiran', [0, 1])->count();
+                        return $record->jumlah_peserta;
+                    })->alignCenter(),
+                TextColumn::make('pendapatan')
+                    ->label('Pendapatan')
+                    ->toggleable()
+                    ->formatStateUsing(function ($record) {
+                        $pendapatan = 0;
+                        if ($record->jumlah_peserta >= 2 && $record->status == 3) {
+                            $pendapatan = $record->kelas->fee;
+                        }
+                        return 'Rp.' . number_format($pendapatan, 0, ',', '.');
+                    }),
+                TextColumn::make('rating')
+                    ->label('Rating')
+                    ->formatStateUsing(function ($record) {
+                        $jumlahReview = 0;
+                        $jumlahRating = 0;
+                        foreach ($record->bookingKelas->where('rating', '!=', null) as $bookingKelas) {
+                            $jumlahRating += $bookingKelas->rating;
+                        }
+
+                        $jumlahReview = $record->bookingKelas->where('rating', '!=', null)->count();
+
+                        if ($jumlahRating == 0 || $jumlahRating == 0) {
+                            $total = 0;
+                        } else {
+                            $total = ($jumlahRating / $jumlahReview) * 2;
+                        }
+
+                        return number_format($total, 2);
+                    })
+                    ->sortable(),
             ])
             ->filters([
-                //
+                Filter::make('tanggal')
+                    ->form([
+                        DatePicker::make('dari_tanggal')
+                            ->label('Dari Tanggal'),
+                        DatePicker::make('sampai_tanggal')
+                            ->label('Sampai Tanggal')
+                    ])->query(function (Builder $query, $data) {
+                        return $query->when($data['dari_tanggal'], function (Builder $query, $date) {
+                            return $query->whereDate('tanggal', '>=', $date);
+                        })->when($data['sampai_tanggal'], function (Builder $query, $date) {
+                            return $query->whereDate('tanggal', '<=', $date);
+                        });
+                    })
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label('Buat Jadwal')
                     ->icon('heroicon-o-plus-circle'),
             ])
             ->actions([
-                ViewAction::make(),
+                Action::make('view')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->color('secondary')
+                    ->url(function ($record) {
+                        return AktifitasKelasInstrukturResource::getUrl('view', ['record' => $record]);
+                    }),
                 EditAction::make()
                     ->hidden(function () {
                         if (Auth::user()->hasRole('Super Admin')) {
@@ -179,7 +240,7 @@ class KelasActivityRelationManager extends RelationManager
                     })
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 }

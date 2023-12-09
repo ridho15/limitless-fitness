@@ -74,6 +74,17 @@ class AktifitasKelasInstrukturResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('user.name')
+                    ->label('Instruktur')
+                    ->toggleable()
+                    ->searchable()
+                    ->hidden(function () {
+                        if (Auth::user()->hasRole(["Instruktur"])) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }),
                 TextColumn::make('kelas.nama_kelas')
                     ->searchable()
                     ->label('Kelas'),
@@ -95,7 +106,15 @@ class AktifitasKelasInstrukturResource extends Resource
                             }
                         }
                         return $jumlahPeserta;
+                    }),
+                TextColumn::make('rating')
+                    ->label('Rating')
+                    ->searchable()
+                    ->toggleable()
+                    ->formatStateUsing(function ($state) {
+                        return number_format($state, 2);
                     })
+                    ->sortable(),
 
             ])
             ->filters([

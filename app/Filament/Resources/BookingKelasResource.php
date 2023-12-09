@@ -22,6 +22,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\Filter;
@@ -112,13 +113,11 @@ class BookingKelasResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        if (Auth::user()->hasRole('Instruktur')) {
-            return parent::getEloquentQuery()->whereHas('kelasActivity', function ($query) {
-                $query->where('id_user', Auth::id());
+        return parent::getEloquentQuery()->when(Auth::user()->hasRole('Instruktur'), function ($query) {
+            $query->whereHas('kelasActivity', function ($query) {
+                return $query->where('id_user', Auth::id());
             });
-        } else {
-            return parent::getEloquentQuery();
-        }
+        })->orderBy('created_at', 'DESC');
     }
 
     public static function table(Table $table): Table
@@ -128,15 +127,9 @@ class BookingKelasResource extends Resource
                 TextColumn::make('user.name')
                     ->label('Nama Customer')
                     ->searchable(),
-                TextColumn::make('kelasActivity.nama_latihan')
+                TextColumn::make('kelasActivity.kelas.nama_kelas')
                     ->label('Kelas')
-                    ->url(function ($record) {
-                        if ($record->kelasActivity->id) {
-                            return InstrukturJadwalResource::getUrl('view', ['record' => $record->kelasActivity]);
-                        } else {
-                            return null;
-                        }
-                    }),
+                    ->searchable(),
                 TextColumn::make('kelasActivity.tanggal')
                     ->formatStateUsing(function ($state) {
                         return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
@@ -146,9 +139,15 @@ class BookingKelasResource extends Resource
                 TextColumn::make('kelasActivity.jam_mulai')
                     ->label('Jam Mulai')
                     ->sortable(),
-                TextColumn::make('status_kehadiran_formatted')
-                    ->label('Status Kehadiran')
-                    ->sortable(),
+                SelectColumn::make('status_kehadiran')
+                    ->label('Status_kehadiran')
+                    ->searchable()
+                    ->options([
+                        null => 'Belum Dikonfirmasi',
+                        0 => 'Tidak Hadir',
+                        1 => 'Hadir',
+                        2 => 'Izin'
+                    ]),
                 ToggleColumn::make('is_send_email')
                     ->label('Send Email'),
                 TextColumn::make('keterangan')
@@ -210,7 +209,7 @@ class BookingKelasResource extends Resource
 
     protected static function shouldRegisterNavigation(): bool
     {
-        if (Auth::user()->hasRole(['Instruktur', 'Admin'])) {
+        if (Auth::user()->hasRole(['Admin'])) {
             return false;
         }
 

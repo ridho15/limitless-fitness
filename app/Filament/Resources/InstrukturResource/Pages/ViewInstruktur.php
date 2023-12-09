@@ -11,6 +11,8 @@ class ViewInstruktur extends ViewRecord
 {
     protected static string $resource = InstrukturResource::class;
 
+    protected static ?string $title = 'View Instruktur';
+
     protected function getActions(): array
     {
         return [

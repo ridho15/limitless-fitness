@@ -120,16 +120,17 @@ class ProfileController extends Controller
         $listBookingKelas = BookingKelas::where('id_user', $user->id)
             ->whereHas('kelasActivity', function ($query) {
                 $query->whereDate('tanggal', '<=', now());
-            })->orderBy('created_at', 'DESC')
-            ->get();
+            })
+            ->get()->sortByDesc('kelasActivity.tanggal');
 
-        $listKelasConfirmed = BookingKelas::where('id_user', $user->id)
+        $listKelasConfirmed = BookingKelas::where('id_user', Auth::id())
+            ->whereIn('status_kehadiran', [0, 1])
+            ->with('kelasActivity')
             ->whereHas('kelasActivity', function ($query) {
-                $query->whereDate('tanggal', '>=', now());
-            })->whereStatusKehadiran([
-                '1', '0'
-            ])->orderBy('created_at', 'DESC')
-            ->get();
+                $query->whereDate('tanggal', '<=', now());
+            })
+            ->get()
+            ->sortByDesc('kelasActivity.tanggal');
         $sisaKredit = $jumlahKredit - $jumlahDigunakan;
 
         $listCustomerJadwalStatis = CustomerJadwalStatic::where('id_user', Auth::id())

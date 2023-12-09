@@ -148,6 +148,7 @@ class KelasResource extends Resource
                 TextColumn::make('status_aktif')
                     ->label('Status Aktif Kelas'),
                 TextColumn::make('keterangan')
+                    ->limit(100)
                     ->label('Deskripsi'),
                 TextColumn::make('duration')
                     ->label('Lama Latihan')

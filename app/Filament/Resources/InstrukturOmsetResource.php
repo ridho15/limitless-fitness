@@ -5,27 +5,20 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InstruktruOmsetResource\Pages\ViewListDetailOmset;
 use App\Filament\Resources\InstrukturOmsetResource\Pages;
 use App\Filament\Resources\InstrukturOmsetResource\Pages\ViewInstrukturOmset;
-use App\Filament\Resources\InstrukturOmsetResource\RelationManagers\KelasActivityRelationManager;
-use App\Filament\Widgets\PendapatanInstrukturOverview;
-use App\Models\Kelas;
+use App\Filament\Resources\InstrukturOmsetResource\RelationManagers\BookingKelasRelationManager;
 use App\Models\KelasActivity;
 use App\Models\Location;
 use Carbon\Carbon;
-use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,8 +60,7 @@ class InstrukturOmsetResource extends Resource
                 TextColumn::make('tanggal')
                     ->label('Tanggal')
                     ->formatStateUsing(function ($state) {
-                        return $state;
-                        // return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
+                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
                     }),
                 TextColumn::make('jam_mulai')
                     ->label('Jam Mulai'),
@@ -130,7 +122,7 @@ class InstrukturOmsetResource extends Resource
     public static function getRelations(): array
     {
         return [
-            KelasActivityRelationManager::class
+            BookingKelasRelationManager::class
         ];
     }
 

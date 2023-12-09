@@ -36,17 +36,6 @@ class BaseController extends Controller
     use WithRateLimiting;
     public function index()
     {
-        // $helper = new HelperController;
-        // return $helper->updateData();
-        // $instruktur = User::with('kelasActivity')->whereHas('roles', function ($query) {
-        //     $query->where('name', 'Instruktur');
-        // })->whereHas('kelasActivity', function ($query) {
-        //     $query->where('tanggal', '2023-08-16')
-        //         ->whereJamMulai([
-        //             '10:00:00', '08:00:00', '12:00:00'
-        //         ]);
-        // })->get();
-        // return $instruktur;
         if (Auth::user() && Auth::user()->id_location != null) {
             session()->put('phone_number', Auth::user()->location->no_hp);
             session()->put('id_location', Auth::user()->id_location);
