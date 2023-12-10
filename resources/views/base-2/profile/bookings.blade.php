@@ -464,77 +464,78 @@
                                     {{ $item->keterangan ?? "-"}}</span>
                             </small>
                         </div>
-                        <div class="text-end">
+                        @if ($item->kelasActivity->tanggal <= now()) <div class="text-end">
                             <button type="button" class="btn btn-sm custom-btn btn-review" data-id="{{ $item->id }}"
                                 id="">
                                 Review
                             </button>
-                        </div>
-                    </div>
-                    @endforeach
-                    @else
-                    <div class="d-flex align-items-center flex-column justify-content-center" style="height: 50vh">
-                        <span class="fs-1 text-center">
-                            <i class="fa-solid fa-file-pen"></i>
-                        </span>
-                        <small class="d-block mb-3">
-                            You don't have any class.
-                        </small>
-                        <a href="{{ route('timetable') }}" class="btn custom-btn-outline">Booking Class</a>
                     </div>
                     @endif
                 </div>
-                <div class="tab-pane fade py-4" id="buat_jadwal">
-                    <h5 class="fw-bold mb-3">Buat Jadwal</h5>
-                    @foreach ($listCustomerJadwalStatis as $item)
-                    <div class="row mb-3">
-                        <div class="col-md-6 col-6">
-                            Hari : {{ $item->hari_formatted }}
+                @endforeach
+                @else
+                <div class="d-flex align-items-center flex-column justify-content-center" style="height: 50vh">
+                    <span class="fs-1 text-center">
+                        <i class="fa-solid fa-file-pen"></i>
+                    </span>
+                    <small class="d-block mb-3">
+                        You don't have any class.
+                    </small>
+                    <a href="{{ route('timetable') }}" class="btn custom-btn-outline">Booking Class</a>
+                </div>
+                @endif
+            </div>
+            <div class="tab-pane fade py-4" id="buat_jadwal">
+                <h5 class="fw-bold mb-3">Buat Jadwal</h5>
+                @foreach ($listCustomerJadwalStatis as $item)
+                <div class="row mb-3">
+                    <div class="col-md-6 col-6">
+                        Hari : {{ $item->hari_formatted }}
+                    </div>
+                    <div class="col-md-6 col-6">
+                        Jam : {{ $item->jam }}
+                    </div>
+                </div>
+                <hr>
+                @endforeach
+                <form action="{{ route('profile.post-customer-jadwal') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="" class="form-label">Hari</label>
+                            <select class="form-control" data-placeholder="Pilih Hari" name="hari" id="" required>
+                                <option value="">Pilih Hari</option>
+                                <option value="0">Senin</option>
+                                <option value="1">Selasa</option>
+                                <option value="2">Rabu</option>
+                                <option value="3">Kamis</option>
+                                <option value="4">Jumat</option>
+                                <option value="5">Sabtu</option>
+                                <option value="6">Minggu</option>
+                            </select>
                         </div>
-                        <div class="col-md-6 col-6">
-                            Jam : {{ $item->jam }}
+
+                        <div class="col-md-6 mb-3">
+                            <label for="" class="form-label">Jam</label>
+                            <select name="jam" class="form-control" data-placeholder="Pilih Jam" id="jam">
+                                <option value="">Pilih Jam</option>
+                                @for ($i = 1; $i <= 24; $i++) { <option value="{{ sprintf('%02d', $i) }}:00:00">
+                                    {{ sprintf('%02d', $i) }}:00:00
+                                    </option>
+                                    }
+                                    @endfor
+                            </select>
                         </div>
                     </div>
-                    <hr>
-                    @endforeach
-                    <form action="{{ route('profile.post-customer-jadwal') }}" method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="" class="form-label">Hari</label>
-                                <select class="form-control" data-placeholder="Pilih Hari" name="hari" id="" required>
-                                    <option value="">Pilih Hari</option>
-                                    <option value="0">Senin</option>
-                                    <option value="1">Selasa</option>
-                                    <option value="2">Rabu</option>
-                                    <option value="3">Kamis</option>
-                                    <option value="4">Jumat</option>
-                                    <option value="5">Sabtu</option>
-                                    <option value="6">Minggu</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="" class="form-label">Jam</label>
-                                <select name="jam" class="form-control" data-placeholder="Pilih Jam" id="jam">
-                                    <option value="">Pilih Jam</option>
-                                    @for ($i = 1; $i <= 24; $i++) { <option value="{{ sprintf('%02d', $i) }}:00:00">
-                                        {{ sprintf('%02d', $i) }}:00:00
-                                        </option>
-                                        }
-                                        @endfor
-                                </select>
-                            </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn custom-btn">Simpan</button>
                         </div>
-                        <div class="row mt-4">
-                            <div class="col-md-12 text-end">
-                                <button type="submit" class="btn custom-btn">Simpan</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
     </div>
     </div>
 </section>

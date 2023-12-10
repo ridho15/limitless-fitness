@@ -125,8 +125,8 @@ class BiayaInstruktruResource extends Resource
     {
         return [
             'index' => Pages\ListBiayaInstruktrus::route('/'),
-            'create' => Pages\CreateBiayaInstruktru::route('/create'),
-            'edit' => Pages\EditBiayaInstruktru::route('/{record}/edit'),
+            // 'create' => Pages\CreateBiayaInstruktru::route('/create'),
+            // 'edit' => Pages\EditBiayaInstruktru::route('/{record}/edit'),
         ];
     }
 
