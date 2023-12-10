@@ -172,6 +172,7 @@ class VoucherResource extends Resource
                 TextColumn::make('lama_aktif')
                     ->label('Lama Aktif'),
                 TextColumn::make('deskripsi')
+                    ->limit(100)
                     ->label('Deskripsi')
                     ->searchable(),
             ])
