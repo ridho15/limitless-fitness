@@ -21,6 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class BiayaInstruktruResource extends Resource
 {
@@ -133,5 +134,10 @@ class BiayaInstruktruResource extends Resource
     {
         return parent::getEloquentQuery()->where('tipe', 0)
             ->whereNotNull('id_parent');
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()->hasRole(['Super Admin']);
     }
 }

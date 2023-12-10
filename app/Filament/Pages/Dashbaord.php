@@ -68,7 +68,6 @@ class Dashbaord extends BasePage
             ];
         } elseif (Auth::user()->hasRole('Admin')) {
             $listWidget = [
-                // TotalJamInstruktur::class,
                 JadwalInstrukturAssign::class,
                 ListTimetable::class,
                 ListAturJadwal::class,
