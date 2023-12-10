@@ -200,8 +200,8 @@ class JurnalResource extends Resource
     {
         return [
             'index' => Pages\ListJurnals::route('/'),
-            'create' => Pages\CreateJurnal::route('/create'),
-            'edit' => Pages\EditJurnal::route('/{record}/edit'),
+            // 'create' => Pages\CreateJurnal::route('/create'),
+            // 'edit' => Pages\EditJurnal::route('/{record}/edit'),
         ];
     }
 }

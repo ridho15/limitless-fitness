@@ -47,10 +47,7 @@ class InstrukturOmsetResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Card::make()
-                    ->schema([])
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
