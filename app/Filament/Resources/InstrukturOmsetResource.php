@@ -8,6 +8,7 @@ use App\Filament\Resources\InstrukturOmsetResource\Pages\ViewInstrukturOmset;
 use App\Filament\Resources\InstrukturOmsetResource\RelationManagers\BookingKelasRelationManager;
 use App\Models\KelasActivity;
 use App\Models\Location;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
@@ -19,6 +20,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +35,8 @@ class InstrukturOmsetResource extends Resource
     protected static ?string $pluralModelLabel = 'Instruktur Report';
 
     protected static ?string $title = 'Instruktur Report';
+
+    protected static ?string $navigationGroup = 'Account';
 
     protected static ?string $tanggal_awal = null;
 
@@ -97,19 +101,23 @@ class InstrukturOmsetResource extends Resource
                             return $query->whereDate('tanggal', '<=', $date);
                         });
                     }),
-                Filter::make('lokasi')
-                    ->form([
-                        Select::make('id_location')
-                            ->label('Lokasi')
-                            ->searchable()
-                            ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
-                    ])->query(function ($query, $data) {
-                        $query->when($data['id_location'], function ($query, $id_location) {
-                            $query->whereHas('locationStudio', function ($query) use ($id_location) {
-                                $query->where('id_location', $id_location);
+                SelectFilter::make('id_location')
+                    ->label('Lokasi')
+                    ->searchable()
+                    ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
+                    ->query(function (Builder $query, $data) {
+                        return $query->when($data['value'], function (Builder $query, $id_location) {
+                            return $query->whereHas('locationStudio', function (Builder $query) use ($id_location) {
+                                return $query->where('id_location', $id_location);
                             });
                         });
-                    })
+                    }),
+                SelectFilter::make('id_user')
+                    ->options(User::whereHas('roles', function ($query) {
+                        $query->where('name', 'Instruktur');
+                    })->select(['name', 'id'])->get()->pluck('name', 'id'))
+                    ->label('Instruktur')
+                    ->searchable(),
             ])
             ->actions([
                 ViewAction::make()
@@ -148,7 +156,10 @@ class InstrukturOmsetResource extends Resource
     {
         return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
             $query->where('id_user', Auth::id());
-        })->withCount('bookingKelas')->having('booking_kelas_count', '>=', 2)
+        })->withCount(['bookingKelas' => function (Builder $query) {
+            $query->where('status_kehadiran', 1)
+                ->orWhereNull('status_kehadiran');
+        }])->having('booking_kelas_count', '>=', 2)
             ->whereDate('tanggal', '<=', now())
             ->orderBy('tanggal', 'ASC');
     }

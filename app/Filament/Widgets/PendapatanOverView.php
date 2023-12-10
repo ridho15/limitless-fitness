@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\BiayaInstruktruResource;
 use App\Filament\Resources\CustomerResource;
 use App\Filament\Resources\InstrukturOmsetResource;
 use App\Filament\Resources\JurnalResource;
@@ -20,37 +21,49 @@ class PendapatanOverView extends BaseWidget
         'onClickOmset',
         'onClickFeeInstruktur',
         'onClickCustomer',
-        'onClickProfit'
+        'onClickProfit',
+        'onClickBiayaInstruktur'
     ];
     protected function getCards(): array
     {
         $listCard = [];
-
+        // Omset dalam 1 bulan
         $omsetDalamSatuBulan = Jurnal::whereMonth('created_at', now())
-            ->where('tipe', 1)->get();
-        $omset = 0;
-        foreach ($omsetDalamSatuBulan as $item) {
-            $omset += $item->jumlah_uang;
-        }
+            ->where('tipe', 1)->sum('jumlah_uang');
 
-        array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omset, 0, ',', '.'))
+        array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omsetDalamSatuBulan, 0, ',', '.'))
             ->description('Omset dalam bulan ini')->color('primary')
             ->extraAttributes([
                 'wire:click' => '$emit("onClickOmset")'
             ]));
-        $instrukturFee = 0;
-        $listInstrukturFee = Jurnal::where('id_order_paket', '!=', null)
+
+        // Biaya Instruktur
+        $biayaInstruktur = Jurnal::whereNotNull('id_parent')
             ->where('tipe', 0)
             ->whereMonth('created_at', now())
+            ->sum('jumlah_uang');
+
+        array_push($listCard, Card::make('Biaya Instruktur', 'Rp.' . number_format($biayaInstruktur, 0, ',', '.'))->description('Biaya instruktur per order paket bulan ini')->color('primary')->extraAttributes([
+            'wire:click' => '$emit("onClickBiayaInstruktur")'
+        ]));
+
+        // Fee instruktur
+        $listKelasActivity = KelasActivity::whereMonth('tanggal', now())
+            ->withCount(['bookingKelas' => function ($query) {
+                $query->where('status_kehadiran', 1)
+                    ->orWhereNull('status_kehadiran');
+            }])->having('booking_kelas_count', '>=', 2)
             ->get();
-        foreach ($listInstrukturFee as $item) {
-            $instrukturFee += $item->jumlah_uang;
+        $feeInstruktur = 0;
+        foreach ($listKelasActivity as $item) {
+            $feeInstruktur += $item->kelas->fee;
         }
 
-        array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format($instrukturFee, 0, ',', '.'))->description('Pembayaran instruktur bulan ini')->color('primary')->extraAttributes([
+        array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format($feeInstruktur, 0, ',', '.'))->description('Pembayaran instruktur per order paket bulan ini')->color('primary')->extraAttributes([
             'wire:click' => '$emit("onClickFeeInstruktur")'
         ]));
 
+        // Jumlah customer bulan ini
         $jumlahCustomer = User::whereHas('roles', function ($query) {
             $query->where('name', 'Customer');
         })->whereMonth('created_at', now())->count();
@@ -59,18 +72,10 @@ class PendapatanOverView extends BaseWidget
             'wire:click' => '$emit("onClickCustomer")'
         ]));
 
-        $profit = 0;
-        $listJurnal = Jurnal::whereMonth('created_at', now())
-            ->get();
-        foreach ($listJurnal as $item) {
-            if ($item->tipe == 1) {
-                $profit += $item->jumlah_uang;
-            } else {
-                $profit -= $item->jumlah_uang;
-            }
-        }
+        // Profit bulan ini
+        $profit = $omsetDalamSatuBulan - ($biayaInstruktur + $feeInstruktur);
 
-        array_push($listCard, Card::make('Profit Bulan ini', number_format($profit, 0, ',', '.'))->description('Total profit dalam 1 bulan ini')->color('primary')->extraAttributes([
+        array_push($listCard, Card::make('Profit Bulan ini', 'Rp.' . number_format($profit, 0, ',', '.'))->description('Total profit dalam 1 bulan ini')->color('primary')->extraAttributes([
             'wire:click' => '$emit("onClickProfit")'
         ]));
 
@@ -95,5 +100,10 @@ class PendapatanOverView extends BaseWidget
     public function onClickProfit()
     {
         return redirect()->to(JurnalResource::getUrl('index'));
+    }
+
+    public function onClickBiayaInstruktur()
+    {
+        return redirect()->to(BiayaInstruktruResource::getUrl('index'));
     }
 }

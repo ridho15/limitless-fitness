@@ -11,6 +11,7 @@ use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
@@ -33,6 +34,8 @@ class KelasActivityRelationManager extends RelationManager
     protected static string $relationship = 'KelasActivity';
 
     protected static ?string $recordTitleAttribute = 'id_user';
+
+    public static $is_active;
 
     public static function form(Form $form): Form
     {
@@ -129,6 +132,9 @@ class KelasActivityRelationManager extends RelationManager
     {
         return $table
             ->columns([
+                TextColumn::make('user.name')
+                    ->label('Instruktur')
+                    ->searchable(),
                 TextColumn::make('tanggal')
                     ->label('Tanggal')
                     ->formatStateUsing(function ($state) {
@@ -160,7 +166,14 @@ class KelasActivityRelationManager extends RelationManager
                 TextColumn::make('jumlah_peserta')
                     ->label('Jumlah Peserta')
                     ->formatStateUsing(function ($record) {
-                        $record->jumlah_peserta = $record->bookingKelas->whereIn('status_kehadiran', [0, 1])->count();
+                        $jumlahPeserta = 0;
+                        foreach ($record->bookingKelas as $item) {
+                            if ($item->status_kehadiran == 1 || $item->status_kehadiran == null) {
+                                $jumlahPeserta++;
+                            }
+                        }
+                        $record->jumlah_peserta = $jumlahPeserta;
+                        // $record->jumlah_peserta = $record->bookingKelas->count();
                         return $record->jumlah_peserta;
                     })->alignCenter(),
                 TextColumn::make('pendapatan')
@@ -207,6 +220,14 @@ class KelasActivityRelationManager extends RelationManager
                         })->when($data['sampai_tanggal'], function (Builder $query, $date) {
                             return $query->whereDate('tanggal', '<=', $date);
                         });
+                    }),
+                Filter::make('kelas_aktif')
+                    ->label('Kelas Aktif')
+                    ->form([
+                        Toggle::make('kelas_aktif')
+                    ])
+                    ->indicateUsing(function ($data) {
+                        static::$is_active = $data['kelas_aktif'];
                     })
             ])
             ->headerActions([
@@ -242,5 +263,17 @@ class KelasActivityRelationManager extends RelationManager
             ->bulkActions([
                 DeleteBulkAction::make(),
             ]);
+    }
+
+    protected function getTableQuery(): Builder|Relation
+    {
+        $query = parent::getTableQuery()->when(static::$is_active, function(Builder $query){
+            return $query->whereDate('tanggal', '<=', now())
+            ->withCount(['bookingKelas' => function(Builder $query){
+                $query->where('status_kehadiran', 1)
+                ->orWhereNull('status_kehadiran');
+            }])->having('booking_kelas_count', '>=', 2);
+        });
+        return $query;
     }
 }

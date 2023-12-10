@@ -88,6 +88,10 @@ class AktifitasKelasInstrukturResource extends Resource
                 TextColumn::make('kelas.nama_kelas')
                     ->searchable()
                     ->label('Kelas'),
+                TextColumn::make('locationStudio.location.nama')
+                    ->label('Location')
+                    ->toggleable()
+                    ->searchable(),
                 TextColumn::make('tanggal')
                     ->label('Tanggal')
                     ->formatStateUsing(function ($state) {
@@ -118,6 +122,19 @@ class AktifitasKelasInstrukturResource extends Resource
 
             ])
             ->filters([
+                Filter::make('location')
+                    ->form([
+                        Select::make('id_location')
+                            ->label('Location')
+                            ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
+                            ->searchable(),
+                    ])->query(function (Builder $query, $data) {
+                        return $query->when($data['id_location'], function (Builder $query, $id_location) {
+                            $query->whereHas('locationStudio', function (Builder $query) use ($id_location) {
+                                $query->where('id_location', $id_location);
+                            });
+                        });
+                    }),
                 Filter::make('tanggal')
                     ->form([
                         DatePicker::make('start_date')
@@ -131,10 +148,7 @@ class AktifitasKelasInstrukturResource extends Resource
                             return $query->whereDate('tanggal', '<=', $date);
                         });
                     }),
-                SelectFilter::make('id_location')
-                    ->searchable()
-                    ->label('Lokasi')
-                    ->options(Location::select('nama', 'id')->get()->pluck('nama', 'id'))
+
             ])
             ->actions([
                 ViewAction::make()

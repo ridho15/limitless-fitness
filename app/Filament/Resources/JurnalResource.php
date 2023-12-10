@@ -38,7 +38,7 @@ class JurnalResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard';
 
-    protected static ?string $navigationGroup = 'Data Master';
+    protected static ?string $navigationGroup = 'Account';
 
     public static function form(Form $form): Form
     {

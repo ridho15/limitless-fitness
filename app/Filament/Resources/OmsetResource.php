@@ -3,21 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OmsetResource\Pages;
-use App\Filament\Resources\OmsetResource\RelationManagers;
 use App\Models\Jurnal;
 use App\Models\Location;
-use App\Models\OrderPaket;
-use Filament\Forms;
+use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class OmsetResource extends Resource
@@ -31,6 +27,10 @@ class OmsetResource extends Resource
     protected static ?string $slug = 'Omset';
 
     protected static ?string $title = 'Omset';
+
+    protected static ?string $pluralModelLabel = 'Omset';
+
+    protected static ?string $navigationGroup = 'Account';
 
     protected static int $omset = 0;
     public static function form(Form $form): Form
@@ -53,7 +53,10 @@ class OmsetResource extends Resource
                     ->searchable(),
                 TextColumn::make('tanggal')
                     ->searchable()
-                    ->label('Tanggal'),
+                    ->label('Tanggal')
+                    ->formatStateUsing(function ($state) {
+                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
+                    }),
                 TextColumn::make('orderPaket.location.nama')
                     ->label('Location')
                     ->toggleable()
