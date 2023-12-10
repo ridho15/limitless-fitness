@@ -92,8 +92,8 @@ class InstrukturOmsetResource extends Resource
                 Filter::make('tanggal')
                     ->form([
                         DatePicker::make('created_from')
-                            ->default(Carbon::now()->startOfMonth()->isoFormat('YYYY-MM-DD')),
-                        DatePicker::make('created_until')->default(Carbon::now()->endOfMonth()->isoFormat('YYYY-MM-DD'))
+                            ->default(Carbon::now()->startOfMonth()),
+                        DatePicker::make('created_until')->default(Carbon::now()->endOfMonth())
                     ])->query(function (Builder $query, $data) {
                         return $query->when($data['created_from'], function (Builder $query, $date) {
                             return $query->whereDate('tanggal', '>=', $date);
@@ -113,6 +113,13 @@ class InstrukturOmsetResource extends Resource
                         });
                     }),
                 SelectFilter::make('id_user')
+                    ->hidden(function () {
+                        if (Auth::user()->hasRole(['Instruktur'])) {
+                            return true;
+                        }
+
+                        return false;
+                    })
                     ->options(User::whereHas('roles', function ($query) {
                         $query->where('name', 'Instruktur');
                     })->select(['name', 'id'])->get()->pluck('name', 'id'))

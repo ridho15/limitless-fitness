@@ -14,19 +14,21 @@ class PendapatanInstrukturOverview extends BaseWidget
     {
         $startDate = Carbon::now()->startOfMonth();
         $listCard = [];
-        $kelasActivity = KelasActivity::when(Auth::user()->hasRole(['Instruktur']), function ($query) {
+        $listKelasActivity = KelasActivity::when(Auth::user()->hasRole(['Instruktur']), function ($query) {
             return $query->where('id_user', Auth::id());
         })
-            ->withCount('bookingKelas')
+            ->withCount(['bookingKelas' => function ($query) {
+                $query->where('status_kehadiran', 1)
+                    ->orWhereNull('status_kehadiran');
+            }])
             ->whereDate('tanggal', '<=', now())
             ->having('booking_kelas_count', '>=', 2)
             ->get();
-
         $totalOmset = 0;
         $omsetSatuBulan = 0;
         $jumlahPertemuanSatuBulan = 0;
         $jumlahPertemuan = 0;
-        foreach ($kelasActivity as $item) {
+        foreach ($listKelasActivity as $item) {
             if (date("Y-m-d", strtotime($item->tanggal)) >= date("Y-m-d", strtotime($startDate)) && date('Y-m-d', strtotime($item->tanggal)) < now()) {
                 $omsetSatuBulan += $item->kelas->fee;
                 $jumlahPertemuanSatuBulan++;
