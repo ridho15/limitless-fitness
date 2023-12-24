@@ -6,11 +6,9 @@ use App\Filament\Resources\AktifitasKelasInstrukturResource\Pages;
 use App\Filament\Resources\AktifitasKelasInstrukturResource\Pages\ViewAktifitasKelasInstruktur;
 use App\Filament\Resources\AktifitasKelasInstrukturResource\RelationManagers;
 use App\Filament\Resources\AktifitaskelasIntrukturResource\RelationManagers\BookingKelasRelationManager;
-use App\Models\AktifitasKelasInstruktur;
 use App\Models\KelasActivity;
 use App\Models\Location;
 use Carbon\Carbon;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -18,13 +16,10 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class AktifitasKelasInstrukturResource extends Resource
@@ -110,7 +105,7 @@ class AktifitasKelasInstrukturResource extends Resource
                             }
                         }
                         return $jumlahPeserta;
-                    }),
+                    })->sortable(),
                 TextColumn::make('rating')
                     ->label('Rating')
                     ->searchable()

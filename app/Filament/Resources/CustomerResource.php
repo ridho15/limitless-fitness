@@ -192,7 +192,17 @@ class CustomerResource extends Resource
                     Action::make('kredit')
                         ->icon('heroicon-o-arrow-circle-down')
                         ->label('View Kredit')
-                        ->url(fn ($record) => CustomerResource::getUrl('kredit-customer', ['record' => $record]))
+                        ->url(fn ($record) => CustomerResource::getUrl('kredit-customer', ['record' => $record])),
+                    Action::make('login')
+                        ->icon('heroicon-o-arrow-circle-right')
+                        ->label('Login')
+                        ->action(function ($record) {
+                            activity()->causedBy(Auth::user())
+                                ->log('Melakukan login ke user ' . $record->name);
+
+                            Auth::loginUsingId($record->id);
+                            return redirect()->route('base');
+                        })
                 ])
             ])
             ->bulkActions([

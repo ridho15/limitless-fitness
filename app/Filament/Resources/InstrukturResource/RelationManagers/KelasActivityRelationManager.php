@@ -21,7 +21,6 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -267,12 +266,12 @@ class KelasActivityRelationManager extends RelationManager
 
     protected function getTableQuery(): Builder|Relation
     {
-        $query = parent::getTableQuery()->when(static::$is_active, function(Builder $query){
+        $query = parent::getTableQuery()->when(static::$is_active, function (Builder $query) {
             return $query->whereDate('tanggal', '<=', now())
-            ->withCount(['bookingKelas' => function(Builder $query){
-                $query->where('status_kehadiran', 1)
-                ->orWhereNull('status_kehadiran');
-            }])->having('booking_kelas_count', '>=', 2);
+                ->withCount(['bookingKelas' => function (Builder $query) {
+                    $query->where('status_kehadiran', 1)
+                        ->orWhereNull('status_kehadiran');
+                }])->having('booking_kelas_count', '>=', 2);
         });
         return $query;
     }
