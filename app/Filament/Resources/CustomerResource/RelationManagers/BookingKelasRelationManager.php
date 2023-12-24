@@ -12,6 +12,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -40,8 +41,8 @@ class BookingKelasRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('kelasActivity.nama_latihan')
-                    ->label('Nama Latihan')
+                TextColumn::make('kelasActivity.kelas.nama_kelas')
+                    ->label('Kelas')
                     ->searchable(),
                 TextColumn::make('kelasActivity.tanggal')
                     ->label('Tanggal')
@@ -70,7 +71,9 @@ class BookingKelasRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make()
+                    ->label('Buat Booking Kelas')
+                    ->icon('heroicon-o-plus-circle'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
