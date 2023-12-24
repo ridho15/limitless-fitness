@@ -25,6 +25,7 @@ use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -561,8 +562,8 @@ class BaseController extends Controller
         //Check slot kelas
         $jumlahBookingKelas = BookingKelas::where('id_kelas_activity', $kelasActivity->id)
             ->where(function ($query) {
-                $query->where('status_kehadiran', '1')
-                    ->orWhere('status_kehadiran', '0');
+                $query->where('status_kehadiran', 1)
+                    ->orWhereNull('status_kehadiran');
             })->count();
 
         if ($jumlahBookingKelas >= $kelasActivity->kelas->max_anggota) {
@@ -582,7 +583,14 @@ class BaseController extends Controller
         $data['status_kehadiran'] = 1;
         $data['is_send_email'] = true;
 
-        BookingKelas::create($data);
+        DB::beginTransaction();
+        try {
+            BookingKelas::create($data);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with('fail', 'Order paket sedang dalam antrian tunggu beberapa detik lagi');
+        }
 
         $orderPaket->update([
             'sisa' => $orderPaket->sisa - 1,
