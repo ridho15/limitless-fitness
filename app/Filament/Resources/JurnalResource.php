@@ -167,12 +167,12 @@ class JurnalResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make()
-                    ->after(function () {
-                        activity()
-                            ->causedBy(Auth::user())
-                            ->log('Menghapus data jurnal');
-                    }),
+                // DeleteAction::make()
+                //     ->after(function () {
+                //         activity()
+                //             ->causedBy(Auth::user())
+                //             ->log('Menghapus data jurnal');
+                //     }),
                 ViewAction::make()
             ])
             ->bulkActions([
