@@ -95,9 +95,10 @@ class BiayaInstruktruResource extends Resource
                             ->options(Location::select(['nama', 'id'])->get()->pluck('nama', 'id'))
                             ->searchable(),
                         DatePicker::make('created_from')
-                            ->label('Dari Tanggal'),
+                            ->label('Dari Tanggal')->default(Carbon::now()->startOfMonth()),
                         DatePicker::make('created_until')
                             ->label('Sampai Tanggal')
+                            ->default(Carbon::now()->endOfMonth())
                     ])->query(function (Builder $query, $data) {
                         return $query->when($data['id_location'], function (Builder $query, $id_location) {
                             return $query->whereHas('orderPaket', function (Builder $query) use ($id_location) {
@@ -133,7 +134,7 @@ class BiayaInstruktruResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('tipe', 0)
-            ->whereNotNull('id_parent');
+            ->whereNotNull('id_parent')->orderBy('tanggal', 'ASC');
     }
 
     protected static function shouldRegisterNavigation(): bool

@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class PendapatanInstrukturOverview extends BaseWidget
 {
+    public $listeners = [
+        'changeTanggal'
+    ];
+
+    public $fromTanggal;
+    public $toTanggal;
+
+    public function changeTanggal($fromTanggal, $toTanggal)
+    {
+        $this->fromTanggal = $fromTanggal;
+        $this->toTanggal = $toTanggal;
+    }
+
     protected function getCards(): array
     {
         $startDate = Carbon::now()->startOfMonth();

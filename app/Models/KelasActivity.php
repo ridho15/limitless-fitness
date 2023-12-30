@@ -150,7 +150,8 @@ class KelasActivity extends Model
         return $this->belongsTo(LocationStudio::class, 'id_location_studio');
     }
 
-    public function userUpdate(){
+    public function userUpdate()
+    {
         return $this->belongsTo(User::class, 'user_update');
     }
 }

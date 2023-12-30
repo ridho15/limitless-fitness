@@ -40,7 +40,7 @@ class ViewListDetailOmset extends Page
         $this->listBookingKelas = BookingKelas::where('id_kelas_activity', $record)
             ->where(function ($query) {
                 $query->where('status_kehadiran', '1')
-                    ->orWhere('status_kehadiran', '0');
+                    ->orWhereNull('status_kehadiran');
             })->get();
     }
 

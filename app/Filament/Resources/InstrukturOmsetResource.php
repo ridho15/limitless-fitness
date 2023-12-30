@@ -79,8 +79,8 @@ class InstrukturOmsetResource extends Resource
                         static::$omset += $record->kelas->fee;
                         return 'Rp.' . number_format($record->kelas->fee);
                     }),
-                TextColumn::make('omset')
-                    ->label('Omset')
+                TextColumn::make('Penghasilan')
+                    ->label('Penghasilan')
                     ->formatStateUsing(function ($record) {
                         return 'Rp.' . number_format(static::$omset, 0, ',', '.');
                     })
@@ -158,6 +158,7 @@ class InstrukturOmsetResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        // return parent::getEloquentQuery();
         return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
             $query->where('id_user', Auth::id());
         })->withCount(['bookingKelas' => function (Builder $query) {

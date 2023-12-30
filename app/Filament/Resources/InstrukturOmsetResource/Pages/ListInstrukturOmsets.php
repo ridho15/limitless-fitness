@@ -19,7 +19,7 @@ class ListInstrukturOmsets extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            PendapatanInstrukturOverview::class,
+            // PendapatanInstrukturOverview::class,
         ];
     }
 }

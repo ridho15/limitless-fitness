@@ -28,8 +28,8 @@ class Kelas extends Model
 
     protected $appends = [
         'status_aktif',
-        'rating',
-        'jumlah_review',
+        // 'rating',
+        // 'jumlah_review',
         'type_formatted',
     ];
 
@@ -50,27 +50,24 @@ class Kelas extends Model
 
     public function getJumlahReviewAttribute()
     {
-        $kelasActivity = KelasActivity::where('id_kelas', $this->id)->get();
-        $jumlahReview = 0;
-        foreach ($kelasActivity as $item) {
-            $jumlahReview += $item->kelasRating->count();
-        }
-
-        return $jumlahReview;
+        $listKelasActivity = KelasActivity::withCount('kelasRating')->where('id_kelas', $this->id)->get()->toArray();
+        $array_column = array_column($listKelasActivity, 'kelas_rating_count');
+        return array_sum($array_column);
     }
 
     public function getRatingAttribute()
     {
-        $kelasActivity = KelasActivity::where('id_kelas', $this->id)->get();
-        $jumlahReview = 0;
+        $jumlahReview = $this->getJumlahReviewAttribute();
+        $listKelasActivity = KelasActivity::where('id_kelas', $this->id)->with(['kelasRating' => function ($query) {
+            $query->select(['id', 'rating']);
+        }])->has('kelasRating')->get()->toArray();
+
         $jumlahRating = 0;
-        foreach ($kelasActivity as $item) {
-            foreach ($item->kelasRating as $kelasRating) {
-                $jumlahReview++;
-                $jumlahRating += $kelasRating->rating;
+        foreach ($listKelasActivity as $item) {
+            foreach ($item['kelasRating'] as $kelasRating) {
+                $jumlahRating += $kelasRating['rating'];
             }
         }
-
         return $jumlahReview == 0 ? 0 : $jumlahRating / $jumlahReview;
     }
 

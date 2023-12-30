@@ -26,9 +26,4 @@ class ListJurnals extends ListRecords
     {
         return Position::BeforeCells;
     }
-
-    protected function getTableQuery(): Builder
-    {
-        return parent::getTableQuery()->whereMonth('created_at', now())->orderBy('created_at', 'DESC');
-    }
 }

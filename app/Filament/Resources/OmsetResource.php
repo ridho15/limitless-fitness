@@ -80,9 +80,9 @@ class OmsetResource extends Resource
                     ->label('Tanggal')
                     ->form([
                         DatePicker::make('tanggal_pembayaran_from')
-                            ->label('Tanggal Dari'),
+                            ->label('Tanggal Dari')->default(Carbon::now()->startOfMonth()),
                         DatePicker::make('tanggal_pembayaran_to')
-                            ->label('Tanggal ke'),
+                            ->label('Tanggal ke')->default(Carbon::now()->endOfMonth()),
                     ])->query(function (Builder $query, array $data) {
                         return $query->when($data['tanggal_pembayaran_from'], function (Builder $query, $date) {
                             return $query->where('tanggal', '>=', $date);

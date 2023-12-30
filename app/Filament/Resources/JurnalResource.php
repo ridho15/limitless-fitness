@@ -7,6 +7,7 @@ use App\Filament\Resources\JurnalResource\RelationManagers;
 use App\Models\Jurnal;
 use App\Models\Location;
 use App\Models\User;
+use Carbon\Carbon;
 use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -21,6 +22,8 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
@@ -138,42 +141,55 @@ class JurnalResource extends Resource
                 Filter::make('tanggal')
                     ->form([
                         DatePicker::make('tanggal_from')
-                            ->label('Dari Tanggal'),
+                            ->label('Dari Tanggal')->default(Carbon::now()->startOfMonth()),
                         DatePicker::make('tanggal_to')
-                            ->label('Ke Tanggal'),
+                            ->label('Ke Tanggal')->default(Carbon::now()->endOfMonth()),
+                        Select::make('id_location')
+                            ->label('Location')
+                            ->searchable()
+                            ->options(function () {
+                                $listLocation = Location::select(['nama', 'id'])->get()->pluck('nama', 'id');
+                                return $listLocation;
+                            })->hidden(function () {
+                                return Auth::user()->hasRole(['Admin']);
+                            })
                     ])->query(function (Builder $query, $data) {
                         return $query->when($data['tanggal_from'], function (Builder $query, $tanggal) {
-                            return $query->whereDate('tanggal', '>=', $tanggal);
+                            return $query->whereDate('created_at', '>=', $tanggal);
                         })->when($data['tanggal_to'], function (Builder $query, $tanggal) {
-                            return $query->whereDate('tanggal', '<=', $tanggal);
-                        });
-                    }),
-                SelectFilter::make('id_location')
-                    ->label('Location')
-                    ->searchable()
-                    ->options(function () {
-                        $listLocation = Location::select(['nama', 'id'])->get()->pluck('nama', 'id');
-                        return $listLocation;
-                    })
-                    ->query(function (Builder $query, $data) {
-                        return $query->when($data['value'], function (Builder $query, $id_location) {
-                            $query->whereHas('orderPaket', function (Builder $query) use ($id_location) {
-                                $query->where('id_location', $id_location);
+                            return $query->whereDate('created_at', '<=', $tanggal);
+                        })->when($data['id_location'], function (Builder $query, $id_location) {
+                            return $query->whereHas('orderPaket', function ($query) use ($id_location) {
+                                return $query->where('id_location', $id_location);
                             });
                         });
-                    })->hidden(function () {
-                        return Auth::user()->hasRole(['Admin']);
-                    })
+                    }),
             ])
             ->actions([
-                EditAction::make(),
-                // DeleteAction::make()
-                //     ->after(function () {
-                //         activity()
-                //             ->causedBy(Auth::user())
-                //             ->log('Menghapus data jurnal');
-                //     }),
-                ViewAction::make()
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make()
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Menghapus data jurnal');
+                        }),
+                    ViewAction::make(),
+                    Action::make('view_struk')
+                        ->label("View Struk")
+                        ->icon('heroicon-o-photograph')
+                        ->hidden(function (Jurnal $record) {
+                            return $record->struk == null ? true : false;
+                        })
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('View bukti pembayaran');
+                        })->url(function (Jurnal $record) {
+                            return asset('storage/' . $record->struk);
+                        })
+                        ->openUrlInNewTab(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -186,7 +202,7 @@ class JurnalResource extends Resource
             return $query->whereHas('orderPaket', function (Builder $query) {
                 $query->where('id_location', Auth::user()->id_location);
             });
-        });
+        })->orderBy('created_at', 'ASC');
     }
 
     public static function getRelations(): array

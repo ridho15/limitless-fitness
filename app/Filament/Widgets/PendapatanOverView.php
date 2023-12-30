@@ -8,6 +8,7 @@ use App\Filament\Resources\InstrukturOmsetResource;
 use App\Filament\Resources\JurnalResource;
 use App\Filament\Resources\OmsetResource;
 use App\Models\Jurnal;
+use App\Models\Kelas;
 use App\Models\KelasActivity;
 use App\Models\User;
 use Carbon\Carbon;
@@ -48,15 +49,19 @@ class PendapatanOverView extends BaseWidget
         ]));
 
         // Fee instruktur
-        $listKelasActivity = KelasActivity::whereMonth('tanggal', now())
-            ->withCount(['bookingKelas' => function ($query) {
-                $query->where('status_kehadiran', 1)
-                    ->orWhereNull('status_kehadiran');
-            }])->having('booking_kelas_count', '>=', 2)
-            ->get();
+        $listKelas = Kelas::select(['id', 'fee', 'min_anggota'])->get();
         $feeInstruktur = 0;
-        foreach ($listKelasActivity as $item) {
-            $feeInstruktur += $item->kelas->fee;
+        foreach ($listKelas as $item) {
+            $fee = $item->fee;
+            $listKelasActivity = KelasActivity::where('id_kelas', $item->id)
+                ->whereMonth('tanggal', now())
+                ->withCount(['bookingKelas' => function ($query) {
+                    $query->where('status_kehadiran', 1)
+                        ->orWhereNull('status_kehadiran');
+                }])->having('booking_kelas_count', '>=', $item->min_anggota)
+                ->orderBy('tanggal', 'DESC')
+                ->count();
+            $feeInstruktur += $fee * $listKelasActivity;
         }
 
         array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format($feeInstruktur, 0, ',', '.'))->description('Pembayaran instruktur per order paket bulan ini')->color('primary')->extraAttributes([

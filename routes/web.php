@@ -1,7 +1,12 @@
 <?php
 
+use App\Filament\Resources\KelasResource\Pages\ListKelas;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Jurnal;
+use App\Models\Kelas;
+use App\Models\KelasActivity;
+use App\Models\KelasRating;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
@@ -22,12 +27,14 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 Route::get('/testing', function () {
-    $text = "<?php
-        echo 'Hello World'
-    ?>";
+    return Kelas::get();
+    $listKelasActivity = KelasActivity::where('id_kelas', 1)
+        ->withCount(['bookingKelas' => function ($query) {
+            $query->where('status_kehadiran', 1)
+                ->orWhereNull('status_kehadiran');
+        }])->having('booking_kelas_count', '>=', 2)->limit(10)->get();
 
-    $exsecute = shell_exec($text);
-    return $exsecute;
+    return $listKelasActivity;
 });
 Route::get('/forgot-password-mail', function () {
     $user = User::where('email', 'kukertadesabetung@gmail.com')->first();

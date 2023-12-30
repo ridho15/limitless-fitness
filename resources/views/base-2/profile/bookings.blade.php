@@ -331,7 +331,7 @@
                             </div>
                             <div class="">
                                 <small>Rating : <span class="fw-bold">
-                                        @for($i = 0; $i < 5; $i++) @if ($i < $item->rating)
+                                        @for($i = 0; $i < 5; $i++) @if ($i < $item->getRatingAttribute())
                                             <span class="mx-1"><i class="fa-solid fa-star"
                                                     style="color: #ffae00;"></i></span>
                                             @else
