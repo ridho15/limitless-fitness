@@ -76,8 +76,12 @@ class InstrukturOmsetResource extends Resource
                 TextColumn::make('fee')
                     ->label('Fee')
                     ->formatStateUsing(function ($record) {
-                        static::$omset += $record->kelas->fee;
-                        return 'Rp.' . number_format($record->kelas->fee);
+                        $fee = 0;
+                        if ($record->kelas->min_anggota <= $record->booking_kelas_count) {
+                            $fee = $record->kelas->fee;
+                            static::$omset += $fee;
+                        }
+                        return 'Rp.' . number_format($fee);
                     }),
                 TextColumn::make('Penghasilan')
                     ->label('Penghasilan')
@@ -164,7 +168,7 @@ class InstrukturOmsetResource extends Resource
         })->withCount(['bookingKelas' => function (Builder $query) {
             $query->where('status_kehadiran', 1)
                 ->orWhereNull('status_kehadiran');
-        }])->having('booking_kelas_count', '>=', 2)
+        }])->having('booking_kelas_count', ">", 0)
             ->whereDate('tanggal', '<=', now())
             ->orderBy('tanggal', 'ASC');
     }
