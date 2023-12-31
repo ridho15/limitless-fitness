@@ -8,6 +8,7 @@ use App\Filament\Resources\InstrukturResource\RelationManagers\KelasActivityRela
 use App\Models\BookingKelas;
 use App\Models\Role;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
@@ -19,6 +20,8 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
@@ -148,14 +151,28 @@ class InstrukturResource extends Resource
             ])
             ->filters([])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make()
-                    ->after(function () {
-                        activity()
-                            ->causedBy(Auth::user())
-                            ->log('Menghapus data instruktur');
-                    }),
-                ViewAction::make()
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make()
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Menghapus data instruktur');
+                        }),
+                    ViewAction::make(),
+                    Action::make('login')
+                        ->icon('heroicon-o-arrow-circle-right')
+                        ->label('Login')
+                        ->action(function ($record) {
+                            activity()->causedBy(Auth::user())
+                                ->log('Melakukan login ke user ' . $record->name);
+
+                            Auth::loginUsingId($record->id);
+                            Filament::auth()->loginUsingId($record->id);
+                            session()->regenerate();
+                            return redirect()->route('base');
+                        })
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -165,7 +182,7 @@ class InstrukturResource extends Resource
     public static function getRelations(): array
     {
         return [
-            KelasActivityRelationManager::class
+            KelasActivityRelationManager::class,
         ];
     }
 
@@ -191,7 +208,6 @@ class InstrukturResource extends Resource
         if (Auth::user()->hasRole(['Super Admin'])) {
             return true;
         }
-
         return false;
     }
 }

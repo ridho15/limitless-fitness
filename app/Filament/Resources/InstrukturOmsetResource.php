@@ -6,6 +6,7 @@ use App\Filament\Resources\InstruktruOmsetResource\Pages\ViewListDetailOmset;
 use App\Filament\Resources\InstrukturOmsetResource\Pages;
 use App\Filament\Resources\InstrukturOmsetResource\Pages\ViewInstrukturOmset;
 use App\Filament\Resources\InstrukturOmsetResource\RelationManagers\BookingKelasRelationManager;
+use App\Filament\Widgets\PendapatanInstrukturOverview;
 use App\Models\KelasActivity;
 use App\Models\Location;
 use App\Models\User;
@@ -23,6 +24,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Livewire;
 
 class InstrukturOmsetResource extends Resource
 {
@@ -38,9 +40,9 @@ class InstrukturOmsetResource extends Resource
 
     protected static ?string $navigationGroup = 'Account';
 
-    protected static ?string $tanggal_awal = null;
+    public static ?string $tanggal_awal;
 
-    protected static ?string $tanggal_akhir = null;
+    public static ?string $tanggal_akhir;
 
     protected static int $omset = 0;
 
@@ -81,7 +83,7 @@ class InstrukturOmsetResource extends Resource
                             $fee = $record->kelas->fee;
                             static::$omset += $fee;
                         }
-                        return 'Rp.' . number_format($fee);
+                        return 'Rp.' . number_format($fee, 0, ',', '.');
                     }),
                 TextColumn::make('Penghasilan')
                     ->label('Penghasilan')
@@ -96,6 +98,10 @@ class InstrukturOmsetResource extends Resource
                             ->default(Carbon::now()->startOfMonth()),
                         DatePicker::make('created_until')->default(Carbon::now()->endOfMonth())
                     ])->query(function (Builder $query, $data) {
+                        if ($data['created_from'] != null && $data['created_until'] != null) {
+                            static::$tanggal_awal = $data['created_from'];
+                            static::$tanggal_akhir = $data['created_until'];
+                        } 
                         return $query->when($data['created_from'], function (Builder $query, $date) {
                             return $query->whereDate('tanggal', '>=', $date);
                         })->when($data['created_until'], function (Builder $query, $date) {
@@ -118,7 +124,6 @@ class InstrukturOmsetResource extends Resource
                         if (Auth::user()->hasRole(['Instruktur'])) {
                             return true;
                         }
-
                         return false;
                     })
                     ->options(User::whereHas('roles', function ($query) {
@@ -139,6 +144,14 @@ class InstrukturOmsetResource extends Resource
     {
         return [
             BookingKelasRelationManager::class
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        $pendapatanInstruktur = PendapatanInstrukturOverview::class;
+        return [
+            $pendapatanInstruktur,
         ];
     }
 

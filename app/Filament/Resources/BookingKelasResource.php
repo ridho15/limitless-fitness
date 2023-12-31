@@ -39,6 +39,8 @@ class BookingKelasResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Kehadiran';
 
+    protected static ?int $navigationSort = 3;
+
     public static function form(Form $form): Form
     {
         return $form

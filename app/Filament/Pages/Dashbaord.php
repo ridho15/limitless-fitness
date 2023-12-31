@@ -27,6 +27,8 @@ class Dashbaord extends BasePage
 
     protected static string $view = 'filament.pages.dashbaord';
 
+    protected static ?int $navigationSort = 1;
+
     public $id_location;
     public $listLocation = [];
 

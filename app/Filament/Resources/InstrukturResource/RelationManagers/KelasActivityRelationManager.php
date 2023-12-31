@@ -17,6 +17,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -180,7 +181,8 @@ class KelasActivityRelationManager extends RelationManager
                     ->toggleable()
                     ->formatStateUsing(function ($record) {
                         $pendapatan = 0;
-                        if ($record->jumlah_peserta >= 2 && $record->status == 3) {
+                        $kelas = Kelas::find($record->id_kelas);
+                        if ($kelas && $record->jumlah_peserta >= $kelas->min_anggota && $record->status == 3) {
                             $pendapatan = $record->kelas->fee;
                         }
                         return 'Rp.' . number_format($pendapatan, 0, ',', '.');
@@ -235,29 +237,31 @@ class KelasActivityRelationManager extends RelationManager
                     ->icon('heroicon-o-plus-circle'),
             ])
             ->actions([
-                Action::make('view')
-                    ->label('View')
-                    ->icon('heroicon-o-eye')
-                    ->color('secondary')
-                    ->url(function ($record) {
-                        return AktifitasKelasInstrukturResource::getUrl('view', ['record' => $record]);
-                    }),
-                EditAction::make()
-                    ->hidden(function () {
-                        if (Auth::user()->hasRole('Super Admin')) {
-                            return false;
-                        }
+                ActionGroup::make([
+                    Action::make('view')
+                        ->label('View')
+                        ->icon('heroicon-o-eye')
+                        ->color('secondary')
+                        ->url(function ($record) {
+                            return AktifitasKelasInstrukturResource::getUrl('view', ['record' => $record]);
+                        }),
+                    EditAction::make()
+                        ->hidden(function () {
+                            if (Auth::user()->hasRole('Super Admin')) {
+                                return false;
+                            }
 
-                        return true;
-                    }),
-                DeleteAction::make()
-                    ->hidden(function () {
-                        if (Auth::user()->hasRole('Super Admin')) {
-                            return false;
-                        }
+                            return true;
+                        }),
+                    DeleteAction::make()
+                        ->hidden(function () {
+                            if (Auth::user()->hasRole('Super Admin')) {
+                                return false;
+                            }
 
-                        return true;
-                    })
+                            return true;
+                        })
+                ])
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),
@@ -268,10 +272,10 @@ class KelasActivityRelationManager extends RelationManager
     {
         $query = parent::getTableQuery()->when(static::$is_active, function (Builder $query) {
             return $query->whereDate('tanggal', '<=', now())
-                ->withCount(['bookingKelas' => function (Builder $query) {
+                ->has('kelas')->withCount(['bookingKelas' => function (Builder $query) {
                     $query->where('status_kehadiran', 1)
                         ->orWhereNull('status_kehadiran');
-                }])->having('booking_kelas_count', '>=', 2);
+                }])->having('booking_kelas_count', '>=', 0);
         });
         return $query;
     }

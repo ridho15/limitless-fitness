@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\InstrukturResource;
+use App\Models\Kelas;
 use App\Models\KelasActivity;
 use App\Models\Location;
 use App\Models\User;
@@ -29,46 +30,64 @@ class JadwalInstrukturAssign extends BaseWidget
 
     protected function getTableColumns(): array
     {
+        $listKelas = Kelas::get();
         return [
             TextColumn::make('name')
                 ->label('Instruktur')
                 ->searchable(),
             TextColumn::make('assing_time')
                 ->label('Assign Time')
-                ->formatStateUsing(function ($record) {
-                    $jumlahAssing = KelasActivity::where('id_user', $record->id)
-                        ->when($this->id_location, function (Builder $query) {
-                            $query->whereHas('locationStudio', function (Builder $query) {
-                                $query->where('id_location', $this->id_location);
-                            });
-                        })
-                        ->whereNotNull('id_kelas')
-                        ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function (Builder $query, $data) {
-                            return $query->whereDate('tanggal', '<=', $this->tanggal_akhir)
-                                ->whereDate('tanggal', '>=', $this->tanggal_awal);
-                        })->when($this->tanggal_awal == null && $this->tanggal_akhir == null, function (Builder $query, $data) {
-                            return $query->whereNotNull('tanggal');
-                        })
-                        ->whereNotNull('jam_mulai')->count();
+                ->formatStateUsing(function ($record) use ($listKelas) {
+                    $jumlahAssing = 0;
+                    foreach ($listKelas as $kelas) {
+                        $jumlahAssing += KelasActivity::where('id_user', $record->id)
+                            ->where('id_kelas', $kelas->id)
+                            ->when($this->id_location, function (Builder $query) {
+                                $query->whereHas('locationStudio', function (Builder $query) {
+                                    $query->where('id_location', $this->id_location);
+                                });
+                            })
+                            ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function (Builder $query, $data) {
+                                return $query->whereDate('tanggal', '<=', $this->tanggal_akhir)
+                                    ->whereDate('tanggal', '>=', $this->tanggal_awal);
+                            })->when($this->tanggal_awal == null && $this->tanggal_akhir == null, function (Builder $query, $data) {
+                                return $query->whereNotNull('tanggal');
+                            })
+                            ->withCount(['bookingKelas' => function ($query) {
+                                $query->where('status_kehadiran', 1)
+                                    ->orWhereNull('status_kehadiran');
+                            }])
+                            ->having('booking_kelas_count', '>=', $kelas->min_anggota)
+                            ->whereNotNull('jam_mulai')->count();
+                    }
+
                     return $jumlahAssing;
                 }),
             TextColumn::make('jumlah_jadwal')
                 ->label('Number of Schedules')
-                ->formatStateUsing(function ($record) {
-                    $kelasActivity = KelasActivity::where('id_user', $record->id)
-                        ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function (Builder $query, $data) {
-                            return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
-                                ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                        })->when($this->tanggal_awal == null && $this->tanggal_akhir == null, function (Builder $query, $data) {
-                            return $query->whereNotNull('tanggal');
-                        })
-                        ->when($this->id_location, function (Builder $query, $data) {
-                            $query->whereHas('locationStudio', function (Builder $query) {
-                                $query->where('id_location', $this->id_location);
-                            });
-                        })
-                        ->count();
-                    return $kelasActivity;
+                ->formatStateUsing(function ($record) use ($listKelas) {
+                    $jumSchedule = 0;
+                    foreach ($listKelas as $kelas) {
+                        $jumSchedule += KelasActivity::where('id_user', $record->id)
+                            ->where('id_kelas', $kelas->id)
+                            ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function (Builder $query, $data) {
+                                return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
+                                    ->whereDate('tanggal', '<=', $this->tanggal_akhir);
+                            })->when($this->tanggal_awal == null && $this->tanggal_akhir == null, function (Builder $query, $data) {
+                                return $query->whereNotNull('tanggal');
+                            })
+                            ->when($this->id_location, function (Builder $query, $data) {
+                                $query->whereHas('locationStudio', function (Builder $query) {
+                                    $query->where('id_location', $this->id_location);
+                                });
+                            })
+                            ->withCount(['bookingKelas' => function ($query) {
+                                $query->where('status_kehadiran', 1)
+                                    ->orWhereNull('status_kehadiran');
+                            }])->having('booking_kelas_count', '<', $kelas->min_anggota)
+                            ->count();
+                    }
+                    return $jumSchedule;
                 })
         ];
     }

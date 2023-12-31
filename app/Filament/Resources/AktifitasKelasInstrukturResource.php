@@ -8,6 +8,7 @@ use App\Filament\Resources\AktifitasKelasInstrukturResource\RelationManagers;
 use App\Filament\Resources\AktifitaskelasIntrukturResource\RelationManagers\BookingKelasRelationManager;
 use App\Models\KelasActivity;
 use App\Models\Location;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
@@ -19,8 +20,10 @@ use Filament\Resources\Table;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Yepsua\Filament\Tables\Components\RatingColumn;
 
 class AktifitasKelasInstrukturResource extends Resource
 {
@@ -28,11 +31,13 @@ class AktifitasKelasInstrukturResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    protected static ?string $pluralModelLabel = 'Review Your Class';
+    protected static ?string $pluralModelLabel = 'Class Rating';
 
-    protected static ?string $slug = 'review-your-class';
+    protected static ?string $slug = 'class-rating';
 
-    protected static ?string $title = 'Review Your Class';
+    protected static ?string $title = 'Class Rating';
+
+    protected static ?int $navigationSort = 6;
 
     public static function form(Form $form): Form
     {
@@ -100,21 +105,15 @@ class AktifitasKelasInstrukturResource extends Resource
                     ->formatStateUsing(function ($record) {
                         $jumlahPeserta = 0;
                         foreach ($record->bookingKelas as $item) {
-                            if ($item->status_kehadiran == '1' || $item->status_kehadiran == '0') {
+                            if ($item->status_kehadiran == '1' || $item->status_kehadiran == null) {
                                 $jumlahPeserta++;
                             }
                         }
                         return $jumlahPeserta;
                     })->sortable(),
-                TextColumn::make('rating')
+                RatingColumn::make('rating')
                     ->label('Rating')
-                    ->searchable()
-                    ->toggleable()
-                    ->formatStateUsing(function ($state) {
-                        return number_format($state, 2);
-                    })
-                    ->sortable(),
-
+                    ->maxValue(10)
             ])
             ->filters([
                 Filter::make('location')
@@ -143,6 +142,14 @@ class AktifitasKelasInstrukturResource extends Resource
                             return $query->whereDate('tanggal', '<=', $date);
                         });
                     }),
+                SelectFilter::make('id_user')
+                    ->label('Instruktur')
+                    ->searchable()
+                    ->options(function () {
+                        return User::whereHas('roles', function ($query) {
+                            $query->where('name', 'Instruktur');
+                        })->get()->pluck('name', 'id');
+                    })
 
             ])
             ->actions([
@@ -175,6 +182,7 @@ class AktifitasKelasInstrukturResource extends Resource
         })->whereNotNull('id_location_studio')
             ->whereDate('tanggal', '<=', now())
             ->orderBy('tanggal', 'DESC')
+            ->whereNotNull('rating')
             ->orderBy('jam_mulai', 'DESC');
     }
 }

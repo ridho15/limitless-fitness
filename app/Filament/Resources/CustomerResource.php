@@ -13,6 +13,7 @@ use App\Models\OrderPaket;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
@@ -201,6 +202,8 @@ class CustomerResource extends Resource
                                 ->log('Melakukan login ke user ' . $record->name);
 
                             Auth::loginUsingId($record->id);
+                            Filament::auth()->loginUsingId($record->id);
+                            session()->regenerate();
                             return redirect()->route('base');
                         })
                 ])

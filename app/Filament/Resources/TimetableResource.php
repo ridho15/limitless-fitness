@@ -39,6 +39,8 @@ class TimetableResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Timetable';
 
+    protected static ?int $navigationSort = 2;
+
     public $instruktur = [];
 
     public static function form(Form $form): Form
