@@ -135,9 +135,15 @@ class OrderPaketResource extends Resource
                     })
                     ->view('custom-column.order-paket')
                     ->searchable(),
-                TextColumn::make('user.email')
-                    ->label('Email')
-                    ->hidden()
+                ViewColumn::make('user.email')
+                    ->label('Customer')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->user->email
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
                     ->searchable(),
                 ViewColumn::make('paket.nama')
                     ->label('Paket')
