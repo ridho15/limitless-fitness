@@ -101,7 +101,7 @@ class InstrukturOmsetResource extends Resource
                         if ($data['created_from'] != null && $data['created_until'] != null) {
                             static::$tanggal_awal = $data['created_from'];
                             static::$tanggal_akhir = $data['created_until'];
-                        } 
+                        }
                         return $query->when($data['created_from'], function (Builder $query, $date) {
                             return $query->whereDate('tanggal', '>=', $date);
                         })->when($data['created_until'], function (Builder $query, $date) {
@@ -178,7 +178,7 @@ class InstrukturOmsetResource extends Resource
         // return parent::getEloquentQuery();
         return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
             $query->where('id_user', Auth::id());
-        })->withCount(['bookingKelas' => function (Builder $query) {
+        })->with('kelas')->withCount(['bookingKelas' => function (Builder $query) {
             $query->where('status_kehadiran', 1)
                 ->orWhereNull('status_kehadiran');
         }])->having('booking_kelas_count', ">", 0)
