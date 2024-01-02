@@ -54,12 +54,14 @@ class PendapatanOverView extends BaseWidget
         foreach ($listKelas as $item) {
             $fee = $item->fee;
             $listKelasActivity = KelasActivity::where('id_kelas', $item->id)
-                ->whereMonth('tanggal', now())
+                ->where(function ($query) {
+                    $query->whereMonth('tanggal', now())
+                        ->whereDate('tanggal', '<=', now());
+                })
                 ->withCount(['bookingKelas' => function ($query) {
                     $query->where('status_kehadiran', 1)
                         ->orWhereNull('status_kehadiran');
                 }])->having('booking_kelas_count', '>=', $item->min_anggota)
-                ->orderBy('tanggal', 'DESC')
                 ->count();
             $feeInstruktur += $fee * $listKelasActivity;
         }

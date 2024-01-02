@@ -183,6 +183,6 @@ class InstrukturOmsetResource extends Resource
                 ->orWhereNull('status_kehadiran');
         }])->having('booking_kelas_count', ">", 0)
             ->whereDate('tanggal', '<=', now())
-            ->orderBy('tanggal', 'ASC');
+            ->orderBy('id', 'DESC');
     }
 }

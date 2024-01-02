@@ -65,8 +65,7 @@ class OrderPaket extends Model
 
     public function getSisaSessionAttribute()
     {
-        $paket = Paket::find($this->id_paket);
-        $bookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) use ($paket) {
+        $bookingKelas = BookingKelas::whereHas('kelasActivity', function ($query) {
             $query->whereHas('kelas', function ($query) {
                 $query->whereHas('paket', function ($query) {
                     $query->whereHas('orderPaket', function ($query) {
