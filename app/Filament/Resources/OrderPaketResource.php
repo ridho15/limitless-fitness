@@ -137,6 +137,7 @@ class OrderPaketResource extends Resource
                     ->searchable(),
                 TextColumn::make('user.email')
                     ->label('Email')
+                    ->hidden()
                     ->searchable(),
                 ViewColumn::make('paket.nama')
                     ->label('Paket')
