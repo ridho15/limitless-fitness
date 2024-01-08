@@ -29,15 +29,6 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/testing', function () {
-    return KelasActivity::when(Auth::user()->hasRole('Instruktur'), function ($query) {
-        $query->where('id_user', Auth::id());
-    })->with('kelas')->withCount(['bookingKelas' => function ($query) {
-        $query->where('status_kehadiran', 1)
-            ->orWhereNull('status_kehadiran');
-    }])->having('booking_kelas_count', ">", 0)
-    ->limit(10)->get();
-});
 Route::get('/forgot-password-mail', function () {
     $user = User::where('email', 'kukertadesabetung@gmail.com')->first();
     $carbon = Carbon::now()->addHours(1)->isoFormat('YYYY-MM-DD H:m');

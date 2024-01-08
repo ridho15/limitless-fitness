@@ -26,20 +26,26 @@ class JadwalInstrukturAssign extends BaseWidget
     public $tanggal_awal = null;
     public $tanggal_akhir = null;
     public $id_location = null;
+    public $listKelas = [];
     protected static ?string $heading = "Slot Instruktur";
+
+    public function mount()
+    {
+        $this->listKelas = Kelas::get();
+    }
 
     protected function getTableColumns(): array
     {
-        $listKelas = Kelas::get();
+
         return [
             TextColumn::make('name')
                 ->label('Instruktur')
                 ->searchable(),
             TextColumn::make('assing_time')
                 ->label('Assign Time')
-                ->formatStateUsing(function ($record) use ($listKelas) {
+                ->formatStateUsing(function ($record) {
                     $jumlahAssing = 0;
-                    foreach ($listKelas as $kelas) {
+                    foreach ($this->listKelas as $kelas) {
                         $jumlahAssing += KelasActivity::where('id_user', $record->id)
                             ->where('id_kelas', $kelas->id)
                             ->when($this->id_location, function (Builder $query) {
@@ -65,9 +71,9 @@ class JadwalInstrukturAssign extends BaseWidget
                 }),
             TextColumn::make('jumlah_jadwal')
                 ->label('Number of Schedules')
-                ->formatStateUsing(function ($record) use ($listKelas) {
+                ->formatStateUsing(function ($record) {
                     $jumSchedule = 0;
-                    foreach ($listKelas as $kelas) {
+                    foreach ($this->listKelas as $kelas) {
                         $jumSchedule += KelasActivity::where('id_user', $record->id)
                             ->where('id_kelas', $kelas->id)
                             ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function (Builder $query, $data) {

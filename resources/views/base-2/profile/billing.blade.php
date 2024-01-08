@@ -222,7 +222,8 @@
                                             style="text-decoration: none; color: black">
                                             {{ $item->paket->nama }}
                                         </a></div>
-                                    <small class="d-block text-md-start text-center">{{ $item->paket->jumlah_pertemuan }}
+                                    <small class="d-block text-md-start text-center">{{ $item->paket->jumlah_pertemuan
+                                        }}
                                         Pertemuan</small>
                                 </div>
                                 <div class="col-md-4 text-center mt-2 mt-md-0">
