@@ -10,7 +10,7 @@
     @foreach ($listData as $index => $item)
     <div class="mb-5" id="{{ $index }}">
         <div class="">
-            <span class="fw-semibold fs-5 me-2">{{
+            <span class="fw-semibold fs-5 me-2 d-block d-md-inline">{{
                 \Carbon\Carbon::parse($item['tanggal'])->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</span>
             <small class="fw-light text-secondary">{{ $item['data']->count() }} Classes</small>
         </div>
@@ -18,36 +18,33 @@
         @if (count($item['data']) > 0)
         @foreach ($item['data'] as $data)
         <div class="row align-items-center mt-3">
-            <div class="col-md-1 text-center">
-                <div class="fw-bold text-center">Jam {{ date('H:i', strtotime($data->jam_mulai)) }}
-                </div>
+            <div class="col-md-1 col-12 d-flex d-md-block justify-content-between text-center">
+                <div class="fw-bold text-center">Jam {{ date('H:i', strtotime($data->jam_mulai)) }} </div>
                 <small class="fw-light text-secondary">{{ $data->kelas->duration }} mins</small>
             </div>
             <div class="col-md-11">
-                <div class="shadow bg-white py-3 px-5" style="border-radius: 15px">
+                <div class="shadow bg-white py-md-3 px-md-5 py-2 px-3" style="border-radius: 15px">
                     <div class="row justify-content-center align-items-center">
                         <div class="col-md-3">
-                            <span class="fw-bold d-block">{{ $data->kelas->nama_kelas }}</span>
-                            <span class="">{{ $data->nama_latihan }}</span>
+                            <span class="fw-light d-block">{{ $data->kelas->nama_kelas }}</span>
+                            <span class="fw-light">{{ $data->nama_latihan }}</span>
                         </div>
-                        <div class="col-md-3">
-                            <span class="fw-bold d-block">{{ $data->locationStudio->location->nama }}</span>
-                            <small class="fw-light d-block">{{ $data->locationStudio->nama }}</small>
+                        <div class="col-md-3 d-flex d-md-block justify-content-between">
+                            <span class="fw-bold d-md-block d-inline">{{ $data->locationStudio->location->nama }}</span>
+                            <small class="fw-bold d-md-block d-inline text-md-center">{{ $data->locationStudio->nama }}</small>
                         </div>
-                        <div class="col-md-3 text-center">
-                            <small class="text-secondary fw-bold">{{ $data->status_aktivitas_kelas }}</small>
-                            <small class="fw-light d-block">{{ $data->user->name }}</small>
-
+                        <div class="col-md-3 text-center d-flex d-md-block justify-content-between mt-2 mt-md-0">
+                            <span class="text-secondary fw-bold">{{ $data->status_aktivitas_kelas }}</span>
+                            <span class="fw-bold d-block">{{ $data->user->name }}</span>
                         </div>
-                        <div class="col-md-3 text-end">
+                        <div class="col-md-3 col-12 text-end mt-2 mt-md-0">
                             <form action="{{ route('detail-timetable', ['id' => $data->id]) }}" method="GET">
-                                <button type="submit" class="btn custom-btn" @if ($data->status != 1) disabled @endif
+                                <button type="submit" class="btn custom-btn w-100" @if ($data->status != 1) disabled @endif
                                     style="padding-left: 50px; padding-right: 50px">
                                     @if ($data->status != 1)
-                                    Waitlist
+                                        Waitlist
                                     @else
-                                    Join <br>
-                                    Class
+                                        Join Class
                                     @endif
                                 </button>
                             </form>

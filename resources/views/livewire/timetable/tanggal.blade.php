@@ -58,7 +58,7 @@
         <div class="dropdown col-10">
             <button class="btn btn-custom-filter btn-block dropdown-toggle shadow-sm border w-100" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                Class
+                {{ $nama_kelas }}
             </button>
             <ul class="dropdown-menu w-100">
                 <li><a class="dropdown-item" href="#" wire:click="$emit('onChangeClass',0 )">Close Class</a></li>
@@ -80,7 +80,6 @@
 <script>
     Livewire.on('onClickTanggal', (index, tanggal) => {
             Livewire.emit('setTanggal', index)
-            Livewire.emit('changeTanggal', tanggal)
         })
 
         Livewire.on('onChangeCategory', (category) => {

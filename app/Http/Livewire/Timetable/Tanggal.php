@@ -14,20 +14,19 @@ class Tanggal extends Component
     public $listeners = [
         'setTanggal',
         'onClickCari',
-        'changetanggal'
+        'changetanggal',
+        'changeClass'
     ];
-    protected $listTanggal;
+    protected $listTanggal = [];
     public $indexTanggal;
     public $listKelas = [];
     public $listLocation = [];
     public $listInstruktur = [];
     public $cari;
     public $tanggal;
+    public $nama_kelas = "Class";
     public function render()
     {
-        $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
-        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
-        $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
         $data['listTanggal'] = $this->listTanggal;
         return view('livewire.timetable.tanggal', $data);
     }
@@ -40,6 +39,14 @@ class Tanggal extends Component
             $query->where('name', 'Instruktur');
         })->get();
         $this->tanggal = now();
+
+        $this->updateTanggal();
+    }
+
+    public function updateTanggal(){
+        $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
+        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
+        $this->listTanggal = CarbonPeriod::create($startDate, $endDate);
     }
 
     public function setTanggal($index)
@@ -49,15 +56,25 @@ class Tanggal extends Component
         $listTanggal = CarbonPeriod::create($startDate, $endDate)->toArray();
         $this->emit('changeTanggal', $listTanggal[$index]);
         $this->indexTanggal = $index;
+
+        $this->updateTanggal();
     }
 
     public function onClickCari()
     {
         $this->emit('setCari', $this->cari);
+        $this->updateTanggal();
     }
 
-    public function changeTanggal()
+    public function changeClass($id_kelas)
     {
-        $this->emit('changeTanggal', $this->tanggal);
+        $kelas = Kelas::find($id_kelas);
+        if (!$kelas) {
+            $this->nama_kelas = 'Class';
+        } else {
+            $this->nama_kelas = $kelas->nama_kelas;
+        }
+
+        $this->updateTanggal();
     }
 }

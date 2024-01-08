@@ -9,7 +9,7 @@
             </div>
         </div>
     </div>
-    <div class="shadow-sm bg-white sticky-top py-2" style="top: 70px; z-index: 2 !important;">
+    <div class="shadow-sm bg-white sticky-top py-2" style="top: 55px; z-index: 2 !important;">
         <div class="container my-3">
             @livewire('timetable.tanggal')
         </div>

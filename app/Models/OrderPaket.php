@@ -110,6 +110,6 @@ class OrderPaket extends Model
 
     public function location()
     {
-        return $this->belongsTo(Location::class, 'id_location');
+        return $this->belongsTo(Location::class, 'id_location')->withDefault();
     }
 }

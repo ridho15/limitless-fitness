@@ -42,7 +42,7 @@
         <a href="{{ route('profile.voucher') }}" class="menu-profile">
             <div class="row mb-3 align-items-center @if ($active == 'voucher') active @endif">
                 <div class="col-md-2 col-2 fs-5">
-                    <i class="fa-solid fa-diamond"></i>
+                    <i class="fa-solid fa-ticket"></i>
                 </div>
                 <div class="col-md col">
                     My Voucher

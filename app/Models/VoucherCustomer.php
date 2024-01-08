@@ -47,6 +47,6 @@ class VoucherCustomer extends Model
 
     public function orderPaket()
     {
-        return $this->belongsTo(OrderPaket::class, 'id_order_paket');
+        return $this->belongsTo(OrderPaket::class, 'id_order_paket')->withDefault();
     }
 }

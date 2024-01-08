@@ -10,6 +10,7 @@ use App\Models\KelasActivity;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
+use App\Models\VoucherCustomer;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
@@ -245,6 +246,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'voucher';
+        $data['listVoucherCustomer'] = VoucherCustomer::where('id_customer', Auth::id())->orderBy('created_at', 'DESC')->get();
         return view('base-2.profile.voucher', $data);
     }
 

@@ -35,7 +35,7 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse ms-md-5 ms-0" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'home') active nav-link-fs @endif"
@@ -50,10 +50,10 @@
                             href="{{ route('packages') }}">Packages</a>
                     </li>
                     @if (Auth::user())
-                        <li class="nav-item ">
-                            <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
-                                href="{{ route('timetable') }}">Timetable</a>
-                        </li>
+                    <li class="nav-item ">
+                        <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
+                            href="{{ route('timetable') }}">Timetable</a>
+                    </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'location') active nav-link-fs @endif"
@@ -66,63 +66,63 @@
                     </li>
                 </ul>
                 @if (\Auth::user())
-                    <div class="dropdown">
-                        <button class="btn dropdown-toggle d-flex align-items-center justify-content-center"
-                            type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                            style="border: none !important">
-                            <span class="text-white fw-bold mx-1 text-uppercase rounded-circle px-3"
-                                style="background-color: purple; padding: 10px;">
-                                {{ substr(Auth::user()->name, 0, 2) }}
-                            </span>
-                            <span class="mx-1 text-white">{{ Auth::user()->name }}</span>
-                        </button>
-                        <ul class="dropdown-menu bg-color-custom w-100" style="z-index: 100">
-                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile') }}"><i
-                                        class="fa-regular fa-circle-user"></i> <span class="mx-2">My
-                                        Profile</span></a>
-                            </li>
-                            <li class="my-2"><a class="dropdown-item text-white"
-                                    href="{{ route('profile.bookings') }}"><i class="fa-regular fa-credit-card"></i>
-                                    <span class="mx-2">My
-                                        Bookings</span></a></li>
-                            <li class="my-2"><a class="dropdown-item text-white"
-                                    href="{{ route('profile.packages') }}"><i
-                                        class="fa-solid fa-hand-holding-heart"></i>
-                                    <span class="mx-2">My Packages</span></a>
-                            </li>
-                            {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
-                                        class="fa-solid fa-users-rectangle"></i>
-                                    <span class="mx-2">My Membership</span></a>
-                            </li> --}}
-                            <li class="my-2" class="px-2">
-                                <hr>
-                            </li>
-                            <li class="my-2"><a class="dropdown-item text-white"
-                                    href="{{ route('profile.billing') }}"><i class="fa-solid fa-comments-dollar"></i>
-                                    <span class="mx-2">Billing</span></a></li>
-                            {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.notification-settings') }}"><i
-                                        class="fa-solid fa-bullhorn"></i> <span class="mx-2">Notification
-                                        Settings</span></a></li> --}}
-                            {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
-                                        class="fa-solid fa-clipboard"></i> <span class="mx-2">Waiver Form</span></a>
-                            </li> --}}
-                            <li class="my-2">
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button class="dropdown-item text-white" type="submit"><i
-                                            class="fa-solid fa-right-from-bracket"></i> <span
-                                            class="mx-2">Logout</span></button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle d-flex align-items-center justify-content-center" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="border: none !important">
+                        <span class="text-white fw-bold mx-1 text-uppercase rounded-circle px-3"
+                            style="background-color: purple; padding: 10px;">
+                            {{ substr(Auth::user()->name, 0, 2) }}
+                        </span>
+                        <span class="mx-1 text-white">{{ Auth::user()->name }}</span>
+                    </button>
+                    <ul class="dropdown-menu bg-color-custom w-100" style="z-index: 100">
+                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile') }}"><i
+                                    class="fa-regular fa-circle-user"></i> <span class="mx-2">My Profile</span></a>
+                        </li>
+                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.bookings') }}"><i
+                                    class="fa-regular fa-credit-card"></i>
+                                <span class="mx-2">My Bookings</span></a></li>
+                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.voucher') }}"><i class="fa-solid fa-ticket"></i>
+                                <span class="mx-2">My Voucher</span></a></li>
+                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.packages') }}"><i
+                                    class="fa-solid fa-hand-holding-heart"></i>
+                                <span class="mx-2">My Packages</span></a>
+                        </li>
+                        {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
+                                    class="fa-solid fa-users-rectangle"></i>
+                                <span class="mx-2">My Membership</span></a>
+                        </li> --}}
+                        <li class="my-2" class="px-2">
+                            <hr>
+                        </li>
+                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.billing') }}"><i
+                                    class="fa-solid fa-comments-dollar"></i>
+                                <span class="mx-2">Billing</span></a></li>
+                        {{-- <li class="my-2"><a class="dropdown-item"
+                                href="{{ route('profile.notification-settings') }}"><i class="fa-solid fa-bullhorn"></i>
+                                <span class="mx-2">Notification
+                                    Settings</span></a></li> --}}
+                        {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
+                                    class="fa-solid fa-clipboard"></i> <span class="mx-2">Waiver Form</span></a>
+                        </li> --}}
+                        <li class="my-2">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button class="dropdown-item text-white" type="submit"><i
+                                        class="fa-solid fa-right-from-bracket"></i> <span
+                                        class="mx-2">Logout</span></button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
                 @else
-                    <a href="{{ route('login') }}"
-                        class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline"
+                <div class="d-flex justify-content-evenly align-items-center">
+                    <a href="{{ route('login') }}" class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline"
                         style="border-color: white; color: white">Login / Registrasi</a>
                     <button type="button"
                         class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline ms-3 btn-ganti-lokasi"
                         style="border-color: white; color: white">Ganti Lokasi</button>
+                </div>
                 @endif
             </div>
         </div>

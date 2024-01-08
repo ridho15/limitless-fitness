@@ -35,17 +35,16 @@
                         @foreach ($listPaketAktif as $item)
                         <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4 d-flex justify-content-between align-items-center d-block">
                                     <div class="fw-bold text-start">
                                         <a href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
                                             style="text-decoration: none; color: black">
                                             {{ $item->paket->nama }}
                                         </a>
                                     </div>
-                                    <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
-                                        Pertemuan</small>
+                                    <small class="d-block text-start text-center">{{ $item->paket->jumlah_pertemuan }} Pertemuan</small>
                                 </div>
-                                <div class="col-md-4 text-center">
+                                <div class="col-md-4 text-center mt-2 mt-md-0">
                                     <div class="fw-bold text-center">{{ $item->harga_formatted }}</div>
                                     <small class="d-block text-center">Diskon
                                         {{ $item->paket->diskon }}%</small>
@@ -68,8 +67,8 @@
                                 </div>
                             </div>
                             <div class="row mt-4 align-items-center justify-content-between">
-                                <div class="col-md-4 fw-bold text-start">Pembayaran</div>
-                                <div class="col-md-4 text-center">
+                                <div class="col-md-4 fw-bold text-center text-md-start">Pembayaran</div>
+                                <div class="col-md-4 text-center mt-2 mt-md-0 mb-2 mb-md-0">
                                     <small class="d-block text-center">
                                         @if ($item->tanggal_pembayaran == null)
                                         Belum melakukan pembayaran
@@ -130,13 +129,13 @@
                         @foreach ($listPaketExpired as $item)
                         <div class="bg-white shadow border p-4 mb-3" style="border-radius: 15px">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4 d-flex d-md-block justify-content-between align-items-center">
                                     <div class="fw-bold text-start"> <a
                                             href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
                                             style="text-decoration: none; color: black">
                                             {{ $item->paket->nama }} {{ $item->id }}
                                         </a></div>
-                                    <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
+                                    <small class="d-block text-md-start text-center">{{ $item->paket->jumlah_pertemuan }}
                                         Pertemuan</small>
                                 </div>
                                 <div class="col-md-4 text-center">
@@ -157,11 +156,10 @@
                                     </div>
                                     @endif
                                 </div>
-
                             </div>
                             <div class="row mt-4 align-items-center justify-content-between">
-                                <div class="col-md-4 fw-bold text-start">Pembayaran</div>
-                                <div class="col-md-4 text-center">
+                                <div class="col-md-4 fw-bold text-md-start text-center">Pembayaran</div>
+                                <div class="col-md-4 text-center mt-2 mt-md-0 mb-2 mb-md-0">
                                     <small class="d-block text-center">
                                         @if ($item->tanggal_pembayaran == null)
                                         Belum melakukan pembayaran
