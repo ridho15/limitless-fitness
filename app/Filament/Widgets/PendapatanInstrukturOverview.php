@@ -12,7 +12,7 @@ use Filament\Widgets\StatsOverviewWidget\Card;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 
-class PendapatanInstrukturOverview extends BaseWidget
+class  PendapatanInstrukturOverview extends BaseWidget
 {
     protected static string $view = 'custom-widget.filter-widget';
 

@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Filament\Resources\InstrukturOmsetResource;
 use App\Models\BookingKelas;
+use App\Models\Jurnal;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
 use App\Models\Location;
@@ -38,68 +39,60 @@ class OmsetTable extends BaseWidget
             TextColumn::make('jumlah_pertemuan')
                 ->alignCenter()
                 ->formatStateUsing(function ($record) {
-                    $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-                        $query->whereIn('status_kehadiran', [0, 1]);
-                    }])->when(Auth::user()->hasRole('Instruktur'), function ($query, $data) {
+                    $jumlahPertemuan = KelasActivity::when(Auth::user()->hasRole('Instruktur'), function ($query, $data) {
                         $query->where('id_user', Auth::id());
                     })->when($this->id_location, function ($query, $data) {
                         return $query->whereHas('locationStudio', function ($query) {
                             return $query->where('id_location', $this->id_location);
                         });
-                    })
+                    })->withCount(['bookingKelas' => function ($query) {
+                        $query->where('status_kehadiran', 1)
+                            ->whereNull('status_kehadiran');
+                    }])->having('booking_kelas_count', '>=', $record->min_anggota)
                         ->where('id_kelas', $record->id)
                         ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function ($query, $data) {
                             return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
                                 ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                        })->get();
-
-                    $jumlahPertemuan = 0;
-                    foreach ($listKelasActivity as $item) {
-                        $jumlahPeserta = 0;
-                        foreach ($item->bookingKelas as $bookingKelas) {
-                            if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
-                                $jumlahPeserta++;
-                            }
-                        }
-
-                        if ($item->kelas->min_anggota <= $jumlahPeserta) {
-                            $jumlahPertemuan++;
-                        }
-                    }
+                        })->count();
 
                     return $jumlahPertemuan;
                 }),
             TextColumn::make('omset')
                 ->formatStateUsing(function ($record) {
-                    $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-                        return $query->whereIn('status_kehadiran', [0, 1]);
-                    }])->when(Auth::user()->hasRole('Instruktur'), function ($query, $data) {
-                        $query->where('id_user', Auth::id());
-                    })
-                        ->where('id_kelas', $record->id)
-                        ->when($this->id_location, function ($query, $data) {
-                            return $query->whereHas('locationStudio', function ($query) {
-                                return $query->where('id_location', $this->id_location);
-                            });
-                        })
-                        ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function ($query, $data) {
-                            return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
-                                ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                        })->get();
+                    $omset = Jurnal::whereHas('orderPaket', function ($query) use ($record) {
+                        $query->whereHas('paket', function ($query) use ($record) {
+                            $query->where('id_kelas', $record->id);
+                        });
+                    })->where('tipe', 1)->sum('jumlah_uang');
+                    // $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
+                    //     return $query->whereIn('status_kehadiran', [0, 1]);
+                    // }])->when(Auth::user()->hasRole('Instruktur'), function ($query, $data) {
+                    //     $query->where('id_user', Auth::id());
+                    // })
+                    //     ->where('id_kelas', $record->id)
+                    //     ->when($this->id_location, function ($query, $data) {
+                    //         return $query->whereHas('locationStudio', function ($query) {
+                    //             return $query->where('id_location', $this->id_location);
+                    //         });
+                    //     })
+                    //     ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function ($query, $data) {
+                    //         return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
+                    //             ->whereDate('tanggal', '<=', $this->tanggal_akhir);
+                    //     })->get();
 
-                    $omset = 0;
-                    foreach ($listKelasActivity as $item) {
-                        $jumlahPeserta = 0;
-                        foreach ($item->bookingKelas as $bookingKelas) {
-                            if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
-                                $jumlahPeserta++;
-                            }
-                        }
+                    // $omset = 0;
+                    // foreach ($listKelasActivity as $item) {
+                    //     $jumlahPeserta = 0;
+                    //     foreach ($item->bookingKelas as $bookingKelas) {
+                    //         if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
+                    //             $jumlahPeserta++;
+                    //         }
+                    //     }
 
-                        if ($item->kelas->min_anggota <= $jumlahPeserta) {
-                            $omset += $item->kelas->fee;
-                        }
-                    }
+                    //     if ($item->kelas->min_anggota <= $jumlahPeserta) {
+                    //         $omset += $item->kelas->fee;
+                    //     }
+                    // }
 
                     return 'Rp.' . number_format($omset, 0, ',', '.');
                 })
