@@ -45,7 +45,6 @@ class  PendapatanInstrukturOverview extends BaseWidget
 
     protected function getCards(): array
     {
-        sleep(5);
         $listCard = [];
         if (!$this->readyToLoad) {
             array_push($listCard, Card::make('Jumlah Pertemuan 1 Bulan', 0)
