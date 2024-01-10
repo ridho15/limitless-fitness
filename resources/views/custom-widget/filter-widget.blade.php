@@ -1,4 +1,4 @@
-<x-filament::widget class="filament-stats-overview-widget">
+<x-filament::widget class="filament-stats-overview-widget" wire:init="loadData">
     <div class="rounded overflow-hidden shadow-lg mb-4" style="border-radius: 1rem !important">
         <div class="px-6 pt-4 pb-2"
             style="padding-top: 1rem; padding-bottom: 1rem; background-color: white; overflow: auto !important; max-height: 1200px;">

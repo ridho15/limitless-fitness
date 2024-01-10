@@ -29,17 +29,63 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/testing', function(){
-    $listKelasActivity = KelasActivity::when(Auth::user()->hasRole(['Instruktur']), function ($query) {
-        $query->where('id_user', Auth::id());
-    })->with('kelas')->withCount(['bookingKelas' => function ($query) {
-        $query->where('status_kehadiran', 1)
-            ->orWhereNull('status_kehadiran');
-    }])->having('booking_kelas_count', ">", 0)
-        ->whereDate('tanggal', '<=', now())
-        ->orderBy('id', 'DESC')->first();
+Route::get('/testing', function () {
+    $listKelas = Kelas::get();
+    $totalPendapatan = 0;
+    $totalPendapatanSatuBulan = 0;
+    $jumlahPertemuan = 0;
+    $jumlahPertemuanSatuBulan = 0;
+    $id_location = null;
+    $tanggal_awal = Carbon::now()->subDays(7);
+    $tanggal_akhir = Carbon::now();
+    foreach ($listKelas as $item) {
+        $jumlahKelasAktifSatuBulan = KelasActivity::where('id_kelas', $item->id)
+            ->when($id_location, function ($query, $id_location) {
+                $query->whereHas('locationStudio', function ($query) use ($id_location) {
+                    $query->where('id_location', $id_location);
+                });
+            })
+            ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
+                $query->where('id_user', Auth::id());
+            })->withCount(['bookingKelas' => function ($query) {
+                $query->where('status_kehadiran', 1)
+                    ->orWhereNull('status_kehadiran');
+            }])->having('booking_kelas_count', '>=', $item->min_anggota)
+            ->whereDate('tanggal', '<=', $tanggal_akhir)
+            ->whereDate('tanggal', '>=', $tanggal_awal)
+            ->count();
+
+        $totalPendapatanSatuBulan += $item->fee * $jumlahKelasAktifSatuBulan;
+
+        $listKelasActivity = KelasActivity::where('id_kelas', $item->id)
+            ->when($id_location, function ($query, $id_location) {
+                $query->whereHas('locationStudio', function ($query) use ($id_location) {
+                    $query->where('id_location', $id_location);
+                });
+            })
+            ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
+                $query->where('id_user', Auth::id());
+            })
+            // ->withCount(['bookingKelas' => function ($query) {
+            //     $query->where('status_kehadiran', 1)
+            //         ->orWhereNull('status_kehadiran');
+            // }])
+            // ->having('booking_kelas_count', '>=', $item->min_anggota)
+            ->loadCount('bookingKelas')
+            ->whereDate('tanggal', '<=', now())
+            ->limit(10)
+            ->get();
 
         return $listKelasActivity;
+
+        // $totalPendapatan += $item->fee * $jumlahKelasAktif;
+        // $jumlahPertemuanSatuBulan += $jumlahKelasAktifSatuBulan;
+        // $jumlahPertemuan += $jumlahKelasAktif;
+    }
+
+    return [
+        $totalPendapatan, $jumlahPertemuanSatuBulan, $jumlahPertemuan
+    ];
 });
 Route::get('/forgot-password-mail', function () {
     $user = User::where('email', 'kukertadesabetung@gmail.com')->first();

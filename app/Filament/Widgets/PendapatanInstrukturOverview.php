@@ -24,6 +24,13 @@ class  PendapatanInstrukturOverview extends BaseWidget
 
     public $listLocation = [];
 
+    public bool $readyToLoad = false;
+
+    public function loadData()
+    {
+        $this->readyToLoad = true;
+    }
+
     public function render(): View
     {
         return view(static::$view, $this->getViewData());
@@ -38,63 +45,81 @@ class  PendapatanInstrukturOverview extends BaseWidget
 
     protected function getCards(): array
     {
+        sleep(5);
         $listCard = [];
-        $listKelas = Kelas::get();
-        $totalPendapatan = 0;
-        $totalPendapatanSatuBulan = 0;
-        $jumlahPertemuan = 0;
-        $jumlahPertemuanSatuBulan = 0;
+        if (!$this->readyToLoad) {
+            array_push($listCard, Card::make('Jumlah Pertemuan 1 Bulan', 0)
+                ->description('Jumlah Pertamuan dalam bulan ini loading ...')->color('primary'));
 
-        foreach ($listKelas as $item) {
-            $jumlahKelasAktifSatuBulan = KelasActivity::where('id_kelas', $item->id)
-                ->when($this->id_location, function ($query) {
-                    $query->whereHas('locationStudio', function ($query) {
-                        $query->where('id_location', $this->id_location);
-                    });
-                })
-                ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
-                    $query->where('id_user', Auth::id());
-                })->withCount(['bookingKelas' => function ($query) {
-                    $query->where('status_kehadiran', 1)
-                        ->orWhereNull('status_kehadiran');
-                }])->having('booking_kelas_count', '>=', $item->min_anggota)->whereDate('tanggal', '<=', $this->tanggal_akhir)
-                ->whereDate('tanggal', '>=', $this->tanggal_awal)
-                ->count();
+            array_push($listCard, Card::make('Jumlah Pertemuan', 0)
+                ->description('Jumlah pertemuan seluruh nya loading ...')->color('primary'));
 
-            $totalPendapatanSatuBulan += $item->fee * $jumlahKelasAktifSatuBulan;
+            array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format(0, 0, ',', '.'))
+                ->description('Penghasilan dalam bulan ini loading ...')->color('primary'));
 
-            $jumlahKelasAktif = KelasActivity::where('id_kelas', $item->id)
-                ->when($this->id_location, function ($query) {
-                    $query->whereHas('locationStudio', function ($query) {
-                        $query->where('id_location', $this->id_location);
-                    });
-                })
-                ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
-                    $query->where('id_user', Auth::id());
-                })->withCount(['bookingKelas' => function ($query) {
-                    $query->where('status_kehadiran', 1)
-                        ->orWhereNull('status_kehadiran');
-                }])->having('booking_kelas_count', '>=', $item->min_anggota)->whereDate('tanggal', '<=', now())
-                ->count();
+            array_push($listCard, Card::make('Total Penghasilan', 'Rp.' . number_format(0, 0, ',', '.'))
+                ->description('Penghasilan keseluruhan loading ...')->color('primary'));
 
-            $totalPendapatan += $item->fee * $jumlahKelasAktif;
-            $jumlahPertemuanSatuBulan += $jumlahKelasAktifSatuBulan;
-            $jumlahPertemuan += $jumlahKelasAktif;
+            return $listCard;
+        } else {
+            $listKelas = Kelas::get();
+            $totalPendapatan = 0;
+            $totalPendapatanSatuBulan = 0;
+            $jumlahPertemuan = 0;
+            $jumlahPertemuanSatuBulan = 0;
+
+            foreach ($listKelas as $item) {
+                $jumlahKelasAktifSatuBulan = KelasActivity::where('id_kelas', $item->id)
+                    ->when($this->id_location, function ($query) {
+                        $query->whereHas('locationStudio', function ($query) {
+                            $query->where('id_location', $this->id_location);
+                        });
+                    })
+                    ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
+                        $query->where('id_user', Auth::id());
+                    })->withCount(['bookingKelas' => function ($query) {
+                        $query->where('status_kehadiran', 1)
+                            ->orWhereNull('status_kehadiran');
+                    }])->having('booking_kelas_count', '>=', $item->min_anggota)
+                    ->whereDate('tanggal', '<=', $this->tanggal_akhir)
+                    ->whereDate('tanggal', '>=', $this->tanggal_awal)
+                    ->count();
+
+                $totalPendapatanSatuBulan += $item->fee * $jumlahKelasAktifSatuBulan;
+
+                $jumlahKelasAktif = KelasActivity::where('id_kelas', $item->id)
+                    ->when($this->id_location, function ($query) {
+                        $query->whereHas('locationStudio', function ($query) {
+                            $query->where('id_location', $this->id_location);
+                        });
+                    })
+                    ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
+                        $query->where('id_user', Auth::id());
+                    })->withCount(['bookingKelas' => function ($query) {
+                        $query->where('status_kehadiran', 1)
+                            ->orWhereNull('status_kehadiran');
+                    }])->having('booking_kelas_count', '>=', $item->min_anggota)
+                    ->whereDate('tanggal', '<=', now())
+                    ->count();
+
+                $totalPendapatan += $item->fee * $jumlahKelasAktif;
+                $jumlahPertemuanSatuBulan += $jumlahKelasAktifSatuBulan;
+                $jumlahPertemuan += $jumlahKelasAktif;
+            }
+
+            array_push($listCard, Card::make('Jumlah Pertemuan 1 Bulan', $jumlahPertemuanSatuBulan)
+                ->description('Jumlah Pertamuan dalam bulan ini')->color('primary'));
+
+            array_push($listCard, Card::make('Jumlah Pertemuan', $jumlahPertemuan)
+                ->description('Jumlah pertemuan seluruh nya')->color('primary'));
+
+            array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($totalPendapatanSatuBulan, 0, ',', '.'))
+                ->description('Penghasilan dalam bulan ini')->color('primary'));
+
+            array_push($listCard, Card::make('Total Penghasilan', 'Rp.' . number_format($totalPendapatan, 0, ',', '.'))
+                ->description('Penghasilan keseluruhan')->color('primary'));
+            return $listCard;
         }
-
-        array_push($listCard, Card::make('Jumlah Pertemuan 1 Bulan', $jumlahPertemuanSatuBulan)
-            ->description('Jumlah Pertamuan dalam bulan ini')->color('primary'));
-
-        array_push($listCard, Card::make('Jumlah Pertemuan', $jumlahPertemuan)
-            ->description('Jumlah pertemuan seluruh nya')->color('primary'));
-
-        array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($totalPendapatanSatuBulan, 0, ',', '.'))
-            ->description('Penghasilan dalam bulan ini')->color('primary'));
-
-        array_push($listCard, Card::make('Total Penghasilan', 'Rp.' . number_format($totalPendapatan, 0, ',', '.'))
-            ->description('Penghasilan keseluruhan')->color('primary'));
-
-        return $listCard;
     }
 
     public function setFromDate($tanggal)

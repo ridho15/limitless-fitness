@@ -149,6 +149,7 @@ class InstrukturOmsetResource extends Resource
 
     public static function getWidgets(): array
     {
+        // return [];
         $pendapatanInstruktur = PendapatanInstrukturOverview::class;
         return [
             $pendapatanInstruktur,
@@ -181,7 +182,8 @@ class InstrukturOmsetResource extends Resource
         })->with('kelas')->withCount(['bookingKelas' => function (Builder $query) {
             $query->where('status_kehadiran', 1)
                 ->orWhereNull('status_kehadiran');
-        }])->having('booking_kelas_count', ">", 0)
+        }])
+            ->having('booking_kelas_count', ">", 0)
             ->whereDate('tanggal', '<=', now())
             ->orderBy('id', 'DESC');
     }
