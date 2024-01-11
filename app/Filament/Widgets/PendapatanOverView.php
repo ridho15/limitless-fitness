@@ -36,7 +36,8 @@ class PendapatanOverView extends BaseWidget
     public $listLocation = [];
     public $id_location;
 
-    public function mount(){
+    public function mount()
+    {
         $this->listLocation = Location::get();
     }
 
@@ -50,7 +51,7 @@ class PendapatanOverView extends BaseWidget
         $listCard = [];
         if (!$this->readyToLoad) {
             array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format(0, 0, ',', '.'))
-            ->description('Omset dalam bulan ini loading ...')->color('primary'));
+                ->description('Omset dalam bulan ini loading ...')->color('primary'));
             array_push($listCard, Card::make('Biaya Instruktur', 'Rp.' . number_format(0, 0, ',', '.'))->description('Biaya instruktur per order paket bulan ini loading ...')->color('primary'));
             array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format(0, 0, ',', '.'))->description('Pembayaran instruktur per order paket bulan ini loading ...')->color('primary'));
             array_push($listCard, Card::make('Customer Bulan ini', number_format(0, 0, ',', '.'))->description('Jumlah customer tambahan bulan ini loading ...')->color('primary'));
@@ -59,8 +60,8 @@ class PendapatanOverView extends BaseWidget
             return $listCard;
         } else {
             // Omset dalam 1 bulan
-            $omsetDalamSatuBulan = Jurnal::when($this->id_location, function($query){
-                $query->whereHas('orderPaket', function($query){
+            $omsetDalamSatuBulan = Jurnal::when($this->id_location, function ($query) {
+                $query->whereHas('orderPaket', function ($query) {
                     $query->where('id_location', $this->id_location);
                 });
             })->whereMonth('created_at', now())
@@ -73,7 +74,11 @@ class PendapatanOverView extends BaseWidget
                 ]));
 
             // Biaya Instruktur
-            $biayaInstruktur = Jurnal::whereNotNull('id_parent')
+            $biayaInstruktur = Jurnal::when($this->id_location, function ($query) {
+                $query->whereHas('orderPaket', function ($query) {
+                    $query->where('id_location', $this->id_location);
+                });
+            })->whereNotNull('id_parent')
                 ->where('tipe', 0)
                 ->whereMonth('created_at', now())
                 ->sum('jumlah_uang');
@@ -87,7 +92,12 @@ class PendapatanOverView extends BaseWidget
             $feeInstruktur = 0;
             foreach ($listKelas as $item) {
                 $fee = $item->fee;
-                $listKelasActivity = KelasActivity::where('id_kelas', $item->id)
+                $listKelasActivity = KelasActivity::when($this->id_location, function($query){
+                    $query->whereHas('locationStudio', function($query){
+                        $query->where('id_location', $this->id_location);
+                    });
+                })
+                ->where('id_kelas', $item->id)
                     ->where(function ($query) {
                         $query->whereMonth('tanggal', now())
                             ->whereDate('tanggal', '<=', now());
