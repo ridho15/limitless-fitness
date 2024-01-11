@@ -20,6 +20,8 @@ class PendapatanOverView extends BaseWidget
 {
     public $readyToLoad = false;
 
+    protected static ?string $pollingInterval = null;
+
     public $listeners = [
         'onClickOmset',
         'onClickFeeInstruktur',
@@ -42,7 +44,7 @@ class PendapatanOverView extends BaseWidget
             array_push($listCard, Card::make('Biaya Instruktur', 'Rp.' . number_format(0, 0, ',', '.'))->description('Biaya instruktur per order paket bulan ini loading ...')->color('primary'));
             array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format(0, 0, ',', '.'))->description('Pembayaran instruktur per order paket bulan ini loading ...')->color('primary'));
             array_push($listCard, Card::make('Customer Bulan ini', number_format(0, 0, ',', '.'))->description('Jumlah customer tambahan bulan ini loading ...')->color('primary'));
-            array_push($listCard, Card::make('Profit Bulan ini', 'Rp.' . number_format(0, 0, ',', '.'))->description('Total profit dalam 1 bulan ini loading')->color('primary'));
+            array_push($listCard, Card::make('Profit Bulan ini', 'Rp.' . number_format(0, 0, ',', '.'))->description('Total profit dalam 1 bulan ini loading ...')->color('primary'));
 
             return $listCard;
         } else {
