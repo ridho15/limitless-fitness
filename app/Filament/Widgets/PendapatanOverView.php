@@ -10,6 +10,7 @@ use App\Filament\Resources\OmsetResource;
 use App\Models\Jurnal;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
+use App\Models\Location;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -20,6 +21,8 @@ class PendapatanOverView extends BaseWidget
 {
     public $readyToLoad = false;
 
+    protected static string $view = 'custom-widget.filter-widget-dashboard';
+
     protected static ?string $pollingInterval = null;
 
     public $listeners = [
@@ -29,6 +32,13 @@ class PendapatanOverView extends BaseWidget
         'onClickProfit',
         'onClickBiayaInstruktur'
     ];
+
+    public $listLocation = [];
+    public $id_location;
+
+    public function mount(){
+        $this->listLocation = Location::get();
+    }
 
     public function loadData()
     {
@@ -49,7 +59,11 @@ class PendapatanOverView extends BaseWidget
             return $listCard;
         } else {
             // Omset dalam 1 bulan
-            $omsetDalamSatuBulan = Jurnal::whereMonth('created_at', now())
+            $omsetDalamSatuBulan = Jurnal::when($this->id_location, function($query){
+                $query->whereHas('orderPaket', function($query){
+                    $query->where('id_location', $this->id_location);
+                });
+            })->whereMonth('created_at', now())
                 ->where('tipe', 1)->sum('jumlah_uang');
 
             array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omsetDalamSatuBulan, 0, ',', '.'))
