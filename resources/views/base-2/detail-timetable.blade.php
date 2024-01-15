@@ -164,7 +164,7 @@
                                                 <Strong>Profile -> My Bookings</Strong></a></small>
                                     @endif
                                     <button type="button" class="btn custom-btn w-100 mb-1" id="btn_book_now"
-                                        @if ($isActive == false || $isBookign == true || $orderPaket->sisa <= 0 || $kelasActivity->status != 1) disabled @endif>
+                                        @if ($isActive == false || $isBooking == true || $orderPaket->sisa <= 0 || $kelasActivity->status != 1) disabled @endif>
                                         Book Now
                                     </button>
                                     <div class="" style="font-size: 8pt">
