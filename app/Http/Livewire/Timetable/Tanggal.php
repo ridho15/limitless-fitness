@@ -14,8 +14,8 @@ class Tanggal extends Component
     public $listeners = [
         'setTanggal',
         'onClickCari',
-        'changetanggal',
-        'changeClass'
+        'changeClass',
+        'changeTanggal2'
     ];
     protected $listTanggal = [];
     public $indexTanggal;
@@ -57,6 +57,15 @@ class Tanggal extends Component
         $this->emit('changeTanggal', $listTanggal[$index]);
         $this->indexTanggal = $index;
 
+        $this->updateTanggal();
+    }
+
+    public function changeTanggal2(){
+        $startDate = Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
+        $endDate = Carbon::parse($this->tanggal)->addDays(7)->isoFormat('DD MMMM YYYY');
+        $listTanggal = CarbonPeriod::create($startDate, $endDate)->toArray();
+        $this->emit('changeTanggal', $this->tanggal);
+        $this->indexTanggal = array_search($this->tanggal, $listTanggal);
         $this->updateTanggal();
     }
 

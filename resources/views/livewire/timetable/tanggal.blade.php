@@ -44,8 +44,8 @@
         </div>
         <div class="col-md-3">
             <div class="input-group">
-                <input type="date" class="form-control" name="tanggal" wire:model='tanggal' wire:change='changeTanggal'
-                    placeholder="Cari Kelas ..." aria-label="Tulis Kelas" aria-describedby="basic-addon2"
+                <input type="date" class="form-control" name="tanggal" wire:model='tanggal' placeholder="Cari Kelas ..." wire:change='changeTanggal2'
+                    aria-label="Tulis Kelas" aria-describedby="basic-addon2"
                     style="padding-top: 10px; padding-bottom: 10px">
             </div>
         </div>

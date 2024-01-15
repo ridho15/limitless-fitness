@@ -536,70 +536,72 @@ class BaseController extends Controller
 
     public function postOrderKelas(Request $request, $id_kelas_activity)
     {
-        // Check Kelas activity
-        $kelasActivity = KelasActivity::find($id_kelas_activity);
-        if (!$kelasActivity) {
-            return redirect()->back()->with('fail', 'Data tidak ditemukan !');
-        }
 
-        // Check Order paket
-        $orderPaket = OrderPaket::where('id_user', Auth::id())
-            ->whereHas('paket', function ($query) use ($kelasActivity) {
-                $query->where('id_kelas', $kelasActivity->id_kelas);
-            })->where('sisa', '>', 0)
-            ->whereDate('expired_date', '>=', now())
-            ->where('status', 1)
-            ->first();
-
-        if (!$orderPaket) {
-            return redirect()->back()->with('fail', 'Silahkan order paket terlebih dahulu');
-        }
-
-        // if ($orderPaket->paket->location != $kelasActivity->locationStudio->id_location && $orderPaket->paket->location != 0) {
-        //     return redirect()->back()->with('fail', 'Location tidak valid dengan paket yang sudah di beli');
-        // }
-
-        //Check slot kelas
-        $jumlahBookingKelas = BookingKelas::where('id_kelas_activity', $kelasActivity->id)
-            ->where(function ($query) {
-                $query->where('status_kehadiran', 1)
-                    ->orWhereNull('status_kehadiran');
-            })->count();
-
-        if ($jumlahBookingKelas >= $kelasActivity->kelas->max_anggota) {
-            return redirect()->back()->with('fail', 'Kelas Sudah Penuh');
-        }
-
-        $bookingKelas = BookingKelas::where('id_user', Auth::id())
-            ->where('id_kelas_activity', $kelasActivity->id)->first();
-
-        if ($bookingKelas) {
-            return redirect()->back()->with('fail', 'Anda telah mengambil jadwal kelas ini');
-        }
-
-        $data['id_user'] = Auth::id();
-        $data['id_kelas_activity'] = $kelasActivity->id;
-        $data['set_jam'] = $request->set_jam;
-        $data['status_kehadiran'] = 1;
-        $data['is_send_email'] = true;
 
         DB::beginTransaction();
         try {
+            // Check Kelas activity
+            $kelasActivity = KelasActivity::find($id_kelas_activity);
+            if (!$kelasActivity) {
+                return redirect()->back()->with('fail', 'Data tidak ditemukan !');
+            }
+
+            // Check Order paket
+            $orderPaket = OrderPaket::where('id_user', Auth::id())
+                ->whereHas('paket', function ($query) use ($kelasActivity) {
+                    $query->where('id_kelas', $kelasActivity->id_kelas);
+                })->where('sisa', '>', 0)
+                ->whereDate('expired_date', '>=', now())
+                ->where('status', 1)
+                ->first();
+
+            if (!$orderPaket) {
+                return redirect()->back()->with('fail', 'Silahkan order paket terlebih dahulu');
+            }
+
+            // if ($orderPaket->paket->location != $kelasActivity->locationStudio->id_location && $orderPaket->paket->location != 0) {
+            //     return redirect()->back()->with('fail', 'Location tidak valid dengan paket yang sudah di beli');
+            // }
+
+            //Check slot kelas
+            $jumlahBookingKelas = BookingKelas::where('id_kelas_activity', $kelasActivity->id)
+                ->where(function ($query) {
+                    $query->where('status_kehadiran', 1)
+                        ->orWhereNull('status_kehadiran');
+                })->count();
+
+            if ($jumlahBookingKelas >= $kelasActivity->kelas->max_anggota) {
+                return redirect()->back()->with('fail', 'Kelas Sudah Penuh');
+            }
+
+            $bookingKelas = BookingKelas::where('id_user', Auth::id())
+                ->where('id_kelas_activity', $kelasActivity->id)->first();
+
+            if ($bookingKelas) {
+                return redirect()->back()->with('fail', 'Anda telah mengambil jadwal kelas ini');
+            }
+
+            $data['id_user'] = Auth::id();
+            $data['id_kelas_activity'] = $kelasActivity->id;
+            $data['set_jam'] = $request->set_jam;
+            $data['status_kehadiran'] = 1;
+            $data['is_send_email'] = true;
             BookingKelas::create($data);
+            $orderPaket->update([
+                'sisa' => $orderPaket->sisa - 1,
+                'is_active' => 1,
+            ]);
+    
             DB::commit();
+            activity()->causedBy(Auth::user())
+                ->log('Melakukan Bookingk kelas');
+            return redirect()->route('profile.bookings')->with('success', 'Berhasil mengambil jadwal kelas');
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with('fail', 'Order paket sedang dalam antrian tunggu beberapa detik lagi');
         }
 
-        $orderPaket->update([
-            'sisa' => $orderPaket->sisa - 1,
-            'is_active' => 1,
-        ]);
-
-        activity()->causedBy(Auth::user())
-            ->log('Melakukan Bookingk kelas');
-        return redirect()->route('profile.bookings')->with('success', 'Berhasil mengambil jadwal kelas');
+        
     }
 
     public function logout(Request $request)
