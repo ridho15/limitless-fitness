@@ -80,6 +80,20 @@ class Dashbaord extends BasePage
                 PendapatanInstrukturOverview::class,
                 PendapatanInstruktur::class
             ];
+        } elseif(Auth::user()->hasRole(['Owner Cabang'])){
+            $listWidget = [
+                JadwalInstrukturAssign::class,
+                ListTimetable::class,
+                ListAturJadwal::class
+            ];
+        } elseif(Auth::user()->hasRole('Finance')){
+            $listWidget = [
+                PendapatanOverView::class,
+                OmsetChart::class,
+                PengeluaranChart::class,
+                BelumBayarChart::class,
+                OmsetTable::class
+            ];
         } else {
             $listWidget = [];
         }

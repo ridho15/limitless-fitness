@@ -6,9 +6,9 @@
             @foreach ($this->getCachedCards() as $card)
             {{ $card }}
             @endforeach
+            @if (Auth::user()->hasRole(['Super Admin', 'Instruktur']))
             <div
                 class="filament-stats-card relative rounded-2xl bg-white p-6 shadow filament-stats-overview-widget-card">
-                @if (Auth::user()->hasRole(['Super Admin', 'Instruktur']))
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="end_date">
                         Location
@@ -22,13 +22,8 @@
                         @endforeach
                     </select>
                 </div>
-                @endif
-                <div class="text-center">
-                    <div class="text-center pb-3" wire:loading>
-                        Loading ...
-                    </div>
-                </div>
             </div>
+            @endif
         </x-filament::stats>
     </div>
 </x-filament::widget>

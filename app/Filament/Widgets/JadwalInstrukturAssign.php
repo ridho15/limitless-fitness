@@ -52,6 +52,10 @@ class JadwalInstrukturAssign extends BaseWidget
                                 $query->whereHas('locationStudio', function (Builder $query) {
                                     $query->where('id_location', $this->id_location);
                                 });
+                            })->when(Auth::user()->hasRole('Owner Cabang'), function ($query) {
+                                $query->whereHas('locationStudio', function ($query) {
+                                    $query->where('id_location', Auth::user()->id_location);
+                                });
                             })
                             ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function (Builder $query, $data) {
                                 return $query->whereDate('tanggal', '<=', $this->tanggal_akhir)
@@ -85,6 +89,10 @@ class JadwalInstrukturAssign extends BaseWidget
                             ->when($this->id_location, function (Builder $query, $data) {
                                 $query->whereHas('locationStudio', function (Builder $query) {
                                     $query->where('id_location', $this->id_location);
+                                });
+                            })->when(Auth::user()->hasRole('Owner Cabang'), function ($query) {
+                                $query->whereHas('locationStudio', function ($query) {
+                                    $query->where('id_location', Auth::user()->id_location);
                                 });
                             })
                             ->withCount(['bookingKelas' => function ($query) {
@@ -139,6 +147,11 @@ class JadwalInstrukturAssign extends BaseWidget
                     }
                 }),
             Filter::make('lokasi')
+                ->hidden(function () {
+                    if (Auth::user()->hasRole('Owner Cabang')) {
+                        return true;
+                    }
+                })
                 ->form([
                     Select::make('id_location')
                         ->searchable()
