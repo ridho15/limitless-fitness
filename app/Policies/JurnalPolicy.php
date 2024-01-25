@@ -13,7 +13,7 @@ class JurnalPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasRole(['Admin']);
+        return $user->hasRole(['Admin', 'Finance']);
     }
 
     /**
@@ -21,7 +21,7 @@ class JurnalPolicy
      */
     public function view(User $user, Jurnal $jurnal)
     {
-        return $user->hasRole(['Admin']);
+        return $user->hasRole(['Admin', 'Finance']);
     }
 
     /**

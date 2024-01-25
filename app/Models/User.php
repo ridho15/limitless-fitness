@@ -68,7 +68,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessFilament(): bool
     {
-        return $this->hasRole(['Super Admin', 'Admin', 'Instruktur']);
+        return $this->hasRole(['Super Admin', 'Admin', 'Instruktur', 'Owner Cabang', 'Finance']);
     }
 
     public function getJenisKelaminFormattedAttribute()

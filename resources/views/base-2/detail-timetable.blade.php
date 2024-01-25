@@ -154,7 +154,7 @@
                                     </div>
                                     <div class="col-md">
                                         <small class="d-block">{{ $kelasActivity->user->name }}</small>
-                                    </div>
+                                    </div> 
                                 </div>
                                 <div class="text-center">
                                     @if ($isBooking)

@@ -96,6 +96,7 @@ class ConfirmPembayaran extends Component
             ->where('id_user', Auth::id())
             ->where('status', 1)
             ->first();
+
         if ($orderPaket) {
             return session()->flash('fail', 'Paket sudah pernah di order. Silahkan order paket lain');
         }
@@ -110,6 +111,7 @@ class ConfirmPembayaran extends Component
         $data['jumlah_pertemuan'] = $this->paket->jumlah_pertemuan;
         $data['sisa'] = $this->paket->jumlah_pertemuan;
         $data['expired_date'] = Carbon::now()->addDays($this->paket->valid_day);
+        $data['unix_code'] = $this->generateUnixKode();
 
         $voucherCustomer = VoucherCustomer::find($this->id_voucher_customer);
 
@@ -139,6 +141,26 @@ class ConfirmPembayaran extends Component
             'success' => 'Berhasil melakukan order paket, silahkan lakukan pembayaran dan konfirmasi ke admin. terimakasih',
             'info' => 'Silahkan masuk ke tab tidak aktif dapat dilihat pada halaman ini untuk mengupload bukti pembayaran.',
         ]);
+    }
+
+    public function generateUnixKode()
+    {
+        // Available alpha caracters
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        // generate a pin based on 2 * 7 digits + a random character
+        $pin = mt_rand(1000000, 9999999)
+            . mt_rand(1000000, 9999999)
+            . $characters[rand(0, strlen($characters) - 1)];
+
+        // shuffle the result
+        $kode = str_shuffle($pin);
+        $orderPaket = OrderPaket::where('unix_code', $kode)->first();
+        if ($orderPaket) {
+            return $this->generateUnixKode();
+        }
+
+        return $kode;
     }
 
     public function setVoucher($id_voucher)

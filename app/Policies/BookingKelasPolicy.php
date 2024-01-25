@@ -13,7 +13,7 @@ class BookingKelasPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasRole(['Instruktur', 'Admin'])) {
+        if ($user->hasRole(['Instruktur', 'Admin', 'Owner Cabang'])) {
             return true;
         }
 
@@ -25,7 +25,7 @@ class BookingKelasPolicy
      */
     public function view(User $user, BookingKelas $bookingKelas)
     {
-        if ($user->hasRole(['Instruktur', 'Admin'])) {
+        if ($user->hasRole(['Instruktur', 'Admin', 'Owner Cabang'])) {
             return true;
         }
 
@@ -37,7 +37,7 @@ class BookingKelasPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasRole(['Admin'])) {
+        if ($user->hasRole(['Admin', 'Owner Cabang'])) {
             return true;
         }
 
@@ -49,7 +49,7 @@ class BookingKelasPolicy
      */
     public function update(User $user, BookingKelas $bookingKelas)
     {
-        if ($user->hasRole(['Admin', 'Instruktur'])) {
+        if ($user->hasRole(['Admin', 'Instruktur', 'Owner Cabang'])) {
             return true;
         }
 
@@ -61,7 +61,7 @@ class BookingKelasPolicy
      */
     public function delete(User $user, BookingKelas $bookingKelas)
     {
-        if ($user->hasRole(['Admin'])) {
+        if ($user->hasRole(['Admin', 'Owner Cabang'])) {
             return true;
         }
 

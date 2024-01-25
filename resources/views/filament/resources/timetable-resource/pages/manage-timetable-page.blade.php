@@ -108,7 +108,7 @@
                                                             style="background-color: #22543d; color: white; @if ($nomor == 0) border-left-color: black; border-left-width: 2px !important; @endif
                                                             @if ($nomor == count($listStudio) - 1) border-right-color: black; border-right-width: 2px !important; @endif">
                                                             <a
-                                                                href="{{ Auth::user()->hasRole(['Admin', 'Super Admin']) ? app\Filament\Resources\TimetableResource::getUrl('view', ['record' => $kelasActivity]) : '#' }}">
+                                                                href="{{ Auth::user()->hasRole(['Admin', 'Super Admin', 'Owner Cabang']) ? app\Filament\Resources\TimetableResource::getUrl('view', ['record' => $kelasActivity]) : '#' }}">
                                                                 {{ $kelasActivity->user->name }}</a>
                                                         </div>
                                                         @foreach ($kelasActivity->bookingKelas as $bookingKelas)
@@ -116,7 +116,7 @@
                                                                 @if ($nomor == 0 || $nomor == count($listStudio) - 1) style="@if ($nomor == 0) border-left-color: black; border-left-width: 2px; @endif
                                                                 @if ($nomor == count($listStudio) - 1) border-right-color: black; border-right-width: 2px; @endif"
                                                                 @endif>
-                                                                <a href="{{ Auth::user()->hasRole(['Admin', 'Super Admin', 'Instruktur']) ? app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) : '#' }}"
+                                                                <a href="{{ Auth::user()->hasRole(['Admin', 'Super Admin', 'Instruktur', 'Owner Cabang']) ? app\Filament\Resources\BookingKelasResource::getUrl('edit', ['record' => $bookingKelas]) : '#' }}"
                                                                     class="text-dark">{{ $bookingKelas->user->name }}</a>
                                                             </div>
                                                         @endforeach

@@ -91,9 +91,9 @@ class ManageTimetablePage extends Page
         $this->startDate = session()->get('startDate') ?? date('Y-m-d');
         $this->endDate = session()->get('endDate') ?? Carbon::now()->addDays(7)->isoFormat('YYYY-MM-DD');
         $this->listLocation = Location::get();
-        if (Auth::user()->hasRole('Admin')) {
+        if (Auth::user()->hasRole(['Admin', 'Owner Cabang'])) {
             $this->id_location = Auth::user()->id_location;
-        }else{
+        } else {
             $this->id_location = session()->get('id_location');
         }
         $this->getData();
@@ -108,10 +108,8 @@ class ManageTimetablePage extends Page
             ->whereDate('tanggal', '>=', $this->startDate)
             ->whereDate('tanggal', '<=', $this->endDate)
             ->where('id_kelas', '!=', null)
-            ->where(function ($query) {
-                if (Auth::user()->hasRole(['Instruktur'])) {
-                    $query->where('id_user', Auth::id());
-                }
+            ->when(Auth::user()->hasRole(['Instruktur']), function($query){
+                $query->where('id_user', Auth::id());
             })
             ->whereHas('locationStudio', function ($query) {
                 $query->where('id_location', $this->id_location);
@@ -126,10 +124,8 @@ class ManageTimetablePage extends Page
                     ->where('id_kelas', '!=', null)
                     ->whereHas('locationStudio', function ($query) {
                         $query->where('id_location', $this->id_location);
-                    })->where(function ($query) {
-                        if (Auth::user()->hasRole(['Instruktur'])) {
-                            $query->where('id_user', Auth::id());
-                        }
+                    })->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
+                        $query->where('id_user', Auth::id());
                     });
             })->get();
 
@@ -141,10 +137,8 @@ class ManageTimetablePage extends Page
             ->whereHas('locationStudio', function ($query) {
                 $query->where('id_location', $this->id_location);
             })
-            ->where(function ($query) {
-                if (Auth::user()->hasRole(['Instruktur'])) {
-                    $query->where('id_user', Auth::id());
-                }
+            ->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
+                $query->where('id_user', Auth::id());
             })
             ->orderBy('jam_mulai', 'ASC')
             ->groupBy('jam_mulai')
@@ -156,10 +150,8 @@ class ManageTimetablePage extends Page
                 ->whereDate('tanggal', '<=', $this->endDate)
                 ->whereTime('jam_mulai', $item->jam_mulai)
                 ->where('id_kelas', '!=', null)
-                ->where(function ($query) {
-                    if (Auth::user()->hasRole(['Instruktur'])) {
-                        $query->where('id_user', Auth::id());
-                    }
+                ->when(Auth::user()->hasRole(['Instruktur']), function ($query) {
+                    $query->where('id_user', Auth::id());
                 })
                 ->whereHas('locationStudio', function ($query) {
                     $query->where('id_location', $this->id_location);

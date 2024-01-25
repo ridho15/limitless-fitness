@@ -56,6 +56,9 @@ class OrderPaketResource extends Resource
                     ->schema([
                         Fieldset::make('Form Booking Order')
                             ->schema([
+                                TextInput::make('unix_code')
+                                    ->label('Unix Code')
+                                    ->disabled(),
                                 Select::make('id_user')
                                     ->searchable()
                                     ->preload()
@@ -125,6 +128,15 @@ class OrderPaketResource extends Resource
                     })
                     ->view('custom-column.order-paket')
                     ->sortable(),
+                ViewColumn::make('unix_code')
+                    ->label('Unix Code')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->unix_code
+                        ]);
+                    })->view('custom-column.order-paket')
+                    ->searchable(),
                 ViewColumn::make('user.name')
                     ->label('Customer')
                     ->getStateUsing(function ($record) {

@@ -23,6 +23,7 @@ class OrderPaket extends Model
         'jumlah_pertemuan',
         'sisa',
         'id_location',
+        'unix_code'
     ];
 
     protected $appends = [

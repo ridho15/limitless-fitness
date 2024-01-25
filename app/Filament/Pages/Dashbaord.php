@@ -16,6 +16,7 @@ use App\Filament\Widgets\PendapatanPerLocationOverview;
 use App\Filament\Widgets\PengeluaranChart;
 use App\Models\Location;
 use Closure;
+use Filament\Facades\Filament;
 use Filament\Pages\Dashboard as BasePage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +58,6 @@ class Dashbaord extends BasePage
 
     protected function getWidgets(): array
     {
-        // return Filament::getWidgets();
         if (Auth::user()->hasRole(['Super Admin'])) {
             $listWidget = [
                 PendapatanOverView::class,

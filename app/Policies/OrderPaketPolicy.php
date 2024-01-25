@@ -14,7 +14,7 @@ class OrderPaketPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasRole(['Admin'])) {
+        if ($user->hasRole(['Admin', 'Finance'])) {
             return true;
         }
 
@@ -26,7 +26,7 @@ class OrderPaketPolicy
      */
     public function view(User $user, OrderPaket $orderPaket)
     {
-        if ($user->hasRole(['Admin'])) {
+        if ($user->hasRole(['Admin', 'Finance'])) {
             return true;
         }
 
