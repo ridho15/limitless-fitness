@@ -90,6 +90,9 @@ class JurnalResource extends Resource
                 TextColumn::make('tanggal')
                     ->dateTime('D, d M Y')
                     ->sortable(),
+                TextColumn::make('orderPaket.unix_code')
+                ->label('Unix Code')
+                    ->searchable(),
                 TextColumn::make('nama')
                     ->color(function ($record) {
                         if ($record->tipe == '0') {
