@@ -101,9 +101,11 @@ class ConfirmPembayaran extends Component
             return session()->flash('fail', 'Paket sudah pernah di order. Silahkan order paket lain');
         }
 
+        $unixcode = $this->generateUnixKode($this->paket->harga_diskon - $this->potongan);
+        $data['unix_code'] = $unixcode;
         $data['id_user'] = Auth::id();
         $data['id_paket'] = $this->id_paket;
-        $data['harga'] = $this->paket->harga_diskon - $this->potongan;
+        $data['harga'] = $unixcode;
         $data['status'] = 2;
         $data['is_active'] = 0;
         $data['id_location'] = session()->get('id_location');
@@ -111,7 +113,6 @@ class ConfirmPembayaran extends Component
         $data['jumlah_pertemuan'] = $this->paket->jumlah_pertemuan;
         $data['sisa'] = $this->paket->jumlah_pertemuan;
         $data['expired_date'] = Carbon::now()->addDays($this->paket->valid_day);
-        $data['unix_code'] = $this->generateUnixKode();
 
         $voucherCustomer = VoucherCustomer::find($this->id_voucher_customer);
 
@@ -143,21 +144,15 @@ class ConfirmPembayaran extends Component
         ]);
     }
 
-    public function generateUnixKode()
+    public function generateUnixKode($harga)
     {
-        // Available alpha caracters
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pin = mt_rand(100, 999);
 
-        // generate a pin based on 2 * 7 digits + a random character
-        $pin = mt_rand(1000000, 9999999)
-            . mt_rand(1000000, 9999999)
-            . $characters[rand(0, strlen($characters) - 1)];
+        $kode = $harga + str_shuffle($pin);
 
-        // shuffle the result
-        $kode = str_shuffle($pin);
         $orderPaket = OrderPaket::where('unix_code', $kode)->first();
         if ($orderPaket) {
-            return $this->generateUnixKode();
+            return $this->generateUnixKode($harga);
         }
 
         return $kode;
