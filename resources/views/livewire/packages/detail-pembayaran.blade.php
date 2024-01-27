@@ -25,10 +25,14 @@
             <small class="fw-light">Potongan Voucher</small>
             <small class="fw-light">Rp.{{ number_format($potongan, 0, ',', '.') }}</small>
         </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <small class="fw-light">-</small>
+            <small class="fw-light">Rp.{{ number_format($unixcode, 0, ',', '.') }}</small>
+        </div>
         <hr class="my-4" style="opacity: 0.1">
         <div class="d-flex justify-content-between align-items-center">
             <small class="fw-bold">Grand Total</small>
-            <small class="fw-bold">Rp.{{ number_format($subtotal - $potongan, 0, ',', '.') }}</small>
+            <small class="fw-bold">Rp.{{ number_format($subtotal - $potongan + $unixcode, 0, ',', '.') }}</small>
         </div>
     </div>
     <div class="px-4 mt-3 py-5 bg-white shadow sticky-top"
@@ -57,3 +61,11 @@
         @endif
     </div>
 </div>
+
+@push('js')
+    <script>
+        $(document).ready(function () {
+            Livewire.emit('setUnixcode', "{{ $unixcode }}");
+        });
+    </script>
+@endpush

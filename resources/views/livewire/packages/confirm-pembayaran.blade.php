@@ -56,12 +56,19 @@
                         </div>
                         <div class="row">
                             <div class="col-md-3 col-3">
+                                -
+                            </div>
+                            <div class="col-md col">
+                                : <strong>Rp.{{ number_format($unixcode, 0, ',', '.') }}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-3">
                                 Total
                             </div>
                             <div class="col-md col h5">
                                 :
-                                <strong class="text-danger">Rp.{{ number_format($paket->harga_diskon - $potongan, 0,
-                                    ',', '.') }}</strong>
+                                <strong class="text-danger">Rp.{{ number_format($paket->harga_diskon - $potongan + $unixcode,  0, ',', '.') }}</strong>
                             </div>
                         </div>
                         <div class="my-3">

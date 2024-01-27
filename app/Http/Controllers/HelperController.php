@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BookingKelas;
 use App\Models\KelasActivity;
+use App\Models\OrderPaket;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -53,5 +54,19 @@ class HelperController extends Controller
             }
         }
         return $listKelasActivity;
+    }
+
+    public static function generateUnixKode($harga)
+    {
+        $pin = mt_rand(100, 999);
+
+        $kode = str_shuffle($pin);
+
+        $orderPaket = OrderPaket::where('unix_code',$harga + $kode)->first();
+        if ($orderPaket) {
+            return static::generateUnixKode($harga);
+        }
+
+        return $kode;
     }
 }

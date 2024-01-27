@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Packages;
 
+use App\Http\Controllers\HelperController;
 use App\Models\Location;
 use App\Models\Paket;
 use App\Models\Voucher;
@@ -26,6 +27,7 @@ class DetailPembayaran extends Component
     public $isGunakan = false;
     public $subtotal = 0;
     public $potongan = 0;
+    public $unixcode = 0;
 
     public function render()
     {
@@ -37,6 +39,8 @@ class DetailPembayaran extends Component
         $this->id_paket = $id_paket;
         $this->paket = Paket::find($this->id_paket);
         $this->subtotal = $this->paket->harga_diskon;
+
+        $this->unixcode = HelperController::generateUnixKode($this->paket->harga_diskon - $this->potongan);
     }
 
     public function checkKodeVoucher()
@@ -93,7 +97,8 @@ class DetailPembayaran extends Component
     public function gunakanKodeVoucher()
     {
         $this->isGunakan = true;
-        $this->emit('setVoucher', $this->id_voucher);
+        $this->unixcode = HelperController::generateUnixKode($this->subtotal - $this->potongan);
+        $this->emit('setVoucher', $this->id_voucher, $this->unixcode);
         return session()->flash('success', 'Voucher berhasil digunakan');
     }
 

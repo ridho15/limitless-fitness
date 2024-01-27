@@ -16,7 +16,8 @@ class ConfirmPembayaran extends Component
     public $listeners = [
         'gunakanVoucher',
         'konfirmasiPembayaran',
-        'setVoucher'
+        'setVoucher',
+        'setUnixcode'
     ];
     public $id_paket;
     public $id_voucher_customer;
@@ -26,6 +27,8 @@ class ConfirmPembayaran extends Component
     public $bank;
     public $no_rekening;
     public $atas_nama;
+    public $unixcode;
+    public $harga = 0;
     public function render()
     {
         return view('livewire.packages.confirm-pembayaran');
@@ -63,6 +66,7 @@ class ConfirmPembayaran extends Component
             $this->potongan = $this->paket->harga_diskon * $voucherCustomer->voucher->disc_percent / 100;
         }
 
+        $this->harga = $this->paket->harga_diskon - $this->potongan;
         $this->emit('setIdVoucher', $voucherCustomer->id_voucher);
     }
 
@@ -101,11 +105,10 @@ class ConfirmPembayaran extends Component
             return session()->flash('fail', 'Paket sudah pernah di order. Silahkan order paket lain');
         }
 
-        $unixcode = $this->generateUnixKode($this->paket->harga_diskon - $this->potongan);
-        $data['unix_code'] = $unixcode;
+        $data['unix_code'] = $this->paket->harga_diskon - $this->potongan + $this->unixcode;
         $data['id_user'] = Auth::id();
         $data['id_paket'] = $this->id_paket;
-        $data['harga'] = $unixcode;
+        $data['harga'] = $this->paket->harga_diskon - $this->potongan + $this->unixcode;
         $data['status'] = 2;
         $data['is_active'] = 0;
         $data['id_location'] = session()->get('id_location');
@@ -144,23 +147,10 @@ class ConfirmPembayaran extends Component
         ]);
     }
 
-    public function generateUnixKode($harga)
-    {
-        $pin = mt_rand(100, 999);
-
-        $kode = $harga + str_shuffle($pin);
-
-        $orderPaket = OrderPaket::where('unix_code', $kode)->first();
-        if ($orderPaket) {
-            return $this->generateUnixKode($harga);
-        }
-
-        return $kode;
-    }
-
-    public function setVoucher($id_voucher)
+    public function setVoucher($id_voucher, $unixcode)
     {
         $voucher = Voucher::find($id_voucher);
+        $this->unixcode = $unixcode;
         $voucherCustomer = VoucherCustomer::updateOrCreate([
             'id_voucher' => $voucher->id,
             'id_customer' => Auth::id(),
@@ -181,5 +171,9 @@ class ConfirmPembayaran extends Component
             ->whereDate('expired', '>', now())
             ->get();
         $this->gunakanVoucher($this->id_voucher_customer);
+    }
+
+    public function setUnixcode($unixcode){
+        $this->unixcode = $unixcode;
     }
 }
