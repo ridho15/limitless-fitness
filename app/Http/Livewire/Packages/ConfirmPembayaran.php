@@ -105,7 +105,7 @@ class ConfirmPembayaran extends Component
             return session()->flash('fail', 'Paket sudah pernah di order. Silahkan order paket lain');
         }
 
-        $data['unix_code'] = $this->paket->harga_diskon - $this->potongan + $this->unixcode;
+        $data['unix_code'] = $this->unixcode;
         $data['id_user'] = Auth::id();
         $data['id_paket'] = $this->id_paket;
         $data['harga'] = $this->paket->harga_diskon - $this->potongan + $this->unixcode;
@@ -173,7 +173,8 @@ class ConfirmPembayaran extends Component
         $this->gunakanVoucher($this->id_voucher_customer);
     }
 
-    public function setUnixcode($unixcode){
+    public function setUnixcode($unixcode)
+    {
         $this->unixcode = $unixcode;
     }
 }
