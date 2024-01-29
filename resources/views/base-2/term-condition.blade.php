@@ -11,6 +11,7 @@
             </div>
             <ol>
                 <li>All payments must be received before your session begins.</li>
+                <li>Individuals are strictly limited to a singular account and voucher per person. Failure to adhere to these regulations will lead to account suspension or denial of entry to our studio facilities.</li>
                 <li>Booking: All sessions must be booked in advance. Please
                     call our studio or use our online booking system to schedule
                     your session.</li>
