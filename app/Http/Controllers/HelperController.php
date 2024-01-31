@@ -62,8 +62,8 @@ class HelperController extends Controller
 
         $kode = str_shuffle($pin);
 
-        $orderPaket = OrderPaket::where('unix_code',$harga + $kode)->first();
-        if ($orderPaket) {
+        $jumlahKode = OrderPaket::where('unix_code',$kode)->whereMonth('created_at', now())->count();
+        if ($jumlahKode > 2) {
             return static::generateUnixKode($harga);
         }
 
