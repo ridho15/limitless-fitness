@@ -276,7 +276,7 @@
                 <tr>
                     <td colspan="2"></td>
                     <td colspan="2">GRAND TOTAL</td>
-                    <td>Rp.{{ number_format($orderPaket->harga - $potongan,0,',','.') }}</td>
+                    <td>Rp.{{ number_format($orderPaket->harga,0,',','.') }}</td>
                 </tr>
             </tfoot>
         </table>
