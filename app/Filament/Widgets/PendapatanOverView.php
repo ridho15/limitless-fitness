@@ -124,7 +124,7 @@ class PendapatanOverView extends BaseWidget
             ]));
 
             // Profit bulan ini
-            $profit = $omsetDalamSatuBulan - ($biayaInstruktur + $feeInstruktur);
+            $profit = $omsetDalamSatuBulan - $biayaInstruktur;
 
             array_push($listCard, Card::make('Profit Bulan ini', 'Rp.' . number_format($profit, 0, ',', '.'))->description('Total profit dalam 1 bulan ini')->color('primary')->extraAttributes([
                 'wire:click' => '$emit("onClickProfit")'

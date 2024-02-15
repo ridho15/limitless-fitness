@@ -106,7 +106,7 @@ class OrderPaket extends Model
 
     public function voucherCustomer()
     {
-        return $this->hasOne(VoucherCustomer::class, 'id_order_paket');
+        return $this->hasOne(VoucherCustomer::class, 'id_order_paket')->withDefault();
     }
 
     public function location()

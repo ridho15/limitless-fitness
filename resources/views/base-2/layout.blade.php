@@ -82,7 +82,8 @@
                         <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.bookings') }}"><i
                                     class="fa-regular fa-credit-card"></i>
                                 <span class="mx-2">My Bookings</span></a></li>
-                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.voucher') }}"><i class="fa-solid fa-ticket"></i>
+                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.voucher') }}"><i
+                                    class="fa-solid fa-ticket"></i>
                                 <span class="mx-2">My Voucher</span></a></li>
                         <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.packages') }}"><i
                                     class="fa-solid fa-hand-holding-heart"></i>

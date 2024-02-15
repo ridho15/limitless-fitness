@@ -49,7 +49,12 @@
                                     <small class="d-block text-center">Harga sudah di potonga diskon <br></small>
                                 </div>
                                 <div class="col-md-4 text-end">
-                                    <div class="text-center"><small>Code : {{ $item->unix_code ?? '-' }}</small></div>
+                                    <div class="text-center">
+                                        <small>Code : {{ $item->unix_code ?? '-' }}</small>
+                                        <a href="{{ route('profile.invoice', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice" type="button">
+                                            <i class="fa-solid fa-file-invoice"></i>
+                                        </a>
+                                    </div>
                                     @if ($item->status == 1)
                                     <div class="d-flex align-items-center justify-content-center">
                                         <span class="fs-2 text-success mx-1"><i
@@ -142,7 +147,12 @@
                                         {{ $item->paket->diskon }}%</small>
                                 </div>
                                 <div class="col-md-4 text-end">
-                                    <div class="text-center"><small>Code : {{ $item->unix_code ?? '-' }}</small></div>
+                                    <div class="text-center">
+                                        <small>Code : {{ $item->unix_code ?? '-' }}</small>
+                                        <a href="{{ route('profile.invoice', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice" type="button">
+                                            <i class="fa-solid fa-file-invoice"></i>
+                                        </a>
+                                    </div>
                                     @if ($item->status == 1)
                                     <div class="d-flex align-items-center justify-content-center">
                                         <span class="fs-2 text-success mx-1"><i
@@ -233,7 +243,12 @@
                                     <small class="d-block text-center">Harga sudah di potonga diskon <br></small>
                                 </div>
                                 <div class="col-md-4 text-end">
-                                    <div class="text-center"><small>Code : {{ $item->unix_code ?? '-'  }}</small></div>
+                                    <div class="text-center">
+                                        <small>Code : {{ $item->unix_code ?? '-' }}</small>
+                                        <a href="{{ route('profile.invoice', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoice" type="button">
+                                            <i class="fa-solid fa-file-invoice"></i>
+                                        </a>
+                                    </div>
                                     @if ($item->status == 1)
                                     <div class="d-flex align-items-center justify-content-center">
                                         <span class="fs-2 text-success mx-1"><i

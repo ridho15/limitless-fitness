@@ -320,10 +320,10 @@ class ProfileController extends Controller
         }
 
         $data['orderPaket'] = $orderPaket;
-        $pdf = FacadePdf::loadView('pdf.invoice', $data);
-        return $pdf->stream();
+        $pdf = FacadePdf::loadView('pdf.invoice-2', $data)->setPaper('a4', 'landscape');
+        return $pdf->download('invoice#' . sprintf('%08d', $orderPaket->id) . '_' . date('d-m-Y', strtotime($orderPaket->created_at)) . '.pdf');
 
-        // return view('pdf.invoice', $data);
+        // return view('pdf.invoice-2', $data);
     }
 
     public function postCustomerJadwal(Request $request)
