@@ -212,7 +212,7 @@
         </div>
         <div id="company">
             <h2 class="name">Daily Dose Pilates</h2>
-            <div>{{ $orderPaket->location->nama }} - {{ $orderPaket->location->alamat }}</div>
+            <div style="width: 50%; float: left;">{{ $orderPaket->location->nama }} - {{ $orderPaket->location->alamat }}</div>
             <div>{{ $orderPaket->location->no_hp }}</div>
             <div><a href="mailto:{{ $orderPaket->location->email }}">{{ $orderPaket->location->email }}</a></div>
         </div>
