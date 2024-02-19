@@ -202,23 +202,34 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'packages';
-        $listPaketAktif = OrderPaket::where('id_user', $user->id)->whereIn('status', [1,2])->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
-        return $listPaketAktif;
+        $listPaketAktif = OrderPaket::where('id_user', $user->id)->whereIn('status', [1, 2])->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
         // Update paket
         foreach ($listPaketAktif as $item) {
-            if ($item->expired_date < now()) {
-                $item->update([
-                    'is_active' => 0
-                ]);
-            }
-            $bookingKelas = OrderPaket::where('id_user', Auth::id())
-                ->where('id', $item->id)
-                ->whereHas('paket', function ($query) {
-                    $query->whereHas('kelas', function ($query) {
-                        $query->whereHas('kelasActivity', function ($query) {
-                            $query->whereHas('bookingKelas', function ($query) {
-                                $query->where('id_user', Auth::id())
-                                    ->where('status_kehadiran', 1);
+            // if ($item->expired_date < now()) {
+            //     $item->update([
+            //         'is_active' => 0
+            //     ]);
+            // }
+            // $bookingKelas = OrderPaket::where('id_user', Auth::id())
+            //     ->where('id', $item->id)
+            //     ->whereHas('paket', function ($query) {
+            //         $query->whereHas('kelas', function ($query) {
+            //             $query->whereHas('kelasActivity', function ($query) {
+            //                 $query->whereHas('bookingKelas', function ($query) {
+            //                     $query->where('id_user', Auth::id())
+            //                         ->where('status_kehadiran', 1);
+            //                 });
+            //             });
+            //         });
+            //     })->first();
+            $id_order_paket = $item->id;
+            $bookingKelas = BookingKelas::where('id_user', Auth::id())
+                ->where('status_kehadiran', 1)
+                ->whereHas('kelasActivity', function ($query) use ($id_order_paket) {
+                    $query->whereHas('kelas', function ($query) use ($id_order_paket) {
+                        $query->whereHas('paket', function ($query) use ($id_order_paket) {
+                            $query->whereHas('orderPaket', function ($query) use ($id_order_paket) {
+                                $query->where('id', $id_order_paket);
                             });
                         });
                     });
