@@ -202,10 +202,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'packages';
-        $listPaketAktif = OrderPaket::where('id_user', $user->id)->where(function ($query) {
-            $query->where('status', 1)
-                ->orWhere('status', 2);
-        })->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
+        $listPaketAktif = OrderPaket::where('id_user', $user->id)->whereIn('status', [1,2])->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
 
         // Update paket
         foreach ($listPaketAktif as $item) {

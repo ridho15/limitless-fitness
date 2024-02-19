@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <title>Invoice</title>
     <style>
-        @font-face {
+        /* @font-face {
             font-family: SourceSansPro;
             src: url("{{ asset('/font/SourceSansPro-Regular.ttf') }}");
-        }
+        } */
 
         .clearfix:after {
             content: "";
@@ -208,7 +208,7 @@
 <body>
     <header class="clearfix">
         <div id="logo">
-            <img src="{{ asset('assets/images/logo.png') }}">
+            {{-- <img src="{{ asset('assets/images/logo.png') }}"> --}}
         </div>
         <div id="company">
             <h2 class="name">Daily Dose Pilates</h2>
