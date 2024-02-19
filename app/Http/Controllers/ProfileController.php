@@ -203,7 +203,7 @@ class ProfileController extends Controller
         $data['user'] = $user;
         $data['active'] = 'packages';
         $listPaketAktif = OrderPaket::where('id_user', $user->id)->whereIn('status', [1,2])->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
-
+        return $listPaketAktif;
         // Update paket
         foreach ($listPaketAktif as $item) {
             if ($item->expired_date < now()) {
