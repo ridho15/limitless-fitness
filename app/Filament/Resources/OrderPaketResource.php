@@ -249,6 +249,14 @@ class OrderPaketResource extends Resource
                             'data' => $record->tanggal_pembayaran
                         ]);
                     })->view('custom-column.order-paket')->sortable(),
+                ViewColumn::make('updated_at')
+                    ->label('Tanggal Approve')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => date('Y-m-d H:i', strtotime($record->updated_at))
+                        ]);
+                    })->view('custom-column.order-paket')->sortable(),
             ])
             ->filters([
                 SelectFilter::make('id_location')
