@@ -283,13 +283,18 @@ class OrderPaketResource extends Resource
                 Filter::make('created_at')
                     ->label('Tanggal Order')
                     ->form([
-                        DatePicker::make('created_from'),
-                        DatePicker::make('created_until'),
+                        DatePicker::make('created_from')
+                            ->label('Order Date From'),
+                        DatePicker::make('created_until')
+                            ->label('Order Date Until'),
+                        DatePicker::make('updated_at')
+                            ->label('Tanggal Approve')
                     ])->query(function (Builder $query, array $data) {
                         return $query->when(
                             $data['created_from'],
                             fn (Builder $query, $date) => $query->whereDate('created_at', '>=', $date),
-                        )->when($data['created_until'], fn (Builder $query, $date) => $query->whereDate('created_at', '<=', $date));
+                        )->when($data['created_until'], fn (Builder $query, $date) => $query->whereDate('created_at', '<=', $date))
+                            ->when($data['updated_at'], fn (Builder $query, $date) => $query->whereDate('updated_at', $date));
                     }),
                 SelectFilter::make('is_active')->label('Status Aktif')->searchable()->options([
                     0 => 'Tidak Aktif',
