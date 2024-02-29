@@ -3,6 +3,7 @@
 use App\Filament\Resources\KelasResource\Pages\ListKelas;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\ProfileController;
+use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
 use App\Models\Jurnal;
 use App\Models\Kelas;
@@ -13,6 +14,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,63 +31,11 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/testing', function () {
-    $listKelas = Kelas::get();
-    $totalPendapatan = 0;
-    $totalPendapatanSatuBulan = 0;
-    $jumlahPertemuan = 0;
-    $jumlahPertemuanSatuBulan = 0;
-    $id_location = null;
-    $tanggal_awal = Carbon::now()->subDays(7);
-    $tanggal_akhir = Carbon::now();
-    foreach ($listKelas as $item) {
-        $jumlahKelasAktifSatuBulan = KelasActivity::where('id_kelas', $item->id)
-            ->when($id_location, function ($query, $id_location) {
-                $query->whereHas('locationStudio', function ($query) use ($id_location) {
-                    $query->where('id_location', $id_location);
-                });
-            })
-            ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
-                $query->where('id_user', Auth::id());
-            })->withCount(['bookingKelas' => function ($query) {
-                $query->where('status_kehadiran', 1)
-                    ->orWhereNull('status_kehadiran');
-            }])->having('booking_kelas_count', '>=', $item->min_anggota)
-            ->whereDate('tanggal', '<=', $tanggal_akhir)
-            ->whereDate('tanggal', '>=', $tanggal_awal)
-            ->count();
-
-        $totalPendapatanSatuBulan += $item->fee * $jumlahKelasAktifSatuBulan;
-
-        $listKelasActivity = KelasActivity::where('id_kelas', $item->id)
-            ->when($id_location, function ($query, $id_location) {
-                $query->whereHas('locationStudio', function ($query) use ($id_location) {
-                    $query->where('id_location', $id_location);
-                });
-            })
-            ->when(Auth::user()->hasRole('Instruktur'), function ($query) {
-                $query->where('id_user', Auth::id());
-            })
-            // ->withCount(['bookingKelas' => function ($query) {
-            //     $query->where('status_kehadiran', 1)
-            //         ->orWhereNull('status_kehadiran');
-            // }])
-            // ->having('booking_kelas_count', '>=', $item->min_anggota)
-            ->loadCount('bookingKelas')
-            ->whereDate('tanggal', '<=', now())
-            ->limit(10)
-            ->get();
-
-        return $listKelasActivity;
-
-        // $totalPendapatan += $item->fee * $jumlahKelasAktif;
-        // $jumlahPertemuanSatuBulan += $jumlahKelasAktifSatuBulan;
-        // $jumlahPertemuan += $jumlahKelasAktif;
-    }
-
-    return [
-        $totalPendapatan, $jumlahPertemuanSatuBulan, $jumlahPertemuan
-    ];
+Route::get('send-mail', function(){
+    $user = User::where('email', 'ralamzah@gmail.com')->first();
+    
+    Mail::to($user->email)->send(new RegistrasiKonfirmasiMail($user))->getSymfonySentMessage();
+    return "Berhasil";
 });
 Route::get('/forgot-password-mail', function () {
     $user = User::where('email', 'kukertadesabetung@gmail.com')->first();
