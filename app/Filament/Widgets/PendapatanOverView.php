@@ -92,12 +92,12 @@ class PendapatanOverView extends BaseWidget
             $feeInstruktur = 0;
             foreach ($listKelas as $item) {
                 $fee = $item->fee;
-                $listKelasActivity = KelasActivity::when($this->id_location, function($query){
-                    $query->whereHas('locationStudio', function($query){
+                $listKelasActivity = KelasActivity::when($this->id_location, function ($query) {
+                    $query->whereHas('locationStudio', function ($query) {
                         $query->where('id_location', $this->id_location);
                     });
                 })
-                ->where('id_kelas', $item->id)
+                    ->where('id_kelas', $item->id)
                     ->where(function ($query) {
                         $query->whereMonth('tanggal', now())
                             ->whereDate('tanggal', '<=', now());
@@ -117,6 +117,8 @@ class PendapatanOverView extends BaseWidget
             // Jumlah customer bulan ini
             $jumlahCustomer = User::whereHas('roles', function ($query) {
                 $query->where('name', 'Customer');
+            })->when($this->id_location, function ($query) {
+                $query->where('id_location', $this->id_location);
             })->whereMonth('created_at', now())->count();
 
             array_push($listCard, Card::make('Customer Bulan ini', number_format($jumlahCustomer, 0, ',', '.'))->description('Jumlah customer tambahan bulan ini')->color('primary')->extraAttributes([
