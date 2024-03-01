@@ -134,12 +134,10 @@ class KreditCustomer extends Page
         $this->id_kelas = $id_kelas;
         $this->kelas = Kelas::find($this->id_kelas);
         $this->listOrderPaket = OrderPaket::whereHas('paket', function ($query) {
-            $query->whereHas('kelas', function ($query) {
-                $query->where('id_kelas', $this->id_kelas);
-            });
+            $query->where('id_kelas', $this->id_kelas);
         })->where('id_user', $this->id_user)
             ->where('is_active', 1)
-            ->where('expired_date', '>=', now())
+            ->whereDate('expired_date', '>=', now())
             ->get();
 
         $this->jumlahSession = [];
