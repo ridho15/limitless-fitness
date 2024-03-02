@@ -14,15 +14,21 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextInput\Mask;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class PaketResource extends Resource
@@ -83,6 +89,10 @@ class PaketResource extends Resource
                                         '1' => 'Yes',
                                         '0' => 'No'
                                     ]),
+                                Toggle::make('is_show_public')
+                                    ->label('Tampilkan di publik')
+                                    ->required()
+                                    ->default(0),
                             ])
                     ])
             ]);
@@ -144,7 +154,10 @@ class PaketResource extends Resource
                     ])->enum([
                         0 => 'Hanya sekali',
                         1 => 'Digunakan berkali kali'
-                    ])
+                    ]),
+                ToggleColumn::make('is_show_public')
+                    ->label('Tampilkan di public')
+                    ->alignCenter()
             ])
             ->filters([
                 //
@@ -157,10 +170,12 @@ class PaketResource extends Resource
                             ->causedBy(Auth::user())
                             ->log('Menghapus data paket');
                     }),
-                ViewAction::make()
+                ViewAction::make(),
+                RestoreAction::make(),
             ])
             ->bulkActions([
-                DeleteBulkAction::make()
+                DeleteBulkAction::make(),
+                RestoreBulkAction::make()
             ]);
     }
 
@@ -179,5 +194,12 @@ class PaketResource extends Resource
             'view' => ViewPaket::route('/{record}'),
             'edit' => Pages\EditPaket::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withoutGlobalScopes([
+            SoftDeletingScope::class
+        ]);
     }
 }

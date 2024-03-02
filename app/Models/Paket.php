@@ -18,7 +18,8 @@ class Paket extends Model
         'promote_code',
         'diskon',
         'id_kelas',
-        'is_many_times'
+        'is_many_times',
+        'is_show_public'
     ];
 
     protected $appends = [
