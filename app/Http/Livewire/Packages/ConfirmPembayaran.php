@@ -72,6 +72,10 @@ class ConfirmPembayaran extends Component
 
     public function konfirmasiPembayaran()
     {
+        $paket = Paket::find($this->id_paket);
+        if ($paket->is_show_public == 0) {
+            return session()->flash('fail', 'Paket tidak bisa di order karna tidak diizinkan untuk di order');
+        }
         // Check time order
         $startTime = Carbon::now()->locale('id')->subMinutes(5)->isoFormat('YYYY-MM-DD H:m');
         $endTime = Carbon::now()->isoFormat('YYYY-MM-DD H:m');
