@@ -96,7 +96,7 @@ class OrderPaket extends Model
 
     public function paket()
     {
-        return $this->belongsTo(Paket::class, 'id_paket')->withDefault();
+        return $this->belongsTo(Paket::class, 'id_paket')->withDefault(0);
     }
 
     public function jurnal()
