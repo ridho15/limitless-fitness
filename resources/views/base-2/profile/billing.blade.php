@@ -229,7 +229,7 @@
                             <div class="row">
                                 <div class="col-md-4 d-flex d-md-block justify-content-between align-items-center">
                                     <div class="fw-bold text-start"> <a
-                                            href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
+                                            href="{{ route('detail-packages', ['id' => $item->paket->id ?? 0]) }}"
                                             style="text-decoration: none; color: black">
                                             {{ $item->paket->nama }}
                                         </a></div>
