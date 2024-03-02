@@ -133,12 +133,11 @@
                             <div class="row">
                                 <div class="col-md-4 d-flex d-md-block justify-content-between align-items-center">
                                     <div class="fw-bold text-start"> <a
-                                            href="{{ route('detail-packages', ['id' => $item->paket->id]) }}"
+                                            href="{{ route('detail-packages', ['id' => $item->paket->id ?? 0]) }}"
                                             style="text-decoration: none; color: black">
                                             {{ $item->paket->nama }} {{ $item->id }}
                                         </a></div>
-                                    <small class="d-block text-md-start text-center">{{ $item->paket->jumlah_pertemuan
-                                        }}
+                                    <small class="d-block text-md-start text-center">{{ $item->paket->jumlah_pertemuan }}
                                         Pertemuan</small>
                                 </div>
                                 <div class="col-md-4 text-center mt-2 mt-md-0">
