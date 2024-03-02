@@ -138,7 +138,7 @@ class BaseController extends Controller
         $data['active'] = 'packages';
         $allPaket = Paket::whereHas('paketLocation', function ($query) {
             $query->where('id_location', session()->get('id_location'));
-        })->get();
+        })->where('is_show_public', 1)->get();
         $listKelas = Kelas::where(function ($query) {
             $query->where('id_location', session()->get('id_location'))
                 ->orWhere('id_location', 0);
@@ -591,7 +591,7 @@ class BaseController extends Controller
                 'sisa' => $orderPaket->sisa - 1,
                 'is_active' => 1,
             ]);
-    
+
             DB::commit();
             activity()->causedBy(Auth::user())
                 ->log('Melakukan Bookingk kelas');
@@ -600,8 +600,6 @@ class BaseController extends Controller
             DB::rollBack();
             return redirect()->back()->with('fail', 'Order paket sedang dalam antrian tunggu beberapa detik lagi');
         }
-
-        
     }
 
     public function logout(Request $request)
