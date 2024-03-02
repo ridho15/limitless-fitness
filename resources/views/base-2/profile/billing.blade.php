@@ -39,7 +39,7 @@
                                     <div class="fw-bold text-start"> <a
                                             href="{{ route('detail-packages', ['id' => $item->paket->id ?? 0]) }}"
                                             style="text-decoration: none; color: black">
-                                            {{ $item->paket->nama }}
+                                            {{ $item->paket->nama ?? 'Paket dihapus' }}
                                         </a></div>
                                     <small class="d-block text-start">{{ $item->paket->jumlah_pertemuan }}
                                         Pertemuan</small>
@@ -135,7 +135,7 @@
                                     <div class="fw-bold text-start"> <a
                                             href="{{ route('detail-packages', ['id' => $item->paket->id ?? 0]) }}"
                                             style="text-decoration: none; color: black">
-                                            {{ $item->paket->nama }} {{ $item->id }}
+                                            {{ $item->paket->nama ?? 'Paket dihapus' }}
                                         </a></div>
                                     <small class="d-block text-md-start text-center">{{ $item->paket->jumlah_pertemuan }}
                                         Pertemuan</small>
@@ -231,7 +231,7 @@
                                     <div class="fw-bold text-start"> <a
                                             href="{{ route('detail-packages', ['id' => $item->paket->id ?? 0]) }}"
                                             style="text-decoration: none; color: black">
-                                            {{ $item->paket->nama }}
+                                            {{ $item->paket->nama ?? 'Paket dihapus' }}
                                         </a></div>
                                     <small class="d-block text-md-start text-center">{{ $item->paket->jumlah_pertemuan
                                         }}
