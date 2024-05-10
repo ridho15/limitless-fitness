@@ -60,7 +60,7 @@
 
         #client {
             padding-left: 6px;
-            border-left: 6px solid #396552;
+            border-left: 6px solid #000000;
             float: left;
         }
 
@@ -80,7 +80,7 @@
         }
 
         #invoice h1 {
-            color: #396552;
+            color: #000000;
             font-size: 2.4em;
             line-height: 1em;
             font-weight: normal;
@@ -117,7 +117,7 @@
         }
 
         table td h3 {
-            color: #396552;
+            color: #000000;
             font-size: 1.2em;
             font-weight: normal;
             margin: 0 0 0.2em 0;
@@ -126,7 +126,7 @@
         table .no {
             color: #FFFFFF;
             font-size: 1.6em;
-            background: #396552;
+            background: #000000;
         }
 
         table .desc {
@@ -140,7 +140,7 @@
         table .qty {}
 
         table .total {
-            background: #396552;
+            background: #000000;
             color: #FFFFFF;
         }
 
@@ -168,9 +168,9 @@
         }
 
         table tfoot tr:last-child td {
-            color: #396552;
+            color: #000000;
             font-size: 1.4em;
-            border-top: 1px solid #396552;
+            border-top: 1px solid #000000;
 
         }
 
@@ -185,7 +185,7 @@
 
         #notices {
             padding-left: 6px;
-            border-left: 6px solid #396552;
+            border-left: 6px solid #000000;
         }
 
         #notices .notice {
@@ -211,8 +211,8 @@
             {{-- <img src="{{ asset('assets/images/logo.png') }}"> --}}
         </div>
         <div id="company">
-            <h2 class="name">Daily Dose Pilates</h2>
-            <div style="width: 50%; float: left;">{{ $orderPaket->location->nama }} - {{ $orderPaket->location->alamat }}</div>
+            <h2 class="name">{{ config('app.name') }}</h2>
+            <div style="">{{ $orderPaket->location->nama }} - {{ $orderPaket->location->alamat }}</div>
             <div>{{ $orderPaket->location->no_hp }}</div>
             <div><a href="mailto:{{ $orderPaket->location->email }}">{{ $orderPaket->location->email }}</a></div>
         </div>

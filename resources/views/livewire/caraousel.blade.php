@@ -12,7 +12,7 @@
                     style="z-index: 1; margin-top: 270px">
                     <div class="container px-5">
                         <h1 class="text-white my-3">Welcome to
-                            Daily Dose Pilates</h1>
+                            Fitnes</h1>
                         <p class="text-white"> {{ $location ? 'Location - ' . $location->nama : 'Your Location' }}</p>
                         <div class="d-flex align-items-center justify-content-right">
                             <a href="{{ route('timetable') }}" class="btn me-3 custom-btn custom-btn-white">Book Now</a>

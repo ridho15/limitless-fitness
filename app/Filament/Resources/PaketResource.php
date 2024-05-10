@@ -58,13 +58,16 @@ class PaketResource extends Resource
                                     ->preload()
                                     ->searchable()
                                     ->options(Kelas::get()->pluck('nama_kelas', 'id')),
-                                TextInput::make('jumlah_pertemuan')
-                                    ->numeric()
+                                Select::make('valid_month')
+                                    ->label('Paket Bulanan')
+                                    ->options([
+                                        '1' => "1 Bulan",
+                                        '3' => '3 Bulan',
+                                        '6' => "6 Bulan",
+                                        '12' => "12 Bulan",
+                                    ])
+                                    ->searchable()
                                     ->required(),
-                                TextInput::make('valid_day')
-                                    ->numeric()
-                                    ->required()
-                                    ->default(0),
                                 Select::make('location')
                                     ->preload()
                                     ->searchable()
@@ -83,12 +86,6 @@ class PaketResource extends Resource
                                     ->numeric()
                                     ->default(0)
                                     ->required(),
-                                Radio::make('is_many_times')
-                                    ->label('Many TImes')
-                                    ->options([
-                                        '1' => 'Yes',
-                                        '0' => 'No'
-                                    ]),
                                 Toggle::make('is_show_public')
                                     ->label('Tampilkan di publik')
                                     ->required()
@@ -108,12 +105,6 @@ class PaketResource extends Resource
                 TextColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
                     ->searchable(),
-                TextColumn::make('jumlah_pertemuan')
-                    ->label('Jumlah Pertemuan')
-                    ->formatStateUsing(function ($state) {
-                        return $state . ' Pertemuan';
-                    })
-                    ->sortable(),
                 TextColumn::make('harga_formatted')
                     ->label('Harga')
                     ->sortable(),
@@ -132,9 +123,9 @@ class PaketResource extends Resource
                     ->formatStateUsing(function ($state) {
                         return 'Rp.' . number_format($state, 0, ',', '.');
                     })->sortable(),
-                TextColumn::make('valid_day')
+                TextColumn::make('valid_month')
                     ->formatStateUsing(function ($state) {
-                        return $state . ' Hari';
+                        return $state . ' Bulan';
                     })->sortable(),
                 TextColumn::make('paketLocation')
                     ->label('Location')
@@ -146,15 +137,6 @@ class PaketResource extends Resource
 
                         echo $text;
                     }),
-                BadgeColumn::make('is_many_times')
-                    ->label('Many Times')
-                    ->colors([
-                        'secondary' => 0,
-                        'success' => 1
-                    ])->enum([
-                        0 => 'Hanya sekali',
-                        1 => 'Digunakan berkali kali'
-                    ]),
                 ToggleColumn::make('is_show_public')
                     ->label('Tampilkan di public')
                     ->alignCenter()

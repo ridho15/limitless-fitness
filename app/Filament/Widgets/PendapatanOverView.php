@@ -12,10 +12,8 @@ use App\Models\Kelas;
 use App\Models\KelasActivity;
 use App\Models\Location;
 use App\Models\User;
-use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
-use Illuminate\Support\Facades\Auth;
 
 class PendapatanOverView extends BaseWidget
 {
@@ -88,7 +86,7 @@ class PendapatanOverView extends BaseWidget
             ]));
 
             // Fee instruktur
-            $listKelas = Kelas::select(['id', 'fee', 'min_anggota'])->get();
+            $listKelas = Kelas::select(['id', 'min_anggota'])->get();
             $feeInstruktur = 0;
             foreach ($listKelas as $item) {
                 $fee = $item->fee;

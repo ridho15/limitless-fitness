@@ -28,10 +28,6 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Columns\ColorColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -87,10 +83,6 @@ class OrderPaketResource extends Resource
                                     ->label("Pilih Location")
                                     ->options($listLocation)
                                     ->required(),
-                                TextInput::make('jumlah_pertemuan')
-                                    ->label('Jumlah Pertemuan')
-                                    ->required()
-                                    ->default(0),
                                 TextInput::make('harga')
                                     ->numeric()
                                     ->required(),
@@ -101,7 +93,7 @@ class OrderPaketResource extends Resource
                                         '2' => 'Belum Lunas'
                                     ])->required(),
                                 DateTimePicker::make('expired_date')
-                                    ->label('Tanggal Expired')
+                                    ->label('Expired Date')
                                     ->required(),
                                 DateTimePicker::make('tanggal_pembayaran')
                                     ->label('Tanggal Pembayaran')
@@ -167,24 +159,6 @@ class OrderPaketResource extends Resource
                     })
                     ->view('custom-column.order-paket')
                     ->searchable(),
-                ViewColumn::make('jumlah_pertemuan')
-                    ->getStateUsing(function ($record) {
-                        return json_encode([
-                            'status' => $record->status,
-                            'data' => $record->jumlah_pertemuan
-                        ]);
-                    })
-                    ->view('custom-column.order-paket')
-                    ->sortable(),
-                ViewColumn::make('sisa')
-                    ->getStateUsing(function ($record) {
-                        return json_encode([
-                            'status' => $record->status,
-                            'data' => $record->sisa
-                        ]);
-                    })
-                    ->view('custom-column.order-paket')
-                    ->sortable(),
                 ViewColumn::make('harga_formatted')
                     ->view('custom-column.order-paket')
                     ->getStateUsing(function ($record) {
@@ -349,7 +323,7 @@ class OrderPaketResource extends Resource
                                 'tipe' => 0,
                             ], [
                                 'nama' => 'Biaya Instruktur 1px group @' . $record->paket->kelas->honor,
-                                'jumlah_uang' => $record->paket->kelas->honor * $record->jumlah_pertemuan,
+                                'jumlah_uang' => $record->paket->kelas->honor,
                                 'tipe' => '0',
                                 'struk' => null,
                                 'tanggal' => now(),
@@ -357,11 +331,11 @@ class OrderPaketResource extends Resource
                                 'id_order_paket' => $record->id
                             ]);
                             if ($record->is_active != 1) {
-                                $tanggalExpired = Carbon::now()->addDays($record->paket->valid_day);
+                                $tanggalExpired = Carbon::now()->addMonth($record->paket->valid_month);
                                 $record->update([
                                     'status' => 1,
                                     'expired_date' => $tanggalExpired,
-                                    'sisa' => $record->jumlah_pertemuan
+                                    'is_active' => 1
                                 ]);
                             }
                         })->requiresConfirmation(),

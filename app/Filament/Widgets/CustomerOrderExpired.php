@@ -35,7 +35,7 @@ class CustomerOrderExpired extends BaseWidget
         })->where(function ($query) use ($duaMinggu) {
             $query->whereDate('expired_date', '>=', date('Y-m-d'))
                 ->whereDate('expired_date', "<=", $duaMinggu);
-        })->where('sisa', '>', 0)
+        })
             ->where('is_active', 1)
             ->orderBy('expired_date', 'DESC');
         return $query;
@@ -59,12 +59,6 @@ class CustomerOrderExpired extends BaseWidget
                 ->searchable(),
             TextColumn::make('paket.nama')
                 ->label('Paket')
-                ->searchable(),
-            TextColumn::make('jumlah_pertemuan')
-                ->alignCenter()
-                ->sortable(),
-            TextColumn::make('sisa')
-                ->label('Sisa Paket')
                 ->searchable(),
             TextColumn::make('expired_date')
                 ->label('Hari Akan Habis')

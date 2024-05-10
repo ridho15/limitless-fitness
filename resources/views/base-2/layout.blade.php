@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Daily Dose Pilates</title>
+    <title>{{ config('app.name') }}</title>
     <link rel="stylesheet" href="/css/app.css" />
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -29,7 +29,7 @@
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg bg-light bg-color-custom shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-white fs-4" href="#">Daily Dose Pilates</a>
+            <a class="navbar-brand fw-bold text-white fs-4" href="#">Fitens</a>
             <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -50,10 +50,10 @@
                             href="{{ route('packages') }}">Packages</a>
                     </li>
                     @if (Auth::user())
-                    <li class="nav-item ">
-                        <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
-                            href="{{ route('timetable') }}">Timetable</a>
-                    </li>
+                        <li class="nav-item ">
+                            <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
+                                href="{{ route('timetable') }}">Timetable</a>
+                        </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'location') active nav-link-fs @endif"
@@ -66,75 +66,66 @@
                     </li>
                 </ul>
                 @if (\Auth::user())
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle d-flex align-items-center justify-content-center" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false" style="border: none !important">
-                        <span class="text-white fw-bold mx-1 text-uppercase rounded-circle px-3"
-                            style="background-color: purple; padding: 10px;">
-                            {{ substr(Auth::user()->name, 0, 2) }}
-                        </span>
-                        <span class="mx-1 text-white">{{ Auth::user()->name }}</span>
-                    </button>
-                    <ul class="dropdown-menu bg-color-custom w-100" style="z-index: 100">
-                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile') }}"><i
-                                    class="fa-regular fa-circle-user"></i> <span class="mx-2">My Profile</span></a>
-                        </li>
-                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.bookings') }}"><i
-                                    class="fa-regular fa-credit-card"></i>
-                                <span class="mx-2">My Bookings</span></a></li>
-                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.voucher') }}"><i
-                                    class="fa-solid fa-ticket"></i>
-                                <span class="mx-2">My Voucher</span></a></li>
-                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.packages') }}"><i
-                                    class="fa-solid fa-hand-holding-heart"></i>
-                                <span class="mx-2">My Packages</span></a>
-                        </li>
-                        {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.memberships') }}"><i
-                                    class="fa-solid fa-users-rectangle"></i>
-                                <span class="mx-2">My Membership</span></a>
-                        </li> --}}
-                        <li class="my-2" class="px-2">
-                            <hr>
-                        </li>
-                        <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile.billing') }}"><i
-                                    class="fa-solid fa-comments-dollar"></i>
-                                <span class="mx-2">Billing</span></a></li>
-                        {{-- <li class="my-2"><a class="dropdown-item"
-                                href="{{ route('profile.notification-settings') }}"><i class="fa-solid fa-bullhorn"></i>
-                                <span class="mx-2">Notification
-                                    Settings</span></a></li> --}}
-                        {{-- <li class="my-2"><a class="dropdown-item" href="{{ route('profile.waiver-form') }}"><i
-                                    class="fa-solid fa-clipboard"></i> <span class="mx-2">Waiver Form</span></a>
-                        </li> --}}
-                        <li class="my-2">
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button class="dropdown-item text-white" type="submit"><i
-                                        class="fa-solid fa-right-from-bracket"></i> <span
-                                        class="mx-2">Logout</span></button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle d-flex align-items-center justify-content-center"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="border: none !important">
+                            <span class="text-white fw-bold mx-1 text-uppercase rounded-circle px-3"
+                                style="background-color: purple; padding: 10px;">
+                                {{ substr(Auth::user()->name, 0, 2) }}
+                            </span>
+                            <span class="mx-1 text-white">{{ Auth::user()->name }}</span>
+                        </button>
+                        <ul class="dropdown-menu bg-color-custom w-100" style="z-index: 100">
+                            <li class="my-2"><a class="dropdown-item text-white" href="{{ route('profile') }}"><i
+                                        class="fa-regular fa-circle-user"></i> <span class="mx-2">My
+                                        Profile</span></a>
+                            </li>
+                            <li class="my-2"><a class="dropdown-item text-white"
+                                    href="{{ route('profile.bookings') }}"><i class="fa-regular fa-credit-card"></i>
+                                    <span class="mx-2">My Bookings</span></a></li>
+                            <li class="my-2"><a class="dropdown-item text-white"
+                                    href="{{ route('profile.voucher') }}"><i class="fa-solid fa-ticket"></i>
+                                    <span class="mx-2">My Voucher</span></a></li>
+                            <li class="my-2"><a class="dropdown-item text-white"
+                                    href="{{ route('profile.packages') }}"><i
+                                        class="fa-solid fa-hand-holding-heart"></i>
+                                    <span class="mx-2">My Packages</span></a>
+                            </li>
+                            <li class="my-2" class="px-2">
+                                <hr>
+                            </li>
+                            <li class="my-2"><a class="dropdown-item text-white"
+                                    href="{{ route('profile.billing') }}"><i class="fa-solid fa-comments-dollar"></i>
+                                    <span class="mx-2">Billing</span></a></li>
+                            <li class="my-2">
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button class="dropdown-item text-white" type="submit"><i
+                                            class="fa-solid fa-right-from-bracket"></i> <span
+                                            class="mx-2">Logout</span></button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 @else
-                <div class="d-flex justify-content-evenly align-items-center">
-                    <a href="{{ route('login') }}" class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline"
-                        style="border-color: white; color: white">Login / Registrasi</a>
-                    <button type="button"
-                        class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline ms-3 btn-ganti-lokasi"
-                        style="border-color: white; color: white">Ganti Lokasi</button>
-                </div>
+                    <div class="d-flex justify-content-evenly align-items-center">
+                        <a href="{{ route('login') }}"
+                            class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline"
+                            style="border-color: white; color: white">Login / Registrasi</a>
+                        <button type="button"
+                            class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline ms-3 btn-ganti-lokasi"
+                            style="border-color: white; color: white">Ganti Lokasi</button>
+                    </div>
                 @endif
             </div>
         </div>
     </nav>
 
     @yield('content')
-    {{-- Start Footer --}}
     @livewire('card-location-studio')
     @livewire('footer')
     @livewire('floating-whats-app')
-    {{-- End Footer --}}
 
     <script src="/js/app.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
@@ -179,7 +170,7 @@
             }).showToast();
         }
 
-        $('.btn-ganti-lokasi').on('click', function(){
+        $('.btn-ganti-lokasi').on('click', function() {
             $('#modal_location_studio').modal('show')
         })
     </script>

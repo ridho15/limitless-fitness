@@ -14,9 +14,11 @@ use App\Models\VoucherCustomer;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
+use chillerlan\QRCode\QRCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -205,23 +207,6 @@ class ProfileController extends Controller
         $listPaketAktif = OrderPaket::where('id_user', $user->id)->whereIn('status', [1, 2])->where('is_active', 1)->orderBy('created_at', 'DESC')->get();
         // Update paket
         foreach ($listPaketAktif as $item) {
-            // if ($item->expired_date < now()) {
-            //     $item->update([
-            //         'is_active' => 0
-            //     ]);
-            // }
-            // $bookingKelas = OrderPaket::where('id_user', Auth::id())
-            //     ->where('id', $item->id)
-            //     ->whereHas('paket', function ($query) {
-            //         $query->whereHas('kelas', function ($query) {
-            //             $query->whereHas('kelasActivity', function ($query) {
-            //                 $query->whereHas('bookingKelas', function ($query) {
-            //                     $query->where('id_user', Auth::id())
-            //                         ->where('status_kehadiran', 1);
-            //                 });
-            //             });
-            //         });
-            //     })->first();
             $id_order_paket = $item->id;
             $bookingKelas = BookingKelas::where('id_user', Auth::id())
                 ->where('status_kehadiran', 1)
@@ -273,8 +258,8 @@ class ProfileController extends Controller
         $data['active'] = 'billing';
 
         $listPaymentDue = OrderPaket::where('id_user', $user->id)
-            ->where('expired_date', '>=', now())
             ->where('is_active', 0)
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         $listTransactionHistory = OrderPaket::where('id_user', $user->id)
@@ -377,5 +362,66 @@ class ProfileController extends Controller
         $customerJadwalStatic->delete();
 
         return redirect()->back()->with('success', 'Repetitif time berhasil di hapus');
+    }
+
+    public function webcame(Request $request)
+    {
+        return view('base-2.profile.webcame');
+    }
+
+    public function store(Request $request)
+    {
+        $img = $request->image;
+        $folderPath = "uploads/";
+
+        $image_parts = explode(";base64,", $img);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1];
+
+        $image_base64 = base64_decode($image_parts[1]);
+        $fileName = uniqid() . '.png';
+
+        $file = $folderPath . $fileName;
+        Storage::put($file, $image_base64);
+        return public_path('/storage/upload/' . $fileName);
+    }
+
+    public function upload(Request $request)
+    {
+        try {
+            $image = $request->image;
+        if ($image) {
+            $folderPath = "public/qrcode/";
+            $image_parts = explode(";base64,", $image);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+
+            $image_base64 = base64_decode($image_parts[1]);
+            $fileName = uniqid() . '.png';
+
+            $file = $folderPath . $fileName;
+            Storage::put($file, $image_base64);
+
+            $file = str_replace('public/', '', $file);
+            $result = (new QRCode())->readFromFile(public_path('/storage/' . $file));
+
+            $content = $result->data;
+            $matrix = $result->getQRMatrix();
+
+            return [
+                'content' => $content,
+                'matrix' => $matrix
+            ];
+        } else {
+            return response()->json([
+                'message'   => "Image tidak terbaca"
+            ]);
+        }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'=> false,
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 }

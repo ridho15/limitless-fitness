@@ -63,9 +63,7 @@
                                 <small class="d-block mb-2 fw-light">
                                     <span class="me-2"><i class="fa-solid fa-clock-rotate-left" style="color: grey"></i>
                                     </span>
-                                    <span>Valid For {{ $item->valid_day }} days from date
-                                        of first booking
-                                    </span>
+                                    <span>The package starts from the first time you make a payment and is confirmed by the administrator</span>
                                 </small>
                                 @if ($item->is_many_times == 0)
                                 <small class="d-block mb-2 fw-light">

@@ -61,7 +61,7 @@ body{
 
 
 .bg-color-custom{
-    background-color: #396552 !important;
+    background-color: #000000 !important;
 }
 
 .custom-carousel{
@@ -118,10 +118,10 @@ body{
     padding-bottom: 8px;
     padding-right: 20px;
     padding-left: 20px;
-    border: 1px solid #396552;
+    border: 1px solid #000000;
     border-radius: 20px;
     color: white;
-    background-color: #396552;
+    background-color: #000000;
 }
 
 .custom-btn-white{
@@ -131,13 +131,13 @@ body{
     padding-left: 20px;
     border: 1px solid rgb(255, 255, 255);
     border-radius: 20px;
-    color: #396552;
+    color: #000000;
     background-color: #ffffff;
 }
 
 .custom-btn-outline{
-    border: 1px solid #396552;
-    color: #396552;
+    border: 1px solid #000000;
+    color: #000000;
     border-radius: 20px;
     background-color: transparent;
 }
@@ -156,19 +156,19 @@ body{
 .custom-btn-outline:hover{
     border: 1px solid grey !important;
     color: white !important;
-    background-color: #396552 !important;
+    background-color: #000000 !important;
 }
 
 .custom-btn-outline-white:hover{
     border: 1px solid rgb(255, 255, 255) !important;
-    color: #396552 !important;
+    color: #000000 !important;
     background-color: #ffffff !important;
 }
 
 .custom-btn:hover{
     background-color: transparent;
-    color: #396552;
-    border: 1px solid #396552;
+    color: #000000;
+    border: 1px solid #000000;
 }
 
 .nav-link-fs{

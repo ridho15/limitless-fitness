@@ -97,16 +97,14 @@ class ConfirmPembayaran extends Component
         }
 
         // check paket hanya sekali order
-        $orderPaket = OrderPaket::whereHas('paket', function ($query) {
-            $query->where('id', $this->id_paket)
-                ->where('is_many_times', 0);
-        })
+        $orderPaket = OrderPaket::has('paket')
             ->where('id_user', Auth::id())
             ->where('status', 1)
+            ->whereDate('expired_date', '>', now())
             ->first();
 
         if ($orderPaket) {
-            return session()->flash('fail', 'Paket sudah pernah di order. Silahkan order paket lain');
+            return session()->flash('fail', 'Paket sudah pernah di order. Silahkan order paket lain atau tunggu paket ini sampai habis');
         }
 
         $data['unix_code'] = $this->unixcode;
@@ -117,9 +115,7 @@ class ConfirmPembayaran extends Component
         $data['is_active'] = 0;
         $data['id_location'] = session()->get('id_location');
         $data['honor'] = $this->paket->honor;
-        $data['jumlah_pertemuan'] = $this->paket->jumlah_pertemuan;
-        $data['sisa'] = $this->paket->jumlah_pertemuan;
-        $data['expired_date'] = Carbon::now()->addDays($this->paket->valid_day);
+        $data['expired_date'] = Carbon::now()->addDay(1);
 
         $voucherCustomer = VoucherCustomer::find($this->id_voucher_customer);
 

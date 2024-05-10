@@ -12,9 +12,8 @@ class Paket extends Model
     protected $table = 'pakets';
     protected $fillable = [
         'nama',
-        'jumlah_pertemuan',
         'harga',
-        'valid_day',
+        'valid_month',
         'promote_code',
         'diskon',
         'id_kelas',

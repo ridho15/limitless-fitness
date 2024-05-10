@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Livewire\Base\Instruktur;
 use App\Mail\RegistrasiKonfirmasiMail;
 use App\Mail\SendForgotPasswordMail;
 use App\Models\BookingKelas;
-use App\Models\BookingOrder;
 use App\Models\CustomerJadwalStatic;
 use App\Models\CustomerKelas;
 use App\Models\Kelas;
 use App\Models\KelasActivity;
-use App\Models\KelasPaket;
 use App\Models\Location;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
-use App\Models\VoucherCustomer;
 use Carbon\Carbon;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
@@ -30,7 +26,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\Console\Input\Input;
 
 class BaseController extends Controller
 {
@@ -159,10 +154,8 @@ class BaseController extends Controller
         $isDisable = false;
         if ($paket->is_many_times == 0) {
             $orderPaket = OrderPaket::where('id_user', Auth::id())
-                ->whereHas('paket', function ($query) use ($paket) {
-                    $query->where('id', $paket->id)
-                        ->where('is_many_times', 0);
-                })
+                ->whereDate('expired_date', '>', now())
+                ->has('paket')
                 ->where('status', 1)
                 ->first();
             if ($orderPaket) {
@@ -449,6 +442,7 @@ class BaseController extends Controller
         $path = str_replace('public/', '', $path);
         $data['tanggal_pembayaran'] = now();
         $data['bukti_pembayaran'] = $path;
+        $data['expired_date'] = Carbon::now()->addDay(2);
 
         $bookingOrder->update($data);
 

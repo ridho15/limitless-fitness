@@ -40,7 +40,7 @@
                     </div>
                     <div class="mb-2">
                         <span class="me-2"><i class="fa-solid fa-calendar-days"></i></span>
-                        <small>Valid for {{ $paket->valid_day }} Days from date of first booking</small>
+                        <small>The package starts from the first time you make a payment and is confirmed by the administrator</small>
                     </div>
                     <div class="mb-2">
                         <span class="me-2"><i class="fa-regular fa-circle-check"></i></span>

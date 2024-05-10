@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Daily Dose Pilates'),
+    'name' => env('APP_NAME', 'Fitnes Pilates'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', true),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'base64:ITWmmTE3R12xbfibg19ZtnSo6T2eZtznZfF6cPCzUrc='),
+    'key' => env('APP_KEY', 'base64:RT4mufsPx9gpuEyMuEy7CXtrLHCidwG5AV3dGLS2gSQ='),
 
     'cipher' => 'AES-256-CBC',
 

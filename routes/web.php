@@ -1,18 +1,10 @@
 <?php
 
-use App\Filament\Resources\KelasResource\Pages\ListKelas;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\ProfileController;
 use App\Mail\RegistrasiKonfirmasiMail;
-use App\Models\BookingKelas;
-use App\Models\Jurnal;
-use App\Models\Kelas;
-use App\Models\KelasActivity;
-use App\Models\KelasRating;
-use App\Models\OrderPaket;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/detail-timetable/{id}', [BaseController::class, 'detailTimetable'])->name('detail-timetable');
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profile');
+        Route::get('webcame', [ProfileController::class, 'webcame'])->name('profile.webcame');
+        Route::post('upload', [ProfileController::class, 'upload'])->name('profile.upload');
         Route::get('/invoice/{id}', [ProfileController::class, 'invoice'])->name('profile.invoice');
         Route::prefix('booking')->group(function () {
             Route::get('/', [ProfileController::class, 'bookings'])->name('profile.bookings');
