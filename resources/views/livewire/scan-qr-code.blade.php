@@ -48,6 +48,8 @@
             Webcam.set({
                 width: width,
                 height: height,
+                dest_width : width,
+                dest_height : height,
                 image_format: 'jpeg',
                 jpeg_quality: 90,
                 constraints: {
