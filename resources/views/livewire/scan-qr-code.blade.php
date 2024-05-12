@@ -43,13 +43,23 @@
         });
 
         function initWebcam() {
-            var width = $(window).width() > 640 ? 640 : $(window).width();
-            var height = width * 75 / 100;
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                var width = $(window).width() > 640 ? 640 : $(window).width();
+                var height = width + 100;
+                console.log("is mobile device");
+            } else {
+                // false for not mobile device
+                console.log("is not mobile device");
+                var width = $(window).width() > 640 ? 640 : $(window).width();
+                var height = width * 75 / 100;
+            }
             Webcam.set({
                 width: width,
-                height: width,
-                dest_width : width,
-                dest_height : width,
+                height: height,
+                dest_width: width,
+                dest_height: height,
+                crop_width: width,
+                crop_height: height,
                 image_format: 'jpeg',
                 jpeg_quality: 90,
                 constraints: {
@@ -58,7 +68,6 @@
             });
             Webcam.attach('#my_camera');
             height = $(window).height();
-            $('#init').html(width + "---" + height);
         }
         window.addEventListener('contentChange', function() {
             initWebcam();
