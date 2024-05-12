@@ -25,6 +25,7 @@
                         Ambil gambar untuk di scan
                     @endif
                 </div>
+                <div id="init"></div>
             </div>
             <div class="col-md-12 text-center">
                 <br />
@@ -36,16 +37,17 @@
 
 @push('js')
     <script>
-        var cameraFacingMode = "";
+        var cameraFacingMode = "user";
         $(document).ready(function() {
             initWebcam();
         });
 
         function initWebcam() {
             var width = $(window).width() > 640 ? 640 : $(window).width();
+            var height = width * 75 / 100;
             Webcam.set({
                 width: width,
-                height: width * 75 / 100,
+                height: height,
                 image_format: 'jpeg',
                 jpeg_quality: 90,
                 constraints: {
@@ -53,6 +55,7 @@
                 }
             });
             Webcam.attach('#my_camera');
+            $('#init').html(width + "---" + height);
         }
         window.addEventListener('contentChange', function() {
             initWebcam();
