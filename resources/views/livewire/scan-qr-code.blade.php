@@ -1,38 +1,53 @@
-<div class="container">
-    <form method="POST" wire:submit="scanImage">
-        @csrf
-        <div class="row justify-content-center align-items-center">
-            <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
-                <div id="my_camera"></div>
-                <br />
-                <div class="row">
-                    <div class="col-md-6 col-6">
-                        <button type="button" class="btn custom-btn" wire:click="$emit('take_snapshot')">Ambil
-                            Gambar</button>
+<div>
+    <div class="bg-white fixed-top"
+        style="box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);">
+        <a href="" class="d-flex align-items-center text-dark py-2">
+            <span class="mx-2" href="" class="mx-2 text-dark">
+                <i class="fa-solid fa-arrow-left"></i>
+            </span>
+            <span>Kembali </span>
+        </a>
+    </div>
+    <div class="container">
+        <form method="POST" wire:submit="scanImage">
+            @csrf
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
+                    <div id="my_camera"></div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6 col-6">
+                            <button type="button" class="btn custom-btn" wire:click="$emit('take_snapshot')">Ambil
+                                Gambar <i class="fa-solid fa-camera"></i></button>
+                        </div>
+                        <div class="col-md-6 col-6">
+                            <button type="button" class="btn custom-btn-outline"
+                                wire:click="$emit('ganti_camera')">Ganti
+                                Camera <i class="fa-solid fa-rotate"></i></button>
+                        </div>
                     </div>
-                    <div class="col-md-6 col-6">
-                        <button type="button" class="btn custom-btn-outline" wire:click="$emit('ganti_camera')">Ganti
-                            Camera</button>
+                    <input type="hidden" name="image" class="image-tag">
+                </div>
+                <div class="col-md-12 text-center mt-4">
+                    <div id="results">
+                        @if ($image != null)
+                            <img src="{{ $image }}" alt="">
+                        @else
+                            Ambil gambar untuk di scan
+                        @endif
                     </div>
+                    <div id="init"></div>
                 </div>
-                <input type="hidden" name="image" class="image-tag">
-            </div>
-            <div class="col-md-12 text-center mt-4">
-                <div id="results">
-                    @if ($image != null)
-                        <img src="{{ $image }}" alt="">
-                    @else
-                        Ambil gambar untuk di scan
-                    @endif
+                <div class="col-md-12 text-center">
+                    <br />
+                    <button class="btn custom-btn">Submit <span class="mx-2"><i
+                                class="fa-solid fa-right-to-bracket"></i></span></button>
                 </div>
-                <div id="init"></div>
             </div>
-            <div class="col-md-12 text-center">
-                <br />
-                <button class="btn btn-success">Submit</button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 @push('js')

@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\OrderPaket;
 use App\Models\User;
 use chillerlan\QRCode\QRCode;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -37,14 +39,23 @@ class ScanQrCode extends Component
             $result = (new QRCode())->readFromFile(public_path($file));
             $content = $result->data;
             $matrix = $result->getQRMatrix();
-
             $id_user = Crypt::decrypt($content);
             $user = User::find($id_user);
             if(!$user){
-                $this->emit('hasilScan', false, "Data user tidak ditemukan !");
-            }else{
-                $this->emit('hasilScan', true, "Data User ditemukan !" . $user->name);
+                return $this->emit('hasilScan', false, "Data user tidak ditemukan !");
             }
+            $orderPaket = OrderPaket::where('id_user', $user->id)
+            ->where('status', 1)
+            ->where('is_active', 1)
+            ->whereDate('expired_date', '>=', now())
+            ->where('id_location', Auth::user()->id_location)
+            ->first();
+
+            if(!$orderPaket){
+                return $this->emit('hasilScan', false, "Data pekat tidak ditemukan !");
+            }
+
+            return $this->emit('hasilScan', true, "Data valid");
         } catch (\Throwable $th) {
          $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());   
         }
