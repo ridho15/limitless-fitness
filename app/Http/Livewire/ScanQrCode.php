@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use App\Filament\Resources\CheckInOutResource;
+use App\Models\CheckInOut;
 use App\Models\OrderPaket;
 use App\Models\User;
+use Carbon\Carbon;
 use chillerlan\QRCode\QRCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -16,16 +19,45 @@ class ScanQrCode extends Component
     public $image;
     public $user;
     public $orderPaket;
-    public $listeners = ['simpanData', 'setImage'];
+    public $listeners = ['scanImage', 'setImage'];
     public function render()
     {
         $this->dispatchBrowserEvent('contentChange');
         return view('livewire.scan-qr-code');
     }
 
-    public function simpanData()
+    public function scanImage()
     {
-        
+        if($this->user == null || $this->orderPaket == null){
+            return $this->emit('hasilScan', false, "Belum Melakukan Scan QR Code");
+        }
+        $checkInOut = CheckInOut::where('id_user', $this->user->id)
+        ->where('id_order_paket', $this->orderPaket->id)
+        ->whereDate('jadwal', now())
+        ->orderBy('jadwal', 'DESC')
+        ->first();
+
+        $data['id_user'] = $this->user->id;
+        $data['id_order_paket'] = $this->orderPaket->id;
+        $data['jadwal'] = now();
+        $data['id_location'] = Auth::user()->id_location;
+        if(!$checkInOut){
+            $data['status'] = 1;
+        }elseif($checkInOut->status == 1){
+            $menit = Carbon::parse($checkInOut->jadwal)->diffInMinutes(now());
+            if($menit >= 5){
+                $data['status'] = 2;
+            }else{
+                return $this->emit('hasilScan', false, "Customer baru saja masuk. tunggu 5 menit sebelum keluar");
+            }
+        }else{
+            $data['status'] = 1;
+        }
+
+        CheckInOut::create($data);
+        $this->emit('hasilScan', true, "Data berhasil disimpan");
+        set_time_limit(2);
+        return redirect(CheckInOutResource::getUrl('index'));
     }
 
     public function setImage($image)
@@ -55,12 +87,12 @@ class ScanQrCode extends Component
             ->first();
 
             if(!$orderPaket){
-                return $this->emit('hasilScan', false, "Data pekat tidak ditemukan !");
+                return $this->emit('hasilScan', false, "Data Paket tidak ditemukan !");
             }
 
             $this->user = $user;
             $this->orderPaket = $orderPaket;
-            return $this->emit('hasilScan', true, "Data valid");
+            return $this->emit('hasilScan', true, "Berhasil Melakukan Scan QR Code");
         } catch (\Throwable $th) {
          $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());   
         }

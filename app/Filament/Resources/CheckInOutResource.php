@@ -145,6 +145,11 @@ class CheckInOutResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->orderBy('jadwal', 'DESC');
+    }
+
     public static function getPages(): array
     {
         return [

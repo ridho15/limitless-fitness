@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-md-6 col-6">
                             <small class="fw-light d-block">Email Address</small>
-                            <div class="fw-semibold">{{ $user->email }}</div>
+                            <div class="fw-semibold" style="overflow: auto">{{ $user->email }}</div>
                             <small class="fw-light d-block">Communications and transactions history will be sent to this
                                 email address</small>
                             <a href="{{ route('profile.resend-verifikasi-email', ['id' => $user->id]) }}"
