@@ -3,7 +3,7 @@
         style="box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
     -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
     -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);">
-        <a href="" class="d-flex align-items-center text-dark py-2">
+        <a href="{{ App\Filament\Resources\CheckInOutResource::getUrl('index') }}" class="d-flex align-items-center text-dark py-2">
             <span class="mx-2" href="" class="mx-2 text-dark">
                 <i class="fa-solid fa-arrow-left"></i>
             </span>
