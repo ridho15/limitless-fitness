@@ -46,8 +46,8 @@
             var width = $(window).width() > 640 ? 640 : $(window).width();
             var height = width * 75 / 100;
             Webcam.set({
-                width: width,
-                height: height,
+                width: 490,
+                height: 350,
                 dest_width : width,
                 dest_height : height,
                 image_format: 'jpeg',
