@@ -30,7 +30,7 @@ class CheckInOutResource extends Resource
 {
     protected static ?string $model = CheckInOut::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-selector';
+    protected static ?string $navigationIcon = 'heroicon-o-search-circle';
 
     protected static ?int $navigationSort = 2;
 
