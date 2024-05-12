@@ -9,6 +9,10 @@
     <script src="{{ asset('/js/webcam.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+        integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @yield('css')
     @livewireStyles
     @stack('css')
@@ -17,7 +21,9 @@
             padding: 20px;
             border: 1px solid;
             width: 100%;
-            background: #ccc;
+            border-radius: 10px;
+            background: #f0f0f0;
+            border-color: #f0f0f0;
         }
 
         #results img {

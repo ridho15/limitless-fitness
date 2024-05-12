@@ -28,7 +28,7 @@ async function sweetAlert(status, title, message, confirmButton) {
     return response;
 }
 
-function alert(status, message){
+function alert(status = false, message = "Terjadi kesalahan", icon = 'error'){
     if(status == true){
         icon = 'success';
     }else if(status == false){

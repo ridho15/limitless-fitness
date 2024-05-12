@@ -5,7 +5,16 @@
             <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
                 <div id="my_camera"></div>
                 <br />
-                <input type=button value="Take Snapshot" wire:click="$emit('take_snapshot')">
+                <div class="row">
+                    <div class="col-md-6 col-6">
+                        <button type="button" class="btn custom-btn" wire:click="$emit('take_snapshot')">Ambil
+                            Gambar</button>
+                    </div>
+                    <div class="col-md-6 col-6">
+                        <button type="button" class="btn custom-btn-outline" wire:click="$emit('ganti_camera')">Ganti
+                            Camera</button>
+                    </div>
+                </div>
                 <input type="hidden" name="image" class="image-tag">
             </div>
             <div class="col-md-12 text-center mt-4">
@@ -27,6 +36,7 @@
 
 @push('js')
     <script>
+        var cameraFacingMode = "";
         $(document).ready(function() {
             initWebcam();
         });
@@ -35,18 +45,27 @@
             console.log($(window).width());
             var width = $(window).width();
             Webcam.set({
-                // width: 500,
-                // height: 400,
-                width:  width > 500 ? 500 : width,
-                height: 350,
+                width: width > 640 ? 640 : width,
+                height: width * 75 / 100,
                 image_format: 'jpeg',
-                jpeg_quality: 90
+                jpeg_quality: 90,
+                constraints: {
+                    facingMode: cameraFacingMode
+                }
             });
             Webcam.attach('#my_camera');
         }
         window.addEventListener('contentChange', function() {
             initWebcam();
         })
+
+        Livewire.on('ganti_camera', () => {
+            cameraFacingMode = (cameraFacingMode == 'user') ? 'environment' : 'user';
+            console.log(cameraFacingMode);
+            Webcam.reset();
+            initWebcam();
+        })
+
         Livewire.on('take_snapshot', () => {
             Webcam.snap(function(data_uri) {
                 $(".image-tag").val(data_uri);
