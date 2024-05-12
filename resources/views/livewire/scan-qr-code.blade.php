@@ -11,9 +11,9 @@
         </a>
     </div>
     <div class="container mt-3">
-        <form method="POST" wire:submit="scanImage">
+        <form action="#" wire:submit="scanImage" id="form_scanner">
             @csrf
-            <div class="row justify-content-center align-items-center">
+            <div class="row mb-3 justify-content-center align-items-center">
                 <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
                     <div id="my_camera"></div>
                     <br />
@@ -86,6 +86,9 @@
         }
         window.addEventListener('contentChange', function() {
             initWebcam();
+            $('#form_scanner').submit(function(event){
+                event.preventDefault();
+            })
         })
 
         Livewire.on('ganti_camera', () => {

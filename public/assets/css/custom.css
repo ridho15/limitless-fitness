@@ -105,6 +105,10 @@ body{
     color: gray;
 }
 
+.navbar-toggler{
+    background-color: white !important;
+}
+
 .btn-custom-filter{
     padding-top: 0.6rem;
     padding-bottom: 0.6rem;
