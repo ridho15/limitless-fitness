@@ -267,7 +267,7 @@ return [
     |
     */
 
-    'favicon' => env('FAVICON', 'https://dailydosepilates.com/assets/images/logo.png'),
+    'favicon' => env('FAVICON', 'https://fitnes.dailydosepilates.com/assets/images/logo.png'),
 
     /*
     |--------------------------------------------------------------------------
