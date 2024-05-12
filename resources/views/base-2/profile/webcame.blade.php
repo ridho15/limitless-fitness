@@ -1,85 +1,39 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }}</title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-
+    <script src="{{ asset('/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('/js/webcam.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @yield('css')
+    @livewireStyles
+    @stack('css')
     <style type="text/css">
         #results {
             padding: 20px;
             border: 1px solid;
+            width: 100%;
             background: #ccc;
         }
-    </style>
 
+        #results img {
+            object-fit: contain;
+            width: 100%;
+            ;
+        }
+    </style>
 </head>
 
 <body>
-
-
-
-    <div class="container">
-        <form method="POST" action="{{ route('profile.upload') }}">
-            @csrf
-            <div class="row justify-content-center align-items-center">
-                <div class="col-md-6 col-12 text-center">
-                    <div id="my_camera"></div>
-                    <br />
-                    <input type=button value="Take Snapshot" onClick="take_snapshot()">
-                    <input type="hidden" name="image" class="image-tag">
-                </div>
-                <div class="col-md-12 text-center mt-4">
-                    <div id="results">Your captured image will appear here...</div>
-                </div>
-                <div class="col-md-12 text-center">
-                    <br />
-                    <button class="btn btn-success">Submit</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <script language="JavaScript">
-        Webcam.set({
-
-            width: 490,
-
-            height: 350,
-
-            image_format: 'jpeg',
-
-            jpeg_quality: 90
-
-        });
-
-
-
-        Webcam.attach('#my_camera');
-
-
-
-        function take_snapshot() {
-
-            Webcam.snap(function(data_uri) {
-
-                $(".image-tag").val(data_uri);
-
-                document.getElementById('results').innerHTML = '<img src="' + data_uri + '"/>';
-
-            });
-
-        }
-    </script>
-
-
-
+    @livewire('scan-qr-code')
+    <script language="JavaScript" src="{{ asset('assets/js/custom.js') }}"></script>
+    @yield('js')
+    @livewireScripts
+    @stack('js')
 </body>
 
 </html>

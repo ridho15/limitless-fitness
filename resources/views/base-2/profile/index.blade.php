@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <img src="{{ (new chillerlan\QRCode\QRCode)->render("Testing") }}" alt="" style="width: 300px; height: 300px; object-fit: contain;">
+                        <img src="{{ (new chillerlan\QRCode\QRCode)->render($kode) }}" alt="" style="width: 300px; height: 300px; object-fit: contain;">
                         <div class="text-center mt-3">
                             <small>Scan qr code to check in and check out</small>
                         </div>

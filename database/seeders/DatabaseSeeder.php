@@ -28,7 +28,19 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'Indonesia'
         ]);
 
-        $role = Role::create(['name' => 'Super Admin']);
+        $role = Role::updateOrCreate(['name' => 'Super Admin'], ['name' => 'Super Admin']);
         $user->assignRole($role);
+
+        Role::updateOrCreate([
+            'name' => 'Customer'
+        ], [
+            'name' => 'Customer'
+        ]);
+
+        Role::updateOrCreate([
+            'name' => 'Admin'
+        ], [
+            'name' => 'Admin'
+        ]);
     }
 }

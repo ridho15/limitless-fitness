@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use chillerlan\QRCode\QRCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -28,6 +29,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'profile';
+        $kode = Crypt::encrypt($user->id);
+        $data['kode'] = $kode;
         return view('base-2.profile.index', $data);
     }
 

@@ -24,8 +24,8 @@
 
 <body class="d-flex flex-column vh-100">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4 px-0">
+        <div class="row align-items-stretch">
+            <div class="col-md-4 px-0" style="max-height: 100vh; overflow: scroll">
                 @livewire('form-registrasi')
             </div>
             <div class="col-md-8 px-0">

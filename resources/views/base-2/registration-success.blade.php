@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Dose Pilates</title>
+    <title>{{ config('app.name') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -13,12 +13,12 @@
     <div class="vh-100 d-flex justify-content-center align-items-center">
         <div class="col-md-4">
             <div class="text-center mb-4">
-                <img src="{{ asset('assets/images/logo.png') }}" class="img-fluid" alt="">
+                <img src="{{ asset('assets/images/logo.png') }}" class="img-fluid" alt="" style="height: 300px; width: 300px; object-fit: contain">
             </div>
-            <div class="border border-3 border-success"></div>
+            <div class="border border-3 border-dark"></div>
             <div class="card  bg-white shadow p-5">
                 <div class="mb-4 text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="text-success" width="75" height="75"
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-dark" width="75" height="75"
                         fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                         <path
