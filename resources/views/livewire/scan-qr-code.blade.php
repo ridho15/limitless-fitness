@@ -42,10 +42,9 @@
         });
 
         function initWebcam() {
-            console.log($(window).width());
-            var width = $(window).width();
+            var width = $(window).width() > 640 ? 640 : $(window).width();
             Webcam.set({
-                width: width > 640 ? 640 : width,
+                width: width,
                 height: width * 75 / 100,
                 image_format: 'jpeg',
                 jpeg_quality: 90,
