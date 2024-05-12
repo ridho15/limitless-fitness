@@ -37,7 +37,7 @@
 
 @push('js')
     <script>
-        var cameraFacingMode = "";
+        var cameraFacingMode = "user";
         $(document).ready(function() {
             initWebcam();
         });
