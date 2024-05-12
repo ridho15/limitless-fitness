@@ -57,6 +57,7 @@
                 }
             });
             Webcam.attach('#my_camera');
+            height = $(window).height();
             $('#init').html(width + "---" + height);
         }
         window.addEventListener('contentChange', function() {
