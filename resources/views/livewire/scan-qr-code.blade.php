@@ -10,7 +10,7 @@
             <span>Kembali </span>
         </a>
     </div>
-    <div class="container">
+    <div class="container mt-3">
         <form method="POST" wire:submit="scanImage">
             @csrf
             <div class="row justify-content-center align-items-center">
