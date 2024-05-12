@@ -14,15 +14,18 @@ use Illuminate\Support\Str;
 class ScanQrCode extends Component
 {
     public $image;
-    public $listeners = ['scanImage', 'setImage'];
+    public $user;
+    public $orderPaket;
+    public $listeners = ['simpanData', 'setImage'];
     public function render()
     {
         $this->dispatchBrowserEvent('contentChange');
         return view('livewire.scan-qr-code');
     }
 
-    public function scanImage()
+    public function simpanData()
     {
+        
     }
 
     public function setImage($image)
@@ -55,6 +58,8 @@ class ScanQrCode extends Component
                 return $this->emit('hasilScan', false, "Data pekat tidak ditemukan !");
             }
 
+            $this->user = $user;
+            $this->orderPaket = $orderPaket;
             return $this->emit('hasilScan', true, "Data valid");
         } catch (\Throwable $th) {
          $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());   
