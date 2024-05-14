@@ -26,8 +26,8 @@
                 <div class="bg-white shadow min-vh-100 d-flex align-items-center justify-content-center">
                     <div class="w-100 px-md-5 px-3">
                         <div class="text-center mb-3">
-                            <img src="{{ asset('assets/images/logo.png') }}" alt="" class="img-fluid"
-                                style="object-fit: contain">
+                            <img src="{{ asset('vertical/design_7_black.png') }}" alt="" class="img-fluid"
+                                style="object-fit: contain; height: 300px;">
                         </div>
                         <div class="text-center fw-bold mb-5">
                             Login into your account
@@ -101,6 +101,7 @@
         integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('js')
     @livewireScripts

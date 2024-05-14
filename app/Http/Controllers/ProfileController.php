@@ -6,13 +6,11 @@ use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
 use App\Models\CustomerJadwalStatic;
 use App\Models\Kelas;
-use App\Models\KelasActivity;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
 use App\Models\VoucherCustomer;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use chillerlan\QRCode\QRCode;
 use Illuminate\Http\Request;
@@ -393,36 +391,36 @@ class ProfileController extends Controller
     {
         try {
             $image = $request->image;
-        if ($image) {
-            $folderPath = "public/qrcode/";
-            $image_parts = explode(";base64,", $image);
-            $image_type_aux = explode("image/", $image_parts[0]);
-            $image_type = $image_type_aux[1];
+            if ($image) {
+                $folderPath = "public/qrcode/";
+                $image_parts = explode(";base64,", $image);
+                $image_type_aux = explode("image/", $image_parts[0]);
+                $image_type = $image_type_aux[1];
 
-            $image_base64 = base64_decode($image_parts[1]);
-            $fileName = uniqid() . '.png';
+                $image_base64 = base64_decode($image_parts[1]);
+                $fileName = uniqid() . '.png';
 
-            $file = $folderPath . $fileName;
-            Storage::put($file, $image_base64);
+                $file = $folderPath . $fileName;
+                Storage::put($file, $image_base64);
 
-            $file = str_replace('public/', '', $file);
-            $result = (new QRCode())->readFromFile(public_path('/storage/' . $file));
+                $file = str_replace('public/', '', $file);
+                $result = (new QRCode())->readFromFile(public_path('/storage/' . $file));
 
-            $content = $result->data;
-            $matrix = $result->getQRMatrix();
+                $content = $result->data;
+                $matrix = $result->getQRMatrix();
 
-            return [
-                'content' => $content,
-                'matrix' => $matrix
-            ];
-        } else {
-            return response()->json([
-                'message'   => "Image tidak terbaca"
-            ]);
-        }
+                return [
+                    'content' => $content,
+                    'matrix' => $matrix
+                ];
+            } else {
+                return response()->json([
+                    'message'   => "Image tidak terbaca"
+                ]);
+            }
         } catch (\Throwable $th) {
             return response()->json([
-                'status'=> false,
+                'status' => false,
                 'message' => $th->getMessage()
             ]);
         }

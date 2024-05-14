@@ -423,6 +423,10 @@ class BaseController extends Controller
         return view('base-2.registration-success')->with('success', 'Akun berhasil di buat');
     }
 
+    public function registrationSuccess(){
+        return view('base-2.registration-success')->with('success', 'Akun berhasil di buat');
+    }
+
     public function uploadBuktiPembayaran(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
