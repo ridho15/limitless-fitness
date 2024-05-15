@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Packages;
 
+use App\Http\Controllers\HelperController;
 use App\Models\Location;
 use App\Models\OrderPaket;
 use App\Models\Paket;
@@ -29,6 +30,7 @@ class ConfirmPembayaran extends Component
     public $atas_nama;
     public $unixcode;
     public $harga = 0;
+    public $termsConditions;
     public function render()
     {
         return view('livewire.packages.confirm-pembayaran');
@@ -49,6 +51,8 @@ class ConfirmPembayaran extends Component
             $this->no_rekening = $location->no_rekening;
             $this->atas_nama = $location->atas_nama;
         }
+
+        $this->termsConditions = HelperController::termsConditions();
     }
 
     public function gunakanVoucher($id_voucher_customer)
