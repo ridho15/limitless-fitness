@@ -7,9 +7,11 @@ use App\Models\LocationStudio;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class FormProfile extends Component
 {
+    use WithFileUploads;
     public $listeners = [
         'changeLocation',
         'changeLocationStudio'
@@ -25,6 +27,10 @@ class FormProfile extends Component
     public $jenis_kelamin;
     public $negara;
     public $alamat;
+    public $ktp;
+    public $is_upload_ktp = false;
+    public $selfie;
+    public $is_upload_selfie = false;
 
     public $listLocation = [];
     public $listLocationStudio = [];

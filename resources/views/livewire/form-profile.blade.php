@@ -66,6 +66,61 @@
                 <label for="alamat">Alamat</label>
                 <textarea name="alamat" class="form-control" wire:model="alamat" id="alamat" style="border-radius: 10px"></textarea>
             </div>
+            <div class="mb-3 col-md-6">
+                <div class="mt-2" x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
+                    x-on:livewire-upload-finish="isUploading = false, progress = 0"
+                    x-on:livewire-upload-error="isUploading = false"
+                    x-on:livewire-upload-progress="progress = $event.detail.progress">
+                    <!-- File Input -->
+                    <label for="" class="form-label required">Foto KTP</label>
+                    <input type="file" name="ktp" wire:model="ktp" class="form-control padding-vertical-12"
+                        placeholder="Upload KTP" required>
+                    <div><small>Wajib Upload KTP Max File 1MB</small></div>
+
+                    <!-- Progress Bar -->
+                    <div x-show="isUploading" class="progress" style="height: 10px">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                            x-bind:style="`width: ${progress}%`"></div>
+                    </div>
+                </div>
+                @error('ktp')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+                @if ($ktp != null)
+                    <div class="text-center border border-light rounded">
+                        <img src="{{ $ktp->temporaryUrl() }}" alt=""
+                            style="object-fit: contain; width: 100%;">
+                    </div>
+                @endif
+            </div>
+            <div class="mb-3 col-md-6">
+                <div class="mt-2" x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
+                    x-on:livewire-upload-finish="isUploading = false, progress = 0"
+                    x-on:livewire-upload-error="isUploading = false"
+                    x-on:livewire-upload-progress="progress = $event.detail.progress">
+                    <!-- File Input -->
+                    <label for="" class="form-label required">Foto Selfie</label>
+                    <input type="file" name="selfie" wire:model="selfie"
+                        class="form-control padding-vertical-12" placeholder="Upload Selfie" required>
+                    <div><small>Wajib Upload Foto Selfie Max File 1MB</small></div>
+                    <!-- Progress Bar -->
+                    <div x-show="isUploading" class="progress" style="height: 10px">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                            x-bind:style="`width: ${progress}%`"></div>
+                    </div>
+                </div>
+                @error('selfie')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+                @if ($selfie != null)
+                    <div class="text-center border border-light rounded">
+                        <img src="{{ $selfie->temporaryUrl() }}" alt=""
+                            style="object-fit: contain; width: 100%;">
+                    </div>
+                @endif
+            </div>
         </div>
         <div class="text-end">
             <button type="submit" class="btn custom-btn"><i class="fa-solid fa-floppy-disk"></i>

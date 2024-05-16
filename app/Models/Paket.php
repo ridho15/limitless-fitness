@@ -18,7 +18,11 @@ class Paket extends Model
         'diskon',
         'id_kelas',
         'is_many_times',
-        'is_show_public'
+        'is_show_public',
+        'price_per_additional',
+        'additional_member',
+        'pro_rata',
+        'signup_fee'
     ];
 
     protected $appends = [

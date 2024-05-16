@@ -55,6 +55,7 @@ Route::post('/post-login', [BaseController::class, 'postLogin'])->name('postLogi
 Route::post('post-forgot-password', [BaseController::class, 'postForgotPassword'])->name('postForgotPassword');
 Route::get('/registrasi', [BaseController::class, 'registrasi'])->name('registrasi');
 Route::post('/post-registrasi', [BaseController::class, 'postRegistrasi'])->name('postRegistrasi');
+Route::get('/registration-success', [BaseController::class, 'registrationSuccess'])->name('registrationSuccess');
 Route::get('/check-token', [BaseController::class, 'checkToken'])->name('checkToken');
 Route::post('/update-password', [BaseController::class, 'updatePassword'])->name('update-password');
 Route::get('/term-and-condition', [BaseController::class, 'termCondition'])->name('term-condition');

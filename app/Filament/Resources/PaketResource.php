@@ -61,10 +61,10 @@ class PaketResource extends Resource
                                 Select::make('valid_month')
                                     ->label('Paket Bulanan')
                                     ->options([
-                                        '1' => "1 Bulan",
-                                        '3' => '3 Bulan',
-                                        '6' => "6 Bulan",
-                                        '12' => "12 Bulan",
+                                        '1' => "1 Bulan (30 Hari)",
+                                        '3' => '3 Bulan (90 Hari)',
+                                        '6' => "6 Bulan (180 Hari)",
+                                        '12' => "12 Bulan (360 Hari)",
                                     ])
                                     ->searchable()
                                     ->required(),
@@ -81,6 +81,31 @@ class PaketResource extends Resource
                                             ->decimalSeparator(',')
                                     ])->pattern('Rp.uang'))
                                     ->required(),
+                                TextInput::make('price_per_additional')
+                                    ->label('Price Per Additional Member')
+                                    ->numeric()
+                                    ->mask(fn (Mask $mask) => $mask->patternBlocks([
+                                        'uang' => fn (Mask $mask) => $mask->numeric()
+                                            ->thousandsSeparator('.')
+                                            ->decimalSeparator(',')
+                                    ])->pattern('Rp.uang'))
+                                    ->required(),
+                                TextInput::make('signup_fee')
+                                    ->label('Signup Fee')
+                                    ->numeric()
+                                    ->mask(fn (Mask $mask) => $mask->patternBlocks([
+                                        'uang' => fn (Mask $mask) => $mask->numeric()
+                                            ->thousandsSeparator('.')
+                                            ->decimalSeparator(',')
+                                    ])->pattern('Rp.uang'))
+                                    ->required(),
+                                TextInput::make('additional_member')
+                                    ->label('Additional Member Limit')
+                                    ->numeric()
+                                    ->required(),
+                                TextInput::make('pro_rata')
+                                    ->label('Pro Rata')
+                                    ->nullable(),
                                 TextInput::make('promote_code'),
                                 TextInput::make('diskon')
                                     ->numeric()
@@ -108,21 +133,31 @@ class PaketResource extends Resource
                 TextColumn::make('harga_formatted')
                     ->label('Harga')
                     ->sortable(),
-                TextColumn::make('diskon')
+                TextColumn::make('harga_formatted')
+                    ->label('Harga')
+                    ->sortable(),
+                TextColumn::make('price_per_additional')
+                    ->label('Price Per Additional Member')
                     ->formatStateUsing(function ($state) {
-                        return $state . '%';
-                    }),
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    })
+                    ->sortable(),
+                TextColumn::make('additional_member')
+                    ->label('Additional Member Limit'),
+                TextColumn::make('signup_fee')
+                    ->label('Biaya Pendaftaran')
+                    ->formatStateUsing(function ($state) {
+                        return 'Rp.' . number_format($state, 0, ',', '.');
+                    })
+                    ->sortable(),
+                TextColumn::make('pro_rata')
+                    ->label('Pro Rata'),
                 TextColumn::make('harga_diskon')
                     ->label('Harga Diskon')
                     ->formatStateUsing(function ($state) {
                         return 'Rp.' . number_format($state, 0, ',', '.');
                     })
                     ->sortable(),
-                TextColumn::make('kelas.honor')
-                    ->label('Pembayaran Instruktur')
-                    ->formatStateUsing(function ($state) {
-                        return 'Rp.' . number_format($state, 0, ',', '.');
-                    })->sortable(),
                 TextColumn::make('valid_month')
                     ->formatStateUsing(function ($state) {
                         return $state . ' Bulan';

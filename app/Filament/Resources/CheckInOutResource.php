@@ -30,6 +30,12 @@ class CheckInOutResource extends Resource
 {
     protected static ?string $model = CheckInOut::class;
 
+    protected static ?string $modelLabel = 'Check In';
+
+    protected static ?string $title = 'Check In';
+
+    protected static ?string $pluralModelLabel = 'Check In';
+
     protected static ?string $navigationIcon = 'heroicon-o-search-circle';
 
     protected static ?int $navigationSort = 2;

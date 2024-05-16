@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Packages;
 
+use App\Http\Controllers\HelperController;
 use App\Models\Location;
 use App\Models\OrderPaket;
 use App\Models\Paket;
@@ -29,6 +30,10 @@ class ConfirmPembayaran extends Component
     public $atas_nama;
     public $unixcode;
     public $harga = 0;
+    public $termsConditions;
+    public $user;
+    public $start_date;
+    public $end_date;
     public function render()
     {
         return view('livewire.packages.confirm-pembayaran');
@@ -49,6 +54,11 @@ class ConfirmPembayaran extends Component
             $this->no_rekening = $location->no_rekening;
             $this->atas_nama = $location->atas_nama;
         }
+
+        $this->termsConditions = HelperController::termsConditions();
+        $this->user = Auth::user();
+        $this->start_date = Carbon::now()->locale('id')->isoFormat('DD MMMM YYYY');
+        $this->end_date = Carbon::now()->addMonth($this->paket->valid_month)->locale('id')->isoFormat('DD MMMM YYYY');
     }
 
     public function gunakanVoucher($id_voucher_customer)
@@ -115,7 +125,7 @@ class ConfirmPembayaran extends Component
         $data['is_active'] = 0;
         $data['id_location'] = session()->get('id_location');
         $data['honor'] = $this->paket->honor;
-        $data['expired_date'] = Carbon::now()->addDay(1);
+        $data['expired_date'] = Carbon::parse($this->end_date);
 
         $voucherCustomer = VoucherCustomer::find($this->id_voucher_customer);
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }}</title>
     <link rel="stylesheet" href="/css/app.css" />
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/logo.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('vertical/design_7_black.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,9 @@
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg bg-light bg-color-custom shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-white fs-4" href="#">Fitens</a>
+            <a class="navbar-brand fw-bold text-white fs-4" href="#">
+                <img src="{{ asset('horizontal/design_4_white.png') }}" alt="" height="50">
+            </a>
             <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -139,6 +141,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('/js/alpine.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('js')
     @livewireScripts
