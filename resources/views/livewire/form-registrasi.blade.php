@@ -98,6 +98,25 @@
                 @enderror
             </div>
             <div class="mb-3">
+                <label for="" class="form-label">Jenis Kelamin</label>
+                <div class="d-flex align-items-center justify-content-evenly">
+                    <div class="form-check">
+                        <input class="form-check-input" wire:model="jenis_kelamin" value="1" type="radio"
+                            name="jenis_kelamin" id="jenis_kelamin_1" required>
+                        <label class="form-check-label" for="jenis_kelamin_1">
+                            Laki-Laki
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" wire:model="jenis_kelamin" type="radio"
+                            name="jenis_kelamin" id="jenis_kelamin_2" required>
+                        <label class="form-check-label" for="jenis_kelamin_2">
+                            Perempuan
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
                 <div class="mt-2" x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
                     x-on:livewire-upload-finish="isUploading = false, progress = 0"
                     x-on:livewire-upload-error="isUploading = false"
@@ -155,14 +174,14 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="flexCheckChecked" wire:model="setuju" required>
                 <label class="form-check-label text-sm" for="flexCheckChecked">
-                  <small>Apakah kamu menyetujui untuk memberikan data KTP dan Foto Selfie ?</small>
+                    <small>Apakah kamu menyetujui untuk memberikan data KTP dan Foto Selfie ?</small>
                 </label>
-              </div>
-              <div class="text-center my-3">
+            </div>
+            <div class="text-center my-3">
                 <div wire:loading wire:target="postRegistration">
                     <i class="fa-solid fa-sync fa-spin fa-xl"></i>
                 </div>
-              </div>
+            </div>
             <div class="text-center mb-3">
                 <button type="submit" class="btn custom-btn w-100">Submit</button>
             </div>

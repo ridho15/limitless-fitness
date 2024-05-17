@@ -3,29 +3,31 @@
         style="box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
     -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
     -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);">
-        <a href="{{ App\Filament\Resources\CheckInOutResource::getUrl('index') }}" class="d-flex align-items-center text-dark py-2">
+        <a href="{{ App\Filament\Resources\CheckInOutResource::getUrl('index') }}"
+            class="d-flex align-items-center text-dark py-2" style="text-decoration: none">
             <span class="mx-2" href="" class="mx-2 text-dark">
                 <i class="fa-solid fa-arrow-left"></i>
             </span>
             <span>Kembali </span>
         </a>
     </div>
-    <div class="container mt-3">
+    <div class="container mt-md-5">
         <form action="#" wire:submit="scanImage" id="form_scanner">
             @csrf
             <div class="row mb-3 justify-content-center align-items-center">
                 <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
                     <div id="my_camera"></div>
                     <br />
-                    <div class="row">
+                    <div class="row w-100 justify-content-evenly">
                         <div class="col-md-6 col-6">
-                            <button type="button" class="btn custom-btn" wire:click="$emit('take_snapshot')">Ambil
-                                Gambar <i class="fa-solid fa-camera"></i></button>
+                            <button type="button" class="btn custom-btn"
+                                wire:click="$emit('take_snapshot')"><small>Ambil Gambar</small>
+                                <i class="fa-solid fa-camera"></i></button>
                         </div>
                         <div class="col-md-6 col-6">
                             <button type="button" class="btn custom-btn-outline"
-                                wire:click="$emit('ganti_camera')">Ganti
-                                Camera <i class="fa-solid fa-rotate"></i></button>
+                                wire:click="$emit('ganti_camera')"><small>Ganti
+                                    Camera </small><i class="fa-solid fa-rotate"></i></button>
                         </div>
                     </div>
                     <input type="hidden" name="image" class="image-tag">
@@ -47,6 +49,30 @@
                 </div>
             </div>
         </form>
+    </div>
+
+    <div wire:ignore.self class="modal fade" id="result_scan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Hasil Scan</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if ($user)
+                            <img src="{{ $user }}" alt="" class="img-fluid">
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -86,7 +112,7 @@
         }
         window.addEventListener('contentChange', function() {
             initWebcam();
-            $('#form_scanner').submit(function(event){
+            $('#form_scanner').submit(function(event) {
                 event.preventDefault();
             })
         })
@@ -117,6 +143,10 @@
 
         Livewire.on('hasilScan', (status, message) => {
             alert(status, message)
+        })
+
+        Livewire.on('showModal', () => {
+            $('#result_scan').modal('show')
         })
     </script>
 @endpush

@@ -1,11 +1,14 @@
 <div>
-    <form action="{{ route('updateProfile') }}" method="POST">
+    <form action="#" wire:submit.prevent='updateProfile' method="POST">
         @csrf
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="name" class="form-label">Nama Lengkap</label>
-                <input type="text" name="name" class="form-control" id="name" wire:model="nama"
+                <input type="text" name="name" class="form-control" id="name" wire:model="name"
                     style="border-radius: 10px" required>
+                @error('name')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-md-6 mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -13,15 +16,24 @@
                     aria-describedby="emailHelp" style="border-radius: 10px" required>
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
                 </div>
+                @error('email')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-md-6 mb-3">
                 <label for="mobile_number" class="form-label">Mobile Number</label>
                 <input type="number" name="no_hp" class="form-control" id="mobile_number" wire:model="no_hp"
                     style="border-radius: 10px" required>
+                @error('no_hp')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-md-6 mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" id="password" style="border-radius: 10px">
+                @error('password')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-md-6 mb-3">
                 <label for="id_location" class="form-label">Location</label>
@@ -32,11 +44,17 @@
                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
                     @endforeach
                 </select>
+                @error('id_location')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-md-6 mb-3">
                 <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
                 <input type="date" name="tanggal_lahir" class="form-control" wire:model="tanggal_lahir"
                     id="tanggal_lahir" style="border-radius: 10px">
+                @error('tanggal_lahir')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-md-6 mb-3">
                 <label for="name" class="form-label">Jenis Kelamin</label>
@@ -56,15 +74,24 @@
                         </label>
                     </div>
                 </div>
+                @error('jenis_kelamin')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-md-6 mb-3">
                 <label for="negara">Negara</label>
                 <input type="text" name="negara" class="form-control" wire:model="negara" id="negara" required
                     style="border-radius: 10px">
+                @error('negara')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-12 col-12 mb-3">
                 <label for="alamat">Alamat</label>
                 <textarea name="alamat" class="form-control" wire:model="alamat" id="alamat" style="border-radius: 10px"></textarea>
+                @error('alamat')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="mb-3 col-md-6">
                 <div class="mt-2" x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
@@ -74,7 +101,7 @@
                     <!-- File Input -->
                     <label for="" class="form-label required">Foto KTP</label>
                     <input type="file" name="ktp" wire:model="ktp" class="form-control padding-vertical-12"
-                        placeholder="Upload KTP" required>
+                        placeholder="Upload KTP">
                     <div><small>Wajib Upload KTP Max File 1MB</small></div>
 
                     <!-- Progress Bar -->
@@ -87,10 +114,9 @@
                 @error('ktp')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
-                @if ($ktp != null)
+                @if ($foto_ktp != null)
                     <div class="text-center border border-light rounded">
-                        <img src="{{ $ktp->temporaryUrl() }}" alt=""
-                            style="object-fit: contain; width: 100%;">
+                        <img src="{{ $foto_ktp }}" alt="" style="object-fit: contain; width: 100%;">
                     </div>
                 @endif
             </div>
@@ -102,7 +128,7 @@
                     <!-- File Input -->
                     <label for="" class="form-label required">Foto Selfie</label>
                     <input type="file" name="selfie" wire:model="selfie"
-                        class="form-control padding-vertical-12" placeholder="Upload Selfie" required>
+                        class="form-control padding-vertical-12" placeholder="Upload Selfie">
                     <div><small>Wajib Upload Foto Selfie Max File 1MB</small></div>
                     <!-- Progress Bar -->
                     <div x-show="isUploading" class="progress" style="height: 10px">
@@ -114,10 +140,9 @@
                 @error('selfie')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
-                @if ($selfie != null)
+                @if ($foto_selfie != null)
                     <div class="text-center border border-light rounded">
-                        <img src="{{ $selfie->temporaryUrl() }}" alt=""
-                            style="object-fit: contain; width: 100%;">
+                        <img src="{{ $foto_selfie }}" alt="" style="object-fit: contain; width: 100%;">
                     </div>
                 @endif
             </div>

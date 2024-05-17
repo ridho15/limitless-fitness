@@ -34,9 +34,9 @@
                                 <tr
                                     style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class=""
-                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #396552; margin: 0; padding: 20px;"
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; background-color: #000000; margin: 0; padding: 20px;"
                                         align="center" bgcolor="#71b6f9" valign="top">
-                                        <a href="#" style="font-size:32px;color:#fff;"> Fitnes.dailydosepilates.com</a>
+                                        <a href="#" style="font-size:32px;color:#fff;">{{ config('app.url') }}</a>
                                         <br>
                                         <span style="margin-top: 10px;display: block;">Warning: Update password !</span>
                                     </td>
@@ -75,7 +75,7 @@
                                                         valign="top">
                                                         <a href="{{ config('app.url') }}/check-token?token={{ $token }}"
                                                             class="btn-primary"
-                                                            style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #396552; margin: 0; border-color: #396552; border-style: solid; border-width: 8px 16px;">
+                                                            style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #000000; margin: 0; border-color: #000000; border-style: solid; border-width: 8px 16px;">
                                                             Update Password</a>
                                                     </td>
                                                 </tr>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
 use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\User;
@@ -62,6 +63,10 @@ Route::get('/term-and-condition', [BaseController::class, 'termCondition'])->nam
 Route::get('/konfirm-akun/{id_user}', [BaseController::class, 'konfirmasiAkun'])->name('konfirm-akun');
 Route::get('/konfirmasi-kehadiran', [BaseController::class, 'konfirmasiKehadiran'])->name('konfirmasi-kehadiran');
 Route::get('/simpan-keterangan/{id_booking_kelas}', [BaseController::class, 'simpanKeterangan'])->name('simpan-keterangan');
+Route::prefix('kelas')->group(function(){
+    Route::get('kelas-jadwal', [KelasController::class, 'kelasJadwal'])->name('kelas-jadwal');
+    Route::get('kelas-list', [KelasController::class, 'kelasList'])->name('kelas-list');
+});
 Route::middleware('auth')->group(function () {
     Route::prefix('order-kelas')->group(function () {
         Route::get('/', [BaseController::class, 'orderKelas'])->name('order-kelas');
