@@ -92,7 +92,8 @@ class ScanQrCode extends Component
 
             $this->user = $user;
             $this->orderPaket = $orderPaket;
-            return $this->emit('hasilScan', true, "Berhasil Melakukan Scan QR Code");
+            return $this->emit('showModal');
+            // return $this->emit('hasilScan', true, "Berhasil Melakukan Scan QR Code");
         } catch (\Throwable $th) {
          $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());   
         }

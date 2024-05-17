@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Daily Dose Pilates</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/logo.png') }}">
+    <title>{{ config('app.name') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('vertical/design_7_black.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,8 +26,8 @@
                 <div class="bg-white shadow min-vh-100 d-flex align-items-center justify-content-center">
                     <div class="w-100 px-md-5 px-3">
                         <div class="text-center mb-3">
-                            <img src="{{ asset('assets/images/logo.png') }}" alt="" class="img-fluid"
-                                style="object-fit: contain">
+                            <img src="{{ asset('vertical/design_7_black.png') }}" alt="" class="img-fluid"
+                                style="object-fit: contain; height: 300px;">
                         </div>
                         <div class="text-center fw-bold mb-5">
                             Update your password

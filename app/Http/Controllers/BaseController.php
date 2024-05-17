@@ -297,7 +297,11 @@ class BaseController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('fail', $validator->errors()->all()[0]);
+            return redirect()->back()->with([
+                'fail' => $validator->errors()->all()[0],
+                'email' => $request->email,
+                'password' => $request->password,
+            ]);
         }
 
         try {
@@ -319,7 +323,11 @@ class BaseController extends Controller
             $error = ValidationException::withMessages([
                 'email' => __('filament::login.messages.failed'),
             ]);
-            return redirect()->back()->with('fail', $error->validator->getMessageBag()->getMessages()['email'][0]);
+            return redirect()->back()->with([
+                'fail' => $error->validator->getMessageBag()->getMessages()['email'][0],
+                'email' => $request->email,
+                'password' => $request->password,
+            ]);
         }
 
         Auth::logoutOtherDevices($data['password']);

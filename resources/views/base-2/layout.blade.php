@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }}</title>
-    <link rel="stylesheet" href="/css/app.css" />
     <link rel="icon" type="image/x-icon" href="{{ asset('vertical/design_7_black.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -43,18 +42,19 @@
                             aria-current="page" href="{{ route('base') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mx-2 text-white @if ($active == 'class') active nav-link-fs @endif"
-                            href="{{ route('class') }}">Class</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'packages') active nav-link-fs @endif"
                             href="{{ route('packages') }}">Packages</a>
                     </li>
                     @if (Auth::user())
                         <li class="nav-item ">
-                            <a class="nav-link mx-2 text-white @if ($active == 'timetable') active nav-link-fs @endif"
-                                href="{{ route('timetable') }}">Timetable</a>
+                            <a class="nav-link mx-2 text-white @if ($active == 'jadwal-kelas') active nav-link-fs @endif"
+                                href="{{ route('kelas-jadwal') }}">Class</a>
                         </li>
+                    @else
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 text-white @if ($active == 'list-kelas') active nav-link-fs @endif"
+                            href="{{ route('kelas-list') }}">Class</a>
+                    </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'location') active nav-link-fs @endif"

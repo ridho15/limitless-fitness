@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }}</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/logo.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('vertical/design_7_black.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,7 +49,7 @@
                             @endif
                             <label for="" class="form-label">Email</label>
                             <div class="input-group mb-3">
-                                <input type="text" name="email" class="form-control padding-vertical-12"
+                                <input type="text" name="email" class="form-control padding-vertical-12" value="{{ session()->get('email') }}"
                                     placeholder="Masukkan email" aria-label="Masukkan email"
                                     aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2"><i
@@ -57,7 +57,7 @@
                             </div>
                             <label for="exampleInputPassword1" class="form-label">Password</label>
                             <div class="mb-3 input-group">
-                                <input type="password" name="password" class="form-control padding-vertical-12"
+                                <input type="password" name="password" class="form-control padding-vertical-12" value="{{ session()->get('password') }}"
                                     placeholder="Masukkan password" id="exampleInputPassword1">
                                 <span class="input-group-text" id="basic-addon2"><i
                                         class="fa-solid fa-key px-2"></i></span>

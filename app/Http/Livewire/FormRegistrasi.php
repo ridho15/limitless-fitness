@@ -29,6 +29,7 @@ class FormRegistrasi extends Component
     public $ktp = null;
     public $selfie = null;
     public $setuju = false;
+    public $jenis_kelamin;
 
     public $listLocation = [];
     public $listLocationStudio = [];
@@ -48,7 +49,8 @@ class FormRegistrasi extends Component
         $this->id_location = $id_location;
     }
 
-    public function postRegistration(){
+    public function postRegistration()
+    {
         $this->validate([
             'email' => 'required|email',
             'no_hp' => ['required', 'regex:/^(\+62|0)(\d{8,12})$/', 'digits_between:10,12'], // +62 followed by 9 to 15 digits
@@ -59,6 +61,7 @@ class FormRegistrasi extends Component
             'ktp' => 'required|mimes:jpeg,png,jpg,gif|max:1024',
             'selfie' => 'required|mimes:jpeg,png,jpg,gif|max:1024',
             'setuju' => 'required',
+            'jenis_kelamin' => 'required'
         ], [
             'email.required' => 'Email tidak boleh kosong',
             'email.email' => 'Email tidak valid !',
@@ -80,7 +83,8 @@ class FormRegistrasi extends Component
             'selfie.required' => 'Foto selfie wajib diisi',
             'selfie.mimes' => "Foto KTP tidak valid !",
             'selfie.max' => 'Ukuran Foto Selfie terlalu besar',
-            'setuju.required' => 'Anda belum menyetujui ketentuan'
+            'setuju.required' => 'Anda belum menyetujui ketentuan',
+            'jenis_kelamin.required' => 'Jenis kelamin belum dipilih'
         ]);
 
         $checkEmail = User::where('email', $this->email)->withTrashed()->first();
@@ -88,6 +92,8 @@ class FormRegistrasi extends Component
             return $this->emit('finishSubmit', false, "Email sudah digunakan !");
         }
 
+        $ktp = $this->ktp->store('public/ktp');
+        $selfie = $this->selfie->store('public/selfie');
         $data['name'] = $this->name;
         $data['email'] = $this->email;
         $data['password'] = Hash::make($this->password);
@@ -95,6 +101,9 @@ class FormRegistrasi extends Component
         $data['status'] = 0;
         $data['no_hp'] = $this->no_hp;
         $data['id_location'] = $this->id_location;
+        $data['ktp'] = str_replace('public/', '', $ktp);
+        $data['selfie'] = str_replace('public/', '', $selfie);
+        $data['jenis_kelamin'] = $this->jenis_kelamin;
 
         $user = User::create($data);
 
