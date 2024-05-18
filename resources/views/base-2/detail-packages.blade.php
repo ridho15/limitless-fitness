@@ -13,14 +13,9 @@
                     <h3 class="fw-bold mb-4">Your Package</h3>
                     <div class="mb-2 fw-light mb-4">
                         <small class="d-block mb-1">{{ $paket->nama }}</small>
-                        <small class="d-block mb-1">Expires in {{ $paket->valid_day }} days</small>
-                        <small class="d-block mb-1">Please approach our admin to purchase this package.</small>
+                        <small class="d-block mb-1">Expires in {{ $paket->valid_month * 30 }} days</small>
                     </div>
                     <div class="border bg-white p-3 my-4" style="border-radius: 15px">
-                        <div class="mb-2">
-                            <span class="me-2"><i class="fa-regular fa-sun"></i></span>
-                            <small>{{ $paket->jumlah_pertemuan }} Credits</small>
-                        </div>
                         <div class="mb-2">
                             <span class="me-2"><i class="fa-solid fa-house-user"></i></span>
                             <small>
@@ -40,32 +35,15 @@
                         </div>
                         <div class="mb-2">
                             <span class="me-2"><i class="fa-solid fa-calendar-days"></i></span>
-                            <small>The package starts from the first time you make a payment and is confirmed by the
-                                administrator</small>
+                            <small>The package starts from the first time you check in to Limitless Fitness</small>
                         </div>
-                        <div class="mb-2">
-                            <span class="me-2"><i class="fa-regular fa-circle-check"></i></span>
-                            <small>{{ $paket->type_kelas_formatted }} classes only</small>
-                        </div>
-                        @if ($paket->is_many_times == 0)
-                            <div class="mb-2">
-                                <span class="me-2"><i class="fa-solid fa-1"></i></span>
-                                <small>{{ $paket->type_kelas_formatted }} Package only ordered once</small>
-                            </div>
-                        @endif
                     </div>
-                    <h4 class="fw-bold mb-3">What you’re eligible</h4>
-                    <ul class="row">
-                        <li class="col-md-6">
-                            {{ $paket->kelas->nama_kelas }}
-                        </li>
-                    </ul>
                     <hr class="my-5">
                     <small class="d-block fw-light mb-2">
-                        By purchasing you agree to the <a href="{{ route('term-condition') }}" target="_blank"
+                        Dengan membeli paket ini, anda menyetujui dan menandatangani <a href="{{ route('term-condition') }}" target="_blank"
                             class="text-decoration-none text-dark">
                             <strong>
-                                Terms & Conditions
+                                Membership Agreement
                             </strong>
                         </a>
                     </small>

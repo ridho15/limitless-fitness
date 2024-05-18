@@ -185,6 +185,7 @@ class BaseController extends Controller
     public function termCondition()
     {
         $data['active'] = 'term-condition';
+        $data['termsConditions'] = HelperController::termsConditions();
         return view('base-2.term-condition', $data);
     }
 
