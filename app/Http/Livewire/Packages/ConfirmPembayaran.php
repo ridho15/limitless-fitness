@@ -34,6 +34,7 @@ class ConfirmPembayaran extends Component
     public $user;
     public $start_date;
     public $end_date;
+    public $location;
     public function render()
     {
         return view('livewire.packages.confirm-pembayaran');
@@ -48,11 +49,11 @@ class ConfirmPembayaran extends Component
             ->where('status_digunakan', 0)
             ->whereDate('expired', '>', now())
             ->get();
-        $location = Location::find(session()->get('id_location'));
-        if ($location) {
-            $this->bank = $location->nama_bank;
-            $this->no_rekening = $location->no_rekening;
-            $this->atas_nama = $location->atas_nama;
+        $this->location = Location::find(session()->get('id_location'));
+        if ($this->location) {
+            $this->bank = $this->location->nama_bank;
+            $this->no_rekening = $this->location->no_rekening;
+            $this->atas_nama = $this->location->atas_nama;
         }
 
         $this->termsConditions = HelperController::termsConditions();

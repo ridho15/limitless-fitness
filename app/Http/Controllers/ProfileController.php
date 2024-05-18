@@ -44,8 +44,7 @@ class ProfileController extends Controller
             $query->where('id_user', Auth::id())
                 ->whereDate('expired_date', '>=', now())
                 ->where('status', 1)
-                ->where('is_active', 1)
-                ->where('sisa', '>', 0);
+                ->where('is_active', 1);
         }])
             ->whereHas('paket', function ($query) {
                 $query->whereHas('orderPaket', function ($query) {
@@ -55,66 +54,19 @@ class ProfileController extends Controller
             })->get();
 
         foreach ($listKelas as $index => $item) {
-            $jumlahKredit = 0;
-            $sisa = 0;
-            $listOrderPaket = OrderPaket::whereHas('paket', function ($query) use ($item) {
-                $query->where('id_kelas', $item->id);
-            })->where('is_active', 1)
-                ->where('status', 1)
-                ->where('id_user', Auth::id())
-                ->whereDate('expired_date', '>=', now())
-                ->get();
-            foreach ($listOrderPaket as $orderPaket) {
-                $jumlahKredit += $orderPaket->jumlah_pertemuan;
-                $sisa += $orderPaket->sisa;
-            }
-
-            $digunakan = BookingKelas::where('id_user', Auth::id())
-                ->whereHas('kelasActivity', function ($query) use ($item) {
-                    $query->where('id_kelas', $item->id);
-                })
-                ->whereIn('status_kehadiran', ['0', '1'])
-                ->count();
-
-            if ($jumlahKredit == 0) {
-                $sisa = 0;
-                $digunakan = 0;
-            }
-
-            $digunakan = $jumlahKredit -
                 array_push($listData, [
                     'nama_kelas' => $item->nama_kelas,
-                    'jumlah_kredit' => $jumlahKredit,
-                    'digunakan' => $digunakan,
-                    'sisa' => $sisa
+                    'kelas_activity' => $item->kelasActivity
                 ]);
         }
-
-        $listOrderPaket = OrderPaket::where('id_user', $user->id)
-            ->where('is_active', 1)
-            ->get();
 
         $listPaket = Paket::whereHas('kelas', function ($query) {
             $query->where('nama_kelas', 'Private Class');
         })->get();
 
-        $jumlahKredit = 0;
-        foreach ($listOrderPaket as $item) {
-            $jumlahKredit += $item->paket->jumlah_pertemuan;
-        }
-
-        $jumlahDigunakan = BookingKelas::where('id_user', $user->id)
-            ->where(function ($query) {
-                $query->where('status_kehadiran', '0')
-                    ->orWhere('status_kehadiran', '1');
-            })->count();
 
         $jumlahHadir = BookingKelas::where('id_user', $user->id)
             ->where('status_kehadiran', '1')
-            ->count();
-
-        $jumlahIzin = BookingKelas::where('id_user', $user->id)
-            ->where('status_kehadiran', '2')
             ->count();
 
         $jumlahTidakHadir = BookingKelas::where('id_user', $user->id)
@@ -135,17 +87,12 @@ class ProfileController extends Controller
             })
             ->get()
             ->sortByDesc('kelasActivity.tanggal');
-        $sisaKredit = $jumlahKredit - $jumlahDigunakan;
 
         $listCustomerJadwalStatis = CustomerJadwalStatic::where('id_user', Auth::id())
             ->get();
 
         $data['listBookingKelas'] = $listBookingKelas;
-        $data['jumlahKredit'] = $jumlahKredit;
-        $data['jumlahDigunakan'] = $jumlahDigunakan;
-        $data['sisaKredit'] = $sisaKredit;
         $data['jumlahHadir'] = $jumlahHadir;
-        $data['jumlahIzin'] = $jumlahIzin;
         $data['jumlahTidakHadir'] = $jumlahTidakHadir;
         $data['listPaket'] = $listPaket;
         $data['listKelas'] = $listKelas;

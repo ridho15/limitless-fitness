@@ -45,9 +45,7 @@ class ScanQrCode extends Component
             $data['status'] = 1;
         }elseif($checkInOut->status == 1){
             $menit = Carbon::parse($checkInOut->jadwal)->diffInMinutes(now());
-            if($menit >= 5){
-                $data['status'] = 2;
-            }else{
+            if($menit <= 5){
                 return $this->emit('hasilScan', false, "Customer baru saja masuk. tunggu 5 menit sebelum keluar");
             }
         }else{
