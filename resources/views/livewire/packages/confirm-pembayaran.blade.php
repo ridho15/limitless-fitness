@@ -22,7 +22,7 @@
                         @endif
                         <div class="mb-3 text-center fw-bold h5">MEMBERSHIP AGREMENT</div>
                         <div class="mb-3">
-                            {{ $user->location->alamat }} do here by agree Rp.{{ number_format($paket->harga_diskon,0,',','.') }} for {{ $paket->nama }}
+                            {{ $location != null ? $location->nama : null }} do here by agree Rp.{{ number_format($paket->harga_diskon,0,',','.') }} for {{ $paket->nama }}
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-6">

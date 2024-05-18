@@ -9,7 +9,9 @@ use App\Models\Location;
 use App\Models\OrderPaket;
 use App\Models\Paket;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Radio;
@@ -23,8 +25,11 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class CheckInOutResource extends Resource
 {
@@ -117,10 +122,10 @@ class CheckInOutResource extends Resource
                     ->sortable(),
                 BadgeColumn::make('status')
                     ->label('Masuk / Keluar')
-                    ->color(function($state){
-                        if($state == 1){
+                    ->color(function ($state) {
+                        if ($state == 1) {
                             return 'success';
-                        }else{
+                        } else {
                             return 'secondary';
                         }
                     })
@@ -133,7 +138,23 @@ class CheckInOutResource extends Resource
                     })
             ])
             ->filters([
-                //
+                SelectFilter::make('id_location')
+                    ->label('Location')
+                    ->searchable()
+                    ->options(Location::get()->pluck('nama', 'id')),
+                Filter::make('tanggal')
+                    ->form([
+                        DatePicker::make('tanggal_from')
+                            ->label('Dari Tanggal')->default(Carbon::now()->startOfMonth()),
+                        DatePicker::make('tanggal_to')
+                            ->label('Ke Tanggal')->default(Carbon::now()->endOfMonth()),
+                    ])->query(function (Builder $query, $data) {
+                        return $query->when($data['tanggal_from'], function (Builder $query, $tanggal) {
+                            return $query->whereDate('created_at', '>=', $tanggal);
+                        })->when($data['tanggal_to'], function (Builder $query, $tanggal) {
+                            return $query->whereDate('created_at', '<=', $tanggal);
+                        });
+                    }),
             ])
             ->actions([
                 EditAction::make(),

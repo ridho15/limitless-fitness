@@ -205,7 +205,7 @@ class JurnalResource extends Resource
             return $query->whereHas('orderPaket', function (Builder $query) {
                 $query->where('id_location', Auth::user()->id_location);
             });
-        })->orderBy('created_at', 'ASC');
+        })->orderBy('created_at', 'DESC');
     }
 
     public static function getRelations(): array

@@ -64,8 +64,8 @@ Route::get('/konfirm-akun/{id_user}', [BaseController::class, 'konfirmasiAkun'])
 Route::get('/konfirmasi-kehadiran', [BaseController::class, 'konfirmasiKehadiran'])->name('konfirmasi-kehadiran');
 Route::get('/simpan-keterangan/{id_booking_kelas}', [BaseController::class, 'simpanKeterangan'])->name('simpan-keterangan');
 Route::prefix('kelas')->group(function(){
-    Route::get('kelas-jadwal', [KelasController::class, 'kelasJadwal'])->name('kelas-jadwal');
-    Route::get('kelas-list', [KelasController::class, 'kelasList'])->name('kelas-list');
+    Route::get('jadwal', [KelasController::class, 'kelasJadwal'])->name('kelas-jadwal');
+    Route::get('list', [KelasController::class, 'kelasList'])->name('kelas-list');
 });
 Route::middleware('auth')->group(function () {
     Route::prefix('order-kelas')->group(function () {

@@ -88,7 +88,6 @@ class InstrukturResource extends Resource
                                     ->multiple()
                                     ->default($roles ? [$roles->id] : null)
                                     ->relationship('roles', 'name')
-                                    ->disabled()
                                     ->required(),
                                 Toggle::make('status')
                                     ->label('Status User')

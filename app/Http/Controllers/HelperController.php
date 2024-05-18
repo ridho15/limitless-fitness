@@ -129,7 +129,7 @@ class HelperController extends Controller
             "Lain-Lain" => [
                 'Loker pribadi dan handuk tersedia secara gratis jika memiliki membership dengan benefit tersebut',
                 'Jika menghilangkan kunci loker atau handuk maka akan dikenakan denda sebesar biaya yang berlaku per item',
-                'c.	Dengan menandatangani perjanjian ini, Anda setuju bahwa LIMITLESS FITNESS tidak bertanggung jawab atas barang – barang yang hilang dengan alasan apapun. Anda bertanggung jawab untuk menjaga barang – barang pribadi Anda sendiri.'
+                'Dengan menandatangani perjanjian ini, Anda setuju bahwa LIMITLESS FITNESS tidak bertanggung jawab atas barang – barang yang hilang dengan alasan apapun. Anda bertanggung jawab untuk menjaga barang – barang pribadi Anda sendiri.'
             ],
         ];
     }

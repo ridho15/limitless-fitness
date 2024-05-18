@@ -185,6 +185,7 @@ class BaseController extends Controller
     public function termCondition()
     {
         $data['active'] = 'term-condition';
+        $data['termsConditions'] = HelperController::termsConditions();
         return view('base-2.term-condition', $data);
     }
 
@@ -209,14 +210,10 @@ class BaseController extends Controller
                 $query->where('id_kelas', $kelasActivity->id_kelas);
             })->where('status', 1)
             ->whereDate('expired_date', '>=', now())
-            ->where('sisa', '>=', 0)
-            ->orderBy('sisa', 'DESC')
             ->first();
-
+        $isActive = false;
         if ($orderPaket) {
             $isActive = true;
-        } else {
-            $isActive = false;
         }
 
         $isBooking = false;
@@ -431,7 +428,8 @@ class BaseController extends Controller
         return view('base-2.registration-success')->with('success', 'Akun berhasil di buat');
     }
 
-    public function registrationSuccess(){
+    public function registrationSuccess()
+    {
         return view('base-2.registration-success')->with('success', 'Akun berhasil di buat');
     }
 
@@ -542,8 +540,6 @@ class BaseController extends Controller
 
     public function postOrderKelas(Request $request, $id_kelas_activity)
     {
-
-
         DB::beginTransaction();
         try {
             // Check Kelas activity
@@ -556,7 +552,7 @@ class BaseController extends Controller
             $orderPaket = OrderPaket::where('id_user', Auth::id())
                 ->whereHas('paket', function ($query) use ($kelasActivity) {
                     $query->where('id_kelas', $kelasActivity->id_kelas);
-                })->where('sisa', '>', 0)
+                })
                 ->whereDate('expired_date', '>=', now())
                 ->where('status', 1)
                 ->first();
@@ -564,10 +560,6 @@ class BaseController extends Controller
             if (!$orderPaket) {
                 return redirect()->back()->with('fail', 'Silahkan order paket terlebih dahulu');
             }
-
-            // if ($orderPaket->paket->location != $kelasActivity->locationStudio->id_location && $orderPaket->paket->location != 0) {
-            //     return redirect()->back()->with('fail', 'Location tidak valid dengan paket yang sudah di beli');
-            // }
 
             //Check slot kelas
             $jumlahBookingKelas = BookingKelas::where('id_kelas_activity', $kelasActivity->id)
@@ -594,7 +586,6 @@ class BaseController extends Controller
             $data['is_send_email'] = true;
             BookingKelas::create($data);
             $orderPaket->update([
-                'sisa' => $orderPaket->sisa - 1,
                 'is_active' => 1,
             ]);
 

@@ -30,7 +30,7 @@
                             <span class="fw-light">{{ $data->nama_latihan }}</span>
                         </div>
                         <div class="col-md-3 d-flex d-md-block justify-content-between">
-                            <span class="fw-bold d-md-block d-inline">{{ $data->locationStudio->location->nama }}</span>
+                            <span class="fw-bold d-md-block d-inline text-md-center">{{ $data->locationStudio->location->nama }}</span>
                             <small class="fw-bold d-md-block d-inline text-md-center">{{ $data->locationStudio->nama }}</small>
                         </div>
                         <div class="col-md-3 text-center d-flex d-md-block justify-content-between mt-2 mt-md-0">

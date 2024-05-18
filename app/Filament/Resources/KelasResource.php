@@ -62,7 +62,8 @@ class KelasResource extends Resource
                                     ->label('Location')
                                     ->searchable()
                                     ->preload()
-                                    ->options($location),
+                                    ->options($location)
+                                    ->required(),
                                 TextInput::make('min_anggota')
                                     ->label('Minimal Peserta')
                                     ->numeric()
@@ -119,15 +120,6 @@ class KelasResource extends Resource
                             return $record->location->nama;
                         }
                     }),
-                BadgeColumn::make('is_many_times')
-                    ->label('Many Times')
-                    ->colors([
-                        'secondary' => 0,
-                        'success' => 1
-                    ])->enum([
-                        0 => 'Hanya sekali',
-                        1 => 'Digunakan berkali kali'
-                    ]),
                 TextColumn::make('min_anggota')
                     ->formatStateUsing(fn ($state) => $state . ' Orang')
                     ->label('Minimal Peserta')

@@ -224,7 +224,7 @@ class OrderPaketResource extends Resource
                         ]);
                     })->view('custom-column.order-paket')->sortable(),
                 ViewColumn::make('updated_at')
-                    ->label('Tanggal Approve')
+                    ->label('Last Update')
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,

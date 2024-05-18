@@ -48,12 +48,12 @@
                     @if (Auth::user())
                         <li class="nav-item ">
                             <a class="nav-link mx-2 text-white @if ($active == 'jadwal-kelas') active nav-link-fs @endif"
-                                href="{{ route('kelas-jadwal') }}">Class</a>
+                                href="{{ route('kelas-jadwal') }}">Kelas</a>
                         </li>
                     @else
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'list-kelas') active nav-link-fs @endif"
-                            href="{{ route('kelas-list') }}">Class</a>
+                            href="{{ route('kelas-list') }}">Kelas</a>
                     </li>
                     @endif
                     <li class="nav-item">

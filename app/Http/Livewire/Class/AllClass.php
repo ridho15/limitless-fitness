@@ -16,13 +16,9 @@ class AllClass extends Component
         $this->listKelas = Kelas::where(function ($query) {
             $query->where('id_location', session()->get('id_location'))
                 ->orWhere('id_location', 0);
-        })
-            ->where(function ($query) {
-                if ($this->type != 0) {
-                    $query->where('type', $this->type);
-                }
-            })
-            ->get();
+        })->where('is_active', 1)->when($this->type != 0, function ($query) {
+            $query->where('type', $this->type);
+        })->get();
         return view('livewire.class.all-class');
     }
 
