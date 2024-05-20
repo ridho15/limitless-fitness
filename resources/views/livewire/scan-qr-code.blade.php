@@ -99,7 +99,7 @@
                                     Jenis Kelamin
                                 </div>
                                 <div class="col-md col">
-                                    : {{ $user->jenis_kelamin }}
+                                    : {{ $user->jenis_kelamin == 1 ? 'Laki-Laki' : 'Perempuan' }}
                                 </div>
                             </div>
                             <hr class="my-2">

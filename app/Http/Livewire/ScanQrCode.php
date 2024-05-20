@@ -28,8 +28,8 @@ class ScanQrCode extends Component
 
     public function scanImage()
     {
-        if($this->user == null || $this->orderPaket == null){
-            return $this->emit('hasilScan', false, "Belum Melakukan Scan QR Code");
+        if($this->user == null){
+            return $this->emit('hasilScan', false, "Data customer tidak ditemukan");
         }
         $checkInOut = CheckInOut::where('id_user', $this->user->id)
         ->where('id_order_paket', $this->orderPaket->id)
