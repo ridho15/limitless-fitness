@@ -16,8 +16,8 @@ class ListLocationStudios extends ListRecords
     {
         return [
             CreateAction::make()
-            ->label('Studio Baru')
-            ->icon('heroicon-o-plus-circle'),
+                ->label('Studio Baru')
+                ->icon('heroicon-o-plus-circle'),
         ];
     }
 

@@ -38,7 +38,8 @@ class User extends Authenticatable implements FilamentUser
         'id_location',
         'rating',
         'ktp',
-        'selfie'
+        'selfie',
+        'nik'
     ];
 
     /**

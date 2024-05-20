@@ -2,10 +2,8 @@
 
 namespace App\Filament\Resources\CustomerResource\RelationManagers;
 
-use App\Models\Kelas;
 use App\Models\Paket;
 use Closure;
-use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
@@ -16,12 +14,14 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderPaketRelationManager extends RelationManager
 {
@@ -112,6 +112,8 @@ class OrderPaketRelationManager extends RelationManager
             ])
             ->headerActions([
                 CreateAction::make()
+                    ->label("Tambah Order")
+                    ->icon('heroicon-o-plus-circle')
                     ->mutateFormDataUsing(function ($data) {
                         if ($data['status'] == 1) {
                             $data['is_active'] = 1;
@@ -125,11 +127,11 @@ class OrderPaketRelationManager extends RelationManager
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 

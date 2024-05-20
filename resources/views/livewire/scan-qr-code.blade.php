@@ -64,6 +64,14 @@
                         @if ($user)
                             <div class="row mb-2">
                                 <div class="col-md-4 col-5">
+                                    NIK
+                                </div>
+                                <div class="col-md col">
+                                    : {{ $user->nik }}
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4 col-5">
                                     Nama
                                 </div>
                                 <div class="col-md col">
@@ -76,6 +84,14 @@
                                 </div>
                                 <div class="col-md col">
                                     : {{ $user->email }}
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4 col-5">
+                                    Status User
+                                </div>
+                                <div class="col-md col">
+                                    : {{ $user->status == 1 ? "Aktif" : 'Belum / Tidak Aktif' }}
                                 </div>
                             </div>
                             <div class="row mb-2">

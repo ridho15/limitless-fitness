@@ -13,6 +13,7 @@ use App\Models\OrderPaket;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
+use Closure;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
@@ -31,6 +32,7 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -62,6 +64,11 @@ class CustomerResource extends Resource
                         Fieldset::make('Form Customer')
                             ->schema([
                                 TextInput::make('name')
+                                    ->label('Nama')
+                                    ->string()
+                                    ->required(),
+                                TextInput::make('nik')
+                                    ->label('NIK')
                                     ->string()
                                     ->required(),
                                 TextInput::make('email')
@@ -106,7 +113,15 @@ class CustomerResource extends Resource
                                     ->disabled()
                                     ->required(),
                                 Toggle::make('status')
-                                    ->label('Status User')
+                                    ->label('Status User'),
+                                FileUpload::make('ktp')
+                                    ->label('KTP')
+                                    ->image()
+                                    ->maxSize(1024),
+                                FileUpload::make('selfie')
+                                    ->label('Foto Selfie')
+                                    ->image()
+                                    ->maxSize(1024)
                             ])
                     ])
             ]);
@@ -119,12 +134,28 @@ class CustomerResource extends Resource
                 ImageColumn::make('foto')
                     ->circular()
                     ->height(75)
+                    ->toggleable()
                     ->width(75),
                 TextColumn::make('name')
                     ->label('nama')
                     ->searchable(),
+                TextColumn::make('nik')
+                    ->label('NIK')
+                    ->searchable(),
                 TextColumn::make('email')
                     ->searchable(),
+                BadgeColumn::make('status')
+                    ->label('Status User')
+                    ->enum([
+                        '1' => 'Aktif',
+                        '0' => 'Belum / Tidak aktif'
+                    ])->color(function($state){
+                        if($state == 1){
+                            return 'success';
+                        }else{
+                            return 'secondary';
+                        }
+                    }),
                 TextColumn::make('tanggal_lahir')
                     ->toggleable()
                     ->label('Tanggal Lahir')
@@ -149,6 +180,23 @@ class CustomerResource extends Resource
                     ->sortable()
                     ->toggleable()
                     ->dateTime(),
+
+                ImageColumn::make('ktp')
+                    ->label('KTP')
+                    ->url(function ($record) {
+                        return asset('storage/' . $record->ktp);
+                        // return redirect()->to(asset('storage/' . $record->ktp));
+                    })
+                    ->openUrlInNewTab()
+                    ->size(75),
+                ImageColumn::make('selfie')
+                    ->label('Foto Selfie')
+                    ->url(function ($record) {
+                        return asset('storage/' . $record->selfie);
+                        // return redirect()->to(asset('storage/' . $record->selfie));
+                    })
+                    ->openUrlInNewTab()
+                    ->size(75),
                 TextColumn::make('status_formatted')
                     ->toggleable()
                     ->label('Status User'),
@@ -190,10 +238,37 @@ class CustomerResource extends Resource
                                 ->log('Menghapus data customer');
                         }),
                     ViewAction::make(),
-                    Action::make('kredit')
-                        ->icon('heroicon-o-arrow-circle-down')
-                        ->label('View Kredit')
-                        ->url(fn ($record) => CustomerResource::getUrl('kredit-customer', ['record' => $record])),
+                    Action::make('konfirmasi')
+                        ->icon(function ($record) {
+                            if ($record->status == 1) {
+                                return 'heroicon-o-ban';
+                            } else {
+                                return 'heroicon-o-check-circle';
+                            }
+                        })
+                        ->label(function ($record) {
+                            if ($record->status == 1) {
+                                return "Non Aktfikan";
+                            } else {
+                                return "Aktifkan";
+                            }
+                        })->color(function ($record) {
+                            if ($record->status == 1) {
+                                return 'secondary';
+                            } else {
+                                return 'success';
+                            }
+                        })->action(function ($record) {
+                            if ($record->status == 1) {
+                                $record->status = 0;
+                                $record->save();
+                            } else {
+                                $record->status = 1;
+                                $record->save();
+                            }
+                            activity()->causedBy(Auth::user())
+                                ->log('Melakukan update status aktifasi customer');
+                        })->requiresConfirmation(),
                     Action::make('login')
                         ->icon('heroicon-o-arrow-circle-right')
                         ->label('Login')

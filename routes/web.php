@@ -3,12 +3,9 @@
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
-use App\Mail\RegistrasiKonfirmasiMail;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,22 +21,15 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('send-mail', function(){
-    $user = User::where('email', 'ralamzah@gmail.com')->first();
-    
-    Mail::to($user->email)->send(new RegistrasiKonfirmasiMail($user))->getSymfonySentMessage();
-    return "Berhasil";
-});
-Route::get('/forgot-password-mail', function () {
-    $user = User::where('email', 'kukertadesabetung@gmail.com')->first();
-    $carbon = Carbon::now()->addHours(1)->isoFormat('YYYY-MM-DD H:m');
-    $jsonEncode = json_encode([
-        'id_user' => $user->id,
-        'waktu' => $carbon
-    ]);
-    $token = Crypt::encryptString($jsonEncode);
-    $data['token'] = $token;
-    return view('mail.forgot-password', $data);
+Route::get('/testing-barcode', function () {
+
+    $d1 = new DNS1D;
+    echo '<img src="data:image/png;base64,' .  $d1->getBarcodePNG('123456789', "EAN13") . '" alt="barcode"   />';
+    return null;
+    $d = new DNS1D();
+    $d->setStorPath(__DIR__ . '/cache/');
+    echo $d->getBarcodeHTML('9780691147727', 'EAN13');
+    return null;
 });
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
@@ -63,7 +53,7 @@ Route::get('/term-and-condition', [BaseController::class, 'termCondition'])->nam
 Route::get('/konfirm-akun/{id_user}', [BaseController::class, 'konfirmasiAkun'])->name('konfirm-akun');
 Route::get('/konfirmasi-kehadiran', [BaseController::class, 'konfirmasiKehadiran'])->name('konfirmasi-kehadiran');
 Route::get('/simpan-keterangan/{id_booking_kelas}', [BaseController::class, 'simpanKeterangan'])->name('simpan-keterangan');
-Route::prefix('kelas')->group(function(){
+Route::prefix('kelas')->group(function () {
     Route::get('jadwal', [KelasController::class, 'kelasJadwal'])->name('kelas-jadwal');
     Route::get('list', [KelasController::class, 'kelasList'])->name('kelas-list');
 });
