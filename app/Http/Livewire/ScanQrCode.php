@@ -31,14 +31,14 @@ class ScanQrCode extends Component
         if($this->user == null){
             return $this->emit('hasilScan', false, "Data customer tidak ditemukan");
         }
+
         $checkInOut = CheckInOut::where('id_user', $this->user->id)
-        ->where('id_order_paket', $this->orderPaket->id)
         ->whereDate('jadwal', now())
         ->orderBy('jadwal', 'DESC')
         ->first();
 
         $data['id_user'] = $this->user->id;
-        $data['id_order_paket'] = $this->orderPaket->id;
+        $data['id_order_paket'] = $this->orderPaket != null ? $this->orderPaket->id : null;
         $data['jadwal'] = now();
         $data['id_location'] = Auth::user()->id_location;
         if(!$checkInOut){
