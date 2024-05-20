@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('outs', function (Blueprint $table) {
-            //
+        Schema::table('check_in_outs', function (Blueprint $table) {
+            $table->integer('id_order_paket')->nullable()->change();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('outs', function (Blueprint $table) {
+        Schema::table('check_in_outs', function (Blueprint $table) {
             //
         });
     }
