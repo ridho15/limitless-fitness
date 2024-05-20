@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Milon\Barcode\BarcodeServiceProvider;
+use Milon\Barcode\Facades\DNS1DFacade;
+use Milon\Barcode\Facades\DNS2DFacade;
 
 return [
 
@@ -42,7 +45,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', true),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -171,6 +174,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         // ExcelServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        BarcodeServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -187,6 +191,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'DNS1D' => DNS1DFacade::class,
+        'DNS2D' => DNS2DFacade::class,
     ])->toArray(),
 
 ];

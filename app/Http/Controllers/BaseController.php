@@ -238,14 +238,13 @@ class BaseController extends Controller
         }
 
         $user->update([
-            'status' => 1,
             'email_verified_at' => now()
         ]);
 
         activity()->causedBy(Auth::user())
-            ->log('Melakukan Konfirmasi akun');
+            ->log('Melakukan verifikasi akun');
 
-        return redirect()->route('login')->with('success', 'Akun dan email berhasil di konfirmasi');
+        return redirect()->route('login')->with('success', 'Email berhasil di verifikasi');
     }
 
     public function contactus()
@@ -328,6 +327,14 @@ class BaseController extends Controller
         }
 
         Auth::logoutOtherDevices($data['password']);
+        if (Auth::user()->status == 0) {
+            Auth::logout();
+            return redirect()->back()->with([
+                'fail' => 'Akun kamu belum aktif. Tunggu 1 x 24 jam untuk aktifasi akun atau bisa menghubungi admin melalui whatsapp yang sudah di sediakan',
+                'email' => $request->email,
+                'password' => $request->password
+            ]);
+        }
         session()->regenerate();
         if (Auth::user()->id_location != null) {
             session()->put('isStudioChecked', true);

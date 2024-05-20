@@ -30,6 +30,7 @@ class FormRegistrasi extends Component
     public $selfie = null;
     public $setuju = false;
     public $jenis_kelamin;
+    public $nik;
 
     public $listLocation = [];
     public $listLocationStudio = [];
@@ -61,7 +62,8 @@ class FormRegistrasi extends Component
             'ktp' => 'required|mimes:jpeg,png,jpg,gif|max:1024',
             'selfie' => 'required|mimes:jpeg,png,jpg,gif|max:1024',
             'setuju' => 'required',
-            'jenis_kelamin' => 'required'
+            'jenis_kelamin' => 'required',
+            'nik' => 'required|numeric'
         ], [
             'email.required' => 'Email tidak boleh kosong',
             'email.email' => 'Email tidak valid !',
@@ -84,7 +86,9 @@ class FormRegistrasi extends Component
             'selfie.mimes' => "Foto KTP tidak valid !",
             'selfie.max' => 'Ukuran Foto Selfie terlalu besar',
             'setuju.required' => 'Anda belum menyetujui ketentuan',
-            'jenis_kelamin.required' => 'Jenis kelamin belum dipilih'
+            'jenis_kelamin.required' => 'Jenis kelamin belum dipilih',
+            'nik.required' => 'NIK tidak boleh kosong',
+            'NIK.numeric' => 'NIK tidak valid !'
         ]);
 
         $checkEmail = User::where('email', $this->email)->withTrashed()->first();
@@ -104,6 +108,7 @@ class FormRegistrasi extends Component
         $data['ktp'] = str_replace('public/', '', $ktp);
         $data['selfie'] = str_replace('public/', '', $selfie);
         $data['jenis_kelamin'] = $this->jenis_kelamin;
+        $data['nik'] = $this->nik;
 
         $user = User::create($data);
 

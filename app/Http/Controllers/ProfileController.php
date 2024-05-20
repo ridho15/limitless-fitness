@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Milon\Barcode\DNS1D;
 
 class ProfileController extends Controller
 {
@@ -29,6 +30,9 @@ class ProfileController extends Controller
         $data['active'] = 'profile';
         $kode = Crypt::encrypt($user->id);
         $data['kode'] = $kode;
+        $generatorBarcode = new DNS1D;
+        $generatorBarcode->setStorPath(__DIR__ . '/cache/');
+        $data['generatorBarcode'] = $generatorBarcode;
         return view('base-2.profile.index', $data);
     }
 

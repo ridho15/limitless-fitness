@@ -12,6 +12,8 @@ class ViewCustomer extends ViewRecord
 {
     protected static string $resource = CustomerResource::class;
 
+    protected static ?string $title = 'Detail Customer';
+
     protected function getActions(): array
     {
         return [

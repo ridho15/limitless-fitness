@@ -26,8 +26,7 @@
                 <label for="" class="form-label">Nama</label>
                 <div class="input-group">
                     <input type="text" name="name" wire:model="name" class="form-control padding-vertical-12"
-                        placeholder="Masukkan nama" aria-label="Masukkan nama" value="{{ session()->get('name') }}"
-                        aria-describedby="basic-addon2">
+                        placeholder="Masukkan nama" aria-label="Masukkan nama" aria-describedby="basic-addon2" required>
                     <span class="input-group-text" id="basic-addon2"><i
                             class="fa-solid fa-file-signature px-2"></i></span>
                 </div>
@@ -36,11 +35,21 @@
                 @enderror
             </div>
             <div class="mb-3">
+                <label for="" class="form-label">NIK</label>
+                <div class="input-group">
+                    <input type="number" name="nik" wire:model="nik" class="form-control padding-vertical-12"
+                        placeholder="Masukkan NIK" aria-label="Masukkan NIK" aria-describedby="basic-addon2" required>
+                    <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-address-card px-2"></i></span>
+                </div>
+                @error('nik')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="mb-3">
                 <label for="" class="form-label">Email</label>
                 <div class="input-group">
                     <input type="text" class="form-control padding-vertical-12" wire:model="email" name="email"
-                        value="{{ session()->get('email') }}" placeholder="Masukkan email" aria-label="Masukkan email"
-                        aria-describedby="basic-addon2">
+                        placeholder="Masukkan email" aria-label="Masukkan email" aria-describedby="basic-addon2">
                     <span class="input-group-text" id="basic-addon2"><i class="fa-regular fa-envelope px-2"></i></span>
                 </div>
                 @error('email')

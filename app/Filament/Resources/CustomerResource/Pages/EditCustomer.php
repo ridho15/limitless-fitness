@@ -11,6 +11,12 @@ class EditCustomer extends EditRecord
 {
     protected static string $resource = CustomerResource::class;
 
+    protected static ?string $title = 'Detail Customer';
+
+    protected static ?string $modelLabel = 'Detail Customer';
+
+    protected static ?string $pluralModelLabel = 'Detail Customer';
+
     protected function getActions(): array
     {
         return [

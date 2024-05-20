@@ -77,6 +77,9 @@ class ScanQrCode extends Component
             if(!$user){
                 return $this->emit('hasilScan', false, "Data user tidak ditemukan !");
             }
+            
+            $checkIn = CheckInOut::where('id_user', $user->id)->first();
+
             $orderPaket = OrderPaket::where('id_user', $user->id)
             ->where('status', 1)
             ->where('is_active', 1)
@@ -84,7 +87,7 @@ class ScanQrCode extends Component
             ->where('id_location', Auth::user()->id_location)
             ->first();
 
-            if(!$orderPaket){
+            if(!$orderPaket && $checkIn){
                 return $this->emit('hasilScan', false, "Data Paket tidak ditemukan !");
             }
 
