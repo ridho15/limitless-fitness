@@ -99,8 +99,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'noreply@dailydosepilates.com'),
-        'name' => env('MAIL_FROM_NAME', 'Daily Dose Pilates'),
+        'address' => env('MAIL_FROM_ADDRESS', 'limitlesfitnes@dailydosepilates.com'),
+        'name' => env('MAIL_FROM_NAME', 'Limitles Fitnes'),
     ],
 
     /*
