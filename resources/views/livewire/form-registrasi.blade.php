@@ -115,6 +115,9 @@
                         </label>
                     </div>
                 </div>
+                @error('jenis_kelamin')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="mb-3">
                 <div class="mt-2" x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
