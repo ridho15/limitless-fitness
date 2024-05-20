@@ -121,7 +121,8 @@ class CheckInOutResource extends Resource
                     ->label('Jadwal')
                     ->sortable(),
                 BadgeColumn::make('status')
-                    ->label('Masuk / Keluar')
+                    ->label('Status Check In')
+                    ->toggleable()
                     ->color(function ($state) {
                         if ($state == 1) {
                             return 'success';
@@ -174,7 +175,9 @@ class CheckInOutResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->orderBy('jadwal', 'DESC');
+        return parent::getEloquentQuery()->when(Auth::user()->hasRole('Admin'), function ($query) {
+            $query->where('id_location', Auth::user()->id_location);
+        })->orderBy('jadwal', 'DESC');
     }
 
     public static function getPages(): array

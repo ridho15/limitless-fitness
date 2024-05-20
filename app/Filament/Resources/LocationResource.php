@@ -73,6 +73,7 @@ class LocationResource extends Resource
                                     ->string(),
                                 FileUpload::make('image')
                                     ->image()
+                                    ->required()
                                     ->maxSize(2048)
                             ])
                     ])

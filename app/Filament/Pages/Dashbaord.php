@@ -60,8 +60,8 @@ class Dashbaord extends BasePage
     {
         if (Auth::user()->hasRole(['Super Admin'])) {
             $listWidget = [
-                // PendapatanOverView::class,
-                // JadwalInstrukturAssign::class,
+                PendapatanOverView::class,
+                JadwalInstrukturAssign::class,
                 CustomerOrderExpired::class,
                 OmsetChart::class,
                 PengeluaranChart::class,
@@ -70,7 +70,7 @@ class Dashbaord extends BasePage
             ];
         } elseif (Auth::user()->hasRole('Admin')) {
             $listWidget = [
-                // JadwalInstrukturAssign::class,
+                JadwalInstrukturAssign::class,
                 ListTimetable::class,
                 ListAturJadwal::class,
                 CustomerOrderExpired::class,
@@ -82,13 +82,13 @@ class Dashbaord extends BasePage
             ];
         } elseif(Auth::user()->hasRole(['Owner Cabang'])){
             $listWidget = [
-                // JadwalInstrukturAssign::class,
+                JadwalInstrukturAssign::class,
                 ListTimetable::class,
                 ListAturJadwal::class
             ];
         } elseif(Auth::user()->hasRole('Finance')){
             $listWidget = [
-                // PendapatanOverView::class,
+                PendapatanOverView::class,
                 OmsetChart::class,
                 PengeluaranChart::class,
                 BelumBayarChart::class,

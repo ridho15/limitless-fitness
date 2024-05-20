@@ -43,7 +43,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'packages') active nav-link-fs @endif"
-                            href="{{ route('packages') }}">Packages</a>
+                            href="{{ route('packages') }}">Paket</a>
                     </li>
                     @if (Auth::user())
                         <li class="nav-item ">
