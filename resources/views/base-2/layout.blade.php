@@ -114,9 +114,9 @@
                         <a href="{{ route('login') }}"
                             class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline"
                             style="border-color: white; color: white">Login / Registrasi</a>
-                        <button type="button"
+                        {{-- <button type="button"
                             class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline ms-3 btn-ganti-lokasi"
-                            style="border-color: white; color: white">Ganti Lokasi</button>
+                            style="border-color: white; color: white">Ganti Lokasi</button> --}}
                     </div>
                 @endif
             </div>
@@ -124,7 +124,7 @@
     </nav>
 
     @yield('content')
-    @livewire('card-location-studio')
+    {{-- @livewire('card-location-studio') --}}
     @livewire('footer')
     @livewire('floating-whats-app')
 
