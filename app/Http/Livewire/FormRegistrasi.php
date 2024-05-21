@@ -115,8 +115,7 @@ class FormRegistrasi extends Component
         $user->assignRole('Customer');
 
         Mail::to($this->email)->send(new RegistrasiKonfirmasiMail($user));
-        $this->emit('finishSubmit', true, "Berhasil melakukan registrasi");
         set_time_limit(2);
-        return redirect()->route('registrationSuccess');
+        return redirect()->route('login')->with('success', 'Berhasil melakukan registrasi');
     }
 }
