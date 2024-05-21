@@ -48,7 +48,7 @@
                                 <div class="row mb-2">
                                     <div class="col-md-1"><i class="fa-regular fa-envelope"></i></div>
                                     <div class="col-md fw-light">
-                                        dailydosepilates@gmail.com
+                                        limitlessfitness@gmail.com
                                     </div>
                                 </div>
                                 <div class="row mb-2">
