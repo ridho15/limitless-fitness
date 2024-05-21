@@ -16,13 +16,14 @@
                         <div class="row">
                             <div class="col-md-12 p-5">
                                 <div class="fw-bold fs-4 mb-2">
-                                    Are you new to Daily Dose Pilates?
+                                    Are you new to Limitless Fitness?
                                 </div>
                                 <hr class="my-4">
                                 <div class="fw-bold fs-5 mb-2">Find a location</div>
                                 <div>
                                     <span class="fw-light">To get in touch with our outlets visit our</span>
-                                    <a href="https://www.google.com/maps/place/Ruko+Green+Garden,+Jl.+Komp.+Green+Garden+Blok+B1+No.61,+RT.8%2FRW.3,+Kedoya+Utara,+Kec.+Kb.+Jeruk,+Kota+Jakarta+Barat,+Daerah+Khusus+Ibukota+Jakarta+11520/@-6.1631999,106.7536214,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f7b9ff5231b7:0x17fd8c03e89d219a!8m2!3d-6.1632053!4d106.7584923!16s%2Fg%2F11j0stqf6t?entry=ttu" class="text-decoration-none text-dark fw-bold" target="_blank">
+                                    <a href="https://www.google.com/maps/place/Ruko+Green+Garden,+Jl.+Komp.+Green+Garden+Blok+B1+No.61,+RT.8%2FRW.3,+Kedoya+Utara,+Kec.+Kb.+Jeruk,+Kota+Jakarta+Barat,+Daerah+Khusus+Ibukota+Jakarta+11520/@-6.1631999,106.7536214,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f7b9ff5231b7:0x17fd8c03e89d219a!8m2!3d-6.1632053!4d106.7584923!16s%2Fg%2F11j0stqf6t?entry=ttu"
+                                        class="text-decoration-none text-dark fw-bold" target="_blank">
                                         <strong>location</strong>
                                     </a>
                                 </div>
@@ -35,13 +36,14 @@
                                         <i class="fa-brands fa-instagram"></i>
                                     </div>
                                     <div class="col-md col">
-                                        <a href="https://www.instagram.com/dailydose.pilates/?hl=id" class="text-decoration-none text-dark fw-bold" target="_blank">
-                                            dailydose.pilates
+                                        <a href="https://www.instagram.com/dailydose.pilates/?hl=id"
+                                            class="text-decoration-none text-dark fw-bold" target="_blank">
+                                            limitless.fitness
                                         </a>
                                     </div>
                                 </div>
                                 <hr class="my-4">
-                                <div class="fw-bold fs-5 mb-2">Daily Dose Pilates
+                                <div class="fw-bold fs-5 mb-2">Limitless Fitness
                                 </div>
                                 <div class="row mb-2">
                                     <div class="col-md-1"><i class="fa-regular fa-envelope"></i></div>
@@ -57,42 +59,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="col-md-6 p-5">
-                                <div class="fw-bold mb-3">
-                                    What can we help you with?
-                                </div>
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="inputNama" class="form-label fw-light">Nama</label>
-                                        <input type="text" name="name" class="form-control" id="inputNama"
-                                            aria-describedby="nama" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="inputEmail" class="form-label fw-light">Email Address</label>
-                                        <input type="text" name="email" class="form-control" id="inputEmail"
-                                            aria-describedby="email" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="inputMobileNumber" class="form-label fw-light">Mobile Number</label>
-                                        <input type="number" name="no_hp" class="form-control" id="inputMobileNumber"
-                                            required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="subject" class="form-label fw-light">Subject</label>
-                                        <select name="subject" class="form-control" id="subject">
-                                            <option value="General">General</option>
-                                            <option value="Others">Others</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="description" class="form-label fw-light">Mobile Number</label>
-                                        <textarea name="description" class="form-control" id="description"></textarea>
-                                    </div>
-                                    <div class="text-center d-grid gap-2 mt-4">
-                                        <button type="submit" class="btn custom-btn w-100">Submit</button>
-                                    </div>
-                                </form>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
