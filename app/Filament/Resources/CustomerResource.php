@@ -132,17 +132,6 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                ViewColumn::make('foto')
-                    ->label('Foto')
-                    ->getStateUsing(function ($record) {
-                        return json_encode([
-                            'status' => $record->status,
-                            'data' => $record->foto != null ? '<img src=' . asset('storage/' . $record->foto) . ' />' : null,
-                        ]);
-                    })
-                    ->toggleable()
-                    ->view('custom-column.customer')
-                    ->sortable(),
                 ViewColumn::make('name')
                     ->label('Nama')
                     ->getStateUsing(function ($record) {
@@ -174,8 +163,8 @@ class CustomerResource extends Resource
                     })
                     ->view('custom-column.customer')
                     ->sortable(),
-                ViewColumn::make('email')
-                    ->label('Email')
+                ViewColumn::make('status')
+                    ->label('Status User')
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
@@ -194,53 +183,76 @@ class CustomerResource extends Resource
                     })
                     ->view('custom-column.customer')
                     ->sortable(),
-                TextColumn::make('no_hp')
-                    ->label('Nomor Hp')
-                    ->searchable(),
-                TextColumn::make('alamat')
-                    ->label('Alamat')
-                    ->searchable(),
-                TextColumn::make('location.nama')
+                ViewColumn::make('no_hp')
+                    ->label('Nomor Handphone')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->no_hp
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('alamat')
+                    ->label('Nomor Alamat')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->alamat
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('location.name')
                     ->label('Location')
-                    ->toggleable()
-                    ->searchable(),
-                TextColumn::make('tanggal_lahir')
-                    ->label('Tanggal Lahir'),
-                TextColumn::make('email_verified_at')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->location->name
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('tanggal_lahir')
+                    ->label('Tanggal Lahir')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->tanggal_lahir
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('email_verified_at')
                     ->label('Tanggal Verifikasi Email')
-                    ->sortable()
-                    ->toggleable()
-                    ->dateTime(),
-
-                ImageColumn::make('ktp')
-                    ->label('KTP')
-                    ->url(function ($record) {
-                        return asset('storage/' . $record->ktp);
-                        // return redirect()->to(asset('storage/' . $record->ktp));
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->email_verified_ad
+                        ]);
                     })
-                    ->openUrlInNewTab()
-                    ->size(75),
-                ImageColumn::make('selfie')
-                    ->label('Foto Selfie')
-                    ->url(function ($record) {
-                        return asset('storage/' . $record->selfie);
-                        // return redirect()->to(asset('storage/' . $record->selfie));
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('created_at')
+                    ->label('Tanggal Daftar')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->created_at
+                        ]);
                     })
-                    ->openUrlInNewTab()
-                    ->size(75),
-                TextColumn::make('status_formatted')
-                    ->toggleable()
-                    ->label('Status User'),
-                TextColumn::make('created_at')
-                    ->label('Tanggal Buat')
-                    ->sortable()
-                    ->toggleable()
-                    ->dateTime(),
-                TextColumn::make('updated_at')
-                    ->label('Tanggal Pembaharuan')
-                    ->sortable()
-                    ->toggleable()
-                    ->dateTime()
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('updated_at')
+                    ->label('Tanggal Update')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->updated_at
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
             ])
             ->filters([
                 Filter::make('created_at')
