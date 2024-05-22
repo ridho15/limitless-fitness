@@ -19,13 +19,13 @@ class ViewCustomer extends ViewRecord
         return [
             EditAction::make()
                 ->icon('heroicon-o-pencil-alt'),
-            Action::make('view-credit')
-                ->label('View Session')
-                ->icon('heroicon-o-arrow-circle-down')
-                ->label('View Kredit')
-                ->url(function () {
-                    return CustomerResource::getUrl('kredit-customer', ['record' => $this->getRecord()]);
-                })
+            // Action::make('view-credit')
+            //     ->label('View Session')
+            //     ->icon('heroicon-o-arrow-circle-down')
+            //     ->label('View Kredit')
+            //     ->url(function () {
+            //         return CustomerResource::getUrl('kredit-customer', ['record' => $this->getRecord()]);
+            //     })
         ];
     }
 }

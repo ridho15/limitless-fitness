@@ -194,7 +194,7 @@ class CustomerResource extends Resource
                     ->view('custom-column.customer')
                     ->sortable(),
                 ViewColumn::make('alamat')
-                    ->label('Nomor Alamat')
+                    ->label('Alamat')
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
@@ -208,7 +208,7 @@ class CustomerResource extends Resource
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
-                            'data' => $record->location->name
+                            'data' => $record->location->nama
                         ]);
                     })
                     ->view('custom-column.customer')
@@ -228,7 +228,7 @@ class CustomerResource extends Resource
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
-                            'data' => $record->email_verified_ad
+                            'data' => $record->email_verified_at
                         ]);
                     })
                     ->view('custom-column.customer')
@@ -347,7 +347,7 @@ class CustomerResource extends Resource
             'index' => Pages\ListCustomers::route('/'),
             'create' => Pages\CreateCustomer::route('/create'),
             'view' => ViewCustomer::route('/{record}'),
-            'kredit-customer' => KreditCustomer::route('/kredit-customer/{record}'),
+            // 'kredit-customer' => KreditCustomer::route('/kredit-customer/{record}'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
     }
