@@ -33,6 +33,8 @@ class KelasRatingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
 
+    protected static ?string $title = 'Kelas Rating';
+
     protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form

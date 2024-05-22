@@ -37,7 +37,7 @@ class AktifitasKelasInstrukturResource extends Resource
 
     protected static ?string $title = 'Class Rating';
 
-    protected static ?int $navigationSort = 6;
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {

@@ -36,7 +36,9 @@ class ClassReviewResource extends Resource
 
     protected static ?string $title = 'Class Review';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
+
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {

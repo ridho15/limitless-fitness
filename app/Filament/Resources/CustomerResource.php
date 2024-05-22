@@ -35,6 +35,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -46,13 +47,13 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationGroup = 'User';
-
     protected static ?string $navigationLabel = 'Customer';
 
     protected static ?string $pluralModelLabel = 'Data Customer';
 
     protected static ?string $slug = 'customer';
+
+    protected static ?int $navigationSort = 6;
 
     public static function form(Form $form): Form
     {
@@ -131,38 +132,68 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('foto')
-                    ->circular()
-                    ->height(75)
+                ViewColumn::make('foto')
+                    ->label('Foto')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->foto != null ? '<img src=' . asset('storage/' . $record->foto) . ' />' : null,
+                        ]);
+                    })
                     ->toggleable()
-                    ->width(75),
-                TextColumn::make('name')
-                    ->label('nama')
-                    ->searchable(),
-                TextColumn::make('nik')
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('name')
+                    ->label('Nama')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->name
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+
+                ViewColumn::make('nik')
                     ->label('NIK')
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->searchable(),
-                BadgeColumn::make('status')
-                    ->label('Status User')
-                    ->enum([
-                        '1' => 'Aktif',
-                        '0' => 'Belum / Tidak aktif'
-                    ])->color(function($state){
-                        if($state == 1){
-                            return 'success';
-                        }else{
-                            return 'secondary';
-                        }
-                    }),
-                TextColumn::make('tanggal_lahir')
-                    ->toggleable()
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->nik
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('email')
+                    ->label('Email')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->email
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('email')
+                    ->label('Email')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->status == 1 ? 'Aktif' : 'Belum / Tidak Aktif'
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
+                ViewColumn::make('tanggal_lahir')
                     ->label('Tanggal Lahir')
-                    ->formatStateUsing(function ($state) {
-                        return Carbon::parse($state)->locale('id')->isoFormat('dddd, DD MMMM YYYY');
-                    })->searchable()
-                    ->toggleable(),
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->tanggal_lahir
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
                 TextColumn::make('no_hp')
                     ->label('Nomor Hp')
                     ->searchable(),
