@@ -19,10 +19,7 @@
                 <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
                     <div id="my_camera"></div>
                     <br />
-                    <div class="d-none">
-                        <input type="text" name="user_code" class="form-control" onblur="setFocus()"
-                            wire:model="user_code" autofocus>
-                    </div>
+
                     <div class="row w-100 justify-content-evenly">
                         <div class="col-md-6 col-6">
                             <button type="button" class="btn custom-btn"
@@ -34,6 +31,10 @@
                                 wire:click="$emit('ganti_camera')"><small>Ganti
                                     Camera </small><i class="fa-solid fa-rotate"></i></button>
                         </div>
+                    </div>
+                    <div class="my-3">
+                        <input type="text" name="user_code" class="form-control" onblur="setFocus()"
+                            wire:model="user_code" autofocus>
                     </div>
                     <input type="hidden" name="image" class="image-tag">
                 </div>
