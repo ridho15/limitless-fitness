@@ -127,6 +127,6 @@ class FormRegistrasi extends Component
         // return $this->emit('finishSubmit', true, "Email berhasil di buat");
         Mail::to($this->email)->send(new RegistrasiKonfirmasiMail($user));
         set_time_limit(2);
-        return redirect()->route('login')->with('success', 'Berhasil melakukan registrasi');
+        return redirect()->route('login')->with('success', 'Akun kamu belum aktif. Tunggu 1 x 24 jam untuk aktifasi akun atau bisa menghubungi admin melalui whatsapp yang sudah di sediakan');
     }
 }

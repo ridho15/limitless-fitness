@@ -14,6 +14,10 @@ Route::get('generate-user-id', function () {
     return $faker->ean8();
 });
 
+Route::get('testing', function(){
+    return md5('admin123');
+});
+
 Route::get('testing-insert', function () {
     do {
         $id = random_int(11111111, 99999999);
