@@ -12,7 +12,7 @@
         </a>
     </div>
     <div class="container mt-md-5">
-        <form action="#" wire:submit.prevent="scanImage" method="POST" id="form_scanner">
+        <form action="#" wire:submit.prevent="checkBarcode" method="POST" id="form_scanner">
             @csrf
 
             <div class="row mb-3 justify-content-center align-items-center">
@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-md-12 text-center">
                     <br />
-                    <button class="btn custom-btn">Submit <span class="mx-2"><i
+                    <button type="button" wire:click="scanImage" class="btn custom-btn">Submit <span class="mx-2"><i
                                 class="fa-solid fa-right-to-bracket"></i></span></button>
                 </div>
             </div>

@@ -19,7 +19,7 @@ class ScanQrCode extends Component
     public $image;
     public $user;
     public $orderPaket;
-    public $listeners = ['scanImage', 'setImage'];
+    public $listeners = ['scanImage', 'setImage', 'checkBarcode'];
     public $user_code;
     public function render()
     {
@@ -29,10 +29,8 @@ class ScanQrCode extends Component
 
     public function scanImage()
     {
-        if ($this->user_code) {
-            $this->checkBarcode();
-        }
         if ($this->user == null) {
+            $this->user_code = null;
             return $this->emit('hasilScan', false, "Data customer tidak ditemukan");
         }
 
@@ -50,6 +48,7 @@ class ScanQrCode extends Component
         } elseif ($checkInOut->status == 1) {
             $menit = Carbon::parse($checkInOut->jadwal)->diffInMinutes(now());
             if ($menit <= 5) {
+                $this->user_code = null;
                 return $this->emit('hasilScan', false, "Customer baru saja masuk. tunggu 5 menit sebelum keluar");
             }
         } else {
@@ -64,8 +63,36 @@ class ScanQrCode extends Component
 
     public function checkBarcode()
     {
-        $this->user = User::find((int)$this->user_code);
-        $this->user_code = null;
+        if (strlen($this->user_code) > 8) {
+            $this->user_code = Crypt::decrypt($this->user_code);
+        }
+        try {
+            $this->user = User::find($this->user_code);
+            if ($this->user == null) {
+                $this->user_code = null;
+                return $this->emit('hasilScan', false, "Data user tidak ditemukan !");
+            }
+
+            $checkIn = CheckInOut::where('id_user', $this->user->id)->first();
+
+            $orderPaket = OrderPaket::where('id_user', $this->user->id)
+                ->where('status', 1)
+                ->where('is_active', 1)
+                ->whereDate('expired_date', '>=', now())
+                ->where('id_location', Auth::user()->id_location)
+                ->first();
+
+            if (!$orderPaket && $checkIn) {
+                $this->user_code = null;
+                return $this->emit('hasilScan', false, "Data Paket tidak ditemukan !");
+            }
+
+            $this->orderPaket = $orderPaket;
+            return $this->emit('showModal');
+        } catch (\Throwable $th) {
+            $this->user_code = null;
+            $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());
+        }
     }
 
     public function setImage($image)
@@ -98,6 +125,7 @@ class ScanQrCode extends Component
                 ->first();
 
             if (!$orderPaket && $checkIn) {
+                $this->user_code = null;
                 return $this->emit('hasilScan', false, "Data Paket tidak ditemukan !");
             }
 
@@ -106,6 +134,7 @@ class ScanQrCode extends Component
             return $this->emit('showModal');
             // return $this->emit('hasilScan', true, "Berhasil Melakukan Scan QR Code");
         } catch (\Throwable $th) {
+            $this->user_code = null;
             $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());
         }
     }
