@@ -63,10 +63,10 @@ class ScanQrCode extends Component
 
     public function checkBarcode()
     {
-        if (strlen($this->user_code) > 8) {
-            $this->user_code = Crypt::decrypt($this->user_code);
-        }
         try {
+            if (strlen($this->user_code) > 8) {
+                $this->user_code = Crypt::decrypt($this->user_code);
+            }
             $this->user = User::find($this->user_code);
             if ($this->user == null) {
                 $this->user_code = null;
