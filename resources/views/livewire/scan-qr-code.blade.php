@@ -12,12 +12,17 @@
         </a>
     </div>
     <div class="container mt-md-5">
-        <form action="#" wire:submit="scanImage" id="form_scanner">
+        <form action="#" wire:submit.prevent="scanImage" method="POST" id="form_scanner">
             @csrf
+
             <div class="row mb-3 justify-content-center align-items-center">
                 <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
                     <div id="my_camera"></div>
                     <br />
+                    <div class="d-none">
+                        <input type="text" name="user_code" class="form-control" onblur="setFocus()"
+                            wire:model="user_code" autofocus>
+                    </div>
                     <div class="row w-100 justify-content-evenly">
                         <div class="col-md-6 col-6">
                             <button type="button" class="btn custom-btn"
@@ -91,7 +96,7 @@
                                     Status User
                                 </div>
                                 <div class="col-md col">
-                                    : {{ $user->status == 1 ? "Aktif" : 'Belum / Tidak Aktif' }}
+                                    : {{ $user->status == 1 ? 'Aktif' : 'Belum / Tidak Aktif' }}
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -198,5 +203,13 @@
         Livewire.on('showModal', () => {
             $('#result_scan').modal('show')
         })
+
+        function setFocus() {
+            setTimeout(function() {
+                $('input[name="user_code"]').focus();
+            }, 10)
+        }
+
+        document.body.addEventListener('click', setFocus, true)
     </script>
 @endpush

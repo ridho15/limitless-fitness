@@ -3,6 +3,8 @@
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
@@ -23,13 +25,49 @@ use Milon\Barcode\DNS2D;
 // });
 Route::get('/testing-barcode', function () {
 
-    $d1 = new DNS1D;
-    echo '<img src="data:image/png;base64,' .  $d1->getBarcodePNG('123456789', "EAN13") . '" alt="barcode"   />';
-    return null;
+    // $d1 = new DNS1D;
+    // echo '<img src="data:image/png;base64,' .  $d1->getBarcodePNG('1111', "EAN8") . '" alt="barcode"   />';
+    // return null;
+    $faker = Faker\Factory::create();
+    $code = $faker->ean8();
     $d = new DNS1D();
     $d->setStorPath(__DIR__ . '/cache/');
-    echo $d->getBarcodeHTML('9780691147727', 'EAN13');
+    $user = User::where('email', 'kukertadesabetung@gmail.com')->first();
+    echo $user->id;
+    echo $d->getBarcodeHTML($user->id, 'EAN8');
     return null;
+});
+
+Route::get('generate-user-id', function () {
+    $id = "";
+    for ($i = 0; $i < 8; $i++) {
+        $id .= random_int(1, 4);
+    }
+
+    return $id;
+});
+
+Route::get('testing-insert', function () {
+    do {
+        $id = random_int(11111111, 99999999);
+        $user = User::find($id);
+    } while ($user);
+    $data['id'] = $id;
+    $data['name'] = "Kukerta Desa Betung";
+    $data['email'] = "kukertadesabetung@gmail.com";
+    $data['password'] = Hash::make('ridho123');
+    $data['alamat'] = "Indonesia";
+    $data['status'] = 0;
+    $data['no_hp'] = "082163256603";
+    $data['id_location'] = 1;
+    $data['ktp'] = "testing.png";
+    $data['selfie'] = "Testing.png";
+    $data['jenis_kelamin'] = 1;
+    $data['nik'] = "1305031506980001";
+
+    User::insert($data);
+    $user = User::find($id);
+    return $user;
 });
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');

@@ -20,6 +20,7 @@ class ScanQrCode extends Component
     public $user;
     public $orderPaket;
     public $listeners = ['scanImage', 'setImage'];
+    public $user_code;
     public function render()
     {
         $this->dispatchBrowserEvent('contentChange');
@@ -28,27 +29,30 @@ class ScanQrCode extends Component
 
     public function scanImage()
     {
-        if($this->user == null){
+        if ($this->user_code) {
+            $this->checkBarcode();
+        }
+        if ($this->user == null) {
             return $this->emit('hasilScan', false, "Data customer tidak ditemukan");
         }
 
         $checkInOut = CheckInOut::where('id_user', $this->user->id)
-        ->whereDate('jadwal', now())
-        ->orderBy('jadwal', 'DESC')
-        ->first();
+            ->whereDate('jadwal', now())
+            ->orderBy('jadwal', 'DESC')
+            ->first();
 
         $data['id_user'] = $this->user->id;
         $data['id_order_paket'] = $this->orderPaket != null ? $this->orderPaket->id : null;
         $data['jadwal'] = now();
         $data['id_location'] = Auth::user()->id_location;
-        if(!$checkInOut){
+        if (!$checkInOut) {
             $data['status'] = 1;
-        }elseif($checkInOut->status == 1){
+        } elseif ($checkInOut->status == 1) {
             $menit = Carbon::parse($checkInOut->jadwal)->diffInMinutes(now());
-            if($menit <= 5){
+            if ($menit <= 5) {
                 return $this->emit('hasilScan', false, "Customer baru saja masuk. tunggu 5 menit sebelum keluar");
             }
-        }else{
+        } else {
             $data['status'] = 1;
         }
 
@@ -56,6 +60,12 @@ class ScanQrCode extends Component
         $this->emit('hasilScan', true, "Data berhasil disimpan");
         set_time_limit(2);
         return redirect(CheckInOutResource::getUrl('index'));
+    }
+
+    public function checkBarcode()
+    {
+        $this->user = User::find((int)$this->user_code);
+        $this->user_code = null;
     }
 
     public function setImage($image)
@@ -74,20 +84,20 @@ class ScanQrCode extends Component
             $matrix = $result->getQRMatrix();
             $id_user = Crypt::decrypt($content);
             $user = User::find($id_user);
-            if(!$user){
+            if (!$user) {
                 return $this->emit('hasilScan', false, "Data user tidak ditemukan !");
             }
-            
+
             $checkIn = CheckInOut::where('id_user', $user->id)->first();
 
             $orderPaket = OrderPaket::where('id_user', $user->id)
-            ->where('status', 1)
-            ->where('is_active', 1)
-            ->whereDate('expired_date', '>=', now())
-            ->where('id_location', Auth::user()->id_location)
-            ->first();
+                ->where('status', 1)
+                ->where('is_active', 1)
+                ->whereDate('expired_date', '>=', now())
+                ->where('id_location', Auth::user()->id_location)
+                ->first();
 
-            if(!$orderPaket && $checkIn){
+            if (!$orderPaket && $checkIn) {
                 return $this->emit('hasilScan', false, "Data Paket tidak ditemukan !");
             }
 
@@ -96,8 +106,7 @@ class ScanQrCode extends Component
             return $this->emit('showModal');
             // return $this->emit('hasilScan', true, "Berhasil Melakukan Scan QR Code");
         } catch (\Throwable $th) {
-         $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());   
+            $this->emit('hasilScan', false, "Hasil tidak valid !. " . $th->getMessage());
         }
-
     }
 }

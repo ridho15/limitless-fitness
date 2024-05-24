@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <img src="{{ 'data:image/png;base64,' . $generatorBarcode->getBarcodePNG(sprintf('%010d', $user->id), 'EAN13') }}"
+                        <img src="{{ 'data:image/png;base64,' . $generatorBarcode->getBarcodePNG($user->id, 'EAN8') }}"
                             alt="barcode" style="height: 50px"/>
                     </div>
                     <div class="text-center">

@@ -6,10 +6,12 @@ use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\Location;
 use App\Models\LocationStudio;
 use App\Models\User;
+use Faker\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use illuminate\Support\Str;
 
 class FormRegistrasi extends Component
 {
@@ -96,8 +98,15 @@ class FormRegistrasi extends Component
             return $this->emit('finishSubmit', false, "Email sudah digunakan !");
         }
 
+        $faker = Factory::create();
+        do {
+            $user_id = $faker->ean8();
+            $user = User::find($user_id);
+        } while ($user);
+
         $ktp = $this->ktp->store('public/ktp');
         $selfie = $this->selfie->store('public/selfie');
+        $data['id'] = $user_id;
         $data['name'] = $this->name;
         $data['email'] = $this->email;
         $data['password'] = Hash::make($this->password);
@@ -109,11 +118,13 @@ class FormRegistrasi extends Component
         $data['selfie'] = str_replace('public/', '', $selfie);
         $data['jenis_kelamin'] = $this->jenis_kelamin;
         $data['nik'] = $this->nik;
+        $data['created_at'] = now();
 
-        $user = User::create($data);
-
+        User::insert($data);
+        $user = User::find($user_id);
         $user->assignRole('Customer');
 
+        // return $this->emit('finishSubmit', true, "Email berhasil di buat");
         Mail::to($this->email)->send(new RegistrasiKonfirmasiMail($user));
         set_time_limit(2);
         return redirect()->route('login')->with('success', 'Berhasil melakukan registrasi');
