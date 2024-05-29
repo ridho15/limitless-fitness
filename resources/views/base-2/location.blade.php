@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row my-3">
                 <div class="col-md-12">
-                    <h3 class="fw-bold">Timetable</h3>
+                    <h3 class="fw-bold">Location</h3>
                 </div>
             </div>
             <div class="row">

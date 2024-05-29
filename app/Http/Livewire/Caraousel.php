@@ -15,13 +15,15 @@ class Caraousel extends Component
 
     public function render()
     {
-        if(session()->get('id_location')){
+        $this->location = Location::first();
+        if (session()->get('id_location')) {
             $this->location = Location::find(session()->get('id_location'));
         }
+
         return view('livewire.caraousel');
     }
 
-    public function mount(){
-
+    public function mount()
+    {
     }
 }
