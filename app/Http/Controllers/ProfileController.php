@@ -33,6 +33,14 @@ class ProfileController extends Controller
         $generatorBarcode = new DNS1D;
         $generatorBarcode->setStorPath(__DIR__ . '/cache/');
         $data['generatorBarcode'] = $generatorBarcode;
+        try {
+            $generatorBarcode->getBarcodePNG($user->id, 'EAN8');
+        } catch (\Throwable $th) {
+            $user->id = HelperController::generateIdUser();
+            $user->save();
+
+            return redirect()->route('profile')->with('fail', 'Terjadi kesalahan. melakukan update User');
+        }
         return view('base-2.profile.index', $data);
     }
 
@@ -58,10 +66,10 @@ class ProfileController extends Controller
             })->get();
 
         foreach ($listKelas as $index => $item) {
-                array_push($listData, [
-                    'nama_kelas' => $item->nama_kelas,
-                    'kelas_activity' => $item->kelasActivity
-                ]);
+            array_push($listData, [
+                'nama_kelas' => $item->nama_kelas,
+                'kelas_activity' => $item->kelasActivity
+            ]);
         }
 
         $listPaket = Paket::whereHas('kelas', function ($query) {
