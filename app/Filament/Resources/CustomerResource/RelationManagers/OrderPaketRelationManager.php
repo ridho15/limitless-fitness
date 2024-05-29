@@ -42,16 +42,11 @@ class OrderPaketRelationManager extends RelationManager
                         $paket = Paket::find($state);
                         if ($paket) {
                             $set('harga', $paket->harga_diskon);
-                            $set('jumlah_pertemuan', $paket->jumlah_pertemuan);
                             $set('honor', $paket->honor);
                         }
                     })
                     ->relationship('paket', 'nama')
                     ->required(),
-                TextInput::make('jumlah_pertemuan')
-                    ->label('Jumlah Pertemuan')
-                    ->required()
-                    ->default(0),
                 TextInput::make('harga')
                     ->numeric()
                     ->required(),
@@ -83,8 +78,6 @@ class OrderPaketRelationManager extends RelationManager
                 TextColumn::make('paket.nama')
                     ->label('Paket')
                     ->searchable(),
-                TextColumn::make('jumlah_pertemuan')
-                    ->sortable(),
                 TextColumn::make('sisa')
                     ->sortable(),
                 TextColumn::make('harga_formatted')
@@ -120,8 +113,6 @@ class OrderPaketRelationManager extends RelationManager
                         } else {
                             $data['is_active'] = 0;
                         }
-
-                        $data['sisa'] = $data['jumlah_pertemuan'];
 
                         return $data;
                     })

@@ -38,8 +38,6 @@ class KreditKelasRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('nama_kelas')
                     ->label('Kelas'),
-                TextColumn::make('jumlah_pertemuan')
-                    ->label('Total Session'),
                 TextColumn::make('jumlah_digunakan')
                     ->label('Session Digunakan'),
                 TextColumn::make('sisa')
@@ -62,30 +60,6 @@ class KreditKelasRelationManager extends RelationManager
                 $query->where('id_user', $this->getOwnerRecord()->id);
             });
         })->get();
-        foreach ($kelas as $item) {
-            $jumlahKredit = 0;
-            foreach ($item->paket as $paket) {
-                foreach ($paket->orderPaket as $orderPaket) {
-                    if ($orderPaket->is_active == 1) {
-                        $jumlahKredit += $orderPaket->jumlah_pertemuan;
-                    }
-                }
-            }
-
-            $jumlahDigunakan = BookingKelas::where('id_user', $this->ownerRecord->id)
-                ->whereHas('kelasActivity', function ($query) use ($item) {
-                    $query->where('id_kelas', $item->id);
-                })
-                ->whereStatusKehadiran(['1', '0'])
-                ->count();
-
-            $sisa = $jumlahKredit - $jumlahDigunakan;
-
-            $item->jumlah_pertemuan = $jumlahKredit;
-            $item->nama_kelas = $item->nama_kelas;
-            $item->sisa = $sisa;
-            $item->jumlah_digunakan = $jumlahDigunakan;
-        }
         return $kelas;
     }
 }

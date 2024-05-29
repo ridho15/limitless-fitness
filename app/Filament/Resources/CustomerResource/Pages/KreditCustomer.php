@@ -59,12 +59,10 @@ class KreditCustomer extends Page
             ->get();
 
         foreach ($this->listKelas as $index => $item) {
-            $jumlahKredit = 0;
             $sisa = 0;
             foreach ($item->paket as $paket) {
                 foreach ($paket->orderPaket as $orderPaket) {
                     if ($orderPaket->is_active == 1 && $orderPaket->id_user == $this->id_user && $orderPaket->expired_date >= now()) {
-                        $jumlahKredit += $orderPaket->jumlah_pertemuan;
                         $sisa += $orderPaket->sisa;
                     }
                 }
@@ -83,11 +81,6 @@ class KreditCustomer extends Page
             if ($this->jumlahDigunakanTerbanyak <= count($listBookingKelas)) {
                 $this->jumlahDigunakanTerbanyak = count($listBookingKelas);
             }
-
-            $this->listKelas[$index]->jumlah_kredit = $jumlahKredit;
-            $this->listKelas[$index]->jumlah_digunakan = count($listBookingKelas);
-            $this->listKelas[$index]->sisa = $sisa;
-            $this->listKelas[$index]->listBookingKelas = $listBookingKelas ?? [];
         }
     }
 

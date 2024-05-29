@@ -39,12 +39,6 @@ class KelasPaketRelationManager extends RelationManager
                 TextColumn::make('paket.nama')
                     ->label('Nama Paket')
                     ->searchable(),
-                TextColumn::make('paket.jumlah_pertemuan')
-                    ->label('Jumlah Pertemuan')
-                    ->formatStateUsing(function ($state) {
-                        return $state . ' Pertemuan';
-                    })
-                    ->sortable(),
                 TextColumn::make('paket.harga_formatted')
                     ->label('Harga')
                     ->sortable(),

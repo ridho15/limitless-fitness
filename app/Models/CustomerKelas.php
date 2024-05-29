@@ -16,7 +16,6 @@ class CustomerKelas extends Model
         'status',
         'tanggal_bayar',
         'bukti_bayar',
-        'jumlah_pertemuan'
     ];
 
     protected $appends = [

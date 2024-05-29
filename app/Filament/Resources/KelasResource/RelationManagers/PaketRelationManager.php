@@ -35,9 +35,6 @@ class PaketRelationManager extends RelationManager
                     ->string()
                     ->maxLength(255)
                     ->required(),
-                TextInput::make('jumlah_pertemuan')
-                    ->numeric()
-                    ->required(),
                 TextInput::make('valid_day')
                     ->numeric()
                     ->required()
@@ -69,12 +66,6 @@ class PaketRelationManager extends RelationManager
                 TextColumn::make('nama')
                     ->label('Nama Paket')
                     ->searchable(),
-                TextColumn::make('jumlah_pertemuan')
-                    ->label('Jumlah Pertemuan')
-                    ->formatStateUsing(function ($state) {
-                        return $state . ' Pertemuan';
-                    })
-                    ->sortable(),
                 TextColumn::make('harga_formatted')
                     ->label('Harga')
                     ->sortable(),

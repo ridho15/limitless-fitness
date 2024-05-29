@@ -14,7 +14,6 @@
     <div class="container mt-md-5">
         <form action="#" wire:submit.prevent="checkBarcode" method="POST" id="form_scanner">
             @csrf
-
             <div class="row mb-3 justify-content-center align-items-center">
                 <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
                     <div id="my_camera"></div>

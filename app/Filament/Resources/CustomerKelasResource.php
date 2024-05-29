@@ -60,21 +60,11 @@ class CustomerKelasResource extends Resource
                             ->searchable()
                             ->reactive()
                             ->relationship('kelas', 'nama_kelas')
-                            ->afterStateUpdated(function (Closure $set, $state) {
-                                $kelas = Kelas::find($state);
-                                if ($kelas) {
-                                    $set('jumlah_pertemuan ', $kelas->jumlah_pertemuan);
-                                }
-                            })
                             ->preload()
                             ->required(),
                         DateTimePicker::make('tanggal_bayar')
                             ->label('Tanggal Bayar')
                             ->nullable(),
-                        TextInput::make('jumlah_pertemuan')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         FileUpload::make('bukti_bayar')
                             ->image()
                             ->maxSize('2048')
@@ -105,8 +95,6 @@ class CustomerKelasResource extends Resource
                 TextColumn::make('tanggal_bayar')
                     ->sortable(),
                 ImageColumn::make('bukti_bayar'),
-                TextColumn::make('jumlah_pertemuan')
-                    ->sortable(),
             ])
             ->filters([
                 //

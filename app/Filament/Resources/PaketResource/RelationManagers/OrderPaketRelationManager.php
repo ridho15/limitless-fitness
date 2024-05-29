@@ -44,10 +44,6 @@ class OrderPaketRelationManager extends RelationManager
                         $query->where('name', 'Customer');
                     })->pluck('name', 'id'))
                     ->required(),
-                TextInput::make('jumlah_pertemuan')
-                    ->label('Jumlah Pertemuan')
-                    ->required()
-                    ->default(0),
                 TextInput::make('harga')
                     ->numeric()
                     ->required(),
@@ -79,8 +75,6 @@ class OrderPaketRelationManager extends RelationManager
                 TextColumn::make('user.name')
                     ->label('Customer')
                     ->searchable(),
-                TextColumn::make('jumlah_pertemuan')
-                    ->sortable(),
                 TextColumn::make('sisa')
                     ->sortable(),
                 TextColumn::make('harga_formatted')
@@ -126,11 +120,7 @@ class OrderPaketRelationManager extends RelationManager
                 ]),
             ])
             ->headerActions([
-                CreateAction::make()
-                ->mutateFormDataUsing(function($data){
-                    $data['sisa'] = $data['jumlah_pertemuan'];
-                    return $data;
-                })
+                CreateAction::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

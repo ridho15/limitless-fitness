@@ -32,7 +32,6 @@ class ViewInstrukturOmset extends ViewRecord
         }   
 
         $data['omset'] = 'Rp.' . number_format($omset,0,',','.');
-        $data['jumlah_pertemuan'] = $kelasActivity->count();
         return $data;
     }
 }

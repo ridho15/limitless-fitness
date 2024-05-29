@@ -72,7 +72,6 @@ class OrderPaketResource extends Resource
                                         $paket = Paket::find($state);
                                         if ($paket) {
                                             $set('harga', $paket->harga_diskon);
-                                            $set('jumlah_pertemuan', $paket->jumlah_pertemuan);
                                         }
                                     })
                                     ->relationship('paket', 'nama')

@@ -364,7 +364,6 @@ class BaseController extends Controller
         $data['status'] = 2;
         $data['is_active'] = 0;
         $data['honor'] = $paket->honor;
-        $data['jumlah_pertemuan'] = $paket->jumlah_pertemuan;
         $data['expired_date'] = Carbon::now()->addDays($paket->valid_day);
 
         // Check time order
@@ -538,7 +537,6 @@ class BaseController extends Controller
             'id_user' => $id_user,
             'id_kelas' => $id_kelas,
             'status' => 2,
-            'jumlah_pertemuan' => $kelas->jumlah_pertemuan
         ]);
 
         return redirect()->route('profile')->with('success', 'Berhasil melakukan order kelas');

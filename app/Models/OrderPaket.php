@@ -20,7 +20,6 @@ class OrderPaket extends Model
         'expired_date',
         'tanggal_pembayaran',
         'bukti_pembayaran',
-        'jumlah_pertemuan',
         'sisa',
         'id_location',
         'unix_code'
@@ -80,8 +79,7 @@ class OrderPaket extends Model
                     ->orWhere('status_kehadiran', '1');
             })->count();
 
-        $sisa = $this->jumlah_pertemuan - $bookingKelas;
-        return $sisa;
+        return 0;
     }
 
     public function getHargaFormattedAttribute()
