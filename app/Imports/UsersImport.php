@@ -28,6 +28,7 @@ class UsersImport implements ToModel, SkipsEmptyRows, WithValidation, SkipsOnFai
 
         if ($user) {
             $no_hp = $user->no_hp;
+            $user->delete();
         }
         $id = HelperController::generateIdUser();
         return User::updateOrCreate([
