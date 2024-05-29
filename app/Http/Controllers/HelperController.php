@@ -133,4 +133,24 @@ class HelperController extends Controller
             ],
         ];
     }
+
+    function generatePassword()
+    {
+        return $this->getBlowfishPassword('admin123', 'admin_hasse');
+    }
+
+    function getCodeGeneratorForBlowfishPassword()
+    {
+        return "$2a$09$";
+    }
+
+    function getBlowfishPassword($password, $username)
+    {
+        $salt = $this->getCodeGeneratorForBlowfishPassword();
+        for ($i = 0; $i < 22; $i++) {
+            $salt .= substr("./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", mt_rand(0, 63), 1);
+        }
+        $newPassword = crypt($password . "{" . $username . "}", $salt);
+        return str_replace($this->getCodeGeneratorForBlowfishPassword(), '', $newPassword);
+    }
 }

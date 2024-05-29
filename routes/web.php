@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\HelperController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
@@ -8,38 +9,7 @@ use Faker\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('generate-user-id', function () {
-    $faker = Factory::create();
-    return $faker->ean8();
-});
-
-Route::get('testing', function(){
-    return md5('admin123');
-});
-
-Route::get('testing-insert', function () {
-    do {
-        $id = random_int(11111111, 99999999);
-        $user = User::find($id);
-    } while ($user);
-    $data['id'] = $id;
-    $data['name'] = "Kukerta Desa Betung";
-    $data['email'] = "kukertadesabetung@gmail.com";
-    $data['password'] = Hash::make('ridho123');
-    $data['alamat'] = "Indonesia";
-    $data['status'] = 0;
-    $data['no_hp'] = "082163256603";
-    $data['id_location'] = 1;
-    $data['ktp'] = "testing.png";
-    $data['selfie'] = "Testing.png";
-    $data['jenis_kelamin'] = 1;
-    $data['nik'] = "1305031506980001";
-
-    User::insert($data);
-    $user = User::find($id);
-    return $user;
-});
+Route::get('generate-password', [HelperController::class, 'generatePassword']);
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
 Route::get('/detail-class/{id}', [BaseController::class, 'detailClass'])->name('detail-class');

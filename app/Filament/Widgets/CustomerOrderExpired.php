@@ -44,10 +44,10 @@ class CustomerOrderExpired extends BaseWidget
     protected function getTableActions(): array
     {
         return [
-            ViewAction::make()
-                ->url(function ($record) {
-                    return CustomerResource::getUrl('kredit-customer', ['record' => $record->user]);
-                })
+            // ViewAction::make()
+            //     ->url(function ($record) {
+            //         return CustomerResource::getUrl('kredit-customer', ['record' => $record->user]);
+            //     })
         ];
     }
 
