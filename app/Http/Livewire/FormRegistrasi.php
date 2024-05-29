@@ -65,7 +65,7 @@ class FormRegistrasi extends Component
             'selfie' => 'required|mimes:jpeg,png,jpg,gif|max:1024',
             'setuju' => 'required',
             'jenis_kelamin' => 'required',
-            'nik' => 'required|numeric'
+            'nik' => 'required|numeric|digits:16'
         ], [
             'email.required' => 'Email tidak boleh kosong',
             'email.email' => 'Email tidak valid !',

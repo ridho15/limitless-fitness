@@ -134,6 +134,7 @@ class CustomerResource extends Resource
             ->columns([
                 ViewColumn::make('name')
                     ->label('Nama')
+                    ->searchable()
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
@@ -145,6 +146,7 @@ class CustomerResource extends Resource
 
                 ViewColumn::make('nik')
                     ->label('NIK')
+                    ->searchable()
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
@@ -155,6 +157,7 @@ class CustomerResource extends Resource
                     ->sortable(),
                 ViewColumn::make('email')
                     ->label('Email')
+                    ->searchable()
                     ->getStateUsing(function ($record) {
                         return json_encode([
                             'status' => $record->status,
