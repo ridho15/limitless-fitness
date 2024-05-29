@@ -57,7 +57,6 @@ class PaketResource extends Resource
                                     ->label('Kelas')
                                     ->preload()
                                     ->searchable()
-                                    ->required()
                                     ->options(Kelas::get()->pluck('nama_kelas', 'id')),
                                 Select::make('valid_month')
                                     ->label('Paket Bulanan')
