@@ -37,7 +37,6 @@ Route::get('/send-email', function () {
 });
 
 Route::post('/import-user', function (Request $request) {
-
     $dataImport = $request->file('data');
     if ($request->hasFile('data')) {
         try {
