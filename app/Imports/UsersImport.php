@@ -2,7 +2,9 @@
 
 namespace App\Imports;
 
+use App\Http\Controllers\HelperController;
 use App\Models\User;
+use Faker\Factory;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
@@ -27,9 +29,11 @@ class UsersImport implements ToModel, SkipsEmptyRows, WithValidation, SkipsOnFai
         if ($user) {
             $no_hp = $user->no_hp;
         }
+        $id = HelperController::generateIdUser();
         return User::updateOrCreate([
             'email' => $email
         ], [
+            'id' => $id,
             'name' => $row[0],
             'password' => Hash::make('12345678'),
             'email' => $email,

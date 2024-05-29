@@ -7,6 +7,7 @@ use App\Models\KelasActivity;
 use App\Models\OrderPaket;
 use App\Models\User;
 use Carbon\Carbon;
+use Faker\Factory;
 
 class HelperController extends Controller
 {
@@ -67,6 +68,11 @@ class HelperController extends Controller
         }
 
         return $kode;
+    }
+
+    public static function generateIdUser(){
+        $faker = Factory::create();
+        return $faker->ean8();
     }
 
     public static function termsConditions()
