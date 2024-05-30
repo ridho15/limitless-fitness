@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\CustomerResource\Pages;
 
 use App\Filament\Resources\CustomerResource;
+use App\Models\User;
+use Filament\Notifications\Notification;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Auth;
@@ -42,5 +44,21 @@ class EditCustomer extends EditRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $user = User::where('nik', $data['nik'])->where('email', '!=', $data['email'])->first();
+        if ($user) {
+            Notification::make()
+                ->title("Error")
+                ->icon('error')
+                ->danger()
+                ->body("NIK sudah digunakan")
+                ->send();
+
+            $this->halt();
+        }
+        return $data;
     }
 }

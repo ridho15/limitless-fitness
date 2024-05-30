@@ -70,7 +70,8 @@ class CustomerResource extends Resource
                                     ->required(),
                                 TextInput::make('nik')
                                     ->label('NIK')
-                                    ->string()
+                                    ->numeric()
+                                    ->length(16)
                                     ->required(),
                                 TextInput::make('email')
                                     ->email()
