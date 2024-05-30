@@ -31,7 +31,6 @@
     @livewireStyles
     @stack('css')
 </head>
-
 <body>
     @livewire('scan-qr-code')
     <script src="{{ asset('/js/webcam.min.js') }}"></script>

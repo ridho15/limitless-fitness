@@ -72,7 +72,7 @@ return [
     |
     */
 
-    'brand' => env('APP_NAME', 'Fitnes Pilates'),
+    'brand' => env('APP_NAME', 'Limitless Fitness'),
 
     /*
     |--------------------------------------------------------------------------

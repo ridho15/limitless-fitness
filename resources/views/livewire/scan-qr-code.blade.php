@@ -16,9 +16,16 @@
             @csrf
             <div class="row mb-3 justify-content-center align-items-center">
                 <div class="col-md-6 col-12 text-center d-flex flex-column align-items-center" style="width: 100%">
-                    <div id="my_camera"></div>
+                    <div id="my_camera" class="flex-column p-3"
+                        style="background-color: #e7e7e7;
+                    height: 430px;
+                    width: 500px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 10px;">
+                    </div>
                     <br />
-
                     <div class="row w-100 justify-content-evenly">
                         <div class="col-md-6 col-6">
                             <button type="button" class="btn custom-btn"
@@ -211,5 +218,15 @@
         }
 
         document.body.addEventListener('click', setFocus, true)
+
+        async function errorCamera(message) {
+            const response = await sweetAlert('error', "Error", message, "Tanpa Camera")
+            if (response.isConfirmed == true) {
+                $('#my_camera').html('<div class="bg-danger h3 text-white p-3" style="border-radius: 10px">' +
+                    '<i class="fa-solid fa-triangle-exclamation"></i>' +
+                    '</div>' +
+                    '<span id="text_error">' + message + '</span>')
+            }
+        }
     </script>
 @endpush

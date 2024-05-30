@@ -62,7 +62,7 @@ class PendapatanOverView extends BaseWidget
                 $query->whereHas('orderPaket', function ($query) {
                     $query->where('id_location', $this->id_location);
                 });
-            })->whereMonth('created_at', now())
+            })->whereHas('orderPaket')->whereMonth('created_at', now())
                 ->where('tipe', 1)->sum('jumlah_uang');
 
             array_push($listCard, Card::make('Omset 1 Bulan', 'Rp.' . number_format($omsetDalamSatuBulan, 0, ',', '.'))
