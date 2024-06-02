@@ -105,22 +105,33 @@
                                 </div>
                                 <div class="col-md col"> :
                                     @if ($orderPaket == null)
-                                        <span class="badge text-bg-secondary">Belum Order Paket dan Belum pernah check in</span>
+                                        <span class="badge text-bg-secondary">Belum Order Paket dan Belum pernah check
+                                            in</span>
                                     @elseif($orderPaket->status == 0)
                                         <span class="badge text-bg-danger">Paket tidak aktif</span>
                                     @elseif($orderPaket->expired_date >= now())
                                         <small>Expired At </small> <span
-                                            class="badge @if($orderPaket->expired_date >= now()) text-bg-success @elseif($orderPaket->expired_date < now()) text-bg-danger  @endif">{{ \Carbon\Carbon::parse($orderPaket->expired_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</span>
+                                            class="badge @if ($orderPaket->expired_date >= now()) text-bg-success @elseif($orderPaket->expired_date < now()) text-bg-danger @endif">{{ \Carbon\Carbon::parse($orderPaket->expired_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</span>
                                     @endif
                                 </div>
                             </div>
                             <hr class="my-2">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <img src="{{ asset('storage/' . $user->ktp) }}" alt="" class="img-fluid">
+                                    @if ($user->ktp)
+                                        <img src="{{ asset('storage/' . $user->ktp) }}" alt=""
+                                            class="img-fluid">
+                                    @else
+                                        Belum ada KTP
+                                    @endif
                                 </div>
                                 <div class="col-md-6">
-                                    <img src="{{ asset('storage/' . $user->selfie) }}" alt="" class="img-fluid">
+                                    @if ($user->selfie)
+                                        <img src="{{ asset('storage/' . $user->selfie) }}" alt=""
+                                            class="img-fluid">
+                                    @else
+                                        Belum ada foto pribadi
+                                    @endif
                                 </div>
                             </div>
                         @endif
