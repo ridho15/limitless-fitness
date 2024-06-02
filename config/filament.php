@@ -267,7 +267,7 @@ return [
     |
     */
 
-    'favicon' => env('FAVICON', 'https://fitnes.dailydosepilates.com/vertical/design_7_black.png'),
+    'favicon' => env('FAVICON', 'https://fitnes.kesegaranjasmani.web.id/vertical/design_7_black.png'),
 
     /*
     |--------------------------------------------------------------------------

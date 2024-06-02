@@ -37,10 +37,10 @@ return [
         'smtp' => [
             'transport' => 'smtp',
             'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', 'smtp.hostinger.com'),
+            'host' => env('MAIL_HOST', 'srv172.niagahoster.com'),
             'port' => env('MAIL_PORT', 465),
             'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
-            'username' => env('MAIL_USERNAME', 'limitlesfitnes@dailydosepilates.com'),
+            'username' => env('MAIL_USERNAME', 'coba@medialatihan.com'),
             'password' => env('MAIL_PASSWORD', '@Qwertyzaq123'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
