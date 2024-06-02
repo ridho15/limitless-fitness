@@ -65,7 +65,7 @@
 
     <div wire:ignore.self class="modal fade" id="result_scan" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-center">
+        <div class="modal-dialog modal-xl modal-center">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Hasil Scan</h1>
@@ -92,26 +92,26 @@
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-4 col-5">
-                                    Email
-                                </div>
-                                <div class="col-md col">
-                                    : {{ $user->email }}
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-md-4 col-5">
                                     Status User
                                 </div>
                                 <div class="col-md col">
                                     : {{ $user->status == 1 ? 'Aktif' : 'Belum / Tidak Aktif' }}
+
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-4 col-5">
-                                    Jenis Kelamin
+                                    Status Paket
                                 </div>
-                                <div class="col-md col">
-                                    : {{ $user->jenis_kelamin == 1 ? 'Laki-Laki' : 'Perempuan' }}
+                                <div class="col-md col"> :
+                                    @if ($orderPaket == null)
+                                        <span class="badge text-bg-secondary">Belum Order Paket dan Belum pernah check in</span>
+                                    @elseif($orderPaket->status == 0)
+                                        <span class="badge text-bg-danger">Paket tidak aktif</span>
+                                    @elseif($orderPaket->expired_date >= now())
+                                        <small>Expired At </small> <span
+                                            class="badge @if($orderPaket->expired_date >= now()) text-bg-success @elseif($orderPaket->expired_date < now()) text-bg-danger  @endif">{{ \Carbon\Carbon::parse($orderPaket->expired_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <hr class="my-2">
