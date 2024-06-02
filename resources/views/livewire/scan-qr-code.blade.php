@@ -212,21 +212,25 @@
         })
 
         function setFocus() {
+            // console.log($('#result_scan').hasClass('show'));
             setTimeout(function() {
-                $('input[name="user_code"]').focus();
+                if ($('#result_scan').hasClass('show') == false) {
+                    $('input[name="user_code"]').focus();
+                }
             }, 10)
         }
 
         document.body.addEventListener('click', setFocus, true)
 
         async function errorCamera(message) {
-            const response = await sweetAlert('error', "Error", message, "Tanpa Camera")
-            if (response.isConfirmed == true) {
-                $('#my_camera').html('<div class="bg-danger h3 text-white p-3" style="border-radius: 10px">' +
-                    '<i class="fa-solid fa-triangle-exclamation"></i>' +
-                    '</div>' +
-                    '<span id="text_error">' + message + '</span>')
+            console.log("{{ $no_camera }}");
+            if ("{{ $no_camera }}" == false || "{{ $no_camera }}" == "") {
+                Livewire.emit('setNoCamera', true)
             }
+            $('#my_camera').html('<div class="bg-danger h3 text-white p-3" style="border-radius: 10px">' +
+                '<i class="fa-solid fa-triangle-exclamation"></i>' +
+                '</div>' +
+                '<span id="text_error">' + message + '</span>')
         }
     </script>
 @endpush

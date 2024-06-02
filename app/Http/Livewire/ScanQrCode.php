@@ -19,8 +19,9 @@ class ScanQrCode extends Component
     public $image;
     public $user;
     public $orderPaket;
-    public $listeners = ['scanImage', 'setImage', 'checkBarcode'];
+    public $listeners = ['scanImage', 'setImage', 'checkBarcode', 'setNoCamera'];
     public $user_code;
+    public $no_camera = true;
     public function render()
     {
         $this->dispatchBrowserEvent('contentChange');
@@ -59,6 +60,10 @@ class ScanQrCode extends Component
         $this->emit('hasilScan', true, "Data berhasil disimpan");
         set_time_limit(2);
         return redirect(CheckInOutResource::getUrl('index'));
+    }
+
+    public function setNoCamera($no_camera){
+        $this->no_camera = $no_camera;
     }
 
     public function checkBarcode()
