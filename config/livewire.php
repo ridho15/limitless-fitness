@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'asset_url' => env('ASSET_URL', 'https://fitnes.dailydosepilates.com'),
+    'asset_url' => env('ASSET_URL', 'https://fitnes.kesegaranjasmani.web.id'),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'app_url' => env('APP_URL', 'https://fitnes.dailydosepilates.com'),
+    'app_url' => env('APP_URL', 'https://fitnes.kesegaranjasmani.web.id'),
 
     /*
     |--------------------------------------------------------------------------
