@@ -48,8 +48,8 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'u201173813_fitnes'),
-            'username' => env('DB_USERNAME', 'u201173813_fitnes'),
+            'database' => env('DB_DATABASE', 'u839250884_limitless'),
+            'username' => env('DB_USERNAME', 'u839250884_limitless'),
             'password' => env('DB_PASSWORD', '@Qwertyzaq123'),
             // 'database' => env('DB_DATABASE', 'u1605090_fitnes'),
             // 'username' => env('DB_USERNAME', 'u1605090_fitnes'),
@@ -128,7 +128,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

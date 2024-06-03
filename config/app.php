@@ -58,9 +58,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://limitless.dailydosepilates.com'),
+    'url' => env('APP_URL', 'https://limitlessfitness.id'),
 
-    'asset_url' => env('ASSET_URL', 'https://limitless.dailydosepilates.com'),
+    'asset_url' => env('ASSET_URL', 'https://limitlessfitness.id'),
 
     /*
     |--------------------------------------------------------------------------
