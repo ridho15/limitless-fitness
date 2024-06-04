@@ -11,50 +11,33 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Route;
 
-Route::get('test', function () {
-    $result = Process::run('ls -la');
-    return $result->output();
-});
-
 Route::get('cache_clear', function () {
-    Artisan::call('cache:clear', function () {
-        $this->info('cache clear');
-    });
+    Artisan::call('cache:clear');
     return 'Cache Clear';
 });
 
 Route::get('config_clear', function () {
-    Artisan::call('config:clear', function () {
-        $this->info('config_clear');
-    });
+    Artisan::call('config:clear');
     return 'Config Clear';
 });
 
 Route::get('view:clear', function () {
-    Artisan::call('view:clear', function () {
-        $this->info('view clear');
-    });
+    Artisan::call('view:clear');
     return 'View Clear';
 });
 
 Route::get('optimize', function () {
-    Artisan::call('optimize', function () {
-        $this->info('Optimize');
-    });
+    Artisan::call('optimize');
     return 'Optimize';
 });
 
 Route::get('migrate', function () {
-    Artisan::call('migrate', function () {
-        $this->info('Migrate');
-    });
+    Artisan::call('migrate');
     return 'Migrate';
 });
 
 Route::get('optimize_clear', function () {
-    Artisan::call('optimize:clear', function () {
-        $this->info('cache clear');
-    });
+    Artisan::call('optimize:clear');
     return 'Optimize Clear';
 });
 
