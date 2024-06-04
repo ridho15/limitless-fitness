@@ -6,8 +6,43 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Faker\Factory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+
+Route::get('cache_clear', function () {
+    Artisan::command('cache:clear', function () {
+        $this->info('cache clear');
+    });
+    return 'Cache Clear';
+});
+
+Route::get('config_clear', function () {
+    Artisan::command('config:clear', function () {
+        $this->info('config_clear');
+    });
+    return 'Config Clear';
+});
+
+Route::get('view:clear', function () {
+    Artisan::command('view:clear');
+    return 'View Clear';
+});
+
+Route::get('optimize', function () {
+    Artisan::command('optimize');
+    return 'Optimize';
+});
+
+Route::get('migrate', function () {
+    Artisan::command('migrate');
+    return 'Migrate';
+});
+
+Route::get('optimize_clear', function () {
+    Artisan::command('optimize:clear');
+    return 'Optimize Clear';
+});
 
 Route::get('generate-password', [HelperController::class, 'generatePassword']);
 Route::get('/', [BaseController::class, 'index'])->name('base');
