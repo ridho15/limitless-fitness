@@ -25,27 +25,37 @@ Route::get('config_clear', function () {
 });
 
 Route::get('view:clear', function () {
-    Artisan::command('view:clear');
+    Artisan::command('view:clear', function () {
+        $this->info('view clear');
+    });
     return 'View Clear';
 });
 
 Route::get('optimize', function () {
-    Artisan::command('optimize');
+    Artisan::command('optimize', function () {
+        $this->info('Optimize');
+    });
     return 'Optimize';
 });
 
 Route::get('migrate', function () {
-    Artisan::command('migrate');
+    Artisan::command('migrate', function () {
+        $this->info('Migrate');
+    });
     return 'Migrate';
 });
 
 Route::get('optimize_clear', function () {
-    Artisan::command('optimize:clear');
+    Artisan::command('optimize:clear', function () {
+        $this->info('cache clear');
+    });
     return 'Optimize Clear';
 });
 
 Route::get('storage_link', function () {
-    Artisan::command('storage:link');
+    Artisan::command('storage:link', function () {
+        $this->info('Membuat storage Link');
+    });
     return 'Create storage link';
 });
 
