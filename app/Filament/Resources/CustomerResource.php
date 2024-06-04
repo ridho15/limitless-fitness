@@ -20,6 +20,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -106,16 +108,25 @@ class CustomerResource extends Resource
                                     ->image()
                                     ->maxSize(2048)
                                     ->nullable(),
-                                Select::make('roles')
-                                    ->label('Roles')
-                                    ->multiple()
-                                    ->default($roles ? [$roles->id] : null)
-                                    ->preload()
-                                    ->relationship('roles', 'name')
-                                    ->disabled()
-                                    ->required(),
-                                Toggle::make('status')
-                                    ->label('Status User'),
+                                Grid::make()
+                                    ->schema([
+                                        Select::make('roles')
+                                            ->label('Roles')
+                                            ->multiple()
+                                            ->default($roles ? [$roles->id] : null)
+                                            ->preload()
+                                            ->relationship('roles', 'name')
+                                            ->disabled()
+                                            ->required(),
+                                        Toggle::make('status')
+                                            ->label('Status User'),
+                                        Radio::make('jenis_kelamin')
+                                            ->label('Jenis Kelamin')
+                                            ->options([
+                                                '1' => 'Laki-Laki',
+                                                '0' => 'Perempuan'
+                                            ])->required()
+                                    ])->columns(3),
                                 FileUpload::make('ktp')
                                     ->label('KTP')
                                     ->image()
