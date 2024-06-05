@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
+use App\Models\CheckInOut;
 use App\Models\CustomerJadwalStatic;
 use App\Models\Kelas;
 use App\Models\OrderPaket;
@@ -26,6 +27,7 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $id_user = $user->id;
         $data['user'] = $user;
         $data['active'] = 'profile';
         $kode = Crypt::encrypt($user->id);
@@ -36,9 +38,20 @@ class ProfileController extends Controller
         try {
             $generatorBarcode->getBarcodePNG($user->id, 'EAN8');
         } catch (\Throwable $th) {
+            $listOrderPaket = OrderPaket::where('id_user', $id_user)->get();
+            $listCheckIn = CheckInOut::where('id_user', $id_user)->get();
             $user->id = HelperController::generateIdUser();
             $user->save();
 
+            foreach ($listOrderPaket as $item) {
+                $item->id_user = $user->id;
+                $item->save();
+            }
+
+            foreach ($listCheckIn as $item) {
+                $item->id_user = $user->id;
+                $item->save();
+            }
             return redirect()->route('profile')->with('fail', 'Terjadi kesalahan. melakukan update User');
         }
         return view('base-2.profile.index', $data);
