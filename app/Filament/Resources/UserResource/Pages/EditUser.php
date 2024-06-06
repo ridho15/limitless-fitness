@@ -38,9 +38,4 @@ class EditUser extends EditRecord
             ->log('Update data user');
         return "Berhasil mengupdate data user";
     }
-
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        return $data;
-    }
 }

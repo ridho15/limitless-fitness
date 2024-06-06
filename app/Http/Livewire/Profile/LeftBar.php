@@ -12,7 +12,8 @@ class LeftBar extends Component
         return view('livewire.profile.left-bar');
     }
 
-    public function mount($active){
+    public function mount($active)
+    {
         $this->active = $active;
     }
 }

@@ -47,9 +47,9 @@ class BookingKelas extends Model
         } elseif ($this->status_kehadiran == 0) {
             return 'Tidak Hadir';
         } elseif ($this->status_kehadiran == 1) {
-            return 'Hadir';
+            return 'Akan hadir';
         } elseif ($this->status_kehadiran == 2) {
-            return 'Izin';
+            return 'Hadir';
         }
     }
 

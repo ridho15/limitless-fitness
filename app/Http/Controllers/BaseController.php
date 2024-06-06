@@ -198,13 +198,15 @@ class BaseController extends Controller
         if ($bookingKelas) {
             return redirect()->back()->with('fail', 'Anda sudah mengambil kelas ini. silahkan konfirmasi kehadiran terlebih dahulu');
         }
-
         $orderPaket = OrderPaket::where('id_user', Auth::id())
             ->whereHas('paket', function ($query) use ($kelasActivity) {
-                $query->where('id_kelas', $kelasActivity->id_kelas);
-            })->where('status', 1)
+                $query->where('id_kelas', $kelasActivity->id_kelas)
+                    ->orWhereNull('id_kelas');
+            })
+            ->where('status', 1)
             ->whereDate('expired_date', '>=', now())
             ->first();
+
         $isActive = false;
         if ($orderPaket) {
             $isActive = true;
@@ -219,6 +221,7 @@ class BaseController extends Controller
         $data['orderPaket'] = $orderPaket;
         $data['isActive'] = $isActive;
         $data['isBooking'] = $isBooking;
+
         return view('base-2.detail-timetable', $data);
     }
 
@@ -340,7 +343,7 @@ class BaseController extends Controller
         if (Auth::user()->hasRole(['Super Admin', 'Instruktur', 'Admin'])) {
             return app(LoginResponse::class);
         }
-        return redirect()->route('base')->with('success', 'Login Berhasil');
+        return redirect()->route('base');
     }
 
     public function confirmPembayaranPaket($paket)
@@ -550,7 +553,8 @@ class BaseController extends Controller
             // Check Order paket
             $orderPaket = OrderPaket::where('id_user', Auth::id())
                 ->whereHas('paket', function ($query) use ($kelasActivity) {
-                    $query->where('id_kelas', $kelasActivity->id_kelas);
+                    $query->where('id_kelas', $kelasActivity->id_kelas)
+                        ->orWhereNull('id_kelas');
                 })
                 ->whereDate('expired_date', '>=', now())
                 ->where('status', 1)

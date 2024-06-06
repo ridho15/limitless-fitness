@@ -4,9 +4,13 @@ use App\Http\Controllers\BaseController;
 use App\Http\Controllers\HelperController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
+use App\Models\BookingKelas;
+use App\Models\CheckInOut;
+use App\Models\OrderPaket;
 use App\Models\User;
 use Faker\Factory;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +48,51 @@ Route::get('optimize_clear', function () {
 Route::get('storage_link', function () {
     Artisan::call('storage:link');
     return "Berhasil membuat storage link";
+});
+
+Route::get('db_seed', function () {
+    Artisan::call('db:seed');
+    return "DB seed berhasil";
+});
+
+Route::get('generate-barcode', function () {
+    $listUser = User::get();
+    foreach ($listUser as $item) {
+        $item->update([
+            'barcode' => $item->id
+        ]);
+    }
+
+    return 'Berhasil';
+});
+
+Route::get('sinkronkan', function () {
+    $listUser = User::get();
+    foreach ($listUser as $index => $item) {
+        $item->id = $index + 1;
+        $item->save();
+        $listOrderPaket = OrderPaket::where('id_user', $item->barcode)->get();
+        foreach ($listOrderPaket as $orderPaket) {
+            $orderPaket->id_user = $item->id;
+            $orderPaket->save();
+        }
+
+        $listChecIn = CheckInOut::where('id_user', $item->barcode)->get();
+        foreach ($listChecIn as $checkIn) {
+            $checkIn->id_user = $item->id;
+            $checkIn->save();
+        }
+    }
+
+    return 'Berhasil sinkronkan';
+});
+
+Route::get('testing', function () {
+    return BookingKelas::where('id_user', Auth::user()->id)
+        ->whereHas('kelasActivity', function ($query) {
+            $query->whereDate('tanggal', now())->orWhere('jam_mulai', '<=', date("H:i:s"))
+                ->orWhere('status', 2);
+        })->first();
 });
 
 Route::get('generate-password', [HelperController::class, 'generatePassword']);

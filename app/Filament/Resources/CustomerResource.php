@@ -146,6 +146,17 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
+                ViewColumn::make('barcode')
+                    ->label('Barcode')
+                    ->searchable()
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->barcode
+                        ]);
+                    })
+                    ->view('custom-column.customer')
+                    ->sortable(),
                 ViewColumn::make('name')
                     ->label('Nama')
                     ->searchable()
@@ -157,7 +168,6 @@ class CustomerResource extends Resource
                     })
                     ->view('custom-column.customer')
                     ->sortable(),
-
                 ViewColumn::make('nik')
                     ->label('NIK')
                     ->searchable()

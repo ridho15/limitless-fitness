@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Filament\Resources\CheckInOutResource;
+use App\Models\BookingKelas;
 use App\Models\CheckInOut;
 use App\Models\OrderPaket;
 use App\Models\User;
@@ -55,14 +56,24 @@ class ScanQrCode extends Component
         } else {
             $data['status'] = 1;
         }
-
         CheckInOut::create($data);
+        $bookignKelas = BookingKelas::where('id_user', Auth::user()->id)
+            ->whereHas('kelasActivity', function ($query) {
+                $query->whereDate('tanggal', now())->orWhere('jam_mulai', '<=', date("H:i:s"))
+                    ->orWhere('status', 2);
+            })->first();
+        if ($bookignKelas) {
+            $bookignKelas->update([
+                'status_kehadiran' => 2
+            ]);
+        }
         $this->emit('hasilScan', true, "Data berhasil disimpan");
         set_time_limit(2);
         return redirect(CheckInOutResource::getUrl('index'));
     }
 
-    public function setNoCamera($no_camera){
+    public function setNoCamera($no_camera)
+    {
         $this->no_camera = $no_camera;
     }
 
@@ -72,7 +83,7 @@ class ScanQrCode extends Component
             if (strlen($this->user_code) > 8) {
                 $this->user_code = Crypt::decrypt($this->user_code);
             }
-            $this->user = User::find($this->user_code);
+            $this->user = User::where('barcode', $this->user_code)->first();
             if ($this->user == null) {
                 $this->user_code = null;
                 return $this->emit('hasilScan', false, "Data user tidak ditemukan !");
@@ -114,8 +125,8 @@ class ScanQrCode extends Component
             $result = (new QRCode())->readFromFile(public_path($file));
             $content = $result->data;
             $matrix = $result->getQRMatrix();
-            $id_user = Crypt::decrypt($content);
-            $user = User::find($id_user);
+            $barcode = Crypt::decrypt($content);
+            $user = User::where('barcode', $barcode)->first();
             if (!$user) {
                 return $this->emit('hasilScan', false, "Data user tidak ditemukan !");
             }

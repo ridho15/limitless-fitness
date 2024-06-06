@@ -33,26 +33,61 @@
                         <div class="tab-pane fade py-4 show active" id="booking">
                             <h4 class="fw-bold">Booking Kelas</h4>
                             <div class="row">
-                                @foreach ($listData as $item)
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card h-100 shadow-sm" style="border-radius: 15px">
-                                            <div class="card-body">
-                                                <h6 class="">{{ $item['nama_kelas'] }}</h6>
-                                                @foreach ($item['kelas_activity'] as $kelasActivity)
-                                                    <div class="text-end">Jadwal :
-                                                        {{ Carbon\Carbon::parse($kelasActivity->tanggal)->locale('id')->isoFormat('DD MMMM YYYY') }}
-                                                        {{ date('H:m', strtotime($kelasActivity->jam_mulai)) }}</div>
-                                                        <hr class="my-2" style="opacity: 0.1">
-                                                @endforeach
+                                @if (count($listBookingKelas) > 0)
+                                    @foreach ($listBookingKelas as $item)
+                                        <div class="bg-white shadow-sm border p-4 mb-4" style="border-radius: 15px">
+                                            <div class="row justify-content-between">
+                                                <div class="col-md-3 text-start">
+                                                    <small class="fw-light">Kelas</small>
+                                                    <div class="fw-bold">
+                                                        <a style="text-decoration: none; color:black"
+                                                            href="{{ route('detail-timetable', ['id' => $item->id_kelas_activity]) }}">
+                                                            {{ $item->kelasActivity->kelas->nama_kelas }}
+                                                        </a>
+                                                    </div>
+                                                    <small>{{ $item->kelasActivity->user->name }}</small>
+                                                </div>
+                                                <div class="col-md-3 text-center">
+                                                    <small class="fw-light">Booking</small>
+                                                    <div class="fw-bold">{{ $item->tanggal_booking }}</div>
+                                                    <small>Keterangan : {{ $item->keterangan ?? '-' }}</small>
+                                                </div>
+                                                <div class="col-md-3 text-center">
+                                                    <small class="fw-light">Waktu Latihan</small>
+                                                    <div class="fw-bold">{{ $item->kelasActivity->jam_mulai_formatted }}
+                                                    </div>
+                                                    <small>Kehadiran :
+                                                        <strong>{{ $item->status_kehadiran_formatted }}</strong></small>
+                                                </div>
+                                                <div class="col-md-3 text-end">
+                                                    <small class="fw-light">Lokasi</small>
+                                                    <div class="fw-bold">
+                                                        <a href="{{ route('detail-location', ['id' => isset($item->kelasActivity->locationStudio->id_location) ? $item->kelasActivity->locationStudio->id_location : 0]) }}"
+                                                            style="text-decoration: none; color: black">
+                                                            {{ $item->kelasActivity->locationStudio->location->nama }}</a>
+                                                    </div>
+                                                    <small>{{ $item->kelasActivity->locationStudio->nama }}</small>
+                                                </div>
                                             </div>
                                         </div>
+                                    @endforeach
+                                @else
+                                    <div class="d-flex align-items-center flex-column justify-content-center"
+                                        style="height: 50vh">
+                                        <span class="fs-1 text-center">
+                                            <i class="fa-solid fa-file-pen"></i>
+                                        </span>
+                                        <small class="d-block mb-3">
+                                            You don't have any class.
+                                        </small>
+                                        <a href="{{ route('timetable') }}" class="btn custom-btn-outline">Booking Class</a>
                                     </div>
-                                @endforeach
+                                @endif
                             </div>
                         </div>
                         <div class="tab-pane fade py-4" id="hadir">
-                            @if (count($listBookingKelas->where('status_kehadiran', 1)) > 0)
-                                @foreach ($listBookingKelas->where('status_kehadiran', 1) as $item)
+                            @if (count($listBookingKelas->where('status_kehadiran', 2)) > 0)
+                                @foreach ($listBookingKelas->where('status_kehadiran', 2) as $item)
                                     <div class="bg-white shadow-sm border p-4 mb-4" style="border-radius: 15px">
                                         <div class="row justify-content-between">
                                             <div class="col-md-3 text-start">
@@ -265,7 +300,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->created_at)->locale('id')->isoFormat('dddd, DD MMMM
-                                                                                                                                    YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">
@@ -275,7 +310,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->kelasActivity->tanggal)->locale('id')->isoFormat('dddd,
-                                                                                                                                    DD MMMM YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    DD MMMM YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">
@@ -402,7 +437,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->created_at)->locale('id')->isoFormat('dddd, DD MMMM
-                                                                                                                                YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">
@@ -412,7 +447,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->kelasActivity->tanggal)->locale('id')->isoFormat('dddd,
-                                                                                                                                DD MMMM YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                DD MMMM YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">

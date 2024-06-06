@@ -97,6 +97,9 @@ class UserResource extends Resource
                     ->circular()
                     ->height(75)
                     ->width(75),
+                TextColumn::make('barcode')
+                    ->label('barcode')
+                    ->searchable(),
                 TextColumn::make('name')
                     ->label('nama')
                     ->searchable(),

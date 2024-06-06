@@ -144,7 +144,7 @@
                         <button type="button" class="btn custom-btn-outline mx-2"
                             data-bs-dismiss="modal"><small>Close</small> <i
                                 class="fa-regular fa-circle-xmark"></i></button>
-                        <button class="btn custom-btn">Submit <span class="mx-2"><i
+                        <button class="btn custom-btn" type="submit">Submit <span class="mx-2"><i
                                     class="fa-solid fa-right-to-bracket"></i></span></button>
                     </div>
                 </form>

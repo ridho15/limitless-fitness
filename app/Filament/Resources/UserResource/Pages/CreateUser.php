@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use App\Http\Controllers\HelperController;
 use Faker\Factory;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
@@ -26,8 +27,7 @@ class CreateUser extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $faker = Factory::create();
-        $data['id'] = $faker->ean8();
+        $data['barcode'] = HelperController::generateBarcode();
         return $data;
     }
 }

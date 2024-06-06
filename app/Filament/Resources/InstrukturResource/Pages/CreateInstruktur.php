@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\InstrukturResource\Pages;
 
 use App\Filament\Resources\InstrukturResource;
+use App\Http\Controllers\HelperController;
 use Faker\Factory;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
@@ -27,8 +28,7 @@ class CreateInstruktur extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $faker = Factory::create();
-        $data['id'] = $faker->ean8();
+        $data['barcode'] = HelperController::generateBarcode();
         return $data;
     }
 }

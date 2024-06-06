@@ -27,22 +27,18 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $id_user = $user->id;
         $data['user'] = $user;
         $data['active'] = 'profile';
-        $kode = Crypt::encrypt($user->id);
+        $kode = Crypt::encrypt($user->barcode);
         $data['kode'] = $kode;
         $generatorBarcode = new DNS1D;
         $generatorBarcode->setStorPath(__DIR__ . '/cache/');
         $data['generatorBarcode'] = $generatorBarcode;
         try {
-            $generatorBarcode->getBarcodePNG($user->id, 'EAN8');
+            $generatorBarcode->getBarcodePNG($user->barcode, 'EAN8');
         } catch (\Throwable $th) {
-            $listOrderPaket = OrderPaket::where('id_user', $id_user)->get();
-            $listCheckIn = CheckInOut::where('id_user', $id_user)->get();
-            $user->id = HelperController::generateIdUser();
-            $user->save();
-
+            $listOrderPaket = OrderPaket::where('id_user', $user->barcode)->get();
+            $listCheckIn = CheckInOut::where('id_user', $user->barcode)->get();
             foreach ($listOrderPaket as $item) {
                 $item->id_user = $user->id;
                 $item->save();
@@ -52,6 +48,9 @@ class ProfileController extends Controller
                 $item->id_user = $user->id;
                 $item->save();
             }
+
+            $user->barcode = HelperController::generateBarcode();
+            $user->save();
             return redirect()->route('profile')->with('fail', 'Terjadi kesalahan. melakukan update User');
         }
         return view('base-2.profile.index', $data);
@@ -59,7 +58,6 @@ class ProfileController extends Controller
 
     public function bookings()
     {
-        // return Carbon::now()->addWeeks()->startOfWeek(Carbon::TUESDAY)->isoFormat('DD-MM-YYYY');
         $user = Auth::user();
         $data['user'] = $user;
         $data['active'] = 'bookings';
@@ -100,6 +98,13 @@ class ProfileController extends Controller
 
         $listBookingKelas = BookingKelas::where('id_user', $user->id)
             ->whereHas('kelasActivity', function ($query) {
+                $query->whereDate('tanggal', '>=', now());
+            })
+            ->where('status_kehadiran', 1)
+            ->get()->sortByDesc('kelasActivity.tanggal');
+
+        $listHistoryKelas = BookingKelas::where('id_user', $user->id)
+            ->whereHas('kelasActivity', function ($query) {
                 $query->whereDate('tanggal', '<=', now());
             })
             ->get()->sortByDesc('kelasActivity.tanggal');
@@ -115,7 +120,7 @@ class ProfileController extends Controller
 
         $listCustomerJadwalStatis = CustomerJadwalStatic::where('id_user', Auth::id())
             ->get();
-
+        $data['listHistoryKelas'] = $listHistoryKelas;
         $data['listBookingKelas'] = $listBookingKelas;
         $data['jumlahHadir'] = $jumlahHadir;
         $data['jumlahTidakHadir'] = $jumlahTidakHadir;

@@ -104,6 +104,9 @@ class InstrukturResource extends Resource
                     ->circular()
                     ->height(75)
                     ->width(75),
+                TextColumn::make('barcode')
+                    ->label('Barcode')
+                    ->searchable(),
                 TextColumn::make('name')
                     ->label('nama')
                     ->searchable(),

@@ -322,7 +322,7 @@ class OrderPaketResource extends Resource
                                 'tipe' => 0,
                             ], [
                                 'nama' => 'Biaya Instruktur 1px group @' . $record->paket->kelas->honor,
-                                'jumlah_uang' => $record->paket->kelas->honor,
+                                'jumlah_uang' => $record->paket->kelas->honor ?? 0,
                                 'tipe' => '0',
                                 'struk' => null,
                                 'tanggal' => now(),

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CustomerResource\Pages;
 
 use App\Filament\Resources\CustomerResource;
+use App\Http\Controllers\HelperController;
 use App\Models\User;
 use Faker\Factory;
 use Filament\Notifications\Notification;
@@ -57,8 +58,7 @@ class CreateCustomer extends CreateRecord
 
             return $this->halt();
         }
-        $faker = Factory::create();
-        $data['id'] = $faker->ean8();
+        $data['barcode'] = HelperController::generateBarcode();
         return $data;
     }
 }

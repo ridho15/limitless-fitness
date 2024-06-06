@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Http\Controllers\HelperController;
 use App\Models\User;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
@@ -19,11 +20,10 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        $faker = Factory::create();
         $user = User::updateOrCreate([
             'email' => 'ralamzah@gmail.com'
         ], [
-            'id' => $faker->ean8(),
+            'barcode' => HelperController::generateBarcode(),
             'name' => 'Ridho Al Amzah',
             'email' => 'ralamzah@gmail.com',
             'password' => Hash::make('ridho123'),
