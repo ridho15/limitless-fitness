@@ -131,4 +131,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsTo(Location::class, 'id_location')->withDefault();
     }
+
+    public function checkInOut()
+    {
+        return $this->hasMany(CheckInOut::class, 'id_user');
+    }
 }

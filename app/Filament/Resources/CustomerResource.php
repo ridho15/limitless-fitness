@@ -6,9 +6,11 @@ use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\Pages\KreditCustomer;
 use App\Filament\Resources\CustomerResource\Pages\ViewCustomer;
 use App\Filament\Resources\CustomerResource\RelationManagers\BookingKelasRelationManager;
+use App\Filament\Resources\CustomerResource\RelationManagers\CheckInOutRelationManager;
 use App\Filament\Resources\CustomerResource\RelationManagers\KreditKelasRelationManager;
 use App\Filament\Resources\CustomerResource\RelationManagers\OrderPaketRelationManager;
 use App\Filament\Resources\CustomerResource\RelationManagers\VoucherCustomerRelationManager;
+use App\Models\CheckInOut;
 use App\Models\OrderPaket;
 use App\Models\Role;
 use App\Models\User;
@@ -349,9 +351,10 @@ class CustomerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            BookingKelasRelationManager::class,
+            CheckInOutRelationManager::class,
             OrderPaketRelationManager::class,
             VoucherCustomerRelationManager::class,
+            // BookingKelasRelationManager::class,
             // KreditKelasRelationManager::class,
         ];
     }
