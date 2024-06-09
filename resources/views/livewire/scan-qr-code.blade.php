@@ -122,7 +122,8 @@
                                         <img src="{{ asset('storage/' . $user->ktp) }}" alt=""
                                             class="img-fluid">
                                     @else
-                                        <div class="text-center border rounded d-flex align-items-center justify-content-center" style="height: 300px">
+                                        <div class="text-center border rounded d-flex align-items-center justify-content-center"
+                                            style="height: 300px">
                                             <small>Belum ada KTP</small>
                                         </div>
                                     @endif
@@ -132,9 +133,10 @@
                                         <img src="{{ asset('storage/' . $user->selfie) }}" alt=""
                                             class="img-fluid">
                                     @else
-                                    <div class="text-center border rounded d-flex align-items-center justify-content-center" style="height: 300px">
-                                        <small>Belum ada foto pribadi</small>
-                                    </div>
+                                        <div class="text-center border rounded d-flex align-items-center justify-content-center"
+                                            style="height: 300px">
+                                            <small>Belum ada foto pribadi</small>
+                                        </div>
                                     @endif
                                 </div>
                             </div>

@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\JurnalResource\Pages;
 use App\Filament\Resources\JurnalResource\RelationManagers;
+use App\Filament\Resources\JurnalResource\Widgets\JournalOverview;
+use App\Filament\Widgets\PendapatanOverView;
 use App\Models\Jurnal;
 use App\Models\Location;
 use App\Models\User;
@@ -91,7 +93,7 @@ class JurnalResource extends Resource
                     ->dateTime('D, d M Y')
                     ->sortable(),
                 TextColumn::make('orderPaket.unix_code')
-                ->label('Unix Code')
+                    ->label('Unix Code')
                     ->searchable(),
                 TextColumn::make('nama')
                     ->color(function ($record) {
@@ -206,6 +208,13 @@ class JurnalResource extends Resource
                 $query->where('id_location', Auth::user()->id_location);
             });
         })->orderBy('created_at', 'DESC');
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            // PendapatanOverView::class,
+        ];
     }
 
     public static function getRelations(): array

@@ -102,7 +102,7 @@
                     <label for="" class="form-label required">Foto KTP</label>
                     <input type="file" name="ktp" wire:model="ktp" class="form-control padding-vertical-12"
                         placeholder="Upload KTP">
-                    <div><small>Wajib Upload KTP Max File 1MB</small></div>
+                    <div><small>Wajib Upload KTP Max File 2MB</small></div>
 
                     <!-- Progress Bar -->
                     <div x-show="isUploading" class="progress" style="height: 10px">
@@ -129,7 +129,7 @@
                     <label for="" class="form-label required">Foto Selfie</label>
                     <input type="file" name="selfie" wire:model="selfie"
                         class="form-control padding-vertical-12" placeholder="Upload Selfie">
-                    <div><small>Wajib Upload Foto Selfie Max File 1MB</small></div>
+                    <div><small>Wajib Upload Foto Selfie Max File 2MB</small></div>
                     <!-- Progress Bar -->
                     <div x-show="isUploading" class="progress" style="height: 10px">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"

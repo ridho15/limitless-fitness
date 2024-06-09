@@ -115,7 +115,7 @@ class FormProfile extends Component
             $data['selfie'] = str_replace('public/', '', $selfie);
         }
 
-        if($this->password){
+        if ($this->password) {
             $data['password'] = Hash::make($this->password);
         }
 

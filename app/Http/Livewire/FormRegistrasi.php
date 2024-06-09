@@ -61,8 +61,8 @@ class FormRegistrasi extends Component
             'password' => 'required|min:8|max:20',
             'alamat' => 'required',
             'id_location' => 'required|numeric',
-            'ktp' => 'required|mimes:jpeg,png,jpg,gif|max:1024',
-            'selfie' => 'required|mimes:jpeg,png,jpg,gif|max:1024',
+            'ktp' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
+            'selfie' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
             'setuju' => 'required',
             'jenis_kelamin' => 'required',
             'nik' => 'required|numeric|digits:16'

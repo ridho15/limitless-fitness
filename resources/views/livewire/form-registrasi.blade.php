@@ -39,7 +39,8 @@
                 <div class="input-group">
                     <input type="number" name="nik" wire:model="nik" class="form-control padding-vertical-12"
                         placeholder="Masukkan NIK" aria-label="Masukkan NIK" aria-describedby="basic-addon2" required>
-                    <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-address-card px-2"></i></span>
+                    <span class="input-group-text" id="basic-addon2"><i
+                            class="fa-solid fa-address-card px-2"></i></span>
                 </div>
                 @error('nik')
                     <small class="text-danger">{{ $message }}</small>
@@ -137,7 +138,7 @@
                     <label for="" class="form-label required">Foto KTP</label>
                     <input type="file" name="ktp" wire:model="ktp" class="form-control padding-vertical-12"
                         placeholder="Upload KTP" required>
-                    <div><small>Wajib Upload KTP Max File 1MB</small></div>
+                    <div><small>Wajib Upload KTP Max File 2MB</small></div>
 
                     <!-- Progress Bar -->
                     <div x-show="isUploading" class="progress" style="height: 10px">
@@ -165,7 +166,7 @@
                     <label for="" class="form-label required">Foto Selfie</label>
                     <input type="file" name="selfie" wire:model="selfie"
                         class="form-control padding-vertical-12" placeholder="Upload Selfie" required>
-                    <div><small>Wajib Upload Foto Selfie Max File 1MB</small></div>
+                    <div><small>Wajib Upload Foto Selfie Max File 2MB</small></div>
                     <!-- Progress Bar -->
                     <div x-show="isUploading" class="progress" style="height: 10px">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"

@@ -300,7 +300,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->created_at)->locale('id')->isoFormat('dddd, DD MMMM
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">
@@ -310,7 +310,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->kelasActivity->tanggal)->locale('id')->isoFormat('dddd,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    DD MMMM YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    DD MMMM YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">
@@ -437,7 +437,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->created_at)->locale('id')->isoFormat('dddd, DD MMMM
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">
@@ -447,7 +447,7 @@
                                             <div class="col-8 fw-bold">
                                                 :
                                                 {{ Carbon\Carbon::parse($item->kelasActivity->tanggal)->locale('id')->isoFormat('dddd,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                DD MMMM YYYY') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                DD MMMM YYYY') }}
                                             </div>
                                         </div>
                                         <div class="row d-md-none d-flex mb-2">
