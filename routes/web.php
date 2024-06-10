@@ -97,6 +97,15 @@ Route::get('ean13', function () {
     return $kode;
 });
 
+Route::get('ean8', function () {
+    $faker = Factory::create();
+    $kode = $faker->ean8();
+    $generateBarcode = new DNS1D;
+
+    echo $generateBarcode->getBarcodeHTML($kode, 'EAN8');
+    return $kode;
+});
+
 Route::get('testing', function () {
     return BookingKelas::where('id_user', Auth::user()->id)
         ->whereHas('kelasActivity', function ($query) {
