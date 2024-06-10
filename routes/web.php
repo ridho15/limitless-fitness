@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Route;
+use Milon\Barcode\DNS1D;
 
 Route::get('cache_clear', function () {
     Artisan::call('cache:clear');
@@ -85,6 +86,15 @@ Route::get('sinkronkan', function () {
     }
 
     return 'Berhasil sinkronkan';
+});
+
+Route::get('ean13', function () {
+    $faker = Factory::create();
+    $kode = $faker->ean13();
+    $generateBarcode = new DNS1D;
+
+    echo $generateBarcode->getBarcodeHTML($kode, 'EAN13');
+    return $kode;
 });
 
 Route::get('testing', function () {

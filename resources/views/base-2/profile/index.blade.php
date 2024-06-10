@@ -53,6 +53,9 @@
                     <div class="text-center">
                         <img src="{{ 'data:image/png;base64,' . $generatorBarcode->getBarcodePNG($user->barcode, 'EAN8') }}"
                             alt="barcode" style="height: 50px" />
+                            <div class="text-center">
+                                {{ $user->barcode }}
+                            </div>
                     </div>
                     <div class="text-center">
                         <img src="{{ (new chillerlan\QRCode\QRCode())->render($kode) }}" alt=""
