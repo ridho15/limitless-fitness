@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Controllers\HelperController;
 use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\Location;
 use App\Models\LocationStudio;
@@ -33,6 +34,7 @@ class FormRegistrasi extends Component
     public $setuju = false;
     public $jenis_kelamin;
     public $nik;
+    public $barcode;
 
     public $listLocation = [];
     public $listLocationStudio = [];
@@ -90,7 +92,7 @@ class FormRegistrasi extends Component
             'setuju.required' => 'Anda belum menyetujui ketentuan',
             'jenis_kelamin.required' => 'Jenis kelamin belum dipilih',
             'nik.required' => 'NIK tidak boleh kosong',
-            'NIK.numeric' => 'NIK tidak valid !'
+            'nik.numeric' => 'NIK tidak valid !'
         ]);
 
         $checkEmail = User::where('email', $this->email)->withTrashed()->first();
@@ -98,15 +100,13 @@ class FormRegistrasi extends Component
             return $this->emit('finishSubmit', false, "Email sudah digunakan !");
         }
 
-        $faker = Factory::create();
         do {
-            $user_id = $faker->ean8();
-            $user = User::find($user_id);
+            $this->barcode = HelperController::generateBarcode();
+            $user = User::where('barcode', $this->barcode)->first();
         } while ($user);
 
         $ktp = $this->ktp->store('public/ktp');
         $selfie = $this->selfie->store('public/selfie');
-        $data['id'] = $user_id;
         $data['name'] = $this->name;
         $data['email'] = $this->email;
         $data['password'] = Hash::make($this->password);
@@ -120,11 +120,9 @@ class FormRegistrasi extends Component
         $data['nik'] = $this->nik;
         $data['created_at'] = now();
 
-        User::insert($data);
-        $user = User::find($user_id);
+        $user = User::create($data);
         $user->assignRole('Customer');
 
-        // return $this->emit('finishSubmit', true, "Email berhasil di buat");
         Mail::to($this->email)->send(new RegistrasiKonfirmasiMail($user));
         set_time_limit(2);
         return redirect()->route('login')->with('success', 'Akun kamu belum aktif. Tunggu 1 x 24 jam untuk aktifasi akun atau bisa menghubungi admin melalui whatsapp yang sudah di sediakan');

@@ -11,8 +11,6 @@ use App\Models\User;
 use Faker\Factory;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Route;
 use Milon\Barcode\DNS1D;
 
