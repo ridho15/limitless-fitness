@@ -106,7 +106,7 @@ Route::get('ean8', function () {
 });
 
 Route::get('sinkron-data', function () {
-    $listOrderPaket = OrderPaket::get();
+    $listOrderPaket = OrderPaket::where('status', 1)->get();
     foreach ($listOrderPaket as $record) {
         $jurnal = Jurnal::updateOrCreate([
             'id_order_paket' => $record->id,
