@@ -4,10 +4,11 @@ use App\Http\Controllers\BaseController;
 use App\Http\Controllers\HelperController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
-use App\Models\BookingKelas;
 use App\Models\CheckInOut;
+use App\Models\Jurnal;
 use App\Models\OrderPaket;
 use App\Models\User;
+use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -104,12 +105,45 @@ Route::get('ean8', function () {
     return $kode;
 });
 
-Route::get('testing', function () {
-    return BookingKelas::where('id_user', Auth::user()->id)
-        ->whereHas('kelasActivity', function ($query) {
-            $query->whereDate('tanggal', now())->orWhere('jam_mulai', '<=', date("H:i:s"))
-                ->orWhere('status', 2);
-        })->first();
+Route::get('sinkron-data', function () {
+    $listOrderPaket = OrderPaket::get();
+    foreach ($listOrderPaket as $record) {
+        $jurnal = Jurnal::updateOrCreate([
+            'id_order_paket' => $record->id,
+            'tipe' => 1
+        ], [
+            'nama' => "Peserta an, " . $record->user->name . ' ' . $record->paket->nama,
+            'jumlah_uang' => $record->harga,
+            'tipe' => 1,
+            'struk' => $record->bukti_pembayaran,
+            'tanggal' => now(),
+            'id_user' => Auth::id(),
+            'id_order_paket' => $record->id
+        ]);
+        Jurnal::updateOrCreate([
+            'id_order_paket' => $record->id,
+            'id_parent' => $jurnal->id,
+            'tipe' => 0,
+        ], [
+            'nama' => 'Biaya Instruktur 1px group @' . $record->paket->kelas->honor,
+            'jumlah_uang' => $record->paket->kelas->honor ?? 0,
+            'tipe' => '0',
+            'struk' => null,
+            'tanggal' => now(),
+            'id_user' => Auth::id(),
+            'id_order_paket' => $record->id
+        ]);
+        if ($record->is_active != 1) {
+            $tanggalExpired = Carbon::now()->addMonth($record->paket->valid_month);
+            $record->update([
+                'status' => 1,
+                'expired_date' => $tanggalExpired,
+                'is_active' => 1
+            ]);
+        }
+    }
+
+    return "selesai";
 });
 
 Route::get('generate-password', [HelperController::class, 'generatePassword']);

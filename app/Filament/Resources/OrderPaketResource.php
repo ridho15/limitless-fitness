@@ -375,7 +375,7 @@ class OrderPaketResource extends Resource
                 ])
             ])
             ->bulkActions([
-                DeleteBulkAction::make()
+                DeleteBulkAction::make(),
             ]);
     }
 

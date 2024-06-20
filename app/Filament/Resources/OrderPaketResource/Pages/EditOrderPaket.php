@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OrderPaketResource\Pages;
 
 use App\Filament\Resources\OrderPaketResource;
+use App\Models\Jurnal;
 use Carbon\Carbon;
 use Filament\Pages\Actions;
 use Filament\Pages\Actions\DeleteAction;
@@ -51,5 +52,44 @@ class EditOrderPaket extends EditRecord
             ->causedBy(Auth::user())
             ->log('melakukan data order paket');
         return 'Berhasil mengupdate data order paket';
+    }
+
+    protected function afterSave()
+    {
+        if ($this->getRecord()->status == 1) {
+            $jurnal = Jurnal::updateOrCreate([
+                'id_order_paket' => $this->getRecord()->id,
+                'tipe' => 1
+            ], [
+                'nama' => "Peserta an, " . $this->getRecord()->user->name . ' ' . $this->getRecord()->paket->nama,
+                'jumlah_uang' => $this->getRecord()->harga,
+                'tipe' => 1,
+                'struk' => $this->getRecord()->bukti_pembayaran,
+                'tanggal' => now(),
+                'id_user' => Auth::id(),
+                'id_order_paket' => $this->getRecord()->id
+            ]);
+            Jurnal::updateOrCreate([
+                'id_order_paket' => $this->getRecord()->id,
+                'id_parent' => $jurnal->id,
+                'tipe' => 0,
+            ], [
+                'nama' => 'Biaya Instruktur 1px group @' . $this->getRecord()->paket->kelas->honor,
+                'jumlah_uang' => $this->getRecord()->paket->kelas->honor ?? 0,
+                'tipe' => '0',
+                'struk' => null,
+                'tanggal' => now(),
+                'id_user' => Auth::id(),
+                'id_order_paket' => $this->getRecord()->id
+            ]);
+            if ($this->getRecord()->is_active != 1) {
+                $tanggalExpired = Carbon::now()->addMonth($this->getRecord()->paket->valid_month);
+                $this->getRecord()->update([
+                    'status' => 1,
+                    'expired_date' => $tanggalExpired,
+                    'is_active' => 1
+                ]);
+            }
+        }
     }
 }
