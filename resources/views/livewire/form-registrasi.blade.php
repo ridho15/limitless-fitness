@@ -118,7 +118,7 @@
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" wire:model="jenis_kelamin" type="radio"
+                        <input class="form-check-input" value="0" wire:model="jenis_kelamin" type="radio"
                             name="jenis_kelamin" id="jenis_kelamin_2" required>
                         <label class="form-check-label" for="jenis_kelamin_2">
                             Perempuan
