@@ -18,5 +18,5 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-    RewriteRule ^(.*)$ https://limitlessfitness.id/$1 [R,L]
+    RewriteRule ^(.*)$ https://dev.limitlessfitness.id/$1 [R,L]
 </IfModule>
