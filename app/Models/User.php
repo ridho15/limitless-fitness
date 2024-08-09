@@ -79,7 +79,7 @@ class User extends Authenticatable implements FilamentUser
     {
         if ($this->jenis_kelamin == 1) {
             return 'Pria';
-        } elseif ($this->jenis_kelamin == 0) {
+        } else {
             return 'Wanita';
         }
     }
