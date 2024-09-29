@@ -11,7 +11,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->hasRole(['Admin'])){
+        if($user->hasRole(['Admin', 'Super Admin'])){
             return true;
         }
 
@@ -23,7 +23,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        if($user->hasRole(['Admin'])){
+        if($user->hasRole(['Admin', 'Super Admin'])){
             return true;
         }
         return false;
@@ -34,7 +34,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        if($user->hasRole(['Admin'])){
+        if($user->hasRole(['Admin', 'Super Admin'])){
             return true;
         }
         return false;
@@ -45,7 +45,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        if($user->hasRole(['Admin'])){
+        if($user->hasRole(['Admin', 'Super Admin'])){
             return true;
         }
         return false;
@@ -56,7 +56,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        if($user->hasRole(['Admin'])){
+        if($user->hasRole(['Admin', 'Super Admin'])){
             return true;
         }
         return false;

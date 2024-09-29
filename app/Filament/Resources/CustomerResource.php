@@ -41,6 +41,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -56,6 +57,8 @@ class CustomerResource extends Resource
     protected static ?string $pluralModelLabel = 'Data Customer';
 
     protected static ?string $slug = 'customer';
+
+    protected static ?string $navigationGroup = 'User';
 
     protected static ?int $navigationSort = 6;
 
@@ -96,10 +99,10 @@ class CustomerResource extends Resource
                                 DateTimePicker::make('email_verified_at'),
                                 TextInput::make('password')
                                     ->minLength(8)
-                                    ->required(fn (string $context): bool => $context === 'create')
+                                    ->required(fn(string $context): bool => $context === 'create')
                                     ->password()
-                                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                                    ->dehydrated(fn ($state) => filled($state)),
+                                    ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                                    ->dehydrated(fn($state) => filled($state)),
                                 Select::make('id_location')
                                     ->label('Location')
                                     ->preload()
@@ -296,7 +299,18 @@ class CustomerResource extends Resource
                         })->when($data['end_date'], function (Builder $query, $date) {
                             return $query->where('created_at', '<=', $date);
                         });
+                    }),
+                SelectFilter::make('id_location')
+                    ->label('Location')
+                    ->hidden(function(){
+                        if(Auth::user()->hasRole(['Admin'])){
+                            return true;
+                        }else{
+                            return false;
+                        }
                     })
+                    ->searchable()
+                    ->relationship('location', 'nama'),
             ])
             ->actions([
                 ActionGroup::make([
@@ -382,7 +396,9 @@ class CustomerResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->whereHas('roles', function ($query) {
+        return parent::getEloquentQuery()->when(Auth::user()->hasRole(['Admin']), function ($query) {
+            $query->where('id_location', Auth::user()->id_location);
+        })->whereHas('roles', function ($query) {
             $query->where('name', 'Customer');
         })->orderBy('created_at', 'DESC');
     }

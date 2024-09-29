@@ -18,6 +18,7 @@ class ListOrderPakets extends ListRecords
         return [
             CreateAction::make()
                 ->label('Tambah Data')
+                ->hidden()
                 ->icon('heroicon-o-plus-circle'),
         ];
     }

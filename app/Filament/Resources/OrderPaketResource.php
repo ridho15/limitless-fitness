@@ -276,7 +276,8 @@ class OrderPaketResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make(),
+                    EditAction::make()
+                    ->hidden(),
                     DeleteAction::make()->successNotificationTitle('Berhasil menghapus order paket')
                         ->after(function () {
                             activity()
