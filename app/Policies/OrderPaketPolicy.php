@@ -38,10 +38,6 @@ class OrderPaketPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasRole(['Admin'])) {
-            return true;
-        }
-
         return false;
     }
 
@@ -50,10 +46,6 @@ class OrderPaketPolicy
      */
     public function update(User $user, OrderPaket $orderPaket)
     {
-        if ($user->hasRole(['Admin'])) {
-            return true;
-        }
-
         return false;
     }
 
