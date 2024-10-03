@@ -109,7 +109,18 @@ class CustomerResource extends Resource
                                     ->searchable()
                                     ->relationship('location', 'nama')
                                     ->nullable(),
+                                FileUpload::make('ktp')
+                                    ->label('KTP')
+                                    ->image()
+                                    ->maxSize(2048)
+                                    ->nullable(),
+                                FileUpload::make('selfie')
+                                    ->label('Selfie')
+                                    ->image()
+                                    ->maxSize(2048)
+                                    ->nullable(),
                                 FileUpload::make('foto')
+                                    ->label('Foto')
                                     ->image()
                                     ->maxSize(2048)
                                     ->nullable(),
@@ -302,10 +313,10 @@ class CustomerResource extends Resource
                     }),
                 SelectFilter::make('id_location')
                     ->label('Location')
-                    ->hidden(function(){
-                        if(Auth::user()->hasRole(['Admin'])){
+                    ->hidden(function () {
+                        if (Auth::user()->hasRole(['Admin'])) {
                             return true;
-                        }else{
+                        } else {
                             return false;
                         }
                     })

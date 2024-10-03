@@ -61,16 +61,27 @@ class UserResource extends Resource
                         DateTimePicker::make('email_verified_at'),
                         TextInput::make('password')
                             ->minLength(8)
-                            ->required(fn (string $context): bool => $context === 'create')
+                            ->required(fn(string $context): bool => $context === 'create')
                             ->password()
-                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                            ->dehydrated(fn ($state) => filled($state)),
+                            ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                            ->dehydrated(fn($state) => filled($state)),
                         Select::make('id_location')
                             ->searchable()
                             ->preload()
                             ->relationship('location', 'nama')
                             ->required(),
+                        FileUpload::make('ktp')
+                            ->label('KTP')
+                            ->image()
+                            ->maxSize(2048)
+                            ->nullable(),
+                        FileUpload::make('selfie')
+                            ->label('Selfie')
+                            ->image()
+                            ->maxSize(2048)
+                            ->nullable(),
                         FileUpload::make('foto')
+                            ->label('Foto')
                             ->image()
                             ->maxSize(2048)
                             ->nullable(),
