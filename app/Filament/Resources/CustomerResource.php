@@ -109,16 +109,6 @@ class CustomerResource extends Resource
                                     ->searchable()
                                     ->relationship('location', 'nama')
                                     ->nullable(),
-                                FileUpload::make('ktp')
-                                    ->label('KTP')
-                                    ->image()
-                                    ->maxSize(2048)
-                                    ->nullable(),
-                                FileUpload::make('selfie')
-                                    ->label('Selfie')
-                                    ->image()
-                                    ->maxSize(2048)
-                                    ->nullable(),
                                 FileUpload::make('foto')
                                     ->label('Foto')
                                     ->image()

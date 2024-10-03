@@ -77,7 +77,7 @@
                                 Start Date
                             </div>
                             <div class="col-md col">
-                                : <strong>{{ $start_date }}</strong>
+                                : <strong>{{ $start_date->isoFormat('DD MMMM YYYY') }}</strong>
                             </div>
                         </div>
                         <div class="row">
@@ -85,7 +85,7 @@
                                 End Date
                             </div>
                             <div class="col-md col">
-                                : <strong>{{ $end_date }}</strong>
+                                : <strong>{{ $end_date->isoFormat('DD MMMM YYYY') }}</strong>
                             </div>
                         </div>
                         <div class="row">

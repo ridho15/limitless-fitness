@@ -39,33 +39,33 @@
         style="border-radius: 15px; top: 80px; z-index: 2 !important;">
         @include('helper.alert-message')
         <div class="form-group">
-            <label for="" class="form-label">Kode Voucher</label>
+            <label for="" class="form-label">Kode Voucher <div wire:loading>
+                    <i class="fas fa-sync fa-spin"></i>
+                </div></label>
             <div class="input-group mb-3">
                 <input type="text" name="kode_voucher" wire:model="kode_voucher"
-                    class="form-control padding-vertical-12" placeholder="Masukkan kode voucher"
-                    @if ($isGunakan == true) disabled @endif aria-label="Masukkan kode voucher"
-                    aria-describedby="basic-addon2">
+                    class="form-control padding-vertical-12" placeholder="Masukkan kode voucher" @if ($isGunakan==true)
+                    disabled @endif aria-label="Masukkan kode voucher" aria-describedby="basic-addon2">
                 <span class="input-group-text @if ($isGunakan == false) bg-color-custom text-white @endif"
                     style="cursor: pointer" id="basic-addon2" wire:click="checkKodeVoucher">Check</span>
             </div>
             @error('kode_voucher')
-                <small class="text-danger">{{ $message }}</small>
+            <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
         @if ($isCheck == true && $isGunakan == false)
-            <div class="d-flex align-items-center justify-content-center">
-                <button type="button" wire:click="batalkanVoucher"
-                    class="btn custom-btn-outline me-1">Batalkan</button>
-                <button type="button" wire:click="gunakanKodeVoucher" class="btn custom-btn ms-1">Gunakan</button>
-            </div>
+        <div class="d-flex align-items-center justify-content-center">
+            <button type="button" wire:click="batalkanVoucher" class="btn custom-btn-outline me-1">Batalkan</button>
+            <button type="button" wire:click="gunakanKodeVoucher" class="btn custom-btn ms-1">Gunakan</button>
+        </div>
         @endif
     </div>
 </div>
 
 @push('js')
-    <script>
-        $(document).ready(function () {
+<script>
+    $(document).ready(function () {
             Livewire.emit('setUnixcode', "{{ $unixcode }}");
         });
-    </script>
+</script>
 @endpush
