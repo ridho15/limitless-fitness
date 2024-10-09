@@ -455,8 +455,6 @@ class BaseController extends Controller
         $path = str_replace('public/', '', $path);
         $data['tanggal_pembayaran'] = now();
         $data['bukti_pembayaran'] = $path;
-        $data['expired_date'] = Carbon::now()->addDay(2);
-
         $bookingOrder->update($data);
 
         activity()->causedBy(Auth::user())
