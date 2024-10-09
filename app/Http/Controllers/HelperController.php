@@ -102,7 +102,7 @@ class HelperController extends Controller
                 "Bonus hanya dapat di isi sesuai dengan persyaratan dan ketentuan yang berlaku."
             ],
             "Pencabutan dan Pindah Tangahn Keanggotaan" => [
-                'LIMITLESS FITNESS Gym dapat melakukan pembatalan kontrak secara sepihak apabila member dinilai merugikan pihak LIMITLESS FITNESS Gym atau member lain.',
+                'LIMITLESS FITNESS Gym dapat melakukan pembatalan kontrak secara sepihak apabila member dinilai merugikan pihak LIMITLESS FITNESS Gym atau member lain. Fee membership akan dikembalikan kepada member dengan hitungan pro rata',
                 'Membership dan/atau Personal Trainer Packages yang sudah dibeli dapat dipindahtangankan dengan ketentuan yang berlaku dan akan dikenakan biaya sesuai dengan peraturan yang berlaku.'
             ],
             "Keadaan Fisik Anggota" => [
