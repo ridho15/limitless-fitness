@@ -14,19 +14,28 @@
                 <a href="#" type="submit" class="btn custom-btn w-100">Book Now</a>
             </div>
         </div>
-        <div class="row mb-3 justify-content-start align-items-center">
-            <div class="col-md-4 col-6 text-start">
-                <small class="d-block fw-semibold"><i class="fa-solid fa-clock-rotate-left"></i>
-                    Jadwal </small>
-                <small class="d-block fw-light">{{ Date('H:i', strtotime($kelas->waktu_buka)) }} - {{
-                    Date("H:i", strtotime($kelas->waktu_tutup)) }}</small>
+        <div class="d-flex justify-content-evenly align-items-center mb-3">
+            <div class="d-flex justify-content-start align-items-center">
+                <div class="text-start">
+                    <small class="d-block fw-semibold"><i class="fa-solid fa-clock-rotate-left"></i>
+                        Jadwal </small>
+                    <small class="d-block fw-light">{{ Date('H:i', strtotime($kelas->waktu_buka)) }} - {{
+                        Date("H:i", strtotime($kelas->waktu_tutup)) }}</small>
+                </div>
             </div>
-        </div>
-        <div class="row justify-content-start align-items-center">
-            <div class="col-md-4 col-6 text-start">
-                <small class="d-block fw-semibold"><i class="fa-solid fa-location-dot"></i>
-                    Location </small>
-                <small class="d-block fw-light">{{ $kelas->location->nama }}</small>
+            <div class="row justify-content-start align-items-center">
+                <div class="text-start">
+                    <small class="d-block fw-semibold"><i class="fa-solid fa-location-dot"></i>
+                        Location </small>
+                    <small class="d-block fw-light">{{ $kelas->location->nama }}</small>
+                </div>
+            </div>
+            <div class="row justify-content-start align-items-center">
+                <div class="text-start">
+                    <small class="d-block fw-semibold"><i class="fa-solid fa-person"></i>
+                        Limit </small>
+                    <small class="d-block fw-light">{{ $kelas->max_anggota }} Slots</small>
+                </div>
             </div>
         </div>
         <div class="card" style="border: none; background-color: white">
@@ -67,7 +76,8 @@
                                         class="img-fluid rounded mb-3" style="border-radius: 10px">
                                     @endif
                                 </div>
-                                <h5 class="fw-bold w-100 text-start">{{ $item->nama_kelas }} @if(count($item->instruktur) > 0)
+                                <h5 class="fw-bold w-100 text-start">{{ $item->nama_kelas }}
+                                    @if(count($item->instruktur) > 0)
                                     (@foreach ($item->instruktur as $index => $instruktur)
                                     {{ $instruktur->name }} @if (count($item->instruktur) > 1)
                                     ,
