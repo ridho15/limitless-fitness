@@ -89,23 +89,7 @@ class PendapatanOverView extends BaseWidget
             $listKelas = Kelas::select(['id', 'min_anggota'])->get();
             $feeInstruktur = 0;
             foreach ($listKelas as $item) {
-                $fee = $item->fee;
-                $listKelasActivity = KelasActivity::when($this->id_location, function ($query) {
-                    $query->whereHas('locationStudio', function ($query) {
-                        $query->where('id_location', $this->id_location);
-                    });
-                })
-                    ->where('id_kelas', $item->id)
-                    ->where(function ($query) {
-                        $query->whereMonth('tanggal', now())
-                            ->whereDate('tanggal', '<=', now());
-                    })
-                    ->withCount(['bookingKelas' => function ($query) {
-                        $query->where('status_kehadiran', 1)
-                            ->orWhereNull('status_kehadiran');
-                    }])->having('booking_kelas_count', '>=', $item->min_anggota)
-                    ->count();
-                $feeInstruktur += $fee * $listKelasActivity;
+                $feeInstruktur += $item->fee;
             }
 
             array_push($listCard, Card::make('Fee Instruktur', 'Rp.' . number_format($feeInstruktur, 0, ',', '.'))->description('Pembayaran instruktur per order paket bulan ini')->color('primary')->extraAttributes([

@@ -16,7 +16,6 @@ class Paket extends Model
         'valid_month',
         'promote_code',
         'diskon',
-        'id_kelas',
         'is_many_times',
         'is_show_public',
         'price_per_additional',
@@ -26,7 +25,9 @@ class Paket extends Model
     ];
 
     protected $appends = [
-        'harga_formatted', 'harga_diskon', 'is_many_times_formatted'
+        'harga_formatted',
+        'harga_diskon',
+        'is_many_times_formatted'
     ];
 
     public function getIsManyTimesFormattedAttribute()
@@ -62,13 +63,22 @@ class Paket extends Model
         return $this->hasMany(OrderPaket::class, 'id_paket');
     }
 
-    public function kelas()
-    {
-        return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
-    }
-
     public function paketLocation()
     {
         return $this->hasMany(PaketLocation::class, 'id_paket');
+    }
+
+    public function location()
+    {
+        return $this->belongsToMany(Location::class, 'paket_locations', 'id_paket', 'id_location');
+    }
+
+    public function kelasPaket(){
+        return $this->hasMany(KelasPaket::class, 'id_paket');
+    }
+
+    public function kelas()
+    {
+        return $this->belongsToMany(Kelas::class, 'kelas_pakets', 'id_paket', 'id_kelas');
     }
 }

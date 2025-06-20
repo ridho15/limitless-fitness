@@ -86,7 +86,8 @@ class HelperController extends Controller
     {
         return [
             "Keanggotaan" => [
-                "Semua data member harus di isi dengan lengkap tanpa terkecuali", "Semua anggota baru harus mendapatkan persetujuan dari management. Management memiliki hak untuk menolak permohonan keanggotaan dengan alasan apapun",
+                "Semua data member harus di isi dengan lengkap tanpa terkecuali",
+                "Semua anggota baru harus mendapatkan persetujuan dari management. Management memiliki hak untuk menolak permohonan keanggotaan dengan alasan apapun",
                 "Jika disetujui, anggota akan diberikan kartu keanggotaan dan tidak dapat dipindah tangankan.",
                 "Jika kartu keanggotaan hilnag, anggota wajib memiliki kartu pengganti dengan biaya sesuai dengan peraturan yang berlaku.",
                 "Setiap anggota dilarang masuk ke club tanpa kartu keanggotaan yang aktif.",
@@ -165,5 +166,19 @@ class HelperController extends Controller
         }
         $newPassword = crypt($password . "{" . $username . "}", $salt);
         return str_replace($this->getCodeGeneratorForBlowfishPassword(), '', $newPassword);
+    }
+
+    public static function getAllPermissions()
+    {
+        return [
+            'check in out' => [
+                'viewAny',
+                'create',
+                'update',
+                'delete',
+                'restore',
+                'forceDelete'
+            ]
+        ];
     }
 }

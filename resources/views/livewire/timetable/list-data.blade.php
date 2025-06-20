@@ -64,7 +64,7 @@
         <div class="text-center">
             <img src="{{ asset('assets/images/illustration-1.png') }}" class="img-fluid" alt=""
                 style="height: 500px; object-fit: contain">
-            <p class="fw-bold" style="color: #3c6553">Silahkan Pilih Kelas</p>
+            <p class="fw-bold" style="color: #000000">Silahkan Pilih Kelas</p>
         </div>
     </div>
     @endif

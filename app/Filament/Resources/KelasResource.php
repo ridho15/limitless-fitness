@@ -3,34 +3,33 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\KelasResource\Pages;
-use App\Filament\Resources\KelasResource\RelationManagers\KelasActivityRelationManager;
 use App\Filament\Resources\KelasResource\RelationManagers\KelasImageRelationManager;
-use App\Filament\Resources\KelasResource\RelationManagers\KelasPaketRelationManager;
 use App\Filament\Resources\KelasResource\RelationManagers\PaketRelationManager;
-use App\Filament\Resources\KelasResource\RelationManagers\PaketRelationManagerRelationManager;
 use App\Models\Kelas;
 use App\Models\Location;
 use App\Models\User;
-use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextInput\Mask;
+use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class KelasResource extends Resource
@@ -43,11 +42,7 @@ class KelasResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $instruktur = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Instruktur');
-        })->get()->pluck('name', 'id');
-        $location = Location::get()->pluck('nama', 'id')->toArray();
-        $location[0] = 'All location';
+
         return $form
             ->schema([
                 Card::make()
@@ -62,8 +57,20 @@ class KelasResource extends Resource
                                     ->label('Location')
                                     ->searchable()
                                     ->preload()
-                                    ->options($location)
+                                    ->reactive()
+                                    ->relationship('location', 'nama')
                                     ->required(),
+                                Select::make('id_paket')
+                                    ->label('Paket')
+                                    ->searchable()
+                                    ->preload()
+                                    ->reactive()
+                                    ->relationship('paket', 'nama', function ($get, Builder $query) {
+                                        $query->whereHas('paketLocation', function (Builder $query) use ($get) {
+                                            $query->where('id_location', $get('id_location'));
+                                        });
+                                    })
+                                    ->multiple(),
                                 TextInput::make('min_anggota')
                                     ->label('Minimal Peserta')
                                     ->numeric()
@@ -72,35 +79,47 @@ class KelasResource extends Resource
                                     ->label('Maximal Peserta')
                                     ->numeric()
                                     ->required(),
-                                TextInput::make('duration')
-                                    ->label('Durasi')
-                                    ->helperText("Hitungan Menit contoh : 10")
-                                    ->numeric()
-                                    ->required(),
-                                Select::make('type')
-                                    ->preload()
-                                    ->options([
-                                        '1' => 'Online',
-                                        '2' => 'Onsite',
-                                    ])->default(2)->required(),
-                                TextInput::make('bawaan')
-                                    ->string()
-                                    ->nullable()
-                                    ->helperText("Untuk pemisah dalam bawaan adalah koma ','"),
+                                TimePicker::make('waktu_buka')
+                                    ->label('Waktu Buka')
+                                    ->helperText("Jam buka setiap hari. Jika kosong kapan pun user bisa checkin")
+                                    ->nullable(),
+                                TimePicker::make('waktu_tutup')
+                                    ->label('Waktu Tutup')
+                                    ->helperText("Jam tutup setiap hari. Jika kosong kapan pun user bisa checkin")
+                                    ->nullable(),
                                 Textarea::make('keterangan')
                                     ->nullable()
                                     ->string(),
+                                Select::make('id_user')
+                                    ->label('Instruktur')
+                                    ->preload()
+                                    ->searchable()
+                                    ->multiple()
+                                    ->relationship('instruktur', 'name', function (Builder $query) {
+                                        $query->whereHas('roles', function (Builder $query) {
+                                            $query->where('name', 'Instruktur');
+                                        });
+                                    }),
                                 TextInput::make('honor')
                                     ->label('Pembayaran Instruktur')
                                     ->numeric()
-                                    ->mask(fn (Mask $mask) => $mask->patternBlocks([
-                                        'uang' => fn (Mask $mask) => $mask->numeric()
+                                    ->mask(fn(Mask $mask) => $mask->patternBlocks([
+                                        'uang' => fn(Mask $mask) => $mask->numeric()
                                             ->thousandsSeparator('.')
                                             ->decimalSeparator(',')
                                     ])->pattern('Rp.uang'))
                                     ->required(),
                                 Toggle::make('is_active')
-                                    ->label('Status Aktif Kelas')
+                                    ->label('Status Aktif Kelas'),
+                                Repeater::make('kelasImage')
+                                    ->relationship()
+                                    ->schema([
+                                        FileUpload::make('image')
+                                            ->image()
+                                            ->acceptedFileTypes(['image/*'])
+                                            ->maxSize(1024)
+                                            ->required(),
+                                    ])
                             ])
                     ])
             ]);
@@ -121,45 +140,53 @@ class KelasResource extends Resource
                         }
                     }),
                 TextColumn::make('min_anggota')
-                    ->formatStateUsing(fn ($state) => $state . ' Orang')
+                    ->formatStateUsing(fn($state) => $state . ' Orang')
                     ->label('Minimal Peserta')
                     ->sortable(),
                 TextColumn::make('max_anggota')
                     ->label('Maximal Peserta')
-                    ->formatStateUsing(fn ($state) => $state . ' Orang')
+                    ->formatStateUsing(fn($state) => $state . ' Orang')
                     ->sortable(),
-                TextColumn::make('status_aktif')
+                TextColumn::make('waktu_buka')
+                    ->label('Waktu Buka')
+                    ->time(),
+                TextColumn::make('waktu_tutup')
+                    ->label('Waktu Tutup')
+                    ->time(),
+                BadgeColumn::make('paket.nama')
+                    ->label('Paket')
+                    ->searchable(),
+                ToggleColumn::make('is_active')
                     ->label('Status Aktif Kelas'),
                 TextColumn::make('keterangan')
                     ->limit(100)
+                    ->wrap()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Deskripsi'),
-                TextColumn::make('duration')
-                    ->label('Lama Latihan')
-                    ->formatStateUsing(fn ($state) => $state . ' Menit'),
-                TextColumn::make('bawaan'),
                 TextColumn::make('honor')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Pembayaran Insruktur')
                     ->formatStateUsing(function ($state) {
                         return 'Rp.' . number_format($state, 0, ',', '.');
                     })->sortable(),
-                TextColumn::make('type_formatted')
-                    ->label('Type'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                EditAction::make(),
-                ViewAction::make(),
-                DeleteAction::make()
-                    ->after(function () {
-                        activity()
-                            ->causedBy(Auth::user())
-                            ->log('Menghapus data kelas');
-                    })
+                ActionGroup::make([
+                    EditAction::make(),
+                    ViewAction::make(),
+                    DeleteAction::make()
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Menghapus data kelas');
+                        })
+                ])
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 
@@ -168,7 +195,6 @@ class KelasResource extends Resource
         return [
             KelasImageRelationManager::class,
             PaketRelationManager::class,
-            KelasActivityRelationManager::class
         ];
     }
 

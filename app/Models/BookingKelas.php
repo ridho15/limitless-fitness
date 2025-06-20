@@ -13,16 +13,18 @@ class BookingKelas extends Model
     protected $table = 'booking_kelas';
     protected $fillable = [
         'id_user',
-        'id_kelas_activity',
+        'id_kelas',
         'is_send_email',
         'status_kehadiran',
         'keterangan',
         'review',
-        'rating'
+        'rating',
     ];
 
     protected $appends = [
-        'status_kehadiran_formatted', 'tanggal_booking', 'honor'
+        'status_kehadiran_formatted',
+        'tanggal_booking',
+        'honor'
     ];
 
     public function getHonorAttribute()
@@ -57,9 +59,8 @@ class BookingKelas extends Model
     {
         return $this->belongsTo(User::class, 'id_user')->withDefault();
     }
-
-    public function kelasActivity()
+    public function kelas()
     {
-        return $this->belongsTo(KelasActivity::class, 'id_kelas_activity')->withDefault();
+        return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
     }
 }

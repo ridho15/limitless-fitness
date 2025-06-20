@@ -65,7 +65,9 @@
             </div>
             <div class="modal-footer">
                 <div class="text-end">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" style="border-radius: 10px !important" id="btn-close-modal"><i class="fa-regular fa-circle-xmark"></i> Close</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                        style="border-radius: 10px !important" id="btn-close-modal"><i
+                            class="fa-regular fa-circle-xmark"></i> Close</button>
                 </div>
             </div>
         </div>

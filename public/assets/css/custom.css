@@ -1,4 +1,4 @@
-body{
+body {
     font-family: 'Poppins';
 }
 
@@ -11,60 +11,61 @@ body{
     left: 0;
     padding: 10px 0;
     z-index: 100;
-  }
+}
 
-  .page-header nav {
+.page-header nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
+}
 
-  .page-header.is-sticky {
+.page-header.is-sticky {
     position: fixed;
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.1);
     padding: 8px 0;
     backdrop-filter: blur(10px);
     animation: slideDown 0.35s ease-out;
-  }
+}
 
-  .page-header.is-sticky img {
+.page-header.is-sticky img {
     max-width: 80%;
-  }
+}
 
-  .page-header.is-sticky button {
+.page-header.is-sticky button {
     font-size: 14px;
     padding: 7px 10px;
-  }
+}
 
-  @keyframes slideDown {
+@keyframes slideDown {
     from {
-      transform: translateY(-100%);
+        transform: translateY(-100%);
     }
+
     to {
-      transform: translateY(0);
+        transform: translateY(0);
     }
-  }
+}
 
 /* End Header */
 
-.opacity-card-black{
+.opacity-card-black {
     background-color: black;
     opacity: 0.5;
     z-index: 1;
     border-radius: 20px
 }
 
-.opacity-card-black:hover{
+.opacity-card-black:hover {
     opacity: 0.6;
 }
 
 
 
-.bg-color-custom{
+.bg-color-custom {
     background-color: #000000 !important;
 }
 
-.custom-carousel{
+.custom-carousel {
     width: 100vw;
     height: 100vh;
     background-position: center;
@@ -72,7 +73,7 @@ body{
     background-size: cover
 }
 
-.custom-card{
+.custom-card {
     border-radius: 20px;
     height: 500px;
     background-position: center;
@@ -80,14 +81,14 @@ body{
     background-size: cover;
 }
 
-.custom-card-classes{
+.custom-card-classes {
     border-radius: 10px;
-    box-shadow: 0px 0px 14px 1px rgba(0,0,0,0.100);
-    -webkit-box-shadow: 0px -1px 14px 2px rgba(0,0,0,0.100);
-    -moz-box-shadow: 0px -1px 14px 2px rgba(0,0,0,0.100);
+    box-shadow: 0px 0px 14px 1px rgba(0, 0, 0, 0.100);
+    -webkit-box-shadow: 0px -1px 14px 2px rgba(0, 0, 0, 0.100);
+    -moz-box-shadow: 0px -1px 14px 2px rgba(0, 0, 0, 0.100);
 }
 
-.custom-card-classes .image-custom-card{
+.custom-card-classes .image-custom-card {
     height: 300px;
     background-position: center;
     background-repeat: no-repeat;
@@ -96,20 +97,20 @@ body{
     border-top-right-radius: 10px;
 }
 
-.custom-nav-link{
+.custom-nav-link {
     font-weight: normal !important;
 }
 
-.nav-underline .nav-link{
+.nav-underline .nav-link {
     text-decoration: none !important;
     color: gray;
 }
 
-.navbar-toggler{
+.navbar-toggler {
     background-color: white !important;
 }
 
-.btn-custom-filter{
+.btn-custom-filter {
     padding-top: 0.6rem;
     padding-bottom: 0.6rem;
     padding-right: 2.5rem;
@@ -117,7 +118,7 @@ body{
     justify-content: space-between;
 }
 
-.custom-btn{
+.custom-btn {
     padding-top: 8px;
     padding-bottom: 8px;
     padding-right: 20px;
@@ -128,7 +129,7 @@ body{
     background-color: #000000;
 }
 
-.custom-btn-white{
+.custom-btn-white {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 20px;
@@ -139,70 +140,70 @@ body{
     background-color: #ffffff;
 }
 
-.custom-btn-outline{
+.custom-btn-outline {
     border: 1px solid #000000;
     color: #000000;
     border-radius: 20px;
     background-color: transparent;
 }
 
-.padding-vertical-12{
+.padding-vertical-12 {
     padding-top: 12px;
     padding-bottom: 12px;
 }
 
-.custom-btn-outline-white{
+.custom-btn-outline-white {
     border: 1px solid rgb(255, 255, 255);
     color: rgb(255, 255, 255);
     background-color: transparent;
 }
 
-.custom-btn-outline:hover{
+.custom-btn-outline:hover {
     border: 1px solid grey !important;
     color: white !important;
     background-color: #000000 !important;
 }
 
-.custom-btn-outline-white:hover{
+.custom-btn-outline-white:hover {
     border: 1px solid rgb(255, 255, 255) !important;
     color: #000000 !important;
     background-color: #ffffff !important;
 }
 
-.custom-btn:hover{
+.custom-btn:hover {
     background-color: transparent;
     color: #000000;
     border: 1px solid #000000;
 }
 
-.nav-link-fs{
+.nav-link-fs {
     font-size: 18px;
 }
 
-.modal-content{
+.modal-content {
     border-radius: 20px;
 }
 
-.custom-card-package{
+.custom-card-package {
     border: 1px solid #e4e4e4;
     border-radius: 20px;
     background-color: white;
 }
 
-.custom-card-package .card-child{
+.custom-card-package .card-child {
     background-color: #f4f4f4;
     border-radius: 15px;
     border: 1px solid #e3e3e3
 }
 
-.custom-card-package:hover{
+.custom-card-package:hover {
     border: 1px solid rgb(187, 187, 187);
-    box-shadow: 0px 0px 14px 1px rgba(0,0,0,0.100);
-    -webkit-box-shadow: 0px -1px 14px 2px rgba(0,0,0,0.100);
-    -moz-box-shadow: 0px -1px 14px 2px rgba(0,0,0,0.100);
+    box-shadow: 0px 0px 14px 1px rgba(0, 0, 0, 0.100);
+    -webkit-box-shadow: 0px -1px 14px 2px rgba(0, 0, 0, 0.100);
+    -moz-box-shadow: 0px -1px 14px 2px rgba(0, 0, 0, 0.100);
 }
 
-.card-date{
+.card-date {
     border: 1px solid rgb(206, 206, 206);
     background-color: white;
     padding-right: 20px;
@@ -214,52 +215,52 @@ body{
     color: black;
 }
 
-.card-date.active{
+.card-date.active {
     background-color: black;
     color: white;
 }
 
-.card-date:hover{
+.card-date:hover {
     background-color: black;
     color: white;
 }
 
-.custom-bg-danger{
+.custom-bg-danger {
     background-color: #ffe3e3;
 }
 
-.card-buy-package{
+.card-buy-package {
     background-color: white;
     cursor: pointer;
 }
 
-.card-buy-package a{
+.card-buy-package a {
     color: black;
 }
 
-.card-buy-package:hover{
+.card-buy-package:hover {
     background-color: black;
 }
 
-.card-buy-package:hover a{
+.card-buy-package:hover a {
     color: white;
 }
 
-.form-check-input:checked{
+.form-check-input:checked {
     background-color: black !important;
     border-color: black !important;
 }
 
-.navbar-expand-lg .navbar-nav .nav-link{
+.navbar-expand-lg .navbar-nav .nav-link {
     color: #494949;
 }
 
-.menu-profile{
+.menu-profile {
     text-decoration: none;
     color: black
 }
 
-.menu-profile .row:hover{
+.menu-profile .row:hover {
     background-color: #494949;
     color: white;
     padding-top: 10px;
@@ -268,7 +269,7 @@ body{
     border-radius: 15px;
 }
 
-.menu-profile .active{
+.menu-profile .active {
     background-color: #494949;
     color: white;
     padding-top: 10px;
@@ -277,7 +278,7 @@ body{
     border-radius: 15px;
 }
 
-.circle-profile-default{
+.circle-profile-default {
     border-radius: 50%;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -290,43 +291,44 @@ body{
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-  }
+}
 
-  /* Track */
-  ::-webkit-scrollbar-track {
+/* Track */
+::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey;
     border-radius: 10px;
-  }
+}
 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+/* Handle */
+::-webkit-scrollbar-thumb {
     background: rgb(167, 167, 167);
     border-radius: 10px;
-  }
+}
 
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
     background: #a5a5a5;
-  }
+}
+
 /* =================================== */
-.footer-section{
+.footer-section {
     padding-top: 80px !important;
     margin-top: 0px !important;
 }
 
-.pricing_plans_section{
+.pricing_plans_section {
     padding-top: 20px !important;
 }
 
-.our_specialties_section{
+.our_specialties_section {
     padding-top: 50px !important;
 }
 
-.our_team_section{
+.our_team_section {
     padding-top: 20px !important;
 }
 
-.btn-login{
+.btn-login {
     background-color: var(--e-global-color-soft-orange);
     color: var(--e-global-color-accent) !important;
     padding: 20px 50px;
@@ -336,7 +338,25 @@ body{
     transition: all 0.3s ease-in-out;
 }
 
-.no-hover:hover{
+.no-hover:hover {
     color: white;
 }
 
+.spinner {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.max-lines {
+    display: -webkit-box;
+    /* Gunakan flex box model */
+    -webkit-box-orient: vertical;
+    /* Atur orientasi vertikal */
+    -webkit-line-clamp: 3;
+    /* Batas baris */
+    overflow: hidden;
+    /* Potong overflow */
+    text-align: justify;
+}

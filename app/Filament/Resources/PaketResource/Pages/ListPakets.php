@@ -25,7 +25,7 @@ class ListPakets extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            PaketStatsOverview::class
+            // PaketStatsOverview::class
         ];
     }
 

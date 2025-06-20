@@ -56,10 +56,6 @@ class InstrukturOmsetResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('kelas.nama_kelas')
-                    ->searchable()
-                    ->toggleable()
-                    ->label('Kelas'),
                 TextColumn::make('tanggal')
                     ->label('Tanggal')
                     ->formatStateUsing(function ($state) {

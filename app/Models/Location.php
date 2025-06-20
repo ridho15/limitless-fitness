@@ -38,8 +38,13 @@ class Location extends Model
         return $this->hasMany(OrderPaket::class, 'id_location');
     }
 
-    public function paket()
+    public function paketLocation()
     {
         return $this->hasMany(PaketLocation::class, 'id_location');
+    }
+
+    public function paket()
+    {
+        return $this->belongsToMany(Paket::class, 'paket_locations', 'id_location', 'id_paket');
     }
 }

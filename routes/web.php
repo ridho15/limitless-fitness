@@ -146,6 +146,7 @@ Route::get('sinkron-data', function () {
     return "selesai";
 });
 
+
 Route::get('generate-password', [HelperController::class, 'generatePassword']);
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
@@ -172,6 +173,7 @@ Route::get('/simpan-keterangan/{id_booking_kelas}', [BaseController::class, 'sim
 Route::prefix('kelas')->group(function () {
     Route::get('jadwal', [KelasController::class, 'kelasJadwal'])->name('kelas-jadwal');
     Route::get('list', [KelasController::class, 'kelasList'])->name('kelas-list');
+    Route::get('detail/{id}',[KelasController::class,'detail'])->name('kelas.detail');
 });
 Route::middleware('auth')->group(function () {
     Route::prefix('order-kelas')->group(function () {

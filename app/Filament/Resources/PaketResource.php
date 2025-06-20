@@ -18,6 +18,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -41,7 +42,6 @@ class PaketResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $location = Location::get()->pluck('nama', 'id')->toArray();
         return $form
             ->schema([
                 Card::make()
@@ -53,11 +53,12 @@ class PaketResource extends Resource
                                     ->string()
                                     ->maxLength(255)
                                     ->required(),
-                                Select::make('id_kelas')
+                                Select::make('kelas')
                                     ->label('Kelas')
                                     ->preload()
                                     ->searchable()
-                                    ->options(Kelas::get()->pluck('nama_kelas', 'id')),
+                                    ->relationship('kelas', 'nama_kelas')
+                                    ->multiple(),
                                 Select::make('valid_month')
                                     ->label('Paket Bulanan')
                                     ->options([
@@ -69,14 +70,15 @@ class PaketResource extends Resource
                                     ->searchable()
                                     ->required(),
                                 Select::make('location')
+                                ->label('Location')
                                     ->preload()
                                     ->searchable()
                                     ->multiple()
-                                    ->options($location),
+                                    ->relationship('location', 'nama'),
                                 TextInput::make('harga')
                                     ->numeric()
-                                    ->mask(fn (Mask $mask) => $mask->patternBlocks([
-                                        'uang' => fn (Mask $mask) => $mask->numeric()
+                                    ->mask(fn(Mask $mask) => $mask->patternBlocks([
+                                        'uang' => fn(Mask $mask) => $mask->numeric()
                                             ->thousandsSeparator('.')
                                             ->decimalSeparator(',')
                                     ])->pattern('Rp.uang'))
@@ -84,8 +86,8 @@ class PaketResource extends Resource
                                 TextInput::make('price_per_additional')
                                     ->label('Price Per Additional Member')
                                     ->numeric()
-                                    ->mask(fn (Mask $mask) => $mask->patternBlocks([
-                                        'uang' => fn (Mask $mask) => $mask->numeric()
+                                    ->mask(fn(Mask $mask) => $mask->patternBlocks([
+                                        'uang' => fn(Mask $mask) => $mask->numeric()
                                             ->thousandsSeparator('.')
                                             ->decimalSeparator(',')
                                     ])->pattern('Rp.uang'))
@@ -93,8 +95,8 @@ class PaketResource extends Resource
                                 TextInput::make('signup_fee')
                                     ->label('Signup Fee')
                                     ->numeric()
-                                    ->mask(fn (Mask $mask) => $mask->patternBlocks([
-                                        'uang' => fn (Mask $mask) => $mask->numeric()
+                                    ->mask(fn(Mask $mask) => $mask->patternBlocks([
+                                        'uang' => fn(Mask $mask) => $mask->numeric()
                                             ->thousandsSeparator('.')
                                             ->decimalSeparator(',')
                                     ])->pattern('Rp.uang'))
@@ -127,7 +129,7 @@ class PaketResource extends Resource
                 TextColumn::make('nama')
                     ->label('Nama Paket')
                     ->searchable(),
-                TextColumn::make('kelas.nama_kelas')
+                BadgeColumn::make('kelas.nama_kelas')
                     ->label('Kelas')
                     ->searchable(),
                 TextColumn::make('harga_formatted')
@@ -162,16 +164,9 @@ class PaketResource extends Resource
                     ->formatStateUsing(function ($state) {
                         return $state . ' Bulan';
                     })->sortable(),
-                TextColumn::make('paketLocation')
+                BadgeColumn::make('location.nama')
                     ->label('Location')
-                    ->formatStateUsing(function ($record) {
-                        $text = "";
-                        foreach ($record->paketLocation as $item) {
-                            $text .= $item->location->nama . ", <br>";
-                        }
-
-                        echo $text;
-                    }),
+                    ->searchable(),
                 ToggleColumn::make('is_show_public')
                     ->label('Tampilkan di public')
                     ->alignCenter()
@@ -180,15 +175,17 @@ class PaketResource extends Resource
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make()
-                    ->after(function () {
-                        activity()
-                            ->causedBy(Auth::user())
-                            ->log('Menghapus data paket');
-                    }),
-                ViewAction::make(),
-                RestoreAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make()
+                        ->after(function () {
+                            activity()
+                                ->causedBy(Auth::user())
+                                ->log('Menghapus data paket');
+                        }),
+                    ViewAction::make(),
+                    RestoreAction::make(),
+                ])
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),

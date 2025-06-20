@@ -34,6 +34,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
+        return true;
         if($user->hasRole(['Admin', 'Super Admin'])){
             return true;
         }

@@ -59,7 +59,7 @@ class Dashbaord extends BasePage
         if (Auth::user()->hasRole(['Super Admin'])) {
             $listWidget = [
                 PendapatanOverView::class,
-                JadwalInstrukturAssign::class,
+                // JadwalInstrukturAssign::class,
                 CustomerOrderExpired::class,
                 OmsetChart::class,
                 PengeluaranChart::class,

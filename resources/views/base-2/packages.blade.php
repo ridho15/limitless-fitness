@@ -25,58 +25,64 @@
                 <div class="row my-5">
                     @if (count($allPaket) > 0)
                     @foreach ($allPaket as $item)
-                    <div class="col-md-3">
-                        <div class="custom-card-package p-3 mb-4">
-                            <div class="mb-3">
-                                <small class="fw-semibold text-uppercase" style="color: #b4b4b4">{{
-                                    $item->kategori_formatted }}</small>
-                            </div>
-                            <div class="h5 fw-bold mt-3">{{ $item->nama }}</div>
-                            <div class="mb-4 d-flex justify-content-between">
-                                <small style="text-decoration: line-through red;">
-                                    {{ $item->harga_formatted }}
-                                </small><br>
-                                <span class="fw-bold">Rp.{{ number_format($item->harga_diskon, 0, ',', '.') }}</span>
-                            </div>
-                            <div class="p-3 mb-4 card-child" style="">
-                                <small class="d-block mb-2 fw-light">
-                                    <span class="me-2"><i class="fa-solid fa-check" style="color: grey"></i>
-                                    </span>
-                                    <span>{{ $item->jumlah_pertemuan }}
-                                        Credits</span>
-                                </small>
-                                <small class="d-block mb-2 fw-light">
-                                    <span class="me-2"><i class="fa-solid fa-location-dot" style="color: grey"></i>
-                                    </span>
-                                    <span>@php
-                                        if (count($item->paketLocation) > 0) {
-                                        $text = "";
-                                        foreach ($item->paketLocation as $paketLocation) {
-                                        $text .= $paketLocation->location->nama . ", <br>";
-                                        }
-                                        echo $text;
-                                        } else {
-                                        echo '-';
-                                        }
-                                        @endphp</span>
-                                </small>
-                                <small class="d-block mb-2 fw-light">
-                                    <span class="me-2"><i class="fa-solid fa-clock-rotate-left" style="color: grey"></i>
-                                    </span>
-                                    <span>The package starts from the first time you make a payment and is confirmed by the administrator</span>
-                                </small>
-                                @if ($item->is_many_times == 0)
-                                <small class="d-block mb-2 fw-light">
-                                    <span class="me-2">
-                                        <i class="fa-solid fa-1" style="color: grey"></i>
-                                    </span>
-                                    <span>Paket hanyak sekali order</span>
-                                </small>
-                                @endif
-                            </div>
-                            <div class="text-center d-grid gap-2">
-                                <a href="{{ route('detail-packages', ['id' => $item->id]) }}" class="btn custom-btn">Buy
-                                    Now</a>
+                    <div class="col-md-3 mb-3">
+                        <div class="custom-card-package p-3 h-100">
+                            <div class="d-flex h-100 flex-column align-items-center justify-content-between">
+                                <div class="h5 fw-bold w-100 mt-3 text-start">{{ $item->nama }}</div>
+                                <div class="mb-4 d-flex justify-content-between w-100">
+                                    <small style="text-decoration: line-through red;">
+                                        {{ $item->harga_formatted }}
+                                    </small><br>
+                                    <span class="fw-bold">Rp.{{ number_format($item->harga_diskon, 0, ',', '.')
+                                        }}</span>
+                                </div>
+                                <div class="p-3 mb-4 card-child" style="flex: 1">
+                                    <small class="d-block mb-2 fw-light">
+                                        <span class="me-2"><i class="fa-solid fa-check" style="color: grey"></i>
+                                        </span>
+                                        <span>
+                                            @foreach ($item->kelas as $kelas)
+                                            {{ $kelas->nama_kelas }},
+                                            @endforeach
+                                        </span>
+                                    </small>
+                                    <small class="d-block mb-2 fw-light">
+                                        <span class="me-2"><i class="fa-solid fa-location-dot" style="color: grey"></i>
+                                        </span>
+                                        <span>@php
+                                            if (count($item->location) > 0) {
+                                            $text = "";
+                                            foreach ($item->location as $location) {
+                                            $text .= $location->nama . ", <br>";
+                                            }
+                                            echo $text;
+                                            } else {
+                                            echo '-';
+                                            }
+                                            @endphp</span>
+                                    </small>
+                                    <small class="d-block mb-2 fw-light">
+                                        <span class="me-2"><i class="fa-solid fa-clock-rotate-left"
+                                                style="color: grey"></i>
+                                        </span>
+                                        <span>The package starts from the first time you make a payment and is confirmed
+                                            by
+                                            the administrator</span>
+                                    </small>
+                                    @if ($item->is_many_times == 0)
+                                    <small class="d-block mb-2 fw-light">
+                                        <span class="me-2">
+                                            <i class="fa-solid fa-1" style="color: grey"></i>
+                                        </span>
+                                        <span>Paket hanyak sekali order</span>
+                                    </small>
+                                    @endif
+                                </div>
+                                <div class="text-center d-grid gap-2">
+                                    <a href="{{ route('detail-packages', ['id' => $item->id]) }}"
+                                        class="btn custom-btn">Buy
+                                        Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -93,9 +99,18 @@
             </div>
             @foreach ($listKelas as $item)
             <div class="tab-pane fade" id="kelas_{{ $item->id }}">
+                @php
+                $filtered = $allPaket->filter(function($paket)use($item){
+                    foreach ($paket->kelas as $kelas) {
+                        if($kelas->id == $item->id){
+                            return true;
+                        }
+                    }
+                });
+                @endphp
                 <div class="row my-5">
-                    @if (count($allPaket->where('id_kelas', $item->id)) > 0)
-                    @foreach ($allPaket->where('id_kelas', $item->id) as $paket)
+                    @if (count($filtered) > 0)
+                    @foreach ($filtered as $paket)
                     <div class="col-md-3">
                         <div class="custom-card-package p-3 mb-4">
                             <div class="mb-3">
@@ -113,8 +128,11 @@
                                 <small class="d-block mb-2 fw-light">
                                     <span class="me-2"><i class="fa-solid fa-check" style="color: grey"></i>
                                     </span>
-                                    <span>{{ $paket->jumlah_pertemuan }}
-                                        Credits</span>
+                                    <span>
+                                        @foreach ($paket->kelas as $kelas)
+                                        {{ $kelas->nama_kelas }},
+                                        @endforeach
+                                    </span>
                                 </small>
                                 <small class="d-block mb-2 fw-light">
                                     <span class="me-2"><i class="fa-solid fa-location-dot" style="color: grey"></i>

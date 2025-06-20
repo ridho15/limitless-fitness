@@ -3,21 +3,15 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\InstrukturOmsetResource;
-use App\Models\BookingKelas;
-use App\Models\Jurnal;
 use App\Models\Kelas;
-use App\Models\KelasActivity;
 use App\Models\Location;
-use Closure;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 
 class OmsetTable extends BaseWidget
 {
@@ -38,51 +32,6 @@ class OmsetTable extends BaseWidget
             TextColumn::make('nama_kelas')
                 ->label("Kelas")
                 ->searchable(),
-            TextColumn::make('omset')
-                ->formatStateUsing(function ($record) {
-                    $listKelasActivity = KelasActivity::with(['kelas', 'bookingKelas' => function ($query) {
-                        return $query->whereIn('status_kehadiran', [0, 1]);
-                    }])->when(Auth::user()->hasRole('Instruktur'), function ($query, $data) {
-                        $query->where('id_user', Auth::id());
-                    })
-                        ->where('id_kelas', $record->id)
-                        ->when($this->id_location, function ($query, $data) {
-                            return $query->whereHas('locationStudio', function ($query) {
-                                return $query->where('id_location', $this->id_location);
-                            });
-                        })
-                        ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function ($query, $data) {
-                            return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
-                                ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                        })->get();
-
-                    $omset = 0;
-                    foreach ($listKelasActivity as $item) {
-                        $jumlahPeserta = 0;
-                        foreach ($item->bookingKelas as $bookingKelas) {
-                            if ($bookingKelas->status_kehadiran == '1' || $bookingKelas->status_kehadiran == '0') {
-                                $jumlahPeserta++;
-                            }
-                        }
-
-                        if ($item->kelas->min_anggota <= $jumlahPeserta) {
-                            $omset += $item->kelas->fee;
-                        }
-                    }
-
-                    // $omset = Jurnal::whereHas('orderPaket', function($query)use($record){
-                    //     $query->whereHas('paket', function($query)use($record){
-                    //         $query->where('id_kelas', $record->id);
-                    //     });
-                    // })->where('tipe', 1)
-                    // ->when($this->tanggal_awal != null && $this->tanggal_akhir != null, function($query, $data){
-                    //     return $query->whereDate('tanggal', '>=', $this->tanggal_awal)
-                    //     ->whereDate('tanggal', '<=', $this->tanggal_akhir);
-                    // })->sum('jumlah_uang');
-
-                    return 'Rp.' . number_format($omset, 0, ',', '.');
-                })
-                ->label('Omset')
         ];
     }
 
@@ -121,10 +70,6 @@ class OmsetTable extends BaseWidget
     protected function getTableActions(): array
     {
         return [
-            ViewAction::make()
-                ->url(function ($record) {
-                    return InstrukturOmsetResource::getUrl('view', ['record' => $record]);
-                }),
         ];
     }
 }

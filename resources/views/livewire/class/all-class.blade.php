@@ -7,42 +7,49 @@
     @if (count($listKelas) > 0)
     @foreach ($listKelas as $item)
     <div class="col-lg-4 col-md-6 mb-5">
-        <div class="custom-card-classes">
-            <div class="w-100 bg-dark image-custom-card"
-                style="background-image: url({{ count($item->kelasImage) > 0 ? asset('storage/' . $item->kelasImage[0]->image) : null }});">
-            </div>
-            <div class="px-4 py-4">
-                <h5 class="fw-bold">{{ $item->nama_kelas }}</h5>
-                {{-- <div class="d-flex justify-content-start align-items-center my-3">
-                    <small class="me-2">
-                        @for ($i = 1; $i <= $item->rating; $i++)
-                            <i class="fa-solid fa-star text-warning"></i>
-                            @endfor
-                            @for ($i = 1; $i <= 5 - $item->rating; $i++)
-                                <i class="fa-regular fa-star text-warning"></i>
-                                @endfor
-                    </small>
-                    <small class="ms-2 px-2 py-2" style="border: 1px solid grey; border-radius: 20px">
-                        {{ $item->jumlah_review }}
-                        Review</small>
-                </div> --}}
-                <div class="d-flex align-items-center justify-content-start my-2">
-                    <div class="me-2">
-                        <small class="fw-bold">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                            {{ $item->duration }} Mins</small>
+        <div class="card h-100"
+            style="border-color: rgb(239, 239, 239); border-radius: 10px; background-color: rgb(239, 239, 239)">
+            <div class="card-body h-100">
+                <div class="d-flex h-100 flex-column align-items-center justify-content-between">
+                    <div class="text-center">
+                        @if (count($item->kelasImage) > 0)
+                        <img src="{{ asset('storage/' . $item->kelasImage->first()->image) }}"
+                            class="img-fluid rounded mb-3" alt="" style="border-radius: 10px">
+                        @else
+                        <img src="{{ asset('assets/images/default-image.jpg') }}" alt="" class="img-fluid rounded mb-3"
+                            style="border-radius: 10px">
+                        @endif
                     </div>
-                    <div class="ms-2">
-                        <small class="fw-bold"><i class="fa-brands fa-creative-commons-nd"></i>{{ $item->level_formatted
-                            }}</small>
+                    <h5 class="fw-bold w-100 text-start">{{ $item->nama_kelas }} @if (count($item->instruktur) > 0)
+                        (@foreach ($item->instruktur as $index => $instruktur)
+                        {{ $instruktur->name }} @if (count($item->instruktur) > 1)
+                        ,
+                        @endif
+                        @endforeach)
+                        @endif</h5>
+                    <div class="mb-3 w-100 text-start" style="flex: 1">
+                        <p class="max-lines">
+                            <smal>{{ $item->keterangan }}</small>
+                        </p>
                     </div>
-                </div>
-                <div class="my-2">
-                    <p>{{ substr($item->keterangan, 0, 150) }}...</p>
-                </div>
-                <div>
-                    <a href="{{ route('detail-class', ['id' => $item->id]) }}" class="btn custom-btn">View
-                        More</a>
+                    <div class="w-100 d-flex align-items-center justify-content-between">
+                        <div class="">
+                            {{ $item->location->nama }}
+                        </div>
+                        <div class="text-end">
+                            <span>{{ Date('H:i', strtotime($item->waktu_buka)) }} - {{ Date("H:i",
+                                strtotime($item->waktu_tutup)) }}</span>
+                        </div>
+                    </div>
+                    <div class="mb-3 w-100">
+                        <span class="badge rounded-pill bg-dark">
+                            Available / 1 slot remaining
+                        </span>
+                    </div>
+                    <div class="text-center">
+                        <a href="{{ route('kelas.detail', ['id' => $item->id]) }}" class="btn custom-btn w-100">View
+                            More</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,3 +61,12 @@
     </div>
     @endif
 </div>
+@push('js')
+<script>
+    window.addEventListener('contentChange', function(){
+    })
+
+    $(document).ready(function () {
+    });
+</script>
+@endpush

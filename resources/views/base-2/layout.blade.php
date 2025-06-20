@@ -44,17 +44,17 @@
                         <a class="nav-link mx-2 text-white @if ($active == 'packages') active nav-link-fs @endif"
                             href="{{ route('packages') }}">Paket</a>
                     </li>
-                    @if (Auth::user())
+                    {{-- @if (Auth::user())
                         <li class="nav-item ">
                             <a class="nav-link mx-2 text-white @if ($active == 'jadwal-kelas') active nav-link-fs @endif"
                                 href="{{ route('kelas-jadwal') }}">Kelas</a>
                         </li>
-                    @else
+                    @else --}}
+                    {{-- @endif --}}
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'list-kelas') active nav-link-fs @endif"
                             href="{{ route('kelas-list') }}">Kelas</a>
                     </li>
-                    @endif
                     <li class="nav-item">
                         <a class="nav-link mx-2 text-white @if ($active == 'location') active nav-link-fs @endif"
                             href="{{ route('location') }}">Location</a>
@@ -113,9 +113,9 @@
                         <a href="{{ route('login') }}"
                             class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline"
                             style="border-color: white; color: white">Login / Registrasi</a>
-                        {{-- <button type="button"
+                        <button type="button"
                             class="btn btn-outline-dark shadow-sm custom-btn custom-btn-outline ms-3 btn-ganti-lokasi"
-                            style="border-color: white; color: white">Ganti Lokasi</button> --}}
+                            style="border-color: white; color: white">Ganti Lokasi</button>
                     </div>
                 @endif
             </div>
@@ -123,7 +123,7 @@
     </nav>
 
     @yield('content')
-    {{-- @livewire('card-location-studio') --}}
+    @livewire('card-location-studio')
     @livewire('footer')
     @livewire('floating-whats-app')
 

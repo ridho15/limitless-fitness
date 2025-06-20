@@ -131,7 +131,7 @@ class BaseController extends Controller
     public function packages()
     {
         $data['active'] = 'packages';
-        $allPaket = Paket::where('is_show_public', 1)->get();
+        $allPaket = Paket::with(['kelas'])->where('is_show_public', 1)->get();
         $listKelas = Kelas::get();
         $data['allPaket'] = $allPaket;
         $data['listKelas'] = $listKelas;

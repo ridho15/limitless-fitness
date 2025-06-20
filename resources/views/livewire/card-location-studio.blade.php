@@ -1,5 +1,4 @@
 <div>
-    <!-- Modal -->
     <div wire:ignore.self class="modal fade" id="modal_location_studio" tabindex="-1"
         aria-labelledby="modal_location_studio" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -22,18 +21,6 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        {{-- <div class="form-group mb-3">
-                            <label for="" class="form-label">Studio</label>
-                            <select name="id_studio" wire:model="id_studio" class="form-control" required>
-                                <option value="">Pilih</option>
-                                @foreach ($listLocationStudio as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('id_studio')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn custom-btn-outline" data-bs-dismiss="modal">Close</button>
@@ -57,7 +44,8 @@
 
         function select2() {
             $('select[name="id_location"]').select2({
-                theme: 'bootstrap-5'
+                theme: 'bootstrap-5',
+                dropdownParent: $('#modal_location_studio')
             })
 
             $('select[name="id_studio"]').select2({

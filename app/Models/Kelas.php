@@ -18,35 +18,16 @@ class Kelas extends Model
         'max_anggota',
         'keterangan',
         'nama_kelas',
-        'duration',
-        'bawaan',
-        'type',
         'honor',
         'fee',
-        'id_location'
+        'id_location',
+        'waktu_buka',
+        'waktu_tutup',
     ];
 
     protected $appends = [
         'status_aktif',
-        // 'rating',
-        // 'jumlah_review',
-        'type_formatted',
     ];
-
-    public function getTypeFormattedAttribute()
-    {
-        switch ($this->type) {
-            case 1:
-                return 'Online';
-                break;
-            case 2:
-                return 'Onsite';
-                break;
-            default:
-                return "Not Know";
-                break;
-        }
-    }
 
     public function getJumlahReviewAttribute()
     {
@@ -85,18 +66,22 @@ class Kelas extends Model
         return $this->hasMany(KelasImage::class, 'id_kelas');
     }
 
-    public function kelasActivity()
+    public function bookingKelas()
     {
-        return $this->hasMany(KelasActivity::class, 'id_kelas');
+        return $this->hasMany(BookingKelas::class);
+    }
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'id_location');
+    }
+
+    public function instruktur()
+    {
+        return $this->belongsToMany(User::class, 'kelas_instrukturs', 'id_kelas', 'id_user');
     }
 
     public function paket()
     {
-        return $this->hasMany(Paket::class, 'id_kelas');
-    }
-
-    public function location()
-    {
-        return $this->belongsTo(Location::class, 'id_location');
+        return $this->belongsToMany(Paket::class, 'kelas_pakets', 'id_kelas', 'id_paket');
     }
 }

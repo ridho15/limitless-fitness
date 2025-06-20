@@ -1,89 +1,117 @@
 @extends('base-2.layout')
 
 @section('content')
-    <section class="my-4">
-        <div class="container">
-            <div class="row mb-3">
-                <div class="col-md-8 mb-3">
-                    <div class="d-flex mb-3">
-                        <small class="fw-light mx-1">Classes</small>
-                        <small class="mx-1"><i class="fa-solid fa-chevron-right"></i></small>
-                        <small class="fw-bold mx-1">{{ $kelas->nama_kelas }}</small>
-                    </div>
-                    <h3 class="fw-bold mb-2">{{ $kelas->nama_kelas }}</h3>
-                    <div class="row mb-4 justify-content-start align-items-center">
-                        <div class="col-md-4 col-6 text-start">
-                            <small class="d-block fw-semibold"><i class="fa-solid fa-clock-rotate-left"></i>
-                                Duration</small>
-                            <small class="d-block fw-light">{{ $kelas->duration }} mins</small>
-                        </div>
-                    </div>
-                    <div class="shadow bg-white p-4" style="border-radius: 15px">
-                        <form action="#" method="GET" id="form_book">
-                            <div class="row align-items-center">
-                                <div class="col-md mb-3">
-                                    <select name="location" class="form-control" data-control="select2"
-                                        data-placeholder="Pilih" id="location">
-                                        <option value="">Pilih</option>
-                                        @foreach ($kelas->paket as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @endforeach
-                                    </select>
+<section class="my-4">
+    <div class="container mb-3">
+        <div class="d-flex mb-3">
+            <small class="fw-light mx-1">Classes</small>
+            <small class="mx-1"><i class="fa-solid fa-chevron-right"></i></small>
+            <small class="fw-bold mx-1">{{ $kelas->nama_kelas }}</small>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <h3 class="fw-bold mb-2">{{ $kelas->nama_kelas }}</h3>
+            <div class="text-center">
+                <a href="#" type="submit" class="btn custom-btn w-100">Book Now</a>
+            </div>
+        </div>
+        <div class="row mb-3 justify-content-start align-items-center">
+            <div class="col-md-4 col-6 text-start">
+                <small class="d-block fw-semibold"><i class="fa-solid fa-clock-rotate-left"></i>
+                    Jadwal </small>
+                <small class="d-block fw-light">{{ Date('H:i', strtotime($kelas->waktu_buka)) }} - {{
+                    Date("H:i", strtotime($kelas->waktu_tutup)) }}</small>
+            </div>
+        </div>
+        <div class="row justify-content-start align-items-center">
+            <div class="col-md-4 col-6 text-start">
+                <small class="d-block fw-semibold"><i class="fa-solid fa-location-dot"></i>
+                    Location </small>
+                <small class="d-block fw-light">{{ $kelas->location->nama }}</small>
+            </div>
+        </div>
+        <div class="card" style="border: none; background-color: white">
+            <div class="card-body">
+                <div class="text-center">
+                    <img src="https://tribratanews.polri.go.id/web/image/blog.post/64327/image"
+                        class="img-fluid w-100 mb-3" alt="" style="border-radius: 10px">
+                </div>
+                <h4>{{ $kelas->nama_kelas }} @if (count($kelas->instruktur) > 0)
+                    (@foreach ($kelas->instruktur as $index => $item)
+                    {{ $item->name }} @if (count($kelas->instruktur) > 1)
+                    ,
+                    @endif
+                    @endforeach)
+                    @endif</h4>
+                <p class="text-justify">
+                    <small>{{ $kelas->keterangan }}</small>
+                </p>
+            </div>
+        </div>
+        <h5 class="fw-bold mb-3">Other Class</h5>
+        <div class="row">
+            @if (count($listKelas) > 0)
+            @foreach ($listKelas as $index => $item)
+            <div class="col-lg-4 col-md-6 mb-5">
+                <div class="card h-100"
+                    style="border-color: rgb(239, 239, 239); border-radius: 10px; background-color: rgb(239, 239, 239)">
+                    <a class="h-100" href="{{ route('kelas.detail', ['id' => $item->id]) }}"
+                        style="text-decoration: none; color: black">
+                        <div class="card-body h-100">
+                            <div class="d-flex h-100 flex-column align-items-center justify-content-between">
+                                <div class="text-center">
+                                    @if (count($item->kelasImage) > 0)
+                                    <img src="{{ asset('storage/' . $item->kelasImage->first()->image) }}"
+                                        class="img-fluid rounded mb-3" alt="" style="border-radius: 10px">
+                                    @else
+                                    <img src="{{ asset('assets/images/default-image.jpg') }}" alt=""
+                                        class="img-fluid rounded mb-3" style="border-radius: 10px">
+                                    @endif
                                 </div>
-                                <div class="col-md-2 mb-3 text-center">
-                                    <button type="submit" class="btn custom-btn w-100">
-                                        <small class="fw-light">Book Now</small>
-                                    </button>
+                                <h5 class="fw-bold w-100 text-start">{{ $item->nama_kelas }} @if(count($item->instruktur) > 0)
+                                    (@foreach ($item->instruktur as $index => $instruktur)
+                                    {{ $instruktur->name }} @if (count($item->instruktur) > 1)
+                                    ,
+                                    @endif
+                                    @endforeach)
+                                    @endif</h5>
+                                <div class="mb-3 w-100 text-start" style="flex: 1">
+                                    <p class="max-lines">
+                                        <smal>{{ $item->keterangan }}</small>
+                                    </p>
+                                </div>
+                                <div class="w-100 d-flex align-items-center justify-content-between">
+                                    <div class="">
+                                        {{ $item->location->nama }}
+                                    </div>
+                                    <div class="text-end">
+                                        <span>{{ Date('H:i', strtotime($item->waktu_buka)) }} - {{ Date("H:i",
+                                            strtotime($item->waktu_tutup)) }}</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3 w-100">
+                                    <span class="badge rounded-pill bg-dark">
+                                        Available / 1 slot remaining
+                                    </span>
+                                </div>
+                                <div class="text-center">
+                                    <a href="{{ route('kelas.detail', ['id' => $item->id]) }}"
+                                        class="btn custom-btn w-100">View More</a>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <img src="{{ count($kelas->kelasImage) > 0 ? asset('storage/' . $kelas->kelasImage[0]->image) : null }}"
-                        class="img-fluid rounded shadow-sm" alt="">
+                        </div>
+                    </a>
                 </div>
             </div>
-            <hr class="my-5">
-            <div class="row">
-                <div class="col-md-6 fw-bold fs-4">
-                    About the class
-                </div>
-                <div class="col-md-6">
-                    <small class="fw-light">
-                        {{ $kelas->keterangan }}
-                    </small>
-                </div>
-            </div>
-            <hr class="my-5">
-            <div class="row">
-                <div class="col-md-6 fw-bold fs-4">
-                    What do you need to bring?
-                </div>
-                <div class="col-md-6">
-                    <small class="fw-light">
-                        @php
-                            $listBawaan = explode(',', $kelas->bawaan);
-                        @endphp
-
-                        <ul>
-                            @foreach ($listBawaan as $item)
-                                @if ($item != null)
-                                    <li>{{ $item }}</li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    </small>
-                </div>
-            </div>
-            <hr class="my-5">
+            @endforeach
+            @endif
         </div>
-    </section>
+    </div>
+</section>
 @endsection
 
 @section('js')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             $('#location').select2({
                 theme: 'bootstrap-5'
             });
@@ -93,5 +121,5 @@
             const id = $(this).val()
             $('#form_book').attr('action', "{{ config('app.url') }}/detail-packages/" + id);
         })
-    </script>
+</script>
 @endsection
