@@ -186,22 +186,24 @@ class ProfileController extends Controller
         // Update paket
         foreach ($listPaketAktif as $item) {
             $id_order_paket = $item->id;
-            $bookingKelas = BookingKelas::where('id_user', Auth::id())
-                ->where('status_kehadiran', 1)
-                ->whereHas('kelasActivity', function ($query) use ($id_order_paket) {
-                    $query->whereHas('kelas', function ($query) use ($id_order_paket) {
-                        $query->whereHas('paket', function ($query) use ($id_order_paket) {
-                            $query->whereHas('orderPaket', function ($query) use ($id_order_paket) {
-                                $query->where('id', $id_order_paket);
-                            });
-                        });
-                    });
-                })->first();
-            if ($bookingKelas) {
-                $item['keterangan'] = 'Paket sudah digunakan';
-            } else {
-                $item['keterangan'] = 'Paket belum digunakan';
-            }
+            // $bookingKelas = BookingKelas::where('id_user', Auth::id())
+            //     ->where('status_kehadiran', 1)
+            //     ->whereHas('kelasActivity', function ($query) use ($id_order_paket) {
+            //         $query->whereHas('kelas', function ($query) use ($id_order_paket) {
+            //             $query->whereHas('paket', function ($query) use ($id_order_paket) {
+            //                 $query->whereHas('orderPaket', function ($query) use ($id_order_paket) {
+            //                     $query->where('id', $id_order_paket);
+            //                 });
+            //             });
+            //         });
+            //     })->first();
+            // if ($bookingKelas) {
+            //     $item['keterangan'] = 'Paket sudah digunakan';
+            // } else {
+            //     $item['keterangan'] = 'Paket belum digunakan';
+            // }
+
+            $item['keterangan'] = '-';
         }
         $listPaketExpired = OrderPaket::where('id_user', $user->id)
             ->where('expired_date', '<=', now())

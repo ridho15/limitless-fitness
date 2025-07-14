@@ -73,7 +73,8 @@ class Paket extends Model
         return $this->belongsToMany(Location::class, 'paket_locations', 'id_paket', 'id_location');
     }
 
-    public function kelasPaket(){
+    public function kelasPaket()
+    {
         return $this->hasMany(KelasPaket::class, 'id_paket');
     }
 

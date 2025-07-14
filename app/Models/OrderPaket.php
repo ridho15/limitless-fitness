@@ -30,7 +30,6 @@ class OrderPaket extends Model
         'status_formatted',
         'expired_date_formatted',
         'tanggal_pembayaran_formatted',
-        'sisa_session'
     ];
 
     public function getTanggalPembayaranFormattedAttribute()

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('paket', function (Blueprint $table) {
+        Schema::table('pakets', function (Blueprint $table) {
             $table->dropColumn(['id_kelas']);
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('paket', function (Blueprint $table) {
+        Schema::table('pakets', function (Blueprint $table) {
             //
         });
     }

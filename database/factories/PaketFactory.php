@@ -19,14 +19,17 @@ class PaketFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama' => $this->faker->word(),
-            'harga' => random_int(100000, 1000000),
-            'valid_month' => array_rand([1, 3, 6, 12]),
-            'diskon' => random_int(0, 10),
-            'promote_code' => Str::upper($this->faker->word()),
-            'id_kelas' => Kelas::inRandomOrder()->first()->id,
-            'is_show_public' => true,
-            'price_per_additional' => 0,
+            'nama' => $this->faker->words(2, true),
+            'harga' => $this->faker->numberBetween(100000, 1000000),
+            'valid_month' => $this->faker->numberBetween(1, 12),
+            'promote_code' => strtoupper($this->faker->bothify('PROMO###')),
+            'diskon' => $this->faker->randomFloat(2, 0, 50),
+            'is_many_times' => $this->faker->boolean(),
+            'is_show_public' => $this->faker->boolean(),
+            'price_per_additional' => $this->faker->numberBetween(10000, 100000),
+            'additional_member' => $this->faker->numberBetween(0, 5),
+            'pro_rata' => $this->faker->randomFloat(2, 0, 1),
+            'signup_fee' => $this->faker->numberBetween(0, 200000),
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PaketController;
 use App\Imports\ImportBookingKelas;
 use App\Imports\OrderPaketImport;
 use App\Imports\UsersImport;
@@ -77,7 +78,7 @@ Route::post('/import-user-paket', function (Request $request) {
     }
 });
 
-Route::post('/import-booking-kelas', function(Request $request){
+Route::post('/import-booking-kelas', function (Request $request) {
     $dataImport = $request->file('data');
     if ($request->hasFile('data')) {
         try {
@@ -96,3 +97,6 @@ Route::post('/import-booking-kelas', function(Request $request){
         ], 404);
     }
 });
+
+
+Route::post('check-paket', [PaketController::class, 'checkPaket']);

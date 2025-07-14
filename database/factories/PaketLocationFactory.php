@@ -23,7 +23,7 @@ class PaketLocationFactory extends Factory
             $id_paket = Paket::inRandomOrder()->first()->id;
             $id_location = Location::inRandomOrder()->first()->id;
             $paketLocation = PaketLocation::where('id_paket', $id_paket)
-            ->where('id_location', $id_location)->first();
+                ->where('id_location', $id_location)->first();
         } while ($paketLocation);
         return [
             'id_paket' => $id_paket,

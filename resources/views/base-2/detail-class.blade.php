@@ -11,7 +11,11 @@
         <div class="d-flex align-items-center justify-content-between">
             <h3 class="fw-bold mb-2">{{ $kelas->nama_kelas }}</h3>
             <div class="text-center">
-                <a href="#" type="submit" class="btn custom-btn w-100">Book Now</a>
+                <form action="{{ route('kelas.booking', ['id' => $kelas->id]) }}" method="POST" id="form_book_now">
+                    @csrf
+                    <button type="button" id="btn_book_now" class="btn custom-btn w-100">Book Now</button>
+
+                </form>
             </div>
         </div>
         <div class="d-flex justify-content-evenly align-items-center mb-3">
@@ -113,6 +117,8 @@
                 </div>
             </div>
             @endforeach
+            @else
+            <div class="text-center text-sm mt-5">Tidak ada data</div>
             @endif
         </div>
     </div>
@@ -130,6 +136,13 @@
         $('#location').on('change', function() {
             const id = $(this).val()
             $('#form_book').attr('action', "{{ config('app.url') }}/detail-packages/" + id);
+        })
+
+        $('#btn_book_now').on('click',async function(){
+            const confirm = await sweetAlert("info", "Informasi", "Apakah kamu yakin melakukan booking kelas ini?", "Ya, Booking")
+            if(confirm.isConfirmed){
+                $('#form_book_now').submit();
+            }
         })
 </script>
 @endsection

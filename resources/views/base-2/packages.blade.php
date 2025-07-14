@@ -25,7 +25,7 @@
                 <div class="row my-5">
                     @if (count($allPaket) > 0)
                     @foreach ($allPaket as $item)
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div class="custom-card-package p-3 h-100">
                             <div class="d-flex h-100 flex-column align-items-center justify-content-between">
                                 <div class="h5 fw-bold w-100 mt-3 text-start">{{ $item->nama }}</div>
@@ -78,7 +78,7 @@
                                     </small>
                                     @endif
                                 </div>
-                                <div class="text-center d-grid gap-2">
+                                <div class="text-center d-grid gap-2 w-100">
                                     <a href="{{ route('detail-packages', ['id' => $item->id]) }}"
                                         class="btn custom-btn">Buy
                                         Now</a>
@@ -101,17 +101,17 @@
             <div class="tab-pane fade" id="kelas_{{ $item->id }}">
                 @php
                 $filtered = $allPaket->filter(function($paket)use($item){
-                    foreach ($paket->kelas as $kelas) {
-                        if($kelas->id == $item->id){
-                            return true;
-                        }
-                    }
+                foreach ($paket->kelas as $kelas) {
+                if($kelas->id == $item->id){
+                return true;
+                }
+                }
                 });
                 @endphp
                 <div class="row my-5">
                     @if (count($filtered) > 0)
                     @foreach ($filtered as $paket)
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="custom-card-package p-3 mb-4">
                             <div class="mb-3">
                                 <small class="fw-semibold text-uppercase" style="color: #b4b4b4">{{
@@ -157,7 +157,7 @@
                                     </span>
                                 </small>
                             </div>
-                            <div class="text-center d-grid gap-2">
+                            <div class="text-center d-grid gap-2 w-100">
                                 <a href="{{ route('detail-packages', ['id' => $paket->id]) }}"
                                     class="btn custom-btn">Buy Now</a>
                             </div>

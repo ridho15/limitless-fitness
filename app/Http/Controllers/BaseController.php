@@ -18,6 +18,7 @@ use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Filament\Facades\Filament;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -663,5 +664,37 @@ class BaseController extends Controller
         } else {
             return redirect()->route('profile.bookings')->with('fail', 'Jadwal sudah tidak valid !');
         }
+    }
+
+    public function bookingKelas($id)
+    {
+        $kelas = Kelas::find($id);
+        if (!$kelas) {
+            return redirect()->back()->with('fail', 'Kelas tidak ditemukan !');
+        }
+
+        // Check order paket
+        $orderPaket = OrderPaket::where('id_user', Auth::id())
+            ->whereHas('paket', function (Builder $query) use ($kelas) {
+                $query->whereHas('kelasPaket', function (Builder $query) use ($kelas) {
+                    $query->where('id_kelas', $kelas->id);
+                });
+            })->where('is_active', 1)->whereDate('expired_date', '>', Carbon::now())->first();
+        if ($orderPaket) {
+            BookingKelas::updateOrCreate([
+                'id_user' => Auth::id(),
+                'id_kelas' => $kelas->id,
+            ], [
+                'id_user' => Auth::id(),
+                'id_kelas' => $kelas->id,
+                'is_send_email' => true,
+                'status_kehadiran' => 1,
+                'keterangan' => '-'
+            ]);
+
+            return redirect()->back()->with('success', 'Berhasil melakukan booking kelas');
+        }
+
+        return redirect()->route('packages')->with('fail', 'Anda belum memiliki paket');
     }
 }
