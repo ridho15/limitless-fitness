@@ -316,6 +316,78 @@ class HelperController extends Controller
         }
     }
 
+    public function registerFace(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'face_image' => 'required|string',
+                'image_type' => 'nullable|in:selfie,img_base64'
+            ], [
+                'user_id.required' => 'Data user belum dikirim',
+                'user_id.exists' => 'User tidak ditemukan',
+                'face_image.required' => 'Gambar wajah belum dikirim',
+                'face_image.string' => 'Format gambar wajah tidak valid',
+                'image_type.in' => 'Tipe gambar harus selfie atau img_base64'
+            ]);
+
+            $user = User::find($request->user_id);
+            
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User tidak ditemukan'
+                ], 404);
+            }
+
+            // Validate base64 image format
+            $faceImage = $request->face_image;
+            if (!$this->isValidBase64Image($faceImage)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Format gambar tidak valid. Gunakan format base64 yang benar.'
+                ], 400);
+            }
+
+            // Determine which field to update
+            $imageType = $request->image_type ?: 'img_base64';
+            
+            // Update user's face data
+            $user->update([
+                $imageType => $faceImage
+            ]);
+
+            // Log activity
+            activity()
+                ->causedBy($user)
+                ->withProperties(['image_type' => $imageType])
+                ->log('Melakukan registrasi wajah');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Registrasi wajah berhasil',
+                'data' => [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'image_type' => $imageType,
+                    'registered_at' => now()->toISOString()
+                ]
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $th->getMessage()
+            ], 500);
+        }
+    }
+
     private function compareFaces($faceImage1, $faceImage2)
     {
         try {
@@ -389,6 +461,37 @@ class HelperController extends Controller
             return round($similarity, 3);
         } catch (\Throwable $th) {
             return 0;
+        }
+    }
+
+    private function isValidBase64Image($base64String)
+    {
+        try {
+            // Check if it's a valid base64 string
+            if (!preg_match('/^data:image\/[a-zA-Z]+;base64,/', $base64String)) {
+                return false;
+            }
+
+            // Extract and decode the base64 data
+            $imageData = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $base64String));
+            
+            if (!$imageData) {
+                return false;
+            }
+
+            // Create temporary file to validate image
+            $tempFile = tempnam(sys_get_temp_dir(), 'face_register_');
+            file_put_contents($tempFile, $imageData);
+            
+            // Check if it's a valid image
+            $imageInfo = getimagesize($tempFile);
+            
+            // Clean up
+            unlink($tempFile);
+            
+            return $imageInfo !== false;
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 }

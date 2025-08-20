@@ -40,3 +40,5 @@ Route::post('/import-booking-kelas', [HelperController::class, 'importBookingKel
 Route::post('/check-paket', [PaketController::class, 'checkPaket']);
 
 Route::post('/validate-face', [HelperController::class, 'validateFace']);
+
+Route::post('/register-face', [HelperController::class, 'registerFace']);
