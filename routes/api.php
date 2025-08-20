@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PaketController;
+use App\Http\Controllers\HelperController;
 use App\Imports\ImportBookingKelas;
 use App\Imports\OrderPaketImport;
 use App\Imports\UsersImport;
@@ -28,75 +29,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/send-email', function () {
-    $sendEmail = new RegistrasiKonfirmasiMail(Auth::user());
-    Mail::to('ralamzah@gmail.com')->send($sendEmail);
-    return response()->json([
-        'status' => true,
-        'message' => 'Berhasil'
-    ], 200);
-});
+Route::get('/send-email', [HelperController::class, 'sendEmail']);
 
-Route::post('/import-user', function (Request $request) {
-    $dataImport = $request->file('data');
-    if ($request->hasFile('data')) {
-        try {
-            Excel::import(new UsersImport, $dataImport);
+Route::post('/import-user', [HelperController::class, 'importUser']);
 
-            return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => "Test" . $th->getMessage()
-            ], 500);
-        }
-    } else {
-        return response()->json([
-            'status' => false,
-            'message' => 'Data tidak terdeteksi',
-        ], 404);
-    }
-});
+Route::post('/import-user-paket', [HelperController::class, 'importUserPaket']);
 
-Route::post('/import-user-paket', function (Request $request) {
-    $dataImport = $request->file('data');
-    if ($request->hasFile('data')) {
-        try {
-            Excel::import(new OrderPaketImport, $dataImport);
-            return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    } else {
-        return response()->json([
-            'status' => false,
-            'message' => 'Data tidak terdeteksi',
-        ], 404);
-    }
-});
+Route::post('/import-booking-kelas', [HelperController::class, 'importBookingKelas']);
 
-Route::post('/import-booking-kelas', function (Request $request) {
-    $dataImport = $request->file('data');
-    if ($request->hasFile('data')) {
-        try {
-            Excel::import(new ImportBookingKelas, $dataImport);
-            return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    } else {
-        return response()->json([
-            'status' => false,
-            'message' => 'Data tidak terdeteksi',
-        ], 404);
-    }
-});
+Route::post('/check-paket', [PaketController::class, 'checkPaket']);
 
-
-Route::post('check-paket', [PaketController::class, 'checkPaket']);
+Route::post('/validate-face', [HelperController::class, 'validateFace']);

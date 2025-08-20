@@ -40,7 +40,9 @@ class User extends Authenticatable implements FilamentUser
         'ktp',
         'selfie',
         'nik',
-        'barcode'
+        'barcode',
+        'img_path',
+        'img_base64',
     ];
 
     /**

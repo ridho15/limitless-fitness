@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ImportBookingKelas;
+use App\Imports\OrderPaketImport;
+use App\Imports\UsersImport;
+use App\Mail\RegistrasiKonfirmasiMail;
 use App\Models\BookingKelas;
 use App\Models\KelasActivity;
 use App\Models\OrderPaket;
 use App\Models\User;
 use Carbon\Carbon;
 use Faker\Factory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HelperController extends Controller
 {
@@ -180,5 +188,207 @@ class HelperController extends Controller
                 'forceDelete'
             ]
         ];
+    }
+
+    public function sendEmail(Request $request)
+    {
+        $sendEmail = new RegistrasiKonfirmasiMail(Auth::user());
+        Mail::to('ralamzah@gmail.com')->send($sendEmail);
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil'
+        ], 200);
+    }
+
+    public function importUser(Request $request)
+    {
+        $dataImport = $request->file('data');
+        if ($request->hasFile('data')) {
+            try {
+                Excel::import(new UsersImport, $dataImport);
+
+                return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'status' => false,
+                    'message' => "Test" . $th->getMessage()
+                ], 500);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak terdeteksi',
+            ], 404);
+        }
+    }
+
+    public function importUserPaket(Request $request)
+    {
+        $dataImport = $request->file('data');
+        if ($request->hasFile('data')) {
+            try {
+                Excel::import(new OrderPaketImport, $dataImport);
+                return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $th->getMessage()
+                ], 500);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak terdeteksi',
+            ], 404);
+        }
+    }
+
+    public function importBookingKelas(Request $request)
+    {
+        $dataImport = $request->file('data');
+        if ($request->hasFile('data')) {
+            try {
+                Excel::import(new ImportBookingKelas, $dataImport);
+                return response()->json(['status' => true, 'message' => 'Berhasil import data'], 200);
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $th->getMessage()
+                ], 500);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak terdeteksi',
+            ], 404);
+        }
+    }
+
+    public function validateFace(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'face_image' => 'required|string'
+            ]);
+
+            $user = User::find($request->user_id);
+            
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User tidak ditemukan'
+                ], 404);
+            }
+
+            if (!$user->selfie && !$user->img_base64) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data wajah referensi tidak ditemukan'
+                ], 400);
+            }
+
+            $faceImage = $request->face_image;
+            $referenceImage = $user->img_base64 ?: $user->selfie;
+
+            $similarity = $this->compareFaces($faceImage, $referenceImage);
+            
+            $threshold = 0.8;
+            $isValid = $similarity >= $threshold;
+
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'is_valid' => $isValid,
+                    'similarity_score' => $similarity,
+                    'threshold' => $threshold,
+                    'message' => $isValid ? 'Validasi wajah berhasil' : 'Validasi wajah gagal'
+                ]
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $th->getMessage()
+            ], 500);
+        }
+    }
+
+    private function compareFaces($faceImage1, $faceImage2)
+    {
+        try {
+            $image1Data = $this->extractImageFeatures($faceImage1);
+            $image2Data = $this->extractImageFeatures($faceImage2);
+            
+            if (!$image1Data || !$image2Data) {
+                return 0;
+            }
+
+            $similarity = $this->calculateSimilarity($image1Data, $image2Data);
+            
+            return $similarity;
+        } catch (\Throwable $th) {
+            return 0;
+        }
+    }
+
+    private function extractImageFeatures($base64Image)
+    {
+        try {
+            $imageData = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $base64Image));
+            
+            if (!$imageData) {
+                return null;
+            }
+
+            $tempFile = tempnam(sys_get_temp_dir(), 'face_validation_');
+            file_put_contents($tempFile, $imageData);
+            
+            $imageInfo = getimagesize($tempFile);
+            
+            if (!$imageInfo) {
+                unlink($tempFile);
+                return null;
+            }
+
+            $features = [
+                'width' => $imageInfo[0],
+                'height' => $imageInfo[1],
+                'size' => filesize($tempFile),
+                'hash' => md5($imageData)
+            ];
+
+            unlink($tempFile);
+            
+            return $features;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    private function calculateSimilarity($features1, $features2)
+    {
+        try {
+            if ($features1['hash'] === $features2['hash']) {
+                return 1.0;
+            }
+
+            $sizeRatio = min($features1['size'], $features2['size']) / max($features1['size'], $features2['size']);
+            $dimensionRatio = min(
+                ($features1['width'] * $features1['height']),
+                ($features2['width'] * $features2['height'])
+            ) / max(
+                ($features1['width'] * $features1['height']),
+                ($features2['width'] * $features2['height'])
+            );
+
+            $similarity = ($sizeRatio + $dimensionRatio) / 2;
+            
+            return round($similarity, 3);
+        } catch (\Throwable $th) {
+            return 0;
+        }
     }
 }
