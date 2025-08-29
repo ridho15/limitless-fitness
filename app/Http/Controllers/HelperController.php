@@ -36,8 +36,7 @@ class HelperController extends Controller
             'data' => [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
-                'selfie' => $user->selfie,
-                'img_base64' => $user->img_base64
+                'selfie' => $user->selfie ? asset('storage/' . $user->selfie) : null,
             ]
         ], 200);
     }
@@ -47,13 +46,12 @@ class HelperController extends Controller
      */
     public function getAllUserSelfies()
     {
-        $users = User::select('id', 'name', 'selfie', 'img_base64')->get();
-        $result = $users->map(function($user) {
+        $users = User::select('id', 'name', 'selfie')->where('selfie', '!=', null)->get();
+        $result = $users->map(function ($user) {
             return [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
-                'selfie' => $user->selfie,
-                'img_base64' => $user->img_base64
+                'selfie' => asset('storage/' . $user->selfie),
             ];
         });
         return response()->json([
@@ -87,15 +85,15 @@ class HelperController extends Controller
 
             // Filter berdasarkan pencarian nama atau email
             if ($search) {
-                $query->where(function($q) use ($search) {
+                $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', '%' . $search . '%')
-                      ->orWhere('email', 'like', '%' . $search . '%');
+                        ->orWhere('email', 'like', '%' . $search . '%');
                 });
             }
 
             // Filter berdasarkan role
             if ($role) {
-                $query->whereHas('roles', function($q) use ($role) {
+                $query->whereHas('roles', function ($q) use ($role) {
                     $q->where('name', $role);
                 });
             }
@@ -145,7 +143,6 @@ class HelperController extends Controller
                     'prev_page_url' => $users->previousPageUrl()
                 ]
             ], 200);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'status' => false,
@@ -167,8 +164,8 @@ class HelperController extends Controller
     {
         try {
             $user = User::with(['roles', 'orderPaket.paket', 'bookingKelas.kelasActivity.kelas'])
-                        ->find($id);
-            
+                ->find($id);
+
             if (!$user) {
                 return response()->json([
                     'status' => false,
@@ -199,7 +196,7 @@ class HelperController extends Controller
                 'has_img_base64' => $user->img_base64 ? true : false,
                 'selfie_url' => $user->selfie,
                 'img_base64_url' => $user->img_base64,
-                'roles' => $user->roles->map(function($role) {
+                'roles' => $user->roles->map(function ($role) {
                     return [
                         'id' => $role->id,
                         'name' => $role->name,
@@ -214,7 +211,7 @@ class HelperController extends Controller
                     'missed_bookings' => $missedBookings,
                     'attendance_rate' => $totalBookings > 0 ? round(($attendedBookings / $totalBookings) * 100, 2) : 0
                 ],
-                'recent_packages' => $user->orderPaket->sortByDesc('created_at')->take(5)->map(function($order) {
+                'recent_packages' => $user->orderPaket->sortByDesc('created_at')->take(5)->map(function ($order) {
                     return [
                         'id' => $order->id,
                         'paket_name' => $order->paket->nama ?? 'Unknown',
@@ -224,7 +221,7 @@ class HelperController extends Controller
                         'created_at' => $order->created_at
                     ];
                 })->values(),
-                'recent_bookings' => $user->bookingKelas->sortByDesc('created_at')->take(10)->map(function($booking) {
+                'recent_bookings' => $user->bookingKelas->sortByDesc('created_at')->take(10)->map(function ($booking) {
                     return [
                         'id' => $booking->id,
                         'kelas_name' => $booking->kelasActivity->kelas->nama_kelas ?? 'Unknown',
@@ -245,7 +242,6 @@ class HelperController extends Controller
                 'message' => 'Detail user berhasil diambil',
                 'data' => $userDetail
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -337,7 +333,7 @@ class HelperController extends Controller
             ]);
 
             $user = User::find($request->user_id);
-            
+
             if (!$user) {
                 return response()->json([
                     'status' => false,
@@ -356,7 +352,7 @@ class HelperController extends Controller
             $referenceImage = $user->img_base64 ?: $user->selfie;
 
             $similarity = $this->compareFaces($faceImage, $referenceImage);
-            
+
             $threshold = 0.8;
             $isValid = $similarity >= $threshold;
 
@@ -371,7 +367,6 @@ class HelperController extends Controller
                     'message' => $isValid ? 'Validasi wajah berhasil' : 'Validasi wajah gagal'
                 ]
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -396,7 +391,7 @@ class HelperController extends Controller
             ]);
 
             $user = User::find($request->user_id);
-            
+
             if (!$user) {
                 return response()->json([
                     'status' => false,
@@ -415,7 +410,7 @@ class HelperController extends Controller
 
             // Determine which field to update
             $imageType = $request->image_type ?: 'img_base64';
-            
+
             // Update user's face data
             $user->update([
                 $imageType => $faceImage
@@ -437,7 +432,6 @@ class HelperController extends Controller
                     'registered_at' => now()->toISOString()
                 ]
             ], 200);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'status' => false,
@@ -457,13 +451,13 @@ class HelperController extends Controller
         try {
             $image1Data = $this->extractImageFeatures($faceImage1);
             $image2Data = $this->extractImageFeatures($faceImage2);
-            
+
             if (!$image1Data || !$image2Data) {
                 return 0;
             }
 
             $similarity = $this->calculateSimilarity($image1Data, $image2Data);
-            
+
             return $similarity;
         } catch (\Throwable $th) {
             return 0;
@@ -474,16 +468,16 @@ class HelperController extends Controller
     {
         try {
             $imageData = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $base64Image));
-            
+
             if (!$imageData) {
                 return null;
             }
 
             $tempFile = tempnam(sys_get_temp_dir(), 'face_validation_');
             file_put_contents($tempFile, $imageData);
-            
+
             $imageInfo = getimagesize($tempFile);
-            
+
             if (!$imageInfo) {
                 unlink($tempFile);
                 return null;
@@ -497,7 +491,7 @@ class HelperController extends Controller
             ];
 
             unlink($tempFile);
-            
+
             return $features;
         } catch (\Throwable $th) {
             return null;
@@ -521,7 +515,7 @@ class HelperController extends Controller
             );
 
             $similarity = ($sizeRatio + $dimensionRatio) / 2;
-            
+
             return round($similarity, 3);
         } catch (\Throwable $th) {
             return 0;
@@ -538,7 +532,7 @@ class HelperController extends Controller
 
             // Extract and decode the base64 data
             $imageData = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $base64String));
-            
+
             if (!$imageData) {
                 return false;
             }
@@ -546,13 +540,13 @@ class HelperController extends Controller
             // Create temporary file to validate image
             $tempFile = tempnam(sys_get_temp_dir(), 'face_register_');
             file_put_contents($tempFile, $imageData);
-            
+
             // Check if it's a valid image
             $imageInfo = getimagesize($tempFile);
-            
+
             // Clean up
             unlink($tempFile);
-            
+
             return $imageInfo !== false;
         } catch (\Throwable $th) {
             return false;
