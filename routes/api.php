@@ -41,4 +41,11 @@ Route::post('/check-paket', [PaketController::class, 'checkPaket']);
 
 Route::post('/validate-face', [HelperController::class, 'validateFace']);
 
+
+Route::get('/user-selfie/{id}', [HelperController::class, 'getUserSelfie']);
+Route::get('/user-selfies', [HelperController::class, 'getAllUserSelfies']);
+
+Route::get('/users', [HelperController::class, 'getUsers']);
+Route::get('/user/{id}/detail', [HelperController::class, 'getUserDetail']);
+
 Route::post('/register-face', [HelperController::class, 'registerFace']);

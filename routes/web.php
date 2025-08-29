@@ -148,6 +148,7 @@ Route::get('sinkron-data', function () {
 
 
 Route::get('generate-password', [HelperController::class, 'generatePassword']);
+
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
 Route::get('/detail-class/{id}', [BaseController::class, 'detailClass'])->name('detail-class');
