@@ -14,52 +14,52 @@ class PaketController extends Controller
         try {
             $request->validate([
                 'id_user' => 'required|integer|exists:users,id',
-                'id_kelas' => 'required|integer',
             ], [
                 'id_user.required' => 'Data user belum dikirim',
                 'id_user.integer' => 'Data user tidak valid !',
-                'id_user.exists' => 'User tidak ditemukan',
-                'id_kelas.required' => "Data kelas belum dikirim",
-                'id_kelas.integer' => 'Data kelas tidak valid !'
+                'id_user.exists' => 'User tidak ditemukan'
             ]);
 
             $userId = $request->input('id_user');
-            $kelasId = $request->input('id_kelas');
-
             $today = Carbon::now();
 
-            $orderPaket = OrderPaket::with(['paket.kelas'])
+            // Ambil semua paket aktif user
+            $orderPakets = OrderPaket::with(['paket'])
                 ->where('id_user', $userId)
                 ->where('is_active', true)
                 ->where('expired_date', '>=', $today)
                 ->where('status', 1)
-                ->get()
-                ->filter(function ($order) use ($kelasId) {
-                    if (!$order->paket || !$order->paket->kelas) {
-                        return false;
-                    }
-                    return $order->paket->kelas->contains('id', $kelasId);
-                })
-                ->first();
+                ->get();
 
-            if ($orderPaket) {
+            if ($orderPakets->isNotEmpty()) {
+                // Transform data untuk response
+                $paketData = $orderPakets->map(function($order) use ($today) {
+                    return [
+                        'order_paket_id' => $order->id,
+                        'paket_id' => $order->id_paket,
+                        'paket_name' => $order->paket->nama ?? 'Unknown Package',
+                        'paket_type' => $order->paket->tipe ?? null,
+                        'paket_durasi' => $order->paket->durasi ?? null,
+                        'expired_date' => $order->expired_date,
+                        'status' => $order->status_formatted ?? 'Active',
+                        'remaining_days' => Carbon::parse($order->expired_date)->diffInDays($today),
+                        'created_at' => $order->created_at
+                    ];
+                });
+
                 return response()->json([
                     'status' => true,
-                    'message' => 'Paket tersedia dan sesuai dengan kelas',
+                    'message' => 'User memiliki paket aktif',
                     'data' => [
-                        'order_paket_id' => $orderPaket->id,
-                        'user_id' => $orderPaket->id_user,
-                        'paket_id' => $orderPaket->id_paket,
-                        'paket_name' => $orderPaket->paket->nama,
-                        'expired_date' => $orderPaket->expired_date,
-                        'status' => $orderPaket->status_formatted,
-                        'remaining_days' => Carbon::parse($orderPaket->expired_date)->diffInDays($today)
+                        'user_id' => $userId,
+                        'total_active_packages' => $orderPakets->count(),
+                        'packages' => $paketData
                     ]
                 ], 200);
             } else {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Tidak ada paket aktif yang sesuai dengan kelas ini'
+                    'message' => 'User tidak memiliki paket aktif'
                 ], 404);
             }
 

@@ -430,23 +430,21 @@ GET /api/user-selfies
 
 ## 📦 Package & Booking APIs
 
-### 7. Check Package Validity
+### 7. Check User Package
 
 **Endpoint**: `POST /check-paket`
 
-**Description**: Check if user has valid package for specific class.
+**Description**: Check if user has any active packages (without specific class validation).
 
 **Request Body**:
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | id_user | integer | Yes | User ID |
-| id_kelas | integer | Yes | Class ID |
 
 **Example Request**:
 ```json
 {
-    "id_user": 123,
-    "id_kelas": 456
+    "id_user": 123
 }
 ```
 
@@ -454,25 +452,45 @@ GET /api/user-selfies
 ```json
 {
     "status": true,
-    "message": "Paket tersedia dan sesuai dengan kelas",
+    "message": "User memiliki paket aktif",
     "data": {
-        "order_paket_id": 789,
         "user_id": 123,
-        "paket_id": 101,
-        "paket_name": "Premium Package",
-        "expired_date": "2025-12-31",
-        "status": "Active",
-        "remaining_days": 133
+        "total_active_packages": 2,
+        "packages": [
+            {
+                "order_paket_id": 789,
+                "paket_id": 101,
+                "paket_name": "Premium Monthly",
+                "paket_type": "Monthly",
+                "paket_durasi": 30,
+                "expired_date": "2025-12-31",
+                "status": "Active",
+                "remaining_days": 133,
+                "created_at": "2025-08-01T10:00:00Z"
+            },
+            {
+                "order_paket_id": 790,
+                "paket_id": 102,
+                "paket_name": "Fitness Package",
+                "paket_type": "Weekly",
+                "paket_durasi": 7,
+                "expired_date": "2025-09-15",
+                "status": "Active",
+                "remaining_days": 16,
+                "created_at": "2025-08-15T10:00:00Z"
+            }
+        ]
     }
 }
 ```
 
-**No Valid Package Response**:
+**No Active Package Response**:
 ```json
 {
     "status": false,
-    "message": "Tidak ada paket aktif yang sesuai dengan kelas ini"
+    "message": "User tidak memiliki paket aktif"
 }
+```
 ```
 
 ---
