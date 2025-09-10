@@ -63,4 +63,12 @@ class BookingKelas extends Model
     {
         return $this->belongsTo(Kelas::class, 'id_kelas')->withDefault();
     }
+
+    public function kelasActivity()
+    {
+        // Jika booking_kelas terhubung melalui kelas
+        return $this->hasOneThrough(KelasActivity::class, Kelas::class, 'id', 'id_kelas', 'id_kelas', 'id');
+
+        // ATAU jika perlu relasi langsung, tambahkan field id_kelas_activity ke tabel
+    }
 }

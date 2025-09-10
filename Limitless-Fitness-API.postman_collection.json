@@ -1,0 +1,902 @@
+{
+	"info": {
+		"_postman_id": "limitless-fitness-api-v1",
+		"name": "Limitless Fitness API Collection",
+		"description": "Complete API collection for Limitless Fitness gym management system including user management, face recognition, package validation, and administrative functions.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "limitless-fitness-team",
+		"version": {
+			"major": 1,
+			"minor": 0,
+			"patch": 0
+		}
+	},
+	"item": [
+		{
+			"name": "🏠 Health Check",
+			"item": [
+				{
+					"name": "API Health Check",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"health"
+							]
+						},
+						"description": "Check if API is running and accessible"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "👥 User Management",
+			"item": [
+				{
+					"name": "Get Users (Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users?page=1&per_page=15&search=&role=&status=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number (default: 1)"
+								},
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "Items per page (default: 15, max: 100)"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search by name or email"
+								},
+								{
+									"key": "role",
+									"value": "",
+									"description": "Filter by role name"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filter by status (active/inactive)"
+								}
+							]
+						},
+						"description": "Retrieve paginated list of users with optional search and filter parameters"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/users?page=1&per_page=10",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"Data users berhasil diambil\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\",\n            \"barcode\": \"12345678\",\n            \"phone\": \"+6281234567890\",\n            \"alamat\": \"Jl. Example No. 123\",\n            \"is_verified\": true,\n            \"has_selfie\": true,\n            \"has_img_base64\": false,\n            \"roles\": [\"Customer\"],\n            \"created_at\": \"2025-08-20T10:00:00Z\",\n            \"updated_at\": \"2025-08-20T10:00:00Z\"\n        }\n    ],\n    \"pagination\": {\n        \"current_page\": 1,\n        \"last_page\": 5,\n        \"per_page\": 10,\n        \"total\": 45,\n        \"from\": 1,\n        \"to\": 10,\n        \"has_more_pages\": true,\n        \"next_page_url\": \"http://localhost:8000/api/users?page=2\",\n        \"prev_page_url\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user/{{user_id}}/detail",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{user_id}}",
+								"detail"
+							]
+						},
+						"description": "Get comprehensive user information including statistics, recent packages, and bookings"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/user/1/detail",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"1",
+										"detail"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"Detail user berhasil diambil\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"John Doe\",\n        \"email\": \"john@example.com\",\n        \"barcode\": \"12345678\",\n        \"statistics\": {\n            \"total_order_paket\": 5,\n            \"active_paket\": 2,\n            \"total_bookings\": 25,\n            \"attended_bookings\": 20,\n            \"missed_bookings\": 3,\n            \"attendance_rate\": 80.0\n        },\n        \"recent_packages\": [],\n        \"recent_bookings\": []\n    }\n}"
+						},
+						{
+							"name": "User Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/user/999999/detail",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"999999",
+										"detail"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": false,\n    \"message\": \"User tidak ditemukan\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "📸 Face Management",
+			"item": [
+				{
+					"name": "Get User Selfie",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user-selfie/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user-selfie",
+								"{{user_id}}"
+							]
+						},
+						"description": "Get selfie image data for specific user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All User Selfies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user-selfies",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user-selfies"
+							]
+						},
+						"description": "Get selfie image data for all users"
+					},
+					"response": []
+				},
+				{
+					"name": "Register Face",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": {{user_id}},\n    \"face_image\": \"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2ODApLCBxdWFsaXR5ID0gODAK/9sAQwAGBAUGBQQGBgUGBwcGCAoQCgoJCQoUDg0NDhQUExMTExQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/9sAQwEHBwcKCAoTCgoTFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/8AAEQgAKAAoAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBkRRCobHwFcHR4fEjM1JygpJzU2N0grHyByZFU/P/2gAMAwEAAhEDEQA/AP1ToA...\",\n    \"image_type\": \"img_base64\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register-face",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"register-face"
+							]
+						},
+						"description": "Register or update user's face image for validation"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": 1,\n    \"face_image\": \"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...\",\n    \"image_type\": \"img_base64\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/register-face",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"register-face"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"Registrasi wajah berhasil\",\n    \"data\": {\n        \"user_id\": 1,\n        \"user_name\": \"John Doe\",\n        \"image_type\": \"img_base64\",\n        \"registered_at\": \"2025-08-31T10:30:00.000000Z\"\n    }\n}"
+						},
+						{
+							"name": "Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": \"\",\n    \"face_image\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/register-face",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"register-face"
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": false,\n    \"message\": \"Validasi gagal\",\n    \"errors\": {\n        \"user_id\": [\"Data user belum dikirim\"],\n        \"face_image\": [\"Gambar wajah belum dikirim\"]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Validate Face",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": {{user_id}},\n    \"face_image\": \"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2ODApLCBxdWFsaXR5ID0gODAK/9sAQwAGBAUGBQQGBgUGBwcGCAoQCgoJCQoUDg0NDhQUExMTExQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/9sAQwEHBwcKCAoTCgoTFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/8AAEQgAKAAoAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBkRRCobHwFcHR4fEjM1JygpJzU2N0grHyByZFU/P/2gAMAwEAAhEDEQA/AP1ToA...\"}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/validate-face",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"validate-face"
+							]
+						},
+						"description": "Validate user face against stored reference image"
+					},
+					"response": [
+						{
+							"name": "Valid Face",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": 1,\n    \"face_image\": \"data:image/jpeg;base64,/9j/4AAQ...\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/validate-face",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"validate-face"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": {\n        \"user_id\": 1,\n        \"user_name\": \"John Doe\",\n        \"is_valid\": true,\n        \"similarity_score\": 0.895,\n        \"threshold\": 0.8,\n        \"message\": \"Validasi wajah berhasil\"\n    }\n}"
+						},
+						{
+							"name": "Invalid Face",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": 1,\n    \"face_image\": \"data:image/jpeg;base64,/9j/4AAQ...\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/validate-face",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"validate-face"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": {\n        \"user_id\": 1,\n        \"user_name\": \"John Doe\",\n        \"is_valid\": false,\n        \"similarity_score\": 0.652,\n        \"threshold\": 0.8,\n        \"message\": \"Validasi wajah gagal\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "📦 Package Management",
+			"item": [
+				{
+					"name": "Check User Package",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_user\": {{user_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/check-paket",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"check-paket"
+							]
+						},
+						"description": "Check if user has any active packages (based on order_paket: status=1, is_active=1, not expired)"
+					},
+					"response": [
+						{
+							"name": "Has Active Packages",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id_user\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/check-paket",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"check-paket"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"User memiliki paket aktif\",\n    \"data\": {\n        \"user_id\": 1,\n        \"total_active_packages\": 2,\n        \"packages\": [\n            {\n                \"order_paket_id\": 789,\n                \"paket_id\": 101,\n                \"paket_name\": \"Premium Monthly\",\n                \"paket_type\": \"Monthly\",\n                \"paket_durasi\": 30,\n                \"expired_date\": \"2025-12-31\",\n                \"status\": \"Active\",\n                \"remaining_days\": 133,\n                \"created_at\": \"2025-08-01T10:00:00Z\",\n                \"order_status\": 1,\n                \"is_active\": 1\n            }\n        ],\n        \"check_method\": \"order_paket_based\",\n        \"note\": \"Pengecekan berdasarkan order_paket karena kelas_paket belum aktif\"\n    }\n}"
+						},
+						{
+							"name": "No Active Packages",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id_user\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/check-paket",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"check-paket"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"status\": false,\n    \"message\": \"User tidak memiliki paket aktif (ada order tapi sudah expired atau inactive)\",\n    \"data\": {\n        \"user_id\": 1,\n        \"total_active_packages\": 0,\n        \"has_any_orders\": true,\n        \"check_method\": \"order_paket_based\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "📁 Data Import",
+			"item": [
+				{
+					"name": "Import Users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"type": "file",
+									"src": [],
+									"description": "Excel file containing user data"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/import-user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"import-user"
+							]
+						},
+						"description": "Import users from Excel file"
+					},
+					"response": []
+				},
+				{
+					"name": "Import User Packages",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"type": "file",
+									"src": [],
+									"description": "Excel file containing package data"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/import-user-paket",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"import-user-paket"
+							]
+						},
+						"description": "Import user package orders from Excel file"
+					},
+					"response": []
+				},
+				{
+					"name": "Import Class Bookings",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"type": "file",
+									"src": [],
+									"description": "Excel file containing booking data"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/import-booking-kelas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"import-booking-kelas"
+							]
+						},
+						"description": "Import class bookings from Excel file"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🔧 Utilities",
+			"item": [
+				{
+					"name": "Send Test Email",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/send-email",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"send-email"
+							]
+						},
+						"description": "Send test confirmation email (requires authentication)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Authenticated User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						},
+						"description": "Get current authenticated user information (requires Sanctum token)"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer valid-token",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Admin User\",\n    \"email\": \"admin@limitless-fitness.com\",\n    \"email_verified_at\": \"2024-01-01T10:00:00.000000Z\",\n    \"created_at\": \"2024-01-01T09:00:00.000000Z\",\n    \"updated_at\": \"2024-01-01T10:00:00.000000Z\"\n}"
+						},
+						{
+							"name": "Unauthenticated",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Pre-request script untuk logging",
+					"console.log('Making request to:', pm.request.url.toString());",
+					"console.log('Method:', pm.request.method);",
+					"",
+					"// Set timestamp",
+					"pm.globals.set('timestamp', new Date().toISOString());"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Test script untuk validasi response",
+					"pm.test('Status code is valid', function () {",
+					"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 400, 401, 404, 422, 500]);",
+					"});",
+					"",
+					"pm.test('Response has status field', function () {",
+					"    const jsonData = pm.response.json();",
+					"    pm.expect(jsonData).to.have.property('status');",
+					"});",
+					"",
+					"pm.test('Response has message field', function () {",
+					"    const jsonData = pm.response.json();",
+					"    pm.expect(jsonData).to.have.property('message');",
+					"});",
+					"",
+					"// Log response time",
+					"console.log('Response time:', pm.response.responseTime + 'ms');",
+					"console.log('Response status:', pm.response.json().status);"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string",
+			"description": "Base URL for the API (change for production)"
+		},
+		{
+			"key": "user_id",
+			"value": "1",
+			"type": "string",
+			"description": "Default user ID for testing"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string",
+			"description": "Authentication token for protected endpoints"
+		}
+	]
+}
