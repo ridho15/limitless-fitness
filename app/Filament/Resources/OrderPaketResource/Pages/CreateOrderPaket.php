@@ -51,8 +51,9 @@ class CreateOrderPaket extends CreateRecord
                 'id_parent' => $jurnal->id,
                 'tipe' => 0,
             ], [
-                'nama' => 'Biaya Instruktur 1px group @' . $this->record->paket->kelas->honor,
-                'jumlah_uang' => $this->record->paket->kelas->honor ?? 0,
+                // 'nama' => 'Biaya Instruktur 1px group @' . $this->record->paket->kelas->honor,
+                'nama' => 'Biaya Instruktur 1px group @' . 0,
+                'jumlah_uang' => 0,
                 'tipe' => '0',
                 'struk' => null,
                 'tanggal' => now(),

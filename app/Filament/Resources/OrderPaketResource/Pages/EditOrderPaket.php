@@ -74,7 +74,7 @@ class EditOrderPaket extends EditRecord
                 'id_parent' => $jurnal->id,
                 'tipe' => 0,
             ], [
-                'nama' => 'Biaya Instruktur 1px group @' . $this->getRecord()->paket->kelas->honor,
+                'nama' => 'Biaya Instruktur 1px group @' . 0,
                 'jumlah_uang' => $this->getRecord()->paket->kelas->honor ?? 0,
                 'tipe' => '0',
                 'struk' => null,
