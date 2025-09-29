@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PaketController;
+use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\HelperController;
 use App\Imports\ImportBookingKelas;
 use App\Imports\OrderPaketImport;
@@ -49,3 +50,5 @@ Route::get('/users', [HelperController::class, 'getUsers']);
 Route::get('/user/{id}/detail', [HelperController::class, 'getUserDetail']);
 
 Route::post('/register-face', [HelperController::class, 'registerFace']);
+
+Route::post('/checkin', [CheckInController::class, 'store']);
