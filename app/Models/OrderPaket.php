@@ -22,7 +22,9 @@ class OrderPaket extends Model
         'bukti_pembayaran',
         'sisa',
         'id_location',
-        'unix_code'
+    'unix_code',
+    'payment_method',
+    'public_token'
     ];
 
     protected $appends = [

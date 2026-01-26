@@ -8,7 +8,7 @@
         $data = $data->data;
     }
 @endphp
-<div class="@if ($status) td-color-success @else td-color-danger @endif">
+<div style="@if ($status) background-color: #28a745; color: white; @else background-color: #dc3545; color: white; @endif padding: 0.25rem 0.5rem; border-radius: 0.25rem; display: inline-block; font-size: 0.75rem; font-weight: 700;">
     @php
         echo $data;
     @endphp

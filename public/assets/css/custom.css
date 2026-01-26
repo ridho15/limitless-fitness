@@ -360,3 +360,22 @@ body {
     /* Potong overflow */
     text-align: justify;
 }
+
+/* Success / Danger badges used in custom columns */
+.td-color-success {
+    background-color: #e9f7ef;
+    color: #0b6a3b;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.td-color-danger {
+    background-color: #fff4f4;
+    color: #b02a2a;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 600;
+}

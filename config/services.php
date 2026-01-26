@@ -31,4 +31,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'payment' => [
+        'manual_note' => env('PAYMENT_MANUAL_NOTE', 'Tim Limitless Fitness akan menghubungi Anda untuk menyelesaikan proses pembayaran.'),
+        'transfer' => [
+            'bank_name' => env('PAYMENT_BANK_NAME', 'Bank Central Asia (BCA)'),
+            'account_number' => env('PAYMENT_ACCOUNT_NUMBER', '1234567890'),
+            'account_name' => env('PAYMENT_ACCOUNT_NAME', 'Limitless Fitness'),
+            'note' => env('PAYMENT_TRANSFER_NOTE', 'Pastikan jumlah transfer sesuai total yang tertera termasuk kode unik.'),
+        ],
+    ],
+
 ];

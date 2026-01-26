@@ -52,3 +52,5 @@ Route::get('/user/{id}/detail', [HelperController::class, 'getUserDetail']);
 Route::post('/register-face', [HelperController::class, 'registerFace']);
 
 Route::post('/checkin', [CheckInController::class, 'store']);
+
+Route::get('/checkinouts', [CheckInController::class, 'index']);

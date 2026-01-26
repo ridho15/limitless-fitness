@@ -128,6 +128,16 @@ class OrderPaketResource extends Resource
                         ]);
                     })->view('custom-column.order-paket')
                     ->searchable(),
+                ViewColumn::make('is_active')
+                    ->label('Status Aktif')
+                    ->getStateUsing(function ($record) {
+                        return json_encode([
+                            'status' => $record->status,
+                            'data' => $record->is_active == 1 ? 'Aktif' : 'Tidak Aktif'
+                        ]);
+                    })
+                    ->view('custom-column.order-paket')
+                    ->sortable(),
                 ViewColumn::make('user.name')
                     ->label('Customer')
                     ->getStateUsing(function ($record) {
@@ -265,9 +275,9 @@ class OrderPaketResource extends Resource
                     ])->query(function (Builder $query, array $data) {
                         return $query->when(
                             $data['created_from'],
-                            fn (Builder $query, $date) => $query->whereDate('created_at', '>=', $date),
-                        )->when($data['created_until'], fn (Builder $query, $date) => $query->whereDate('created_at', '<=', $date))
-                            ->when($data['updated_at'], fn (Builder $query, $date) => $query->whereDate('updated_at', $date));
+                            fn(Builder $query, $date) => $query->whereDate('created_at', '>=', $date),
+                        )->when($data['created_until'], fn(Builder $query, $date) => $query->whereDate('created_at', '<=', $date))
+                            ->when($data['updated_at'], fn(Builder $query, $date) => $query->whereDate('updated_at', $date));
                     }),
                 SelectFilter::make('is_active')->label('Status Aktif')->searchable()->options([
                     0 => 'Tidak Aktif',
@@ -386,6 +396,15 @@ class OrderPaketResource extends Resource
                 $query->where('id_location', Auth::user()->id_location);
             }
         })->orderBy('status', 'DESC')->orderBy('created_at', 'DESC');
+    }
+
+    public static function getTableRecordClassesUsing(): ?Closure
+    {
+        return fn ($record) => match ($record->status) {
+            1 => 'bg-green-100', // Lunas
+            2 => 'bg-red-100', // Belum Lunas
+            default => 'bg-red-100', // Batal
+        };
     }
 
     public static function getRelations(): array

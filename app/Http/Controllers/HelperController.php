@@ -140,6 +140,18 @@ class HelperController extends Controller
         return $kode;
     }
 
+    public static function generateIdUser()
+    {
+        $faker = Factory::create();
+        return $faker->ean8();
+    }
+
+    public static function generateBarcode()
+    {
+        $faker = Factory::create();
+        return $faker->ean8();
+    }
+
     /**
      * Ambil daftar users dengan pagination
      */

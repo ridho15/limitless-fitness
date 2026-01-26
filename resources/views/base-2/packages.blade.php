@@ -23,7 +23,7 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="all">
                 <div class="row my-5">
-                    @if (count($allPaket) > 0)
+                    @if ((is_array($allPaket) || $allPaket instanceof \Countable) && count($allPaket) > 0)
                     @foreach ($allPaket as $item)
                     <div class="col-md-4 mb-3">
                         <div class="custom-card-package p-3 h-100">
@@ -50,16 +50,20 @@
                                         <span class="me-2"><i class="fa-solid fa-location-dot" style="color: grey"></i>
                                         </span>
                                         <span>@php
-                                            if (count($item->location) > 0) {
-                                            $text = "";
-                                            foreach ($item->location as $location) {
-                                            $text .= $location->nama . ", <br>";
-                                            }
-                                            echo $text;
+                                            if (is_array($item->location) || $item->location instanceof \Countable) {
+                                                if (count($item->location) > 0) {
+                                                    $text = "";
+                                                    foreach ($item->location as $location) {
+                                                        $text .= $location->nama . ", <br>";
+                                                    }
+                                                    echo $text;
+                                                } else {
+                                                    echo '-';
+                                                }
                                             } else {
-                                            echo '-';
+                                                echo '-';
                                             }
-                                            @endphp</span>
+                                        @endphp</span>
                                     </small>
                                     <small class="d-block mb-2 fw-light">
                                         <span class="me-2"><i class="fa-solid fa-clock-rotate-left"
@@ -109,7 +113,7 @@
                 });
                 @endphp
                 <div class="row my-5">
-                    @if (count($filtered) > 0)
+                    @if ((is_array($filtered) || $filtered instanceof \Countable) && count($filtered) > 0)
                     @foreach ($filtered as $paket)
                     <div class="col-md-4">
                         <div class="custom-card-package p-3 mb-4">
@@ -138,16 +142,20 @@
                                     <span class="me-2"><i class="fa-solid fa-location-dot" style="color: grey"></i>
                                     </span>
                                     <span>@php
-                                        if (count($paket->paketLocation) > 0) {
-                                        $text = "";
-                                        foreach ($paket->paketLocation as $paketLocation) {
-                                        $text .= $paketLocation->location->nama . ", <br>";
-                                        }
-                                        echo $text;
+                                        if (is_array($paket->paketLocation) || $paket->paketLocation instanceof \Countable) {
+                                            if (count($paket->paketLocation) > 0) {
+                                                $text = "";
+                                                foreach ($paket->paketLocation as $paketLocation) {
+                                                    $text .= $paketLocation->location->nama . ", <br>";
+                                                }
+                                                echo $text;
+                                            } else {
+                                                echo '-';
+                                            }
                                         } else {
-                                        echo '-';
+                                            echo '-';
                                         }
-                                        @endphp</span>
+                                    @endphp</span>
                                 </small>
                                 <small class="d-block mb-2 fw-light">
                                     <span class="me-2"><i class="fa-solid fa-clock-rotate-left" style="color: grey"></i>

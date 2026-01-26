@@ -1,11 +1,12 @@
-import colors from 'tailwindcss/colors'
-import forms from '@tailwindcss/forms'
-import typography from '@tailwindcss/typography'
+const colors = require('tailwindcss/colors');
+const forms = require('@tailwindcss/forms');
+const typography = require('@tailwindcss/typography');
 
-export default {
+module.exports = {
     content: [
         './resources/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
+        './app/**/*.php',
     ],
     darkMode: 'class',
     theme: {
@@ -22,4 +23,4 @@ export default {
         forms,
         typography,
     ],
-}
+};
