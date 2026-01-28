@@ -15,8 +15,21 @@ return new class extends Migration
         // does not support multiple drop/rename operations in a single table
         // modification. Splitting helps local/test environments using SQLite.
 
+        // Drop each column in separate operations to be compatible with SQLite
         Schema::table('kelas', function (Blueprint $table) {
-            $table->dropColumn(['harga_real', 'jumlah_pertemuan', 'diskon', 'foto', 'expired']);
+            $table->dropColumn('harga_real');
+        });
+        Schema::table('kelas', function (Blueprint $table) {
+            $table->dropColumn('jumlah_pertemuan');
+        });
+        Schema::table('kelas', function (Blueprint $table) {
+            $table->dropColumn('diskon');
+        });
+        Schema::table('kelas', function (Blueprint $table) {
+            $table->dropColumn('foto');
+        });
+        Schema::table('kelas', function (Blueprint $table) {
+            $table->dropColumn('expired');
         });
 
         Schema::table('kelas', function (Blueprint $table) {
@@ -25,10 +38,12 @@ return new class extends Migration
             $table->text('bawaan')->nullable();
         });
 
+        // Perform each rename in its own operation for SQLite compatibility
         Schema::table('kelas', function (Blueprint $table) {
-            // renaming columns should be done in a separate operation
             // note: renameColumn may require doctrine/dbal depending on DB driver
             $table->renameColumn('min_customer', 'min_anggota');
+        });
+        Schema::table('kelas', function (Blueprint $table) {
             $table->renameColumn('max_customer', 'max_anggota');
         });
 
