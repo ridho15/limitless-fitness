@@ -1,6 +1,6 @@
 @extends('base-2.layout')
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/voucher.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('css/voucher.css') }}"> --}}
 @endsection
 @section('content')
 <section class="voucher-page my-5 py-5">
