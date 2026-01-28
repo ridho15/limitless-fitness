@@ -3,9 +3,9 @@
 <link rel="stylesheet" href="{{ asset('css/voucher.css') }}">
 @endsection
 @section('content')
-<section class="my-5 py-5">
+<section class="voucher-page my-5 py-5">
     <div class="container">
-        <div class="row">
+        <div class="row voucher-row">
             <div class="col-md-3">
                 @livewire('profile.left-bar', ['active' => $active])
             </div>
@@ -34,7 +34,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade py-4 show active" id="semua">
                         <h4 class="fw-bold">Semua</h4>
-                        <div class="row">
+                        <div class="row voucher-row">
                             @foreach ($listVoucherCustomer as $index => $item)
                             <article class="card fl-left" style="margin-left: 0% !important; margin: 2px !important">
                                 <section class="date">
@@ -81,7 +81,7 @@
                     </div>
                     <div class="tab-pane fade py-4" id="belum_digunakan">
                         <h4 class="fw-bold">Belum Digunakan</h4>
-                        <div class="row">
+                        <div class="row voucher-row">
                             @foreach ($listVoucherCustomer->where('status_digunakan', 0) as $index => $item)
                             <article class="card fl-left" style="margin-left: 0% !important; margin: 2px !important">
                                 <section class="date">
@@ -128,7 +128,7 @@
                     </div>
                     <div class="tab-pane fade py-4" id="sudah_digunakan">
                         <h4 class="fw-bold">Sudah Digunakan</h4>
-                        <div class="row">
+                        <div class="row voucher-row">
                             @foreach ($listVoucherCustomer->where('status_digunakan', 1) as $index => $item)
                             <article class="card fl-left" style="margin-left: 0% !important; margin: 2px !important">
                                 <section class="date">
