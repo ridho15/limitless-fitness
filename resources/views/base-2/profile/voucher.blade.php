@@ -36,9 +36,10 @@
                         <h4 class="fw-bold">Semua</h4>
                         <div class="row voucher-row">
                             @foreach ($listVoucherCustomer as $index => $item)
-                            <article class="card fl-left" style="margin-left: 0% !important; margin: 2px !important">
-                                <section class="date">
-                                    <small>Expired</small>
+                            <div class="col-md-6 mb-2">
+                                <article class="card voucher-card h-100">
+                                    <section class="voucher-date p-3 d-flex align-items-center justify-content-center">
+                                        <small>Expired</small>
                                     <time datetime="23th feb">
                                         <span>{{ Carbon\Carbon::parse($item->expired)->locale('id')->isoFormat('DD')
                                             }}</span>
@@ -49,7 +50,7 @@
                                             }}</span>
                                     </time>
                                 </section>
-                                <section class="card-cont">
+                                <section class="voucher-content">
                                     <small></small>
                                     <h3>{{ $item->voucher->nama }}</h3>
                                     <div class="even-date">
@@ -72,10 +73,10 @@
                                             $item->orderPaket->location->alamat }}
                                         </p>
                                     </div>
-                                    <a href="#" style="background-color: {{ $item->status_digunakan == 1 ? " #037FDD"
-                                        : "#F8504C" }} !important">{{ $item->status_digunakan_formatted }}</a>
+                                    <span class="badge {{ $item->status_digunakan == 1 ? 'bg-primary' : 'bg-danger' }}">{{ $item->status_digunakan_formatted }}</span>
                                 </section>
                             </article>
+                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -83,9 +84,10 @@
                         <h4 class="fw-bold">Belum Digunakan</h4>
                         <div class="row voucher-row">
                             @foreach ($listVoucherCustomer->where('status_digunakan', 0) as $index => $item)
-                            <article class="card fl-left" style="margin-left: 0% !important; margin: 2px !important">
-                                <section class="date">
-                                    <small>Expired</small>
+                            <div class="col-md-6 mb-2">
+                                <article class="card voucher-card h-100">
+                                    <section class="voucher-date p-3 d-flex align-items-center justify-content-center">
+                                        <small>Expired</small>
                                     <time datetime="23th feb">
                                         <span>{{ Carbon\Carbon::parse($item->expired)->locale('id')->isoFormat('DD')
                                             }}</span>
@@ -96,7 +98,7 @@
                                             }}</span>
                                     </time>
                                 </section>
-                                <section class="card-cont">
+                                <section class="voucher-content">
                                     <small></small>
                                     <h3>{{ $item->voucher->nama }}</h3>
                                     <div class="even-date">
@@ -119,10 +121,10 @@
                                             $item->orderPaket->location->alamat }}
                                         </p>
                                     </div>
-                                    <a href="#" style="background-color: {{ $item->status_digunakan == 1 ? " #037FDD"
-                                        : "#F8504C" }} !important">{{ $item->status_digunakan_formatted }}</a>
+                                    <span class="badge {{ $item->status_digunakan == 1 ? 'bg-primary' : 'bg-danger' }}">{{ $item->status_digunakan_formatted }}</span>
                                 </section>
                             </article>
+                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -130,9 +132,10 @@
                         <h4 class="fw-bold">Sudah Digunakan</h4>
                         <div class="row voucher-row">
                             @foreach ($listVoucherCustomer->where('status_digunakan', 1) as $index => $item)
-                            <article class="card fl-left" style="margin-left: 0% !important; margin: 2px !important">
-                                <section class="date">
-                                    <small>Expired</small>
+                            <div class="col-md-6 mb-2">
+                                <article class="card voucher-card h-100">
+                                    <section class="voucher-date p-3 d-flex align-items-center justify-content-center">
+                                        <small>Expired</small>
                                     <time datetime="23th feb">
                                         <span>{{ Carbon\Carbon::parse($item->expired)->locale('id')->isoFormat('DD')
                                             }}</span>
@@ -143,7 +146,7 @@
                                             }}</span>
                                     </time>
                                 </section>
-                                <section class="card-cont">
+                                <section class="voucher-content">
                                     <small></small>
                                     <h3>{{ $item->voucher->nama }}</h3>
                                     <div class="even-date">
@@ -166,10 +169,10 @@
                                             $item->orderPaket->location->alamat }}
                                         </p>
                                     </div>
-                                    <a href="#" style="background-color: {{ $item->status_digunakan == 1 ? " #037FDD"
-                                        : "#F8504C" }} !important">{{ $item->status_digunakan_formatted }}</a>
+                                    <span class="badge {{ $item->status_digunakan == 1 ? 'bg-primary' : 'bg-danger' }}">{{ $item->status_digunakan_formatted }}</span>
                                 </section>
                             </article>
+                            </div>
                             @endforeach
                         </div>
                     </div>
