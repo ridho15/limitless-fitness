@@ -15,7 +15,7 @@
         @foreach ($listKelas as $item)
         <div class="col-md-4 mb-4">
             <div class="custom-card position-relative"
-                style="background-image: url({{ count($item->kelasImage) > 0 ? asset('storage/' . $item->kelasImage[0]->image) : null }})">
+                style="background-image: url({{ count($item->kelasImage) > 0 ? storage_url($item->kelasImage[0]->image) : null }})">
                 <div class="h-100 position-absolute bg-gradient w-100 opacity-card-black"></div>
                 <div class="position-absolute d-flex align-items-end justify-content-center h-100 w-100 card-class-text"
                     style="z-index: 10;">

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class FormProfile extends Component
 {
@@ -63,8 +64,20 @@ class FormProfile extends Component
         $this->jenis_kelamin = $user->jenis_kelamin;
         $this->negara = $user->negara;
         $this->alamat = $user->alamat;
-        $this->foto_ktp = asset('storage/' . $user->ktp);
-        $this->foto_selfie = asset('storage/' . $user->selfie);
+
+        $disk = config('filesystems.default');
+
+        if ($user->ktp) {
+            $this->foto_ktp = storage_url($user->ktp);
+        } else {
+            $this->foto_ktp = null;
+        }
+
+        if ($user->selfie) {
+            $this->foto_selfie = storage_url($user->selfie);
+        } else {
+            $this->foto_selfie = null;
+        }
 
         if ($user->studio) {
             $this->id_location = $user->studio->id_location;
@@ -100,19 +113,21 @@ class FormProfile extends Component
             'selfie' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        $disk = config('filesystems.default');
+
         if ($this->foto) {
-            $foto = $this->foto->store('public/foto');
-            $data['foto'] = str_replace('public/', '', $foto);
+            $fotoPath = $this->foto->store('foto', $disk);
+            $data['foto'] = ($disk === 'local') ? str_replace('public/', '', $fotoPath) : $fotoPath;
         }
 
         if ($this->ktp) {
-            $ktp = $this->ktp->store('public/ktp');
-            $data['ktp'] = str_replace('public/', '', $ktp);
+            $ktpPath = $this->ktp->store('ktp', $disk);
+            $data['ktp'] = ($disk === 'local') ? str_replace('public/', '', $ktpPath) : $ktpPath;
         }
 
         if ($this->selfie) {
-            $selfie = $this->selfie->store('public/selfie');
-            $data['selfie'] = str_replace('public/', '', $selfie);
+            $selfiePath = $this->selfie->store('selfie', $disk);
+            $data['selfie'] = ($disk === 'local') ? str_replace('public/', '', $selfiePath) : $selfiePath;
         }
 
         if ($this->password) {

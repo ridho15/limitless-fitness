@@ -100,7 +100,7 @@
                                                             <small>Upload Bukti Pembayaran</small>
                                                         </label>
                                                     @else
-                                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
+                                                        <a href="{{ storage_url($item->bukti_pembayaran) }}"
                                                             target="_blank" class="btn custom-btn-outline">
                                                             <small>Lihat Bukti Pembayaran</small>
                                                         </a>
@@ -203,7 +203,7 @@
                                                             <small>Upload Bukti Pembayaran</small>
                                                         </label>
                                                     @else
-                                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
+                                                        <a href="{{ storage_url($item->bukti_pembayaran) }}"
                                                             target="_blank" class="btn custom-btn-outline">
                                                             <small>Lihat Bukti Pembayaran</small>
                                                         </a>
@@ -307,7 +307,7 @@
                                                             <small>Upload Bukti Pembayaran</small>
                                                         </label>
                                                     @else
-                                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}"
+                                                        <a href="{{ storage_url($item->bukti_pembayaran) }}"
                                                             target="_blank" class="btn custom-btn-outline">
                                                             <small>Lihat Bukti Pembayaran</small>
                                                         </a>
@@ -359,6 +359,20 @@
                     $('#sub_form_' + id).removeClass('d-none')
                 })
             })
+
+            // Add 'Ubah Bukti Pembayaran' button for any form that has a file input and a 'Lihat Bukti Pembayaran' link.
+            $('form').each(function() {
+                const $form = $(this);
+                const $input = $form.find('input.bukti-pembayaran');
+                const $link = $form.find('a.btn.custom-btn-outline').first();
+                if ($input.length && $link.length && $form.find('.change-bukti-btn').length === 0) {
+                    const $btn = $('<button type="button" class="btn custom-btn-outline ms-2 change-bukti-btn"><small>Ubah Bukti Pembayaran</small></button>');
+                    $btn.on('click', function() {
+                        $input.trigger('click');
+                    });
+                    $link.after($btn);
+                }
+            });
         });
     </script>
 @endpush

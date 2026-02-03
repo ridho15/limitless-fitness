@@ -34,7 +34,10 @@ class OrderController extends Controller
         ]);
 
         try {
-            $paket = Paket::findOrFail($id);
+            $paket = Paket::find($id);
+            if (!$paket) {
+                return redirect()->back()->with('error', 'Paket tidak ditemukan.');
+            }
 
             // Cek apakah email sudah terdaftar
             $user = User::where('email', $request->email)->first();
@@ -73,6 +76,18 @@ class OrderController extends Controller
 
             // Buat order paket baru
             $expiredDate = now()->addMonths($paket->valid_month ?? 1);
+
+            // Determine the location for the order. Prefer request, then paket's first location, then any location, finally 0.
+            $idLocation = $request->input('id_location');
+            if (!$idLocation) {
+                $firstPaketLocation = $paket->paketLocation()->first();
+                if ($firstPaketLocation && isset($firstPaketLocation->id_location)) {
+                    $idLocation = $firstPaketLocation->id_location;
+                } else {
+                    $idLocation = optional(\App\Models\Location::first())->id ?? 0;
+                }
+            }
+
             $order = OrderPaket::create([
                 'id_user' => $user->id,
                 'id_paket' => $paket->id,
@@ -81,6 +96,7 @@ class OrderController extends Controller
                 'is_active' => 0,
                 'expired_date' => $expiredDate,
                 'public_token' => (string) Str::uuid(),
+                'id_location' => $idLocation,
             ]);
 
             return redirect()
@@ -88,6 +104,11 @@ class OrderController extends Controller
                 ->with('success', 'Pemesanan berhasil! Silakan pilih metode pembayaran yang Anda inginkan.');
 
         } catch (\Exception $e) {
+            // Re-throw during testing so tests can see the root cause
+            if (app()->environment('testing')) {
+                throw $e;
+            }
+
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses pemesanan. Silakan coba lagi.');
         }
     }

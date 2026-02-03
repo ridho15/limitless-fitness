@@ -16,7 +16,7 @@
                     <div class="pricing_plans_box_content">
                         <div class="pricing_plans_box_upper_portion">
                             <figure class="pricing_plans_image mb-0">
-                                <img src="{{ asset('storage/' . $item->foto) }}" alt="" class="img-fluid">
+                                <img src="{{ storage_url($item->foto) }}" alt="" class="img-fluid">
                             </figure>
                             <div class="pricing_plans_box_image_content">
                                 <figure class="mb-0">

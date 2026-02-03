@@ -48,6 +48,7 @@ class OrderControllerTest extends TestCase
         $paket = Paket::factory()->create([
             'nama' => 'Premium Package',
             'harga' => 200000,
+            'diskon' => 0,
             'valid_month' => 6
         ]);
 
@@ -58,14 +59,24 @@ class OrderControllerTest extends TestCase
             'alamat' => 'Jl. Test No. 123'
         ];
 
-        $request = Request::create('/order-package/' . $paket->id, 'POST', $requestData);
-
-        // Mock the controller method
-        $controller = new OrderController();
-        $response = $controller->postOrderPackage($request, $paket->id);
+        // Use HTTP request to allow validation and redirects to be handled by framework
+        $response = $this->post('/order-package/' . $paket->id, $requestData);
 
         // Check redirect
-        $this->assertEquals(302, $response->getStatusCode());
+        if ($response->getStatusCode() !== 302) {
+            $this->fail('Unexpected response status: ' . $response->getStatusCode() . ' content: ' . $response->getContent());
+        }
+
+        // Directly call controller to capture internal exception (debugging)
+        try {
+            $controller = new OrderController();
+            $controller->postOrderPackage(Request::create('/order-package/' . $paket->id, 'POST', $requestData), $paket->id);
+        } catch (\Exception $e) {
+            $this->fail('Controller threw: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . '\n' . $e->getTraceAsString());
+        }
+
+        // Ensure there is no generic error in session
+        $this->assertFalse($response->getSession()->has('error'), 'Controller returned an error in session: ' . json_encode($response->getSession()->get('error')));
 
         // Check database
         $this->assertDatabaseHas('users', [
@@ -76,7 +87,7 @@ class OrderControllerTest extends TestCase
         ]);
 
         $user = User::where('email', 'john@example.com')->first();
-        $this->assertDatabaseHas('order_paket', [
+        $this->assertDatabaseHas('order_pakets', [
             'id_user' => $user->id,
             'id_paket' => $paket->id,
             'harga' => 200000,
@@ -108,12 +119,10 @@ class OrderControllerTest extends TestCase
             'alamat' => 'New Address'
         ];
 
-        $request = Request::create('/order-package/' . $paket->id, 'POST', $requestData);
+        // Use HTTP request so validation and redirects are handled by the framework
+        $response = $this->post('/order-package/' . $paket->id, $requestData);
 
-        $controller = new OrderController();
-        $response = $controller->postOrderPackage($request, $paket->id);
-
-        $this->assertEquals(302, $response->getStatusCode());
+        $response->assertStatus(302);
 
         // Check that user was updated
         $updatedUser = User::find($existingUser->id);
@@ -121,7 +130,7 @@ class OrderControllerTest extends TestCase
         $this->assertEquals('New Address', $updatedUser->alamat);
 
         // Check that order was created
-        $this->assertDatabaseHas('order_paket', [
+        $this->assertDatabaseHas('order_pakets', [
             'id_user' => $existingUser->id,
             'id_paket' => $paket->id
         ]);
@@ -150,12 +159,13 @@ class OrderControllerTest extends TestCase
             'alamat' => $user->alamat
         ];
 
-        $request = Request::create('/order-package/' . $paket->id, 'POST', $requestData);
+        // Use HTTP request so validation and redirects are handled by the framework
+        $response = $this->post('/order-package/' . $paket->id, $requestData);
 
-        $controller = new OrderController();
-        $response = $controller->postOrderPackage($request, $paket->id);
+        $response->assertStatus(302);
 
-        $this->assertEquals(302, $response->getStatusCode());
+        // Should not create new order
+        $this->assertEquals(1, OrderPaket::where('id_user', $user->id)->where('id_paket', $paket->id)->count());
 
         // Should not create new order
         $this->assertEquals(1, OrderPaket::where('id_user', $user->id)->where('id_paket', $paket->id)->count());
@@ -175,12 +185,11 @@ class OrderControllerTest extends TestCase
             'alamat' => ''
         ];
 
-        $request = Request::create('/order-package/' . $paket->id, 'POST', $requestData);
+        // Use HTTP request to trigger validation handling
+        $response = $this->post('/order-package/' . $paket->id, $requestData);
 
-        $controller = new OrderController();
-        $response = $controller->postOrderPackage($request, $paket->id);
-
-        $this->assertEquals(302, $response->getStatusCode());
+        $response->assertRedirect()
+                ->assertSessionHasErrors(['nama', 'email', 'no_hp', 'alamat']);
     }
 
     /**
@@ -195,12 +204,11 @@ class OrderControllerTest extends TestCase
             'alamat' => 'Test Address'
         ];
 
-        $request = Request::create('/order-package/999', 'POST', $requestData);
+        // Use HTTP POST to non-existent package and expect a redirect with error
+        $response = $this->post('/order-package/999', $requestData);
 
-        $controller = new OrderController();
-
-        $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
-        $controller->postOrderPackage($request, 999);
+        $response->assertRedirect()
+                ->assertSessionHas('error');
     }
 
     /**

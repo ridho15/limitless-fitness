@@ -302,7 +302,7 @@ class OrderPaketResource extends Resource
                                 ->log('View bukti pembayaran');
                         })
                         ->url(function (OrderPaket $record) {
-                            return asset('storage/' . $record->bukti_pembayaran);
+                            return $record->bukti_pembayaran ? storage_url($record->bukti_pembayaran) : null;
                         })
                         ->openUrlInNewTab(),
                     Action::make('approve')

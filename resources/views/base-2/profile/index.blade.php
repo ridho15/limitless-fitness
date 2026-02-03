@@ -89,7 +89,7 @@
                             <small class="fw-light d-block">Foto KTP</small>
                             <div class="text-center">
                                 @if($user->ktp)
-                                    <img src="{{ asset('storage/' . $user->ktp) }}" alt="Foto KTP" class="img-fluid rounded" style="max-width: 200px; max-height: 150px; object-fit: contain;">
+                                    <img src="{{ storage_url($user->ktp) }}" alt="Foto KTP" class="img-fluid rounded" style="max-width: 200px; max-height: 150px; object-fit: contain;">
                                 @else
                                     <div class="border border-secondary rounded p-3 text-muted" style="width: 200px; height: 150px; display: flex; align-items: center; justify-content: center;">
                                         <small>Belum di-upload</small>
@@ -101,7 +101,7 @@
                             <small class="fw-light d-block">Foto Selfie</small>
                             <div class="text-center">
                                 @if($user->selfie)
-                                    <img src="{{ asset('storage/' . $user->selfie) }}" alt="Foto Selfie" class="img-fluid rounded" style="max-width: 200px; max-height: 150px; object-fit: contain;">
+                                    <img src="{{ storage_url($user->selfie) }}" alt="Foto Selfie" class="img-fluid rounded" style="max-width: 200px; max-height: 150px; object-fit: contain;">
                                 @else
                                     <div class="border border-secondary rounded p-3 text-muted" style="width: 200px; height: 150px; display: flex; align-items: center; justify-content: center;">
                                         <small>Belum di-upload</small>

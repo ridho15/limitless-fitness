@@ -64,8 +64,8 @@ class ProfileControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Foto KTP');
         $response->assertSee('Foto Selfie');
-        $response->assertSee('/storage/uploads/ktp/sample-ktp.jpg');
-        $response->assertSee('/storage/uploads/selfie/sample-selfie.jpg');
+        $response->assertSee(storage_url('uploads/ktp/sample-ktp.jpg'));
+        $response->assertSee(storage_url('uploads/selfie/sample-selfie.jpg'));
     }
 
     public function test_profile_page_shows_placeholder_when_no_ktp_or_selfie()
@@ -112,11 +112,11 @@ class ProfileControllerTest extends TestCase
         $response->assertSee('Foto Selfie');
 
         if ($user->ktp) {
-            $response->assertSee(asset('storage/' . $user->ktp));
+            $response->assertSee(storage_url($user->ktp));
         }
 
         if ($user->selfie) {
-            $response->assertSee(asset('storage/' . $user->selfie));
+            $response->assertSee(storage_url($user->selfie));
         }
     }
 }

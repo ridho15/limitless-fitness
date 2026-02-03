@@ -101,7 +101,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="w-100 border shadow-sm sticky-top" style="border-radius: 15px; z-index: 1; top: 70px">
-                            <img src="{{ count($kelasActivity->kelas->kelasImage) > 0 ? asset('storage/' . $kelasActivity->kelas->kelasImage[0]->image) : null }}"
+                            <img src="{{ count($kelasActivity->kelas->kelasImage) > 0 ? storage_url($kelasActivity->kelas->kelasImage[0]->image) : null }}"
                                 style="width: 100%; height: 300px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px"
                                 alt="" style="border-top-left-radius: 15px; border-top-right-radius: 15px">
                             <div class="p-4">
