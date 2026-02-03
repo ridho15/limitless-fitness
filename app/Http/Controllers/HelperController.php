@@ -36,7 +36,7 @@ class HelperController extends Controller
             'data' => [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
-                'selfie' => $user->selfie ? asset('storage/' . $user->selfie) : null,
+                'selfie' => $user->selfie ? storage_url($user->selfie) : null,
             ]
         ], 200);
     }
@@ -51,7 +51,7 @@ class HelperController extends Controller
             return [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
-                'selfie' => asset('storage/' . $user->selfie),
+                'selfie' => storage_url($user->selfie),
             ];
         });
         return response()->json([

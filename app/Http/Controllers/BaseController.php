@@ -454,16 +454,42 @@ class BaseController extends Controller
             return redirect()->back()->with('fail', 'Data tidak ditemukan !');
         }
 
-        $path = $request->file('bukti_pembayaran')->store('public');
-        $path = str_replace('public/', '', $path);
-        $data['tanggal_pembayaran'] = now();
-        $data['bukti_pembayaran'] = $path;
-        $bookingOrder->update($data);
+        $disk = config('filesystems.default', 'local');
 
-        activity()->causedBy(Auth::user())
-            ->log('Melakukan upload bukti pembayaran');
+        // Store uploaded file on configured disk and remove old file if present
+        if ($request->hasFile('bukti_pembayaran')) {
+            // Use per-order folder to scope files and make replacement deletion safe
+            $folder = 'bukti_pembayaran/' . $bookingOrder->id;
 
-        return redirect()->back()->with('success', 'Berhasil mengupdate bukti pembayaran. silahkan tunggu konfirmasi dari Admin');
+            // Delete any existing files for this order
+            try {
+                $existing = Storage::disk($disk)->allFiles($folder);
+                foreach ($existing as $f) {
+                    Storage::disk($disk)->delete($f);
+                }
+            } catch (\Throwable $e) {
+                // ignore errors
+            }
+
+            // Determine storage path according to disk and store inside order folder
+            if ($disk === 'local') {
+                $stored = $request->file('bukti_pembayaran')->store('public/' . $folder);
+                $path = str_replace('public/', '', $stored);
+            } else {
+                $path = $request->file('bukti_pembayaran')->store($folder, $disk);
+            }
+
+            $data['tanggal_pembayaran'] = now();
+            $data['bukti_pembayaran'] = $path;
+            $bookingOrder->update($data);
+
+            activity()->causedBy(Auth::user())
+                ->log('Melakukan upload bukti pembayaran');
+
+            return redirect()->back()->with('success', 'Berhasil mengupdate bukti pembayaran. silahkan tunggu konfirmasi dari Admin');
+        }
+
+        return redirect()->back()->with('fail', 'File bukti pembayaran tidak ditemukan.');
     }
 
     public function updateProfile(Request $request)

@@ -119,7 +119,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     @if ($user->ktp)
-                                        <img src="{{ asset('storage/' . $user->ktp) }}" alt=""
+                                        <img src="{{ storage_url($user->ktp) }}" alt=""
                                             class="img-fluid">
                                     @else
                                         <div class="text-center border rounded d-flex align-items-center justify-content-center"
@@ -130,7 +130,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     @if ($user->selfie)
-                                        <img src="{{ asset('storage/' . $user->selfie) }}" alt=""
+                                        <img src="{{ storage_url($user->selfie) }}" alt=""
                                             class="img-fluid">
                                     @else
                                         <div class="text-center border rounded d-flex align-items-center justify-content-center"

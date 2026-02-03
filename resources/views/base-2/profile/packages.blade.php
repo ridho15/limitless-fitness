@@ -88,7 +88,7 @@
                                             <small>Upload Bukti Pembayaran</small>
                                         </label>
                                         @else
-                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}" target="_blank"
+                                        <a href="{{ storage_url($item->bukti_pembayaran) }}" target="_blank"
                                             class="btn custom-btn-outline">
                                             <small>Lihat Bukti Pembayaran</small>
                                         </a>
@@ -174,7 +174,7 @@
                                             <small>Upload Bukti Pembayaran</small>
                                         </label>
                                         @else
-                                        <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}" target="_blank"
+                                        <a href="{{ storage_url($item->bukti_pembayaran) }}" target="_blank"
                                             class="btn custom-btn-outline">
                                             <small>Lihat Bukti Pembayaran</small>
                                         </a>

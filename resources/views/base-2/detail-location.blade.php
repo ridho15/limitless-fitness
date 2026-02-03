@@ -12,14 +12,14 @@
             <div class="row">
                 <div class="col-md-8 mb-4">
                     <div class="bg-white w-100 shadow-sm p-5" style="border-radius: 15px">
-                        <img src="{{ asset('storage/' . $location->image) }}" class="img-fluid rounded" alt="">
+                        <img src="{{ storage_url($location->image) }}" class="img-fluid rounded" alt="">
                     </div>
                     <hr class="my-5">
                     <h3 class="fw-bold mb-4">Facilities</h3>
                     @foreach ($location->locationStudio as $item)
                         <div class="row align-items-center mb-3 bg-white rounded shadow-sm">
                             <div class="col-md mb-3">
-                                <img src="{{ asset('storage/' . $item->image) }}" class="img-fluid" alt=""
+                                <img src="{{ storage_url($item->image) }}" class="img-fluid" alt=""
                                     style="height: 150px; width: 100%; border-radius: 15px; object-fit: cover">
                             </div>
                             <div class="col-md-9 mb-3">

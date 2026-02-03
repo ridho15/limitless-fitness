@@ -53,6 +53,7 @@ class ExampleTest extends TestCase
         $paket = Paket::factory()->create([
             'nama' => 'Premium Package',
             'harga' => 200000,
+            'diskon' => 0,
             'is_show_public' => 1,
             'valid_month' => 6
         ]);
@@ -67,14 +68,15 @@ class ExampleTest extends TestCase
 
         $response = $this->post('/order-package/' . $paket->id, $orderData);
 
-        $response->assertRedirect('/packages');
+        // Redirect to order payment page with public token
+        $this->assertStringContainsString('/order-payment/', $response->headers->get('Location'));
         $this->assertDatabaseHas('users', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'no_hp' => '08123456789',
             'alamat' => 'Jl. Test No. 123'
         ]);
-        $this->assertDatabaseHas('order_paket', [
+        $this->assertDatabaseHas('order_pakets', [
             'id_paket' => $paket->id,
             'harga' => 200000,
             'status' => 2 // belum lunas
@@ -98,6 +100,7 @@ class ExampleTest extends TestCase
         $paket = Paket::factory()->create([
             'nama' => 'Basic Package',
             'harga' => 150000,
+            'diskon' => 0,
             'is_show_public' => 1,
             'valid_month' => 3
         ]);
@@ -112,7 +115,8 @@ class ExampleTest extends TestCase
 
         $response = $this->post('/order-package/' . $paket->id, $orderData);
 
-        $response->assertRedirect('/packages');
+        // Redirect to order payment page with public token
+        $this->assertStringContainsString('/order-payment/', $response->headers->get('Location'));
 
         // Check that user data was updated
         $this->assertDatabaseHas('users', [
@@ -122,7 +126,7 @@ class ExampleTest extends TestCase
         ]);
 
         // Check that order was created
-        $this->assertDatabaseHas('order_paket', [
+        $this->assertDatabaseHas('order_pakets', [
             'id_user' => $existingUser->id,
             'id_paket' => $paket->id,
             'harga' => 150000

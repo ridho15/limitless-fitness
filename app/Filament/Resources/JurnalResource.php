@@ -191,7 +191,7 @@ class JurnalResource extends Resource
                                 ->causedBy(Auth::user())
                                 ->log('View bukti pembayaran');
                         })->url(function (Jurnal $record) {
-                            return asset('storage/' . $record->struk);
+                            return $record->struk ? storage_url($record->struk) : null;
                         })
                         ->openUrlInNewTab(),
                 ])

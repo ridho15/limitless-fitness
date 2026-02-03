@@ -1,9 +1,11 @@
+/** @vitest-environment jsdom */
 /**
  * Frontend Unit Tests for Order Package Form
  * Using Vitest for JavaScript testing
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { initOrderPackage } from '../resources/js/order-package.js';
 
 // Mock DOM elements
 const mockDOM = () => {
@@ -40,6 +42,9 @@ describe('Order Package Form', () => {
 
         // Mock the showAlert function
         global.showAlert = mockShowAlert;
+
+        // Initialize order package handlers so buttons and alerts are wired up
+        initOrderPackage(document);
 
         // Reset mocks
         mockShowAlert.mockClear();
@@ -194,7 +199,7 @@ describe('Utility Functions', () => {
     });
 
     it('should check required fields', () => {
-        const isValid = (value) => value && value.trim().length > 0;
+        const isValid = (value) => !!(value && value.trim().length > 0);
 
         expect(isValid('test')).toBe(true);
         expect(isValid('   ')).toBe(false);

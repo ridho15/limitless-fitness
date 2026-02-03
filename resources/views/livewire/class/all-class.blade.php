@@ -13,7 +13,7 @@
                 <div class="d-flex h-100 flex-column align-items-center justify-content-between">
                     <div class="text-center">
                         @if (count($item->kelasImage) > 0)
-                        <img src="{{ asset('storage/' . $item->kelasImage->first()->image) }}"
+                        <img src="{{ storage_url($item->kelasImage->first()->image) }}"
                             class="img-fluid rounded mb-3" alt="" style="border-radius: 10px">
                         @else
                         <img src="{{ asset('assets/images/default-image.jpg') }}" alt="" class="img-fluid rounded mb-3"

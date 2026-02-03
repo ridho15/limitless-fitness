@@ -23,6 +23,7 @@ class OrderPaketFactory extends Factory
             'id_user' => User::factory(),
             'id_paket' => Paket::factory(),
             'harga' => $this->faker->numberBetween(100000, 1000000),
+            'id_location' => \App\Models\Location::factory(),
             'status' => $this->faker->randomElement([1, 2, 3]), // 1=aktif, 2=belum lunas, 3=cancelled
             'is_active' => $this->faker->boolean(),
             'expired_date' => $this->faker->dateTimeBetween('now', '+1 year'),

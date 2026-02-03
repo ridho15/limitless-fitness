@@ -146,10 +146,10 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @livewireScripts
     <script src="{{ asset('/js/alpine.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('js')
-    @livewireScripts
     @stack('js')
     <script>
         $(document).ready(function() {
