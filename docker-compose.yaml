@@ -1,0 +1,104 @@
+services:
+  limitlessfitness:
+    build:
+      context: .
+      dockerfile: docker/limitlessfitness/Dockerfile
+    image: limitlessfitness-app:latest
+    container_name: limitlessfitness
+    ports:
+      - "8081:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: limitlessfitness
+      DB_USERNAME: limitless
+      DB_PASSWORD: secret
+      RUN_MIGRATIONS: "false"
+      DB_WAIT_TIMEOUT: 60
+      # Storage (MinIO / S3)
+      FILESYSTEM_DISK: s3
+      AWS_ACCESS_KEY_ID: minio
+      AWS_SECRET_ACCESS_KEY: minio123
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_BUCKET: limitlessfitness
+      AWS_ENDPOINT: https://storage.playgo.id
+      AWS_USE_PATH_STYLE_ENDPOINT: "true"
+      AWS_URL: https://storage.playgo.id
+    volumes:
+      - ./:/var/www/html
+      - ./docker/limitlessfitness/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/limitlessfitness/nginx/sites-enabled/default:/etc/nginx/sites-enabled/default:ro
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: limitlessfitness-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: limitlessfitness
+      MYSQL_USER: limitless
+      MYSQL_PASSWORD: secret
+    volumes:
+      - limitlessfitness_mysql_data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+    ports:
+      - "109.106.255.204:3308:3306" # bound to public IP 109.106.255.204 for remote access (ensure firewall rules)
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # MinIO - S3-compatible object storage for uploads (limitlessfitness storage)
+  # Laravel example .env (set in project .env):
+  # AWS_ACCESS_KEY_ID=minio
+  # AWS_SECRET_ACCESS_KEY=minio123
+  # AWS_DEFAULT_REGION=us-east-1
+  # AWS_BUCKET=limitlessfitness
+  # AWS_ENDPOINT=https://storage.playgo.id
+  # AWS_USE_PATH_STYLE_ENDPOINT=true
+  minio:
+    image: minio/minio:latest
+    container_name: limitlessfitness-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    volumes:
+      - limitlessfitness_minio_data:/data
+    ports:
+      - "9004:9000"    # MinIO API (host 9004 -> container 9000) to avoid port conflicts
+      - "9005:9001"    # MinIO Console (host 9005 -> container 9001)
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/minio/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  # MinIO initialization to create bucket automatically
+  minio-init:
+    image: minio/mc:latest
+    container_name: limitlessfitness-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "for i in $(seq 1 30); do mc alias set local https://storage.playgo.id minio minio123 --api S3v4 || true; if mc ls local >/dev/null 2>&1; then mc mb --ignore-existing local/limitlessfitness && mc policy set public local/limitlessfitness || true; echo 'bucket created'; exit 0; fi; echo 'waiting for minio...' >&2; sleep 2; done; echo 'failed to create bucket after retries' >&2; exit 1"
+    restart: "on-failure"
+    networks:
+      - default
+
+volumes:
+  limitlessfitness_mysql_data:
+  limitlessfitness_minio_data:

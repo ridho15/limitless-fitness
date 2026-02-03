@@ -267,7 +267,7 @@ return [
     |
     */
 
-    'favicon' => env('FAVICON', 'https://fitnes.kesegaranjasmani.web.id/vertical/design_7_black.png'),
+    'favicon' => env('FAVICON', 'https://limitlessfitness.id/vertical/design_7_black.png'),
 
     /*
     |--------------------------------------------------------------------------
@@ -291,7 +291,7 @@ return [
     |
     */
 
-    'default_filesystem_disk' => env('FILAMENT_FILESYSTEM_DRIVER', 'public'),
+    'default_filesystem_disk' => env('FILAMENT_FILESYSTEM_DRIVER', 's3'),
 
     /*
     |--------------------------------------------------------------------------

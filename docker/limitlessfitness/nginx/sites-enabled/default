@@ -1,0 +1,2 @@
+# Disabled default site (overridden by bind-mount to avoid duplicate default_server)
+# This file intentionally left blank
