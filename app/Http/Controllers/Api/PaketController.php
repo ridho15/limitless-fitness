@@ -4,11 +4,35 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\OrderPaket;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PaketController extends Controller
 {
+    public function history(Request $request, int $userId)
+    {
+        $perPage = min(max((int) $request->integer('per_page', 15), 1), 100);
+        $orders = OrderPaket::with('paket')->where('id_user', $userId)->latest()->paginate($perPage);
+
+        return response()->json([
+            'status' => true,
+            'data' => $orders->through(fn ($order) => [
+                'order_paket_id' => $order->id,
+                'paket_id' => $order->id_paket,
+                'paket_name' => $order->paket->nama ?? 'Unknown Package',
+                'paket_type' => $order->paket->tipe ?? null,
+                'paket_durasi' => $order->paket->durasi ?? null,
+                'ordered_at' => $order->created_at?->toISOString(),
+                'expired_date' => $order->expired_date,
+                'status' => $order->status,
+                'is_active' => (bool) $order->is_active,
+                'id_location' => $order->id_location,
+            ]),
+        ]);
+    }
+
     public function checkPaket(Request $request)
     {
         try {
@@ -22,6 +46,21 @@ class PaketController extends Controller
 
             $userId = $request->input('id_user');
             $today = Carbon::now();
+
+            $user = User::find($userId);
+
+            if ((int) $user->status !== 1) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Akun user tidak aktif',
+                    'data' => [
+                        'user_id' => $userId,
+                        'total_active_packages' => 0,
+                        'has_any_orders' => OrderPaket::where('id_user', $userId)->exists(),
+                        'check_method' => 'order_paket_based'
+                    ]
+                ], 404);
+            }
 
             // Mengacu ke order paket dengan kondisi:
             // 1. status = true (1) 
@@ -45,8 +84,10 @@ class PaketController extends Controller
                         'order_paket_id' => $order->id,
                         'paket_id' => $order->id_paket,
                         'paket_name' => $order->paket->nama ?? 'Unknown Package',
+                        // Dipertahankan agar response lama TDX tidak berubah.
                         'paket_type' => $order->paket->tipe ?? null,
                         'paket_durasi' => $order->paket->durasi ?? null,
+                        'valid_month' => $order->paket->valid_month ?? null,
                         'expired_date' => $order->expired_date,
                         'status' => 'Active', // Pasti active karena sudah difilter
                         'remaining_days' => $remainingDays,
@@ -93,9 +134,14 @@ class PaketController extends Controller
                 'errors' => $e->errors()
             ], 422);
         } catch (\Throwable $th) {
+            Log::error('Gagal memeriksa paket user', [
+                'id_user' => $request->input('id_user'),
+                'exception' => $th,
+            ]);
+
             return response()->json([
                 'status' => false,
-                'message' => 'Terjadi kesalahan: ' . $th->getMessage()
+                'message' => 'Terjadi kesalahan saat memeriksa paket'
             ], 500);
         }
     }

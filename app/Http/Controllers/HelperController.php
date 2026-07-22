@@ -140,6 +140,36 @@ class HelperController extends Controller
         return $kode;
     }
 
+    public static function generateIdUser(): int
+    {
+        $faker = Factory::create();
+
+        for ($attempt = 0; $attempt < 100; $attempt++) {
+            $id = (int) $faker->ean8();
+
+            if (!User::withTrashed()->whereKey($id)->exists()) {
+                return $id;
+            }
+        }
+
+        throw new \RuntimeException('Gagal membuat ID user unik setelah 100 percobaan.');
+    }
+
+    public static function generateBarcode(): string
+    {
+        $faker = Factory::create();
+
+        for ($attempt = 0; $attempt < 100; $attempt++) {
+            $barcode = $faker->ean8();
+
+            if (!User::withTrashed()->where('barcode', $barcode)->exists()) {
+                return $barcode;
+            }
+        }
+
+        throw new \RuntimeException('Gagal membuat barcode unik setelah 100 percobaan.');
+    }
+
     /**
      * Ambil daftar users dengan pagination
      */

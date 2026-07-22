@@ -2,6 +2,10 @@
 
 return [
 
+    'middleware' => [
+        'checkin_dedupe_minutes' => (int) env('CHECKIN_DEDUPE_MINUTES', 5),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

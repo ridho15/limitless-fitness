@@ -39,6 +39,7 @@ Route::post('/import-user-paket', [HelperController::class, 'importUserPaket']);
 Route::post('/import-booking-kelas', [HelperController::class, 'importBookingKelas']);
 
 Route::post('/check-paket', [PaketController::class, 'checkPaket']);
+Route::get('/users/{userId}/package-orders', [PaketController::class, 'history']);
 
 Route::post('/validate-face', [HelperController::class, 'validateFace']);
 
@@ -52,3 +53,4 @@ Route::get('/user/{id}/detail', [HelperController::class, 'getUserDetail']);
 Route::post('/register-face', [HelperController::class, 'registerFace']);
 
 Route::post('/checkin', [CheckInController::class, 'store']);
+Route::get('/users/{userId}/checkins', [CheckInController::class, 'history']);
