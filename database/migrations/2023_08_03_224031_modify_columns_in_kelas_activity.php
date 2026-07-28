@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::table('kelas_activities', function (Blueprint $table) {
             $table->dropColumn('max_anggota');
+        });
+
+        Schema::table('kelas_activities', function (Blueprint $table) {
             $table->renameColumn('jam_latihan', 'jam_mulai');
+        });
+
+        Schema::table('kelas_activities', function (Blueprint $table) {
             $table->dateTime('jam_selesai');
         });
     }

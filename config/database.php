@@ -46,23 +46,25 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
+            // Read host/credentials from environment so we can change the
+            // database target without editing configs in the container.
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'u839250884_limitless'),
-            'username' => env('DB_USERNAME', 'u839250884_limitless'),
-            'password' => env('DB_PASSWORD', '@Qwertyzaq123'),
+            'database' => env('DB_DATABASE', 'limitless_fitness'),
+            'username' => env('DB_USERNAME', 'local'),
+            'password' => env('DB_PASSWORD', '12345678'),
             // 'database' => env('DB_DATABASE', 'u1605090_fitnes'),
             // 'username' => env('DB_USERNAME', 'u1605090_fitnes'),
             // 'password' => env('DB_PASSWORD', '@Qwertyzaq123'),
-            'unix_socket' => env('DB_SOCKET', ''),
+            'unix_socket' => null,
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => true,
+            'strict' => false,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                // PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 

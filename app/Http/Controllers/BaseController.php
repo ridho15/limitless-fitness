@@ -132,9 +132,11 @@ class BaseController extends Controller
     public function packages()
     {
         $data['active'] = 'packages';
-        $allPaket = Paket::with(['kelas'])->where('is_show_public', 1)->get();
+        $pakets = Paket::with(['kelas'])->where('is_show_public', 1)->get();
         $listKelas = Kelas::get();
-        $data['allPaket'] = $allPaket;
+        $data['pakets'] = $pakets;
+        // Keep backward compatibility with views expecting $allPaket
+        $data['allPaket'] = $pakets;
         $data['listKelas'] = $listKelas;
         return view('base-2.packages', $data);
     }

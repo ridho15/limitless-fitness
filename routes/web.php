@@ -152,8 +152,15 @@ Route::get('generate-password', [HelperController::class, 'generatePassword']);
 Route::get('/', [BaseController::class, 'index'])->name('base');
 Route::get('/class', [BaseController::class, 'class'])->name('class');
 Route::get('/detail-class/{id}', [BaseController::class, 'detailClass'])->name('detail-class');
+// Public packages listing (used by frontend components expecting route('packages'))
 Route::get('/packages', [BaseController::class, 'packages'])->name('packages');
 Route::get('/detail-packages/{id}', [BaseController::class, 'detailPackages'])->name('detail-packages');
+Route::get('/public-packages', [App\Http\Controllers\OrderController::class, 'publicPackages'])->name('public-packages');
+Route::get('/order-packages', [App\Http\Controllers\OrderController::class, 'orderPackages'])->name('order-packages');
+Route::get('/order-package/{id}', [App\Http\Controllers\OrderController::class, 'orderPackage'])->name('order-package');
+Route::post('/order-package/{id}', [App\Http\Controllers\OrderController::class, 'postOrderPackage'])->name('post-order-package');
+Route::get('/order-payment/{token}', [App\Http\Controllers\OrderController::class, 'showOrderPayment'])->name('order-payment.show');
+Route::post('/order-payment/{token}', [App\Http\Controllers\OrderController::class, 'processOrderPayment'])->name('order-payment.process');
 Route::get('/timetable', [BaseController::class, 'timetable'])->name('timetable');
 Route::get('/location', [BaseController::class, 'location'])->name('location');
 Route::get('/detail-location/{id}', [BaseController::class, 'detailLocation'])->name('detail-location');

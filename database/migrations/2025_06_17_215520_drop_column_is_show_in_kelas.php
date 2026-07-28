@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('kelas', 'is_show')) {
+            Schema::table('kelas', function (Blueprint $table) {
+                $table->dropColumn('is_show');
+            });
+        }
+
         Schema::table('kelas', function (Blueprint $table) {
-            $table->dropColumn('is_show');
             $table->text('description')->nullable();
         });
     }

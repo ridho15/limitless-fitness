@@ -14,6 +14,7 @@ class BookingKelas extends Model
     protected $fillable = [
         'id_user',
         'id_kelas',
+        'id_kelas_activity',
         'is_send_email',
         'status_kehadiran',
         'keterangan',
@@ -66,9 +67,7 @@ class BookingKelas extends Model
 
     public function kelasActivity()
     {
-        // Jika booking_kelas terhubung melalui kelas
-        return $this->hasOneThrough(KelasActivity::class, Kelas::class, 'id', 'id_kelas', 'id_kelas', 'id');
-
-        // ATAU jika perlu relasi langsung, tambahkan field id_kelas_activity ke tabel
+        // Prefer direct relation to KelasActivity when id_kelas_activity column is present
+        return $this->belongsTo(KelasActivity::class, 'id_kelas_activity')->withDefault();
     }
 }

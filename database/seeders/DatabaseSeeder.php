@@ -20,10 +20,13 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
+        $faker = Factory::create();
         $user = User::updateOrCreate([
             'email' => 'ralamzah@gmail.com'
         ], [
-            'barcode' => HelperController::generateBarcode(),
+            // HelperController::generateBarcode() was removed in the current helper;
+            // use Faker to generate an EAN8 barcode here to avoid calling a missing method.
+            'barcode' => $faker->ean8(),
             'name' => 'Ridho Al Amzah',
             'email' => 'ralamzah@gmail.com',
             'password' => Hash::make('ridho123'),

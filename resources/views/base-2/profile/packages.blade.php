@@ -57,7 +57,7 @@
                                     </div>
                                     @elseif($item->status == 2)
                                     <div class="text-center">
-                                        <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                        <span class="badge text-bg-danger text-white">Belum Lunas</span>
                                     </div>
                                     @endif
                                 </div>
@@ -144,7 +144,7 @@
                                     </div>
                                     @elseif($item->status == 2)
                                     <div class="text-center">
-                                        <span class="badge text-bg-info text-white">Belum Lunas</span>
+                                        <span class="badge text-bg-danger text-white">Belum Lunas</span>
                                     </div>
                                     @endif
                                 </div>
